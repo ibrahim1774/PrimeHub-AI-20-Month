@@ -3,188 +3,196 @@ import { GeneratedWebsite } from "../types";
 
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+const cleanJsonString = (str: string): string => {
+  // Removes potential markdown code block wrappers if the model ignores the mimeType setting
+  return str.replace(/^```json\n?/, '').replace(/```\n?$/, '').trim();
+};
+
 export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string): Promise<GeneratedWebsite> => {
   const ai = getAI();
-  const prompt = `Act as a senior conversion-focused copywriter for ${industry}. 
-  Generate website content JSON for "${companyName}" in ${location}. Phone: ${phone}.
+  const prompt = `Act as a senior conversion-focused copywriter for the ${industry} industry. 
+  Generate a comprehensive website content structure in JSON format for "${companyName}" located in ${location}. 
+  Contact Phone: ${phone}.
 
   STRICT CONTENT RULES:
-  1. DO NOT include any contact forms, email addresses, or "Contact Us" pages.
-  2. DO NOT include email links or mentions of emails.
-  3. ALL actions must be phone-based. 
-  4. Use neutral, trustworthy language. DO NOT use "best", "elite", "#1". Use "Local", "Trusted", "Reliable".
-  5. Mention "${companyName}" exactly 3-4 times total across the page.
-  6. Industry Value: Explain why ${industry} is critical for ${location} property owners.
-  7. Provide 4 unique CTA variations. 
-     CRITICAL: DO NOT include the phone number ${phone} in these text strings. 
-     Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
-     The application will append the phone number to these phrases automatically.
+  1. FORBIDDEN: Do not include contact forms, email addresses, or email links.
+  2. FORBIDDEN: Do not use hyperbolic words like "best", "elite", or "#1". Use "Reliable", "Professional", "Local".
+  3. MANDATORY: All user actions must be phone-call based.
+  4. MANDATORY: Mention the brand name "${companyName}" exactly 3 times in the content.
+  5. CTA VARIATIONS: Provide 4 unique action phrases (e.g., "Request a Quote", "Speak With Our Team"). 
+     IMPORTANT: DO NOT include the phone number ${phone} inside these specific text strings; the app handles that.
 
-  RETURN RAW JSON ONLY. NO MARKDOWN.`;
+  RETURN VALID RAW JSON ONLY.`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          companyName: { type: Type.STRING },
-          brandColor: { type: Type.STRING },
-          industry: { type: Type.STRING },
-          location: { type: Type.STRING },
-          phone: { type: Type.STRING },
-          hero: {
-            type: Type.OBJECT,
-            properties: {
-              badge: { type: Type.STRING },
-              headline: {
-                type: Type.OBJECT,
-                properties: {
-                  line1: { type: Type.STRING },
-                  line2: { type: Type.STRING },
-                  line3: { type: Type.STRING }
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: [{ parts: [{ text: prompt }] }],
+      config: {
+        thinkingConfig: { thinkingBudget: 0 }, // Minimize latency for layout generation
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            companyName: { type: Type.STRING },
+            brandColor: { type: Type.STRING },
+            industry: { type: Type.STRING },
+            location: { type: Type.STRING },
+            phone: { type: Type.STRING },
+            hero: {
+              type: Type.OBJECT,
+              properties: {
+                badge: { type: Type.STRING },
+                headline: {
+                  type: Type.OBJECT,
+                  properties: {
+                    line1: { type: Type.STRING },
+                    line2: { type: Type.STRING },
+                    line3: { type: Type.STRING }
+                  },
+                  required: ["line1", "line2", "line3"]
                 },
-                required: ["line1", "line2", "line3"]
+                subtext: { type: Type.STRING },
+                trustIndicators: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: { icon: { type: Type.STRING }, label: { type: Type.STRING }, sublabel: { type: Type.STRING } },
+                    required: ["icon", "label", "sublabel"]
+                  }
+                }
               },
-              subtext: { type: Type.STRING },
-              trustIndicators: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-                  properties: { icon: { type: Type.STRING }, label: { type: Type.STRING }, sublabel: { type: Type.STRING } },
-                  required: ["icon", "label", "sublabel"]
+              required: ["badge", "headline", "subtext", "trustIndicators"]
+            },
+            services: {
+              type: Type.OBJECT,
+              properties: {
+                badge: { type: Type.STRING },
+                title: { type: Type.STRING },
+                subtitle: { type: Type.STRING },
+                cards: {
+                  type: Type.ARRAY,
+                  minItems: 4,
+                  maxItems: 4,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
+                    required: ["icon", "title", "description"]
+                  }
                 }
-              }
+              },
+              required: ["badge", "title", "subtitle", "cards"]
             },
-            required: ["badge", "headline", "subtext", "trustIndicators"]
-          },
-          services: {
-            type: Type.OBJECT,
-            properties: {
-              badge: { type: Type.STRING },
-              title: { type: Type.STRING },
-              subtitle: { type: Type.STRING },
-              cards: {
-                type: Type.ARRAY,
-                minItems: 4,
-                maxItems: 4,
-                items: {
-                  type: Type.OBJECT,
-                  properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
-                  required: ["icon", "title", "description"]
+            industryValue: {
+              type: Type.OBJECT,
+              properties: {
+                title: { type: Type.STRING },
+                content: { type: Type.STRING },
+                subtext: { type: Type.STRING }
+              },
+              required: ["title", "content", "subtext"]
+            },
+            featureHighlight: {
+              type: Type.OBJECT,
+              properties: {
+                badge: { type: Type.STRING },
+                headline: { type: Type.STRING },
+                cards: {
+                  type: Type.ARRAY,
+                  minItems: 4,
+                  maxItems: 4,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
+                    required: ["icon", "title", "description"]
+                  }
                 }
-              }
+              },
+              required: ["badge", "headline", "cards"]
             },
-            required: ["badge", "title", "subtitle", "cards"]
-          },
-          industryValue: {
-            type: Type.OBJECT,
-            properties: {
-              title: { type: Type.STRING },
-              content: { type: Type.STRING },
-              subtext: { type: Type.STRING }
+            benefits: {
+              type: Type.OBJECT,
+              properties: { 
+                title: { type: Type.STRING }, 
+                intro: { type: Type.STRING },
+                items: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 5, maxItems: 6 } 
+              },
+              required: ["title", "intro", "items"]
             },
-            required: ["title", "content", "subtext"]
-          },
-          featureHighlight: {
-            type: Type.OBJECT,
-            properties: {
-              badge: { type: Type.STRING },
-              headline: { type: Type.STRING },
-              cards: {
-                type: Type.ARRAY,
-                minItems: 4,
-                maxItems: 4,
-                items: {
-                  type: Type.OBJECT,
-                  properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
-                  required: ["icon", "title", "description"]
+            processSteps: {
+              type: Type.OBJECT,
+              properties: {
+                badge: { type: Type.STRING },
+                title: { type: Type.STRING },
+                subtitle: { type: Type.STRING },
+                steps: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: { title: { type: Type.STRING }, description: { type: Type.STRING }, icon: { type: Type.STRING } },
+                    required: ["title", "description", "icon"]
+                  }
                 }
-              }
+              },
+              required: ["badge", "title", "subtitle", "steps"]
             },
-            required: ["badge", "headline", "cards"]
-          },
-          benefits: {
-            type: Type.OBJECT,
-            properties: { 
-              title: { type: Type.STRING }, 
-              intro: { type: Type.STRING },
-              items: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 5, maxItems: 6 } 
+            emergencyCTA: {
+              type: Type.OBJECT,
+              properties: { headline: { type: Type.STRING }, subtext: { type: Type.STRING }, buttonText: { type: Type.STRING } },
+              required: ["headline", "subtext", "buttonText"]
             },
-            required: ["title", "intro", "items"]
-          },
-          processSteps: {
-            type: Type.OBJECT,
-            properties: {
-              badge: { type: Type.STRING },
-              title: { type: Type.STRING },
-              subtitle: { type: Type.STRING },
-              steps: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-                  properties: { title: { type: Type.STRING }, description: { type: Type.STRING }, icon: { type: Type.STRING } },
-                  required: ["title", "description", "icon"]
-                }
-              }
+            credentials: {
+              type: Type.OBJECT,
+              properties: {
+                badge: { type: Type.STRING },
+                headline: { type: Type.STRING },
+                description: { type: Type.STRING },
+                items: { type: Type.ARRAY, items: { type: Type.STRING } },
+                certificationText: { type: Type.STRING }
+              },
+              required: ["badge", "headline", "description", "items", "certificationText"]
             },
-            required: ["badge", "title", "subtitle", "steps"]
+            ctaVariations: {
+              type: Type.OBJECT,
+              properties: {
+                requestQuote: { type: Type.STRING },
+                getEstimate: { type: Type.STRING },
+                speakWithTeam: { type: Type.STRING },
+                callAndText: { type: Type.STRING }
+              },
+              required: ["requestQuote", "getEstimate", "speakWithTeam", "callAndText"]
+            }
           },
-          emergencyCTA: {
-            type: Type.OBJECT,
-            properties: { headline: { type: Type.STRING }, subtext: { type: Type.STRING }, buttonText: { type: Type.STRING } },
-            required: ["headline", "subtext", "buttonText"]
-          },
-          credentials: {
-            type: Type.OBJECT,
-            properties: {
-              badge: { type: Type.STRING },
-              headline: { type: Type.STRING },
-              description: { type: Type.STRING },
-              items: { type: Type.ARRAY, items: { type: Type.STRING } },
-              certificationText: { type: Type.STRING }
-            },
-            required: ["badge", "headline", "description", "items", "certificationText"]
-          },
-          ctaVariations: {
-            type: Type.OBJECT,
-            properties: {
-              requestQuote: { type: Type.STRING, description: "Action phrase ONLY, e.g., Request a Quote" },
-              getEstimate: { type: Type.STRING, description: "Action phrase ONLY, e.g., Get an Estimate" },
-              speakWithTeam: { type: Type.STRING, description: "Action phrase ONLY, e.g., Speak With Our Team" },
-              callAndText: { type: Type.STRING, description: "Action phrase ONLY, e.g., Call & Text" }
-            },
-            required: ["requestQuote", "getEstimate", "speakWithTeam", "callAndText"]
-          }
-        },
-        required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "emergencyCTA", "credentials", "ctaVariations"]
+          required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "emergencyCTA", "credentials", "ctaVariations"]
+        }
       }
-    }
-  });
+    });
 
-  const jsonStr = response.text.trim();
-  return JSON.parse(jsonStr);
+    const jsonStr = cleanJsonString(response.text || "");
+    return JSON.parse(jsonStr);
+  } catch (error) {
+    console.error("Content generation failed:", error);
+    throw error;
+  }
 };
 
 export const generateImage = async (prompt: string, aspectRatio: "1:1" | "16:9" | "3:4" | "4:3" | "9:16" = "1:1"): Promise<string> => {
   const ai = getAI();
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-image',
-    contents: { 
-      parts: [{ 
-        text: `${prompt}. Photorealistic commercial photography. Show real workers on site using safety gear. Natural lighting, candid but professional, NO text overlays.` 
-      }] 
-    },
-    config: { imageConfig: { aspectRatio } },
-  });
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: [{ parts: [{ text: `${prompt}. Photorealistic commercial photography. Show workers on site. Professional lighting, candid, high resolution.` }] }],
+      config: { imageConfig: { aspectRatio } },
+    });
 
-  for (const part of response.candidates[0].content.parts) {
-    if (part.inlineData) {
-      const base64EncodeString: string = part.inlineData.data;
-      return `data:image/png;base64,${base64EncodeString}`;
+    for (const part of response.candidates?.[0]?.content?.parts || []) {
+      if (part.inlineData) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
     }
+    throw new Error("No image data returned from API");
+  } catch (error) {
+    console.error("Image generation failed:", error);
+    throw error;
   }
-  throw new Error("Image generation failed.");
 };

@@ -26,21 +26,17 @@ export const useWebsiteGenerator = () => {
 
   useEffect(() => {
     if (isGenerating) {
-      // Smooth progress increments with no large jumps
       progressTimer.current = window.setInterval(() => {
         setProgress(prev => {
           if (prev < targetProgress.current) {
-            // Move 5% of the remaining distance to target for smooth decelerating approach
             const step = (targetProgress.current - prev) * 0.05;
             return Math.min(prev + Math.max(0.05, step), 100);
           }
-          // Slow background crawl when waiting for API
           if (prev < 99.5) return prev + 0.03;
           return prev;
         });
       }, 60);
 
-      // Rotate messages every 2.5 seconds (within the requested 2-3s range)
       let msgIdx = 0;
       setStatusMessage(LOADING_MESSAGES[0]);
       messageInterval.current = window.setInterval(() => {
@@ -60,37 +56,33 @@ export const useWebsiteGenerator = () => {
   const generateWebsite = useCallback(async (formData: FormData) => {
     setIsGenerating(true);
     setProgress(0);
-    targetProgress.current = 12; // Start
+    targetProgress.current = 10;
     setError(null);
     setGeneratedData(null);
     setGeneratedImages(null);
 
     try {
-      targetProgress.current = 28;
+      targetProgress.current = 25;
       const content = await generateWebsiteContent(
         formData.industry, 
         formData.companyName, 
         formData.serviceArea, 
         formData.phone, 
         formData.brandColor
-      );
+      ).catch(err => {
+        throw new Error("Content Synthesis Failed: " + (err.message || "Unknown error"));
+      });
+      
       setGeneratedData(content);
-      targetProgress.current = 55;
+      targetProgress.current = 50;
 
       const [heroImg, valueImg, credImg] = await Promise.all([
-        generateImage(
-          `Candid high-end professional photography of ${formData.industry} technicians at a project site in ${formData.serviceArea}, 16:9`,
-          "16:9"
-        ),
-        generateImage(
-          `Action shot of a professional ${formData.industry} technician performing an inspection or repair, cinematic lighting, 4:3`,
-          "4:3"
-        ),
-        generateImage(
-          `Professional ${formData.industry} service team with vehicle, daylight, high-quality photorealistic 16:9`,
-          "16:9"
-        )
-      ]);
+        generateImage(`Candid high-end professional photography of ${formData.industry} technicians at a project site in ${formData.serviceArea}, 16:9`, "16:9"),
+        generateImage(`Action shot of a professional ${formData.industry} technician performing a repair, cinematic lighting, 4:3`, "4:3"),
+        generateImage(`Professional ${formData.industry} service team with vehicle, daylight, high-quality photorealistic 16:9`, "16:9")
+      ]).catch(err => {
+        throw new Error("Image Synthesis Failed: " + (err.message || "Unknown error"));
+      });
       
       setGeneratedImages({
         heroBackground: heroImg,
@@ -99,14 +91,15 @@ export const useWebsiteGenerator = () => {
       });
 
       targetProgress.current = 100;
-      // Allow user to see 100% for a brief moment
       await new Promise(resolve => setTimeout(resolve, 800));
       setIsGenerating(false);
       
     } catch (err: any) {
-      console.error("Generation error:", err);
-      setError("An error occurred during synthesis. Please re-initiate the request.");
+      console.error("Synthesis failed:", err);
+      setError(err.message || "An error occurred during synthesis. Please re-initiate the request.");
       setIsGenerating(false);
+      setGeneratedData(null);
+      setGeneratedImages(null);
     }
   }, []);
 
