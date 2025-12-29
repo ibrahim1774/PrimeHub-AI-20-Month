@@ -1,7 +1,16 @@
-
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { FormData, GeneratedWebsite, GeneratedImages } from '../types';
 import { generateWebsiteContent, generateImage } from '../services/geminiService';
+
+const LOADING_MESSAGES = [
+  "Initializing project structure...",
+  "Assembling page layout and sections...",
+  "Generating content and service details...",
+  "Applying responsive styling for all devices...",
+  "Placing images and visual elements...",
+  "Finalizing calls to action and interactions...",
+  "Running final checks before completion..."
+];
 
 export const useWebsiteGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -10,18 +19,54 @@ export const useWebsiteGenerator = () => {
   const [generatedData, setGeneratedData] = useState<GeneratedWebsite | null>(null);
   const [generatedImages, setGeneratedImages] = useState<GeneratedImages | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  const targetProgress = useRef(0);
+  const progressTimer = useRef<number | null>(null);
+  const messageInterval = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isGenerating) {
+      // Smooth progress increments with no large jumps
+      progressTimer.current = window.setInterval(() => {
+        setProgress(prev => {
+          if (prev < targetProgress.current) {
+            // Move 5% of the remaining distance to target for smooth decelerating approach
+            const step = (targetProgress.current - prev) * 0.05;
+            return Math.min(prev + Math.max(0.05, step), 100);
+          }
+          // Slow background crawl when waiting for API
+          if (prev < 99.5) return prev + 0.03;
+          return prev;
+        });
+      }, 60);
+
+      // Rotate messages every 2.5 seconds (within the requested 2-3s range)
+      let msgIdx = 0;
+      setStatusMessage(LOADING_MESSAGES[0]);
+      messageInterval.current = window.setInterval(() => {
+        msgIdx = (msgIdx + 1) % LOADING_MESSAGES.length;
+        setStatusMessage(LOADING_MESSAGES[msgIdx]);
+      }, 2500);
+    } else {
+      if (progressTimer.current) clearInterval(progressTimer.current);
+      if (messageInterval.current) clearInterval(messageInterval.current);
+    }
+    return () => {
+      if (progressTimer.current) clearInterval(progressTimer.current);
+      if (messageInterval.current) clearInterval(messageInterval.current);
+    };
+  }, [isGenerating]);
 
   const generateWebsite = useCallback(async (formData: FormData) => {
     setIsGenerating(true);
     setProgress(0);
+    targetProgress.current = 12; // Start
     setError(null);
     setGeneratedData(null);
     setGeneratedImages(null);
 
     try {
-      setStatusMessage("Analyzing your business profile...");
-      setProgress(5);
-      
+      targetProgress.current = 28;
       const content = await generateWebsiteContent(
         formData.industry, 
         formData.companyName, 
@@ -29,49 +74,38 @@ export const useWebsiteGenerator = () => {
         formData.phone, 
         formData.brandColor
       );
-      
-      setStatusMessage("Designing your custom layout...");
-      setProgress(25);
       setGeneratedData(content);
+      targetProgress.current = 55;
 
-      setStatusMessage("Generating professional hero photography...");
-      const heroImg = await generateImage(
-        `Ultra-realistic commercial photography of a ${formData.industry} professional at work in ${formData.serviceArea}, cinematic wide-angle shot, dramatic natural lighting, high-end corporate aesthetic, photorealistic, professional workspace visible, depth of field, NO text overlays, NO graphic elements, clean composition, 16:9 aspect ratio`,
-        "16:9"
-      );
-      setProgress(50);
-
-      setStatusMessage("Capturing specialized equipment details...");
-      const featureImg = await generateImage(
-        `Professional ${formData.industry} equipment or specialized tools close-up photography, ultra-realistic commercial quality, dramatic lighting, photorealistic, high-end product photography aesthetic, sharp focus, NO text, NO graphics, clean background`,
-        "4:3"
-      );
-      setProgress(75);
-
-      setStatusMessage("Finalizing credentials and team imagery...");
-      const credImg = await generateImage(
-        `Professional ${formData.industry} company team with service vehicle, or completed high-end ${formData.industry} project, ultra-realistic commercial photography, professional uniforms, corporate aesthetic, photorealistic, natural daylight, NO visible text, NO graphic overlays, 16:9 aspect ratio`,
-        "16:9"
-      );
+      const [heroImg, valueImg, credImg] = await Promise.all([
+        generateImage(
+          `Candid high-end professional photography of ${formData.industry} technicians at a project site in ${formData.serviceArea}, 16:9`,
+          "16:9"
+        ),
+        generateImage(
+          `Action shot of a professional ${formData.industry} technician performing an inspection or repair, cinematic lighting, 4:3`,
+          "4:3"
+        ),
+        generateImage(
+          `Professional ${formData.industry} service team with vehicle, daylight, high-quality photorealistic 16:9`,
+          "16:9"
+        )
+      ]);
       
       setGeneratedImages({
         heroBackground: heroImg,
-        featureHighlight: featureImg,
+        industryValue: valueImg,
         credentialsShowcase: credImg,
       });
 
-      setStatusMessage("Building your custom website...");
-      setProgress(100);
-      
-      // Artificial delay to let user see 100%
+      targetProgress.current = 100;
+      // Allow user to see 100% for a brief moment
       await new Promise(resolve => setTimeout(resolve, 800));
+      setIsGenerating(false);
       
     } catch (err: any) {
-      console.error("Website Generation Failed:", err);
-      // Log more details if available
-      if (err.message) console.error("Error details:", err.message);
-      setError(`Failed to generate website: ${err.message || 'Unknown error'}. Please check your API configuration.`);
-    } finally {
+      console.error("Generation error:", err);
+      setError("An error occurred during synthesis. Please re-initiate the request.");
       setIsGenerating(false);
     }
   }, []);
@@ -80,13 +114,15 @@ export const useWebsiteGenerator = () => {
     setGeneratedData(null);
     setGeneratedImages(null);
     setProgress(0);
+    targetProgress.current = 0;
     setStatusMessage('');
     setError(null);
+    setIsGenerating(false);
   };
 
   return {
     isGenerating,
-    progress,
+    progress: Math.floor(progress),
     statusMessage,
     generatedData,
     generatedImages,

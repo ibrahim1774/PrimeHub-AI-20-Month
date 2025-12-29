@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface LoadingScreenProps {
@@ -9,54 +8,44 @@ interface LoadingScreenProps {
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ progress, statusMessage, companyName }) => {
   return (
-    <div className="fixed inset-0 z-50 bg-[#05070A] flex flex-col items-center justify-center p-4 text-center font-inter overflow-hidden">
-      {/* Background radial gradient */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-600/5 blur-[80px] rounded-full -z-10"></div>
+    <div className="fixed inset-0 z-50 bg-[#05070A] flex flex-col items-center justify-center p-6 text-center font-inter overflow-hidden">
+      {/* Background radial glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full -z-10 animate-pulse"></div>
 
-      {/* Central Spinner Icon */}
-      <div className="relative mb-8 flex items-center justify-center">
-        {/* Outer rotating ring */}
-        <div className="w-16 h-16 rounded-full border-t-2 border-r-2 border-blue-500 animate-spin"></div>
-        
-        {/* Inner static bolt circle */}
-        <div className="absolute w-12 h-12 rounded-full border border-white/5 flex items-center justify-center">
-          <div className="text-blue-500">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h3L12 22l2-10h-3l2-10z"/></svg>
-          </div>
-        </div>
-      </div>
-      
-      <div className="max-w-md mb-6">
-        <h2 className="text-sm md:text-base font-bold text-white mb-2 leading-tight">
-          {statusMessage.includes('layout') ? statusMessage : `Drafting high-conversion layout for ${companyName || 'your business'}...`}
+      <div className="max-w-2xl mb-12">
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-6 leading-tight tracking-tight px-4 transition-all duration-500 ease-in-out">
+          {statusMessage}
         </h2>
-        <p className="text-gray-600 font-bold uppercase tracking-[0.2em] text-[6px]">
-          OUR AI MODELS ARE CRAFTING YOUR LEGACY
+        <p className="text-gray-600 font-bold uppercase tracking-[0.4em] text-[10px] mb-4">
+          PrimeHub Automated Deployment
         </p>
       </div>
 
-      <div className="w-full max-w-[240px] mb-8">
-        <div className="bg-gray-900/50 rounded-full h-[3px] overflow-hidden mb-2">
+      <div className="w-full max-w-[340px] mb-12">
+        <div className="bg-white/5 border border-white/10 rounded-full h-[6px] overflow-hidden mb-5">
           <div 
-            className="bg-blue-500 h-full transition-all duration-500 ease-out"
+            className="bg-blue-600 h-full transition-all duration-700 ease-out shadow-[0_0_20px_rgba(37,99,235,0.4)]"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between items-center text-[6px] font-bold uppercase tracking-[0.2em]">
-          <span className="text-blue-500/60">GENERATION</span>
-          <span className="text-white/80">{progress}%</span>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+            <span className="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Processing Data</span>
+          </div>
+          <span className="text-white font-bold text-sm tabular-nums">{progress}%</span>
         </div>
       </div>
 
-      {/* Status Pill */}
-      <div className="bg-[#0F1219] border border-white/5 rounded-full px-4 py-2 flex items-center gap-3 shadow-xl">
-        <div className="flex gap-1">
-          <div className="w-0.5 h-0.5 bg-blue-500 rounded-full animate-bounce"></div>
-          <div className="w-0.5 h-0.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+      {/* Subtle Animation Hub */}
+      <div className="relative flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full border border-white/5 flex items-center justify-center">
+           <div className="w-8 h-8 rounded-full border-t border-blue-500/40 animate-spin"></div>
         </div>
-        <div className="text-[7px] text-gray-500 font-bold uppercase tracking-widest leading-none">
-          {statusMessage.toUpperCase()}
-        </div>
+      </div>
+      
+      <div className="mt-16 text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-40">
+        {companyName ? `Optimizing Assets for ${companyName}` : 'Finalizing Configuration'}
       </div>
     </div>
   );

@@ -3,8 +3,15 @@ import React from 'react';
 import { GeneratedWebsite } from '../../types';
 import Icon from '../Icon';
 
+// Note: 'contactForm' is not present in GeneratedWebsite as per strict content rules (no forms).
+// Defining a local interface to satisfy the compiler for this unused component.
 interface ContactProps {
-  data: GeneratedWebsite['contactForm'];
+  data: {
+    sidebarTitle: string;
+    sidebarDescription: string;
+    contactMethods: Array<{ icon: string; title: string; subtitle: string }>;
+    formTitle: string;
+  };
   brandColor: string;
   phone: string;
   industry: string;

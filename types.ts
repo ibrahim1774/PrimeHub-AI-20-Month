@@ -1,4 +1,3 @@
-
 export interface GeneratedWebsite {
   companyName: string;
   brandColor: string;
@@ -9,15 +8,15 @@ export interface GeneratedWebsite {
     badge: string;
     headline: {
       line1: string;
-      line2: string; // Company name
+      line2: string; 
       line3: string;
     };
-    subtext: string; // Max 100 chars
+    subtext: string;
     trustIndicators: Array<{
-      icon: string; // Lucide icon name
+      icon: string;
       label: string;
       sublabel: string;
-    }>; // Exactly 3
+    }>;
   };
   services: {
     badge: string;
@@ -26,15 +25,27 @@ export interface GeneratedWebsite {
     cards: Array<{
       icon: string;
       title: string;
-      description: string; // Max 80 chars
-    }>; // Exactly 4
+      description: string;
+    }>;
+  };
+  industryValue: {
+    title: string;
+    content: string;
+    subtext: string;
   };
   featureHighlight: {
     badge: string;
     headline: string;
-    description: string;
-    features: string[]; // Exactly 3
-    quote: string;
+    cards: Array<{
+      icon: string;
+      title: string;
+      description: string;
+    }>;
+  };
+  benefits: {
+    title: string;
+    intro: string;
+    items: string[];
   };
   processSteps: {
     badge: string;
@@ -44,7 +55,7 @@ export interface GeneratedWebsite {
       title: string;
       description: string;
       icon: string;
-    }>; // Exactly 4
+    }>;
   };
   emergencyCTA: {
     headline: string;
@@ -55,26 +66,20 @@ export interface GeneratedWebsite {
     badge: string;
     headline: string;
     description: string;
-    items: string[]; // Exactly 6
-    ratingScore: string;
-    reviewCount: string;
+    items: string[];
     certificationText: string;
   };
-  contactForm: {
-    sidebarTitle: string;
-    sidebarDescription: string;
-    contactMethods: Array<{
-      icon: string;
-      title: string;
-      subtitle: string;
-    }>; // Exactly 3
-    formTitle: string;
+  ctaVariations: {
+    requestQuote: string;
+    getEstimate: string;
+    speakWithTeam: string;
+    callAndText: string;
   };
 }
 
 export interface GeneratedImages {
   heroBackground: string;
-  featureHighlight: string;
+  industryValue: string;
   credentialsShowcase: string;
 }
 

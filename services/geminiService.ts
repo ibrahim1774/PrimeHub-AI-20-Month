@@ -1,59 +1,190 @@
-
+import { GoogleGenAI, Type } from "@google/genai";
 import { GeneratedWebsite } from "../types";
 
-/**
- * Calls the internal Vercel Serverless Function to generate website content.
- * This keeps the API key secure on the server.
- */
-export const generateWebsiteContent = async (
-  industry: string, 
-  companyName: string, 
-  location: string, 
-  phone: string, 
-  brandColor: string
-): Promise<GeneratedWebsite> => {
-  const response = await fetch('/api/gemini', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      action: 'text',
-      payload: { industry, companyName, location, phone, brandColor }
-    }),
+const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string): Promise<GeneratedWebsite> => {
+  const ai = getAI();
+  const prompt = `Act as a senior conversion-focused copywriter for ${industry}. 
+  Generate website content JSON for "${companyName}" in ${location}. Phone: ${phone}.
+
+  STRICT CONTENT RULES:
+  1. DO NOT include any contact forms, email addresses, or "Contact Us" pages.
+  2. DO NOT include email links or mentions of emails.
+  3. ALL actions must be phone-based. 
+  4. Use neutral, trustworthy language. DO NOT use "best", "elite", "#1". Use "Local", "Trusted", "Reliable".
+  5. Mention "${companyName}" exactly 3-4 times total across the page.
+  6. Industry Value: Explain why ${industry} is critical for ${location} property owners.
+  7. Provide 4 unique CTA variations. 
+     CRITICAL: DO NOT include the phone number ${phone} in these text strings. 
+     Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
+     The application will append the phone number to these phrases automatically.
+
+  RETURN RAW JSON ONLY. NO MARKDOWN.`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-pro-preview',
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          companyName: { type: Type.STRING },
+          brandColor: { type: Type.STRING },
+          industry: { type: Type.STRING },
+          location: { type: Type.STRING },
+          phone: { type: Type.STRING },
+          hero: {
+            type: Type.OBJECT,
+            properties: {
+              badge: { type: Type.STRING },
+              headline: {
+                type: Type.OBJECT,
+                properties: {
+                  line1: { type: Type.STRING },
+                  line2: { type: Type.STRING },
+                  line3: { type: Type.STRING }
+                },
+                required: ["line1", "line2", "line3"]
+              },
+              subtext: { type: Type.STRING },
+              trustIndicators: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: { icon: { type: Type.STRING }, label: { type: Type.STRING }, sublabel: { type: Type.STRING } },
+                  required: ["icon", "label", "sublabel"]
+                }
+              }
+            },
+            required: ["badge", "headline", "subtext", "trustIndicators"]
+          },
+          services: {
+            type: Type.OBJECT,
+            properties: {
+              badge: { type: Type.STRING },
+              title: { type: Type.STRING },
+              subtitle: { type: Type.STRING },
+              cards: {
+                type: Type.ARRAY,
+                minItems: 4,
+                maxItems: 4,
+                items: {
+                  type: Type.OBJECT,
+                  properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
+                  required: ["icon", "title", "description"]
+                }
+              }
+            },
+            required: ["badge", "title", "subtitle", "cards"]
+          },
+          industryValue: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              content: { type: Type.STRING },
+              subtext: { type: Type.STRING }
+            },
+            required: ["title", "content", "subtext"]
+          },
+          featureHighlight: {
+            type: Type.OBJECT,
+            properties: {
+              badge: { type: Type.STRING },
+              headline: { type: Type.STRING },
+              cards: {
+                type: Type.ARRAY,
+                minItems: 4,
+                maxItems: 4,
+                items: {
+                  type: Type.OBJECT,
+                  properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
+                  required: ["icon", "title", "description"]
+                }
+              }
+            },
+            required: ["badge", "headline", "cards"]
+          },
+          benefits: {
+            type: Type.OBJECT,
+            properties: { 
+              title: { type: Type.STRING }, 
+              intro: { type: Type.STRING },
+              items: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 5, maxItems: 6 } 
+            },
+            required: ["title", "intro", "items"]
+          },
+          processSteps: {
+            type: Type.OBJECT,
+            properties: {
+              badge: { type: Type.STRING },
+              title: { type: Type.STRING },
+              subtitle: { type: Type.STRING },
+              steps: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: { title: { type: Type.STRING }, description: { type: Type.STRING }, icon: { type: Type.STRING } },
+                  required: ["title", "description", "icon"]
+                }
+              }
+            },
+            required: ["badge", "title", "subtitle", "steps"]
+          },
+          emergencyCTA: {
+            type: Type.OBJECT,
+            properties: { headline: { type: Type.STRING }, subtext: { type: Type.STRING }, buttonText: { type: Type.STRING } },
+            required: ["headline", "subtext", "buttonText"]
+          },
+          credentials: {
+            type: Type.OBJECT,
+            properties: {
+              badge: { type: Type.STRING },
+              headline: { type: Type.STRING },
+              description: { type: Type.STRING },
+              items: { type: Type.ARRAY, items: { type: Type.STRING } },
+              certificationText: { type: Type.STRING }
+            },
+            required: ["badge", "headline", "description", "items", "certificationText"]
+          },
+          ctaVariations: {
+            type: Type.OBJECT,
+            properties: {
+              requestQuote: { type: Type.STRING, description: "Action phrase ONLY, e.g., Request a Quote" },
+              getEstimate: { type: Type.STRING, description: "Action phrase ONLY, e.g., Get an Estimate" },
+              speakWithTeam: { type: Type.STRING, description: "Action phrase ONLY, e.g., Speak With Our Team" },
+              callAndText: { type: Type.STRING, description: "Action phrase ONLY, e.g., Call & Text" }
+            },
+            required: ["requestQuote", "getEstimate", "speakWithTeam", "callAndText"]
+          }
+        },
+        required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "emergencyCTA", "credentials", "ctaVariations"]
+      }
+    }
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to generate website content');
-  }
-
-  return response.json();
+  const jsonStr = response.text.trim();
+  return JSON.parse(jsonStr);
 };
 
-/**
- * Calls the internal Vercel Serverless Function to generate an image.
- */
-export const generateImage = async (
-  prompt: string, 
-  aspectRatio: "1:1" | "16:9" | "3:4" | "4:3" | "9:16" = "1:1"
-): Promise<string> => {
-  const response = await fetch('/api/gemini', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+export const generateImage = async (prompt: string, aspectRatio: "1:1" | "16:9" | "3:4" | "4:3" | "9:16" = "1:1"): Promise<string> => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash-image',
+    contents: { 
+      parts: [{ 
+        text: `${prompt}. Photorealistic commercial photography. Show real workers on site using safety gear. Natural lighting, candid but professional, NO text overlays.` 
+      }] 
     },
-    body: JSON.stringify({
-      action: 'image',
-      payload: { prompt, aspectRatio }
-    }),
+    config: { imageConfig: { aspectRatio } },
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to generate image');
+  for (const part of response.candidates[0].content.parts) {
+    if (part.inlineData) {
+      const base64EncodeString: string = part.inlineData.data;
+      return `data:image/png;base64,${base64EncodeString}`;
+    }
   }
-
-  const result = await response.json();
-  return result.data;
+  throw new Error("Image generation failed.");
 };
