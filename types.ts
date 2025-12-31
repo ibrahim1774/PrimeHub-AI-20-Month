@@ -1,3 +1,4 @@
+
 export interface GeneratedWebsite {
   companyName: string;
   brandColor: string;
@@ -57,6 +58,10 @@ export interface GeneratedWebsite {
       icon: string;
     }>;
   };
+  faqs: Array<{
+    question: string;
+    answer: string;
+  }>;
   emergencyCTA: {
     headline: string;
     subtext: string;

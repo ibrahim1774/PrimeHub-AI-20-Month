@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { GeneratedWebsite, GeneratedImages } from '../types';
 import Hero from './sections/Hero';
@@ -6,6 +7,7 @@ import Feature from './sections/Feature';
 import IndustryValue from './sections/IndustryValue';
 import BenefitsList from './sections/BenefitsList';
 import Process from './sections/Process';
+import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
 import Credentials from './sections/Credentials';
 import OfferPopup from './sections/OfferPopup';
@@ -31,46 +33,37 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
     <div className="bg-white min-h-screen relative font-inter overflow-x-hidden max-sm:text-[85%]">
       <style>{`
         section {
-          padding-top: 4rem !important; 
-          padding-bottom: 4rem !important;
+          padding-top: 4.6rem !important; 
+          padding-bottom: 4.6rem !important;
         }
         @media (max-width: 640px) {
           section {
-            padding-top: 2.5rem !important;
-            padding-bottom: 2.5rem !important;
+            padding-top: 2.875rem !important;
+            padding-bottom: 2.875rem !important;
           }
           body { font-size: 14px; }
         }
       `}</style>
 
-      {/* Navigation */}
-      <div className="bg-white border-b border-gray-100 py-3 px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm max-sm:py-2">
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={onExit}
-            className="text-gray-600 font-medium px-3 md:px-4 py-2 border border-gray-200 rounded hover:bg-gray-50 flex items-center gap-2 text-sm md:text-base transition-colors max-sm:px-2 max-sm:py-1"
-          >
-            <Icon name="arrow-left" size={16} /> <span className="hidden sm:inline font-bold uppercase">Exit Preview</span>
-          </button>
-          
-          <div className="flex flex-col border-l border-gray-200 pl-4 max-sm:pl-2">
-            <span className="font-black tracking-tighter text-base uppercase leading-none text-[#1A1D2E] max-sm:text-sm">
-              {data.companyName}
-            </span>
-          </div>
+      {/* Site Navigation - Adjusted sticky top to 0 since banner is removed */}
+      <div className="bg-white border-b border-gray-100 py-3 md:py-4 px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm transition-all">
+        <div className="flex flex-col">
+          <span className="font-black tracking-tighter text-base md:text-lg uppercase leading-none text-[#1A1D2E] max-sm:text-sm">
+            {data.companyName}
+          </span>
         </div>
         
         <a 
           href={`tel:${formattedPhone}`}
           style={{ backgroundColor: data.brandColor }}
-          className="text-white font-black px-4 md:px-6 py-2.5 rounded shadow-lg hover:brightness-110 flex items-center gap-2 whitespace-nowrap text-xs md:text-sm tracking-widest uppercase transition-all active:scale-95 max-sm:px-3 max-sm:py-1.5"
+          className="text-white font-black px-4 md:px-8 py-2.5 md:py-3.5 rounded shadow-lg hover:brightness-110 flex items-center gap-2 whitespace-nowrap text-[10px] md:text-xs tracking-widest uppercase transition-all active:scale-95 max-sm:px-3 max-sm:py-2"
         >
-          <Icon name="phone" size={14} />
+          <span className="hidden sm:inline">GET AN ESTIMATE:</span>
           <span>{formattedPhone}</span>
         </a>
       </div>
 
-      <main>
+      <main className="pb-16">
         <Hero 
           data={data.hero} 
           image={images.heroBackground} 
@@ -120,19 +113,10 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
           industry={data.industry} 
           location={data.location} 
         />
-      </main>
 
-      {/* Sticky Bottom CTA */}
-      <div className="fixed bottom-6 right-6 left-6 z-[55]">
-        <a 
-          href={`tel:${formattedPhone}`}
-          style={{ backgroundColor: data.brandColor }}
-          className="max-w-md mx-auto flex items-center justify-center gap-3 text-white font-black py-4 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] text-xs md:text-sm uppercase tracking-widest transition-transform hover:scale-105 active:scale-95 max-sm:max-w-none"
-        >
-          <Icon name="phone" size={18} />
-          <span>{data.ctaVariations.getEstimate}: {formattedPhone}</span>
-        </a>
-      </div>
+        {/* FAQ is now the very last section */}
+        <FAQ faqs={data.faqs} brandColor={data.brandColor} />
+      </main>
 
       {showPopup && <OfferPopup />}
     </div>

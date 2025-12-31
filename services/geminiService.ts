@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { GeneratedWebsite } from "../types";
 
@@ -44,7 +45,8 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
   4. Use neutral, trustworthy language. DO NOT use "best", "elite", "#1". Use "Local", "Trusted", "Reliable".
   5. Mention "${companyName}" exactly 3-4 times total across the page.
   6. Industry Value: Explain why ${industry} is critical for ${location} property owners.
-  7. Provide 4 unique CTA variations. 
+  7. Generate 4-5 FAQ items that are "universal common sense" for the ${industry} industry. These should be widely applicable questions about service quality, response times, estimates, and licensing.
+  8. Provide 4 unique CTA variations. 
      CRITICAL: DO NOT include the phone number ${phone} in these text strings. 
      Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
      The application will append the phone number to these phrases automatically.
@@ -162,6 +164,19 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
               },
               required: ["badge", "title", "subtitle", "steps"]
             },
+            faqs: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  question: { type: Type.STRING },
+                  answer: { type: Type.STRING }
+                },
+                required: ["question", "answer"]
+              },
+              minItems: 4,
+              maxItems: 5
+            },
             emergencyCTA: {
               type: Type.OBJECT,
               properties: { headline: { type: Type.STRING }, subtext: { type: Type.STRING }, buttonText: { type: Type.STRING } },
@@ -189,7 +204,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
               required: ["requestQuote", "getEstimate", "speakWithTeam", "callAndText"]
             }
           },
-          required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "emergencyCTA", "credentials", "ctaVariations"]
+          required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "faqs", "emergencyCTA", "credentials", "ctaVariations"]
         }
       }
     });
