@@ -11,6 +11,7 @@ import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
 import Credentials from './sections/Credentials';
 import OfferPopup from './sections/OfferPopup';
+import EditableText from './EditableText';
 import Icon from './Icon';
 import { renderToStaticMarkup } from 'react-dom/server';
 
@@ -127,11 +128,23 @@ interface PreviewSiteProps {
   onExit: () => void;
 }
 
-const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
+const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: initialImages, onExit }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
   const [claimStatus, setClaimStatus] = useState('');
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
+
+  // Editable state
+  const [data, setData] = useState<GeneratedWebsite>(initialData);
+  const [images, setImages] = useState<GeneratedImages>(initialImages);
+
+  const updateData = (newData: Partial<GeneratedWebsite>) => {
+    setData(prev => ({ ...prev, ...newData }));
+  };
+
+  const updateHero = (heroData: Partial<GeneratedWebsite['hero']>) => {
+    setData(prev => ({ ...prev, hero: { ...prev.hero, ...heroData } }));
+  };
 
   const handleClaimSite = async () => {
     if (isClaiming) return;
@@ -257,11 +270,21 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
         }
       `}</style>
 
-      {/* Site Navigation - Adjusted sticky top to 0 since banner is removed */}
-      <div className="bg-white border-b border-gray-100 py-3 md:py-4 px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm transition-all">
+      {/* Sticky Editing Banner */}
+      <div className="sticky top-0 z-[60] bg-red-600 text-white py-3 px-4 text-center font-bold text-sm md:text-base shadow-lg transition-all animate-pulse">
+        <p className="max-w-4xl mx-auto leading-tight">
+          Text and images can be edited. Once ready, click <span className="underline uppercase tracking-wider">Launch Website</span> to start $20/month website hosting and launch your site.
+        </p>
+      </div>
+
+      {/* Site Navigation */}
+      <div className="bg-white border-b border-gray-100 py-3 md:py-4 px-4 md:px-6 flex items-center justify-between sticky top-[var(--banner-height,0)] z-50 shadow-sm transition-all">
         <div className="flex flex-col">
           <span className="font-black tracking-tighter text-base md:text-lg uppercase leading-none text-[#1A1D2E] max-sm:text-sm">
-            {data.companyName}
+            <EditableText
+              value={data.companyName}
+              onChange={(v) => updateData({ companyName: v })}
+            />
           </span>
         </div>
 
@@ -283,12 +306,15 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
+          onUpdateData={updateHero}
+          onUpdateImage={(v) => setImages(prev => ({ ...prev, heroBackground: v }))}
         />
 
         <Services
           data={data.services}
           brandColor={data.brandColor}
           phone={formattedPhone}
+          onUpdateData={(d) => updateData({ services: { ...data.services, ...d } })}
         />
 
         <IndustryValue
@@ -296,26 +322,35 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
           image={images.industryValue}
           brandColor={data.brandColor}
           companyName={data.companyName}
+          onUpdateData={(d) => updateData({ industryValue: { ...data.industryValue, ...d } })}
+          onUpdateImage={(v) => setImages(prev => ({ ...prev, industryValue: v }))}
         />
 
         <Feature
           data={data.featureHighlight}
           brandColor={data.brandColor}
+          onUpdateData={(d) => updateData({ featureHighlight: { ...data.featureHighlight, ...d } })}
         />
 
         <BenefitsList
           data={data.benefits}
           brandColor={data.brandColor}
           companyName={data.companyName}
+          onUpdateData={(d) => updateData({ benefits: { ...data.benefits, ...d } })}
         />
 
-        <Process data={data.processSteps} brandColor={data.brandColor} />
+        <Process
+          data={data.processSteps}
+          brandColor={data.brandColor}
+          onUpdateData={(d) => updateData({ processSteps: { ...data.processSteps, ...d } })}
+        />
 
         <EmergencyCTA
           data={data.emergencyCTA}
           brandColor={data.brandColor}
           phone={formattedPhone}
           ctaText={data.ctaVariations.speakWithTeam}
+          onUpdateData={(d) => updateData({ emergencyCTA: { ...data.emergencyCTA, ...d } })}
         />
 
         <Credentials
@@ -324,10 +359,15 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
           brandColor={data.brandColor}
           industry={data.industry}
           location={data.location}
+          onUpdateData={(d) => updateData({ credentials: { ...data.credentials, ...d } })}
+          onUpdateImage={(v) => setImages(prev => ({ ...prev, credentialsShowcase: v }))}
         />
 
-        {/* FAQ is now the very last section */}
-        <FAQ faqs={data.faqs} brandColor={data.brandColor} />
+        <FAQ
+          faqs={data.faqs}
+          brandColor={data.brandColor}
+          onUpdateData={(d) => updateData({ faqs: d })}
+        />
       </main>
 
 

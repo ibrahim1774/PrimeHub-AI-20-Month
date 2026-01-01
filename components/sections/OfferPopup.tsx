@@ -24,7 +24,7 @@ const OfferPopup: React.FC<OfferPopupProps> = ({ onClaim, isClaiming }) => {
           disabled={isClaiming}
           className="w-full bg-[#05070A] text-white font-black text-[10px] py-4 rounded-[12px] uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all max-sm:w-auto max-sm:px-6 flex items-center justify-center text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isClaiming ? "CLAIMING..." : "CLAIM SITE"}
+          {isClaiming ? "LAUNCHING..." : "Launch Website"}
         </button>
       </div>
 
