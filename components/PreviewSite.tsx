@@ -203,7 +203,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          image: btoa(finalHtml), // Store HTML as base64 string
+          image: btoa(unescape(encodeURIComponent(finalHtml))), // Safe UTF-8 base64
           filename: `pending/html/${pendingId}.html`
         })
       });
