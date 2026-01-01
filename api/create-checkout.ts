@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
                 pendingId,
                 companyName,
             },
-            success_url: `${origin}/?status=success&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/?status=cancelled`,
         });
 
