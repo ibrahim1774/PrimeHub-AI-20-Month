@@ -331,43 +331,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
       </main>
 
 
-      {showPopup && <OfferPopup />}
-
-      {/* Claim Site Floating Action Bar */}
-      <div className="fixed bottom-6 right-6 z-[100] flex gap-4">
-        {isClaiming && (
-          <div className="bg-black/80 text-white px-6 py-3 rounded-full shadow-xl backdrop-blur-md animate-pulse font-medium">
-            {claimStatus}
-          </div>
-        )}
-
-        {!isClaiming && !deployedUrl && (
-          <div className="flex flex-col items-end gap-2">
-            <button
-              onClick={handleClaimSite}
-              className="bg-black hover:bg-gray-900 text-white font-bold text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-3 border-4 border-white"
-            >
-              <span>🚀</span>
-              CLAIM THIS SITE
-            </button>
-            <p className="text-black font-bold text-xs bg-white/90 px-3 py-1 rounded-full shadow-sm border border-gray-100 italic">
-              $20/mo hosting. PrimeHub handles all image and text edits and design finalization.
-            </p>
-          </div>
-        )}
-
-        {deployedUrl && (
-          <a
-            href={deployedUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-3 border-4 border-white"
-          >
-            <span>🌐</span>
-            VIEW LIVE SITE
-          </a>
-        )}
-      </div>
+      {showPopup && <OfferPopup onClaim={handleClaimSite} isClaiming={isClaiming} />}
     </div>
   );
 };
