@@ -135,24 +135,20 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
 
   const handleClaimSite = async () => {
     if (isClaiming) return;
-    if (!confirm("This will deploy the site to Vercel. Process involves uploading images to Cloud Storage and creating a new deployment. Continue?")) return;
 
     setIsClaiming(true);
-    setClaimStatus("Initiating deployment sequence...");
+    setClaimStatus("Preparing for checkout...");
 
     try {
-      // 1. Upload Images
-      setClaimStatus("Uploading high-res assets to Global CDN...");
+      // 1. Upload Images to GCS
+      setClaimStatus("Uploading assets...");
       const uploadedImages: any = { ...images };
-
       const imageKeys = Object.keys(images) as Array<keyof GeneratedImages>;
 
       for (const key of imageKeys) {
         const base64 = images[key];
-        if (base64.startsWith('data:')) {
-          const filename = `${data.companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${key}_${Date.now()}.png`;
-          setClaimStatus(`Uploading asset: ${key}...`);
-
+        if (base64?.startsWith('data:')) {
+          const filename = `pending/assets/${data.companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${key}_${Date.now()}.png`;
           const uploadRes = await fetch('/api/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -162,22 +158,15 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
           if (!uploadRes.ok) throw new Error(`Failed to upload ${key}`);
           const { url } = await uploadRes.json();
           uploadedImages[key] = url;
-          console.log(`Uploaded ${key} to ${url}`);
         }
       }
 
-      // 2. Generate Static HTML
-      setClaimStatus("Generating optimized static production build...");
-
+      // 2. Generate Static HTML & Sync to GCS
+      setClaimStatus("Syncing site data...");
       const staticContent = renderToStaticMarkup(
         <SiteContent data={data} images={uploadedImages} />
       );
-
-      // Inject styles. In production, we assume Tailwind CSS is available via CDN or collected styles using a more robust method.
-      // For this MVP, we try to grab current styles.
-      // A safer bet for a reliable look is to include Tailwind CDN script in the deployed HTML if we can't easily extract built CSS.
       const styles = getPageStyles();
-
       const finalHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -208,27 +197,37 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
 </body>
 </html>`;
 
-      // 3. Deploy to Vercel
-      setClaimStatus("Pushing to Vercel Edge Network...");
-      const deployRes = await fetch('/api/deploy', {
+      const pendingId = `site_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      const syncRes = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          html: finalHtml,
-          companyName: data.companyName
+          image: btoa(finalHtml), // Store HTML as base64 string
+          filename: `pending/html/${pendingId}.html`
         })
       });
 
-      if (!deployRes.ok) throw new Error("Deployment failed");
-      const deployData = await deployRes.json();
+      if (!syncRes.ok) throw new Error("Failed to sync site data");
 
-      setDeployedUrl(deployData.url ? `https://${deployData.url}` : null);
-      setClaimStatus("Deployment Complete!");
-      alert(`Site Deployed Successfully! URL: https://${deployData.url}`);
+      // 3. Initiate Checkout Redirect
+      setClaimStatus("Redirecting to Stripe...");
+
+      // We call our API to get a checkout session
+      const checkoutRes = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pendingId, companyName: data.companyName })
+      });
+
+      if (!checkoutRes.ok) throw new Error("Failed to create checkout session");
+      const { url } = await checkoutRes.json();
+
+      // Redirect to Stripe
+      window.location.href = url;
 
     } catch (error: any) {
       console.error("Claim Error:", error);
-      setClaimStatus(`Error: ${error.message}`);
       alert(`Error: ${error.message}`);
     } finally {
       setIsClaiming(false);
@@ -345,7 +344,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data, images, onExit }) => {
         {!isClaiming && !deployedUrl && (
           <button
             onClick={handleClaimSite}
-            className="bg-green-600 hover:bg-green-500 text-white font-bold text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-3 border-4 border-white"
+            className="bg-black hover:bg-gray-900 text-white font-bold text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-3 border-4 border-white"
           >
             <span>🚀</span>
             CLAIM THIS SITE

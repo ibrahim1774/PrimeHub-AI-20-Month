@@ -15,7 +15,7 @@ export default async function handler(req: Request | any, res: Response | any) {
 
   try {
     const { image, filename } = req.body;
-    
+
     if (!image || !filename) {
       return res.status(400).json({ error: 'Missing image or filename' });
     }
@@ -50,9 +50,13 @@ export default async function handler(req: Request | any, res: Response | any) {
     const buffer = Buffer.from(base64Data, 'base64');
 
     // 3. Upload
+    let contentType = 'image/png';
+    if (filename.endsWith('.json')) contentType = 'application/json';
+    if (filename.endsWith('.html')) contentType = 'text/html';
+
     await file.save(buffer, {
       metadata: {
-        contentType: 'image/png', // Assuming PNG from Gemini, can detect from base64 header if needed
+        contentType,
         cacheControl: 'public, max-age=31536000',
       },
     });
@@ -62,7 +66,7 @@ export default async function handler(req: Request | any, res: Response | any) {
     // User implying public hosting: "intended location where it's the stripe link" ?? No, "location where its the stripe link" might mean payment?
     // User said: "send the images to Google Cloud Console... replace with the images... so the generated site... claims..."
     // We will assume the bucket objects are public readable.
-    
+
     // We can try to make it public explicitly:
     try {
       await file.makePublic();
