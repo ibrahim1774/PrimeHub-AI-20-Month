@@ -111,7 +111,24 @@ export default async function handler(req: any, res: any) {
                     throw new Error(`Vercel API Error: ${deployData.error?.message || 'Unknown error'}`);
                 }
 
-                console.log(`[Webhook] SUCCESS! Deployed at: https://${deployData.url}`);
+                // 3. Fetch the final public domain from Vercel
+                let publicDomainUrl = `${uniqueProjectName}.vercel.app`;
+                try {
+                    const domainRes = await fetch(`https://api.vercel.com/v9/projects/${uniqueProjectName}/domains?teamId=${teamId || ''}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    if (domainRes.ok) {
+                        const domainData = await domainRes.json();
+                        if (domainData && domainData.domains && domainData.domains.length > 0) {
+                            const primary = domainData.domains.find((d: any) => d.main) || domainData.domains[0];
+                            publicDomainUrl = primary.name;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error fetching Vercel domain in webhook:', e);
+                }
+
+                console.log(`[Webhook] SUCCESS! Deployed at: https://${publicDomainUrl}`);
 
                 // Optional: Cleanup the pending HTML file
                 // await file.delete();

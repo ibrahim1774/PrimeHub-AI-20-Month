@@ -31,7 +31,8 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ pendingId, companyName }) => 
                 // Wait 8 seconds for DNS propagation
                 await new Promise(resolve => setTimeout(resolve, 8000));
 
-                setDeployedUrl(`https://${data.url}`);
+                const finalUrl = data.publicDomainUrl || data.url;
+                setDeployedUrl(finalUrl.startsWith('http') ? finalUrl : `https://${finalUrl}`);
                 setStatus('success');
             } catch (err: any) {
                 console.error('Deployment error:', err);

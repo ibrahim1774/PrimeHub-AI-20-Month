@@ -12,27 +12,28 @@ const FAQItem: React.FC<{
   question: string;
   answer: string;
   brandColor: string;
-  onUpdateQuestion: (v: string) => void;
-  onUpdateAnswer: (v: string) => void;
+  onUpdateQuestion?: (v: string) => void;
+  onUpdateAnswer?: (v: string) => void;
 }> = ({ question, answer, brandColor, onUpdateQuestion, onUpdateAnswer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-gray-100">
-      <div className="w-full py-6 flex items-center justify-between text-left hover:text-gray-900 transition-colors">
+    <div className="border-b border-gray-100 faq-item">
+      <div className="w-full py-6 flex items-center justify-between text-left hover:text-gray-900 transition-colors cursor-pointer group" onClick={() => setIsOpen(!isOpen)} data-faq-toggle>
         <div className="text-lg font-bold text-[#1A1D2E] tracking-tight pr-8 flex-1">
           <EditableText value={question} onChange={onUpdateQuestion} />
         </div>
         <button
-          onClick={() => setIsOpen(!isOpen)}
           style={{ color: isOpen ? brandColor : '#9CA3AF' }}
-          className="shrink-0 transition-transform duration-300"
+          className="shrink-0 transition-transform duration-300 faq-icon"
+          data-brand-color={brandColor}
         >
           <Icon name={isOpen ? "minus" : "plus"} size={20} />
         </button>
       </div>
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-6' : 'max-h-0'}`}
+        data-faq-content
+        className={`overflow-hidden transition-all duration-300 ease-in-out faq-content ${isOpen ? 'max-h-96 pb-6' : 'max-h-0'}`}
       >
         <div className="text-gray-600 leading-relaxed font-medium">
           <EditableText value={answer} onChange={onUpdateAnswer} multiline />

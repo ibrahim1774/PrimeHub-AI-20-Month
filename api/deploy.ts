@@ -93,16 +93,31 @@ export default async function handler(req: any, res: any) {
         if (!patchRes.ok) {
             const patchData = await patchRes.json();
             console.error('Project Patch Error:', JSON.stringify(patchData));
-            // We don't throw here to avoid failing the whole deployment if just the patch fails, 
-            // but for this requirement it might be critical. 
-            // user requirement: "Auto-Unlock Public Access... This is critical"
-            // So checking patchRes logic.
-            // Let's log it.
+        }
+
+        // 4. Fetch the final public domain from Vercel
+        let publicDomainUrl = `${uniqueProjectName}.vercel.app`;
+        try {
+            const domainRes = await fetch(`https://api.vercel.com/v9/projects/${uniqueProjectName}/domains?teamId=${teamId || ''}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (domainRes.ok) {
+                const domainData = await domainRes.ok ? await domainRes.json() : null;
+                if (domainData && domainData.domains && domainData.domains.length > 0) {
+                    // Find the primary domain or just use the first one
+                    const primary = domainData.domains.find((d: any) => d.main) || domainData.domains[0];
+                    publicDomainUrl = primary.name;
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching Vercel domain:', e);
         }
 
         return res.status(200).json({
-            url: `${uniqueProjectName}.vercel.app`,
-            projectName: uniqueProjectName
+            url: publicDomainUrl,
+            publicDomainUrl: publicDomainUrl,
+            projectName: uniqueProjectName,
+            deploymentId: deployData.id
         });
 
     } catch (error: any) {

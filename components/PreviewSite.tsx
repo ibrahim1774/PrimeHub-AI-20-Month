@@ -236,6 +236,45 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
             }
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggles = document.querySelectorAll('[data-faq-toggle]');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const item = toggle.closest('.faq-item');
+                    const content = item.querySelector('[data-faq-content]');
+                    const icon = item.querySelector('.faq-icon');
+                    const brandColor = icon.getAttribute('data-brand-color');
+                    
+                    const isOpen = !content.classList.contains('max-h-0');
+                    
+                    // Close all others
+                    document.querySelectorAll('.faq-item').forEach(otherItem => {
+                        if (otherItem !== item) {
+                           const otherContent = otherItem.querySelector('[data-faq-content]');
+                           const otherIcon = otherItem.querySelector('.faq-icon');
+                           otherContent.classList.add('max-h-0');
+                           otherContent.classList.remove('max-h-96', 'pb-6');
+                           otherIcon.style.color = '#9CA3AF';
+                           otherIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>';
+                        }
+                    });
+
+                    if (isOpen) {
+                        content.classList.add('max-h-0');
+                        content.classList.remove('max-h-96', 'pb-6');
+                        icon.style.color = '#9CA3AF';
+                        icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>';
+                    } else {
+                        content.classList.remove('max-h-0');
+                        content.classList.add('max-h-96', 'pb-6');
+                        icon.style.color = brandColor;
+                        icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus"><path d="M5 12h14"/></svg>';
+                    }
+                });
+            });
+        });
+    </script>
     ${styles}
 </head>
 <body>

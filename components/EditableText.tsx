@@ -9,8 +9,14 @@ interface EditableTextProps {
 
 const EditableText: React.FC<EditableTextProps> = ({ value, onChange, className = '', multiline = false }) => {
     const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-        onChange(e.currentTarget.innerText);
+        if (onChange) {
+            onChange(e.currentTarget.innerText);
+        }
     };
+
+    if (!onChange) {
+        return <span className={className}>{value}</span>;
+    }
 
     return (
         <div

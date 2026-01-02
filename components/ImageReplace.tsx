@@ -3,7 +3,7 @@ import { Camera } from 'lucide-react';
 
 interface ImageReplaceProps {
     src: string;
-    onChange: (newBase64: string) => void;
+    onChange?: (newBase64: string) => void;
     className?: string;
     alt?: string;
 }
@@ -13,7 +13,7 @@ const ImageReplace: React.FC<ImageReplaceProps> = ({ src, onChange, className = 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
+        if (file && onChange) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 onChange(reader.result as string);
@@ -21,6 +21,10 @@ const ImageReplace: React.FC<ImageReplaceProps> = ({ src, onChange, className = 
             reader.readAsDataURL(file);
         }
     };
+
+    if (!onChange) {
+        return <img src={src} alt={alt} className={`object-cover ${className}`} />;
+    }
 
     return (
         <div className={`relative group ${className}`}>

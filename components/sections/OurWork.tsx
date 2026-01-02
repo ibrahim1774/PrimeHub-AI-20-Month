@@ -74,12 +74,29 @@ const ImageSlot: React.FC<{
 };
 
 const OurWork: React.FC<OurWorkProps> = ({ data, images, brandColor, onUpdateData, onUpdateImages }) => {
+    const isEditMode = !!onUpdateImages;
+
     const handleImageChange = (index: number, base64: string) => {
         if (onUpdateImages) {
             const newImages = [...images] as [string | null, string | null, string | null, string | null];
             newImages[index] = base64;
             onUpdateImages(newImages);
         }
+    };
+
+    // Filter images in static mode, or use all slots in edit mode
+    const displayedImages = isEditMode
+        ? images.map((img, idx) => ({ img, idx }))
+        : images.map((img, idx) => ({ img, idx })).filter(item => !!item.img);
+
+    if (!isEditMode && displayedImages.length === 0) return null;
+
+    // Determine grid layout based on image count
+    const getGridCols = (count: number) => {
+        if (count === 1) return 'grid-cols-1 max-w-2xl mx-auto';
+        if (count === 2) return 'grid-cols-1 sm:grid-cols-2';
+        if (count === 3) return 'grid-cols-1 sm:grid-cols-3';
+        return 'grid-cols-1 sm:grid-cols-2';
     };
 
     return (
@@ -96,27 +113,35 @@ const OurWork: React.FC<OurWorkProps> = ({ data, images, brandColor, onUpdateDat
                             data.title
                         )}
                     </h2>
-                    <div className="text-gray-500 font-medium max-w-2xl mx-auto max-sm:text-sm">
-                        {onUpdateData ? (
-                            <EditableText
-                                value={data.subtitle}
-                                onChange={(v) => onUpdateData({ subtitle: v })}
-                                multiline
-                            />
-                        ) : (
-                            data.subtitle
-                        )}
-                    </div>
+                    {data.subtitle && (
+                        <div className="text-gray-500 font-medium max-w-2xl mx-auto max-sm:text-sm">
+                            {onUpdateData ? (
+                                <EditableText
+                                    value={data.subtitle}
+                                    onChange={(v) => onUpdateData({ subtitle: v })}
+                                    multiline
+                                />
+                            ) : (
+                                data.subtitle
+                            )}
+                        </div>
+                    )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {images.map((image, idx) => (
-                        <ImageSlot
-                            key={idx}
-                            image={image}
-                            index={idx}
-                            onImageChange={handleImageChange}
-                        />
+                <div className={`grid gap-6 ${getGridCols(displayedImages.length)}`}>
+                    {displayedImages.map(({ img, idx }) => (
+                        isEditMode ? (
+                            <ImageSlot
+                                key={idx}
+                                image={img}
+                                index={idx}
+                                onImageChange={handleImageChange}
+                            />
+                        ) : (
+                            <div key={idx} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden aspect-[4/3] relative">
+                                <img src={img!} alt={`Project ${idx + 1}`} className="w-full h-full object-cover" />
+                            </div>
+                        )
                     ))}
                 </div>
             </div>

@@ -45,8 +45,12 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
   4. Use neutral, trustworthy language. DO NOT use "best", "elite", "#1". Use "Local", "Trusted", "Reliable".
   5. Mention "${companyName}" exactly 3-4 times total across the page.
   6. Industry Value: Explain why ${industry} is critical for ${location} property owners.
-  7. Generate 4-5 FAQ items that are "universal common sense" for the ${industry} industry. These should be widely applicable questions about service quality, response times, estimates, and licensing.
-  8. Our Work Section: Generate title as "Our Work" and subtitle as "Upload real photos of your completed home service projects. These images help customers trust your work."
+  7. Generate EXACTLY 4 FAQ items. These should be universal, non-industry-specific common sense topics:
+     - Scheduling (How quickly can you start?)
+     - Estimates (How do your estimates work?)
+     - Service Area (Where do you work?)
+     - Satisfaction Guarantee (What if I'm not happy with the work?)
+  8. Our Work Section: Generate title as "Our Work" and subtitle as "Real photos from our recent projects in ${location}."
   9. Provide 4 unique CTA variations. 
      CRITICAL: DO NOT include the phone number ${phone} in these text strings. 
      Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
@@ -176,7 +180,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
                 required: ["question", "answer"]
               },
               minItems: 4,
-              maxItems: 5
+              maxItems: 4
             },
             ourWork: {
               type: Type.OBJECT,
