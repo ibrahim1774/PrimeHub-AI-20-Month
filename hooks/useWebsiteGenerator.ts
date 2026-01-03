@@ -87,10 +87,10 @@ export const useWebsiteGenerator = () => {
         formData.brandColor
       );
 
-      // OpenAI DALL-E 3 Strategy (Primary for High Relevance)
-      const heroGenPromise = generateOpenAIImage(`${formData.industry} professional technician working on site`);
-      const valueGenPromise = generateOpenAIImage(`${formData.industry} contractor providing residential service`);
-      const credGenPromise = generateOpenAIImage(`${formData.industry} service crew and professional equipment`);
+      // OpenAI DALL-E Strategy (Primary for High Relevance) with Distinct Compositions
+      const heroGenPromise = generateOpenAIImage(`Wide angle hero shot, ${formData.industry} professional team standing proudly in front of a completed project site, bright daylight`);
+      const valueGenPromise = generateOpenAIImage(`Extreme close-up macro shot, hands of a ${formData.industry} technician using specialized tools for detailed repair work, high focus`);
+      const credGenPromise = generateOpenAIImage(`Medium shot, friendly ${formData.industry} contractor in professional uniform and safety gear smiling at the camera, residential background`);
 
       // Wait for content and OpenAI images
       const [content, heroUrl, valueUrl, credUrl] = await Promise.all([
@@ -116,9 +116,9 @@ export const useWebsiteGenerator = () => {
         return getFallback(fallbackType);
       };
 
-      const heroImg = await resolveWithFallback(heroUrl, `${formData.industry} service`, 'hero');
-      const valueImg = await resolveWithFallback(valueUrl, `${formData.industry} repair`, 'value');
-      const credImg = await resolveWithFallback(credUrl, `${formData.industry} professional`, 'cred');
+      const heroImg = await resolveWithFallback(heroUrl, `${formData.industry} service truck team`, 'hero');
+      const valueImg = await resolveWithFallback(valueUrl, `${formData.industry} technician tools detail`, 'value');
+      const credImg = await resolveWithFallback(credUrl, `${formData.industry} professional worker uniform`, 'cred');
 
       targetProgress.current = 80;
       setGeneratedData(content);

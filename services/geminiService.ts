@@ -292,7 +292,7 @@ export const generateOpenAIImage = async (prompt: string): Promise<string> => {
       },
       body: JSON.stringify({
         model: "dall-e-2",
-        prompt: `${prompt}. Photorealistic, professional contractor photography. Natural lighting, real job site environment. No text, no logos.`,
+        prompt: `${prompt}. ${Math.random().toString(36).substring(7)}. Photorealistic, professional contractor photography. Natural lighting, real job site environment. No text, no logos.`,
         n: 1,
         size: "1024x1024"
       })
