@@ -15,17 +15,21 @@ const getAI = () => {
 };
 
 const getUnsplashKey = () => {
-  return process.env.UNSPLASH_ACCESS_KEY || "3JabxFut430D5h-XZmnhE4eMhGHgDfiD_IuqtoSfWZo";
+  return process.env.UNSPLASH_ACCESS_KEY || "YOUR_UNSPLASH_KEY_HERE";
 };
 
 const getPixabayKey = () => {
-  return process.env.PIXABAY_API_KEY || "4175281-b81ce7d692224f774bbf08c4a";
+  return process.env.PIXABAY_API_KEY || "YOUR_PIXABAY_KEY_HERE";
+};
+
+const getOpenAIKey = () => {
+  return process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY_HERE";
 };
 
 const getGoogleConfig = () => {
   return {
-    apiKey: process.env.GOOGLE_SEARCH_API_KEY || "AIzaSyDSUTwE7I5zF9_HThtH6ygfT076nM531U4",
-    cx: process.env.GOOGLE_SEARCH_CX || "25fe3248de2554915"
+    apiKey: process.env.GOOGLE_SEARCH_API_KEY || "YOUR_GOOGLE_API_KEY_HERE",
+    cx: process.env.GOOGLE_SEARCH_CX || "YOUR_GOOGLE_CX_HERE"
   };
 };
 
@@ -275,6 +279,39 @@ export const generateImage = async (prompt: string, aspectRatio: "1:1" | "16:9" 
   }
 };
 
+export const generateOpenAIImage = async (prompt: string): Promise<string> => {
+  const apiKey = getOpenAIKey();
+  console.log(`[OpenAI] Generating image for: "${prompt}"`);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "dall-e-3",
+        prompt: `${prompt}. Photorealistic, professional contractor photography. High-end, natural lighting, real job site environment. No text, no logos.`,
+        n: 1,
+        size: "1024x1024",
+        quality: "standard"
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.data[0].url;
+  } catch (error) {
+    console.error("[OpenAI Error]:", error);
+    return "";
+  }
+};
+
 export const searchUnsplashImages = async (
   query: string,
   orientation: "landscape" | "portrait" | "squarish" = "landscape",
@@ -352,6 +389,7 @@ export const searchUnsplashImage = async (query: string, orientation: "landscape
   const results = await searchUnsplashImages(query, orientation, 1);
   return results.length > 0 ? results[0].url : "";
 };
+
 export const searchGoogleImages = async (
   query: string,
   count: number = 1,
@@ -431,6 +469,7 @@ export const searchGoogleImages = async (
     return [];
   }
 };
+
 export const searchPixabayImages = async (
   query: string,
   orientation: "landscape" | "portrait" = "landscape",
@@ -441,7 +480,7 @@ export const searchPixabayImages = async (
   const pixabayOrientation = orientation === "landscape" ? "horizontal" : "vertical";
   console.log(`[Pixabay] Human-like search for: "${query}" (Target: ${count} images)`);
 
-  const url = `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=${pixabayOrientation}&safesearch=true&per_page=30`;
+  const url = `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(query)}&image_type=photo&orientation=${pixabayOrientation}&safesearch=true&per_page=40&min_width=1200&min_height=800&order=popular`;
 
   try {
     const response = await fetch(url);
@@ -454,23 +493,38 @@ export const searchPixabayImages = async (
 
     if (hits.length === 0) return [];
 
-    // Scoring Logic (Similar to Unsplash framework)
+    // Aggressive Scoring Logic for Blue-Collar Relevance
     const scoredResults = hits.map((img: any, index: number) => {
       let score = 0;
       const tags = (img.tags || "").toLowerCase();
 
-      // Relevance Ranking
-      if (index < 8) score += 10;
+      // CRITICAL: Industry Match
+      const searchTerms = query.toLowerCase().split(" ");
+      const primaryIndustry = searchTerms[0];
 
-      const primaryQuery = query.split(" ")[0].toLowerCase();
-      if (tags.includes(primaryQuery)) score += 5;
+      // Essential for relevance: The tags MUST contain the primary industry keyword
+      if (!tags.includes(primaryIndustry)) {
+        score -= 50;
+      } else {
+        score += 20;
+      }
 
-      const actionKeywords = ["work", "technician", "tools", "repair", "service", "contractor", "crew", "project"];
-      if (actionKeywords.some(k => tags.includes(k))) score += 3;
+      // Action/Context Boost
+      const blueCollarKeywords = ["repair", "service", "maintenance", "installation", "construction", "professional", "working", "technician", "tools", "truck"];
+      blueCollarKeywords.forEach(k => {
+        if (tags.includes(k)) score += 5;
+      });
+
+      // Avoid "Stock Office" vibes
+      const officeKeywords = ["office", "laptop", "meeting", "suit", "business", "computer", "desk"];
+      if (officeKeywords.some(k => tags.includes(k))) score -= 15;
 
       // Penalize non-professional vibes
-      const cartoonKeywords = ["illustration", "vector", "drawing", "cartoon", "graphic"];
-      if (cartoonKeywords.some(k => tags.includes(k))) score -= 20;
+      const cartoonKeywords = ["illustration", "vector", "drawing", "cartoon", "graphic", "3d", "render"];
+      if (cartoonKeywords.some(k => tags.includes(k))) score -= 100;
+
+      // Unsplash-like popularity/order weight
+      if (index < 5) score += 10;
 
       return { img, score };
     });

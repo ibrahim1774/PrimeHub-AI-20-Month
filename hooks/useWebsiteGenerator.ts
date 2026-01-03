@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { FormData, GeneratedWebsite, GeneratedImages } from '../types';
-import { generateWebsiteContent, generateImage, searchUnsplashImages, searchPixabayImages } from '../services/geminiService';
+import { generateWebsiteContent, generateImage, generateOpenAIImage, searchUnsplashImages, searchPixabayImages } from '../services/geminiService';
 
 const LOADING_MESSAGES = [
   "Initializing project structure...",
@@ -87,44 +87,38 @@ export const useWebsiteGenerator = () => {
         formData.brandColor
       );
 
-      // Pixabay Strategy (Primary) with Batched Results
-      const heroBatchPromise = searchPixabayImages(`${formData.industry} professional technician`, "landscape", 5);
-      const valueBatchPromise = searchPixabayImages(`${formData.industry} repair equipment`, "landscape", 5);
-      const credBatchPromise = searchPixabayImages(`${formData.industry} service team`, "landscape", 5);
+      // OpenAI DALL-E 3 Strategy (Primary for High Relevance)
+      const heroGenPromise = generateOpenAIImage(`${formData.industry} professional technician working on site`);
+      const valueGenPromise = generateOpenAIImage(`${formData.industry} contractor providing residential service`);
+      const credGenPromise = generateOpenAIImage(`${formData.industry} service crew and professional equipment`);
 
-      // Wait for everything to finish concurrently
-      const [content, heroBatch, valueBatch, credBatch] = await Promise.all([
+      // Wait for content and OpenAI images
+      const [content, heroUrl, valueUrl, credUrl] = await Promise.all([
         contentPromise,
-        heroBatchPromise,
-        valueBatchPromise,
-        credBatchPromise
+        heroGenPromise,
+        valueGenPromise,
+        credGenPromise
       ]);
 
-      // Resolve images with deduplication and TIERED FALLBACK (Pixabay -> Unsplash -> Static)
-      const usedIds = new Set<string>();
-      const resolveImage = async (batch: { url: string; id: string }[], query: string, fallbackType: 'hero' | 'value' | 'cred') => {
-        // 1. Try Pixabay Batch
-        let found = batch.find(img => !usedIds.has(img.id));
-        if (found) {
-          usedIds.add(found.id);
-          return found.url;
-        }
+      // Resolve images with robust fallback logic
+      const resolveWithFallback = async (primaryUrl: string, query: string, fallbackType: 'hero' | 'value' | 'cred') => {
+        if (primaryUrl) return primaryUrl;
 
-        // 2. Fallback to Unsplash if Pixabay fails/duplicates
-        console.log(`[Generator] Pixabay fallback triggered for ${fallbackType}, trying Unsplash...`);
-        const unsplashResults = await searchUnsplashImages(query, "landscape", 3, Array.from(usedIds));
-        if (unsplashResults.length > 0) {
-          usedIds.add(unsplashResults[0].id);
-          return unsplashResults[0].url;
-        }
+        console.warn(`[Generator] OpenAI fallback for ${fallbackType}, trying search APIs...`);
+        // Try Pixabay search as second tier
+        const pixabayHits = await searchPixabayImages(query, "landscape", 1);
+        if (pixabayHits.length > 0) return pixabayHits[0].url;
 
-        // 3. Last Resort: Static Industry Fallback
+        // Try Unsplash search as third tier
+        const unsplashHits = await searchUnsplashImages(query, "landscape", 1);
+        if (unsplashHits.length > 0) return unsplashHits[0].url;
+
         return getFallback(fallbackType);
       };
 
-      const heroImg = await resolveImage(heroBatch, `${formData.industry} technician working`, 'hero');
-      const valueImg = await resolveImage(valueBatch, `${formData.industry} repair tools`, 'value');
-      const credImg = await resolveImage(credBatch, `${formData.industry} team professional`, 'cred');
+      const heroImg = await resolveWithFallback(heroUrl, `${formData.industry} service`, 'hero');
+      const valueImg = await resolveWithFallback(valueUrl, `${formData.industry} repair`, 'value');
+      const credImg = await resolveWithFallback(credUrl, `${formData.industry} professional`, 'cred');
 
       targetProgress.current = 80;
       setGeneratedData(content);
