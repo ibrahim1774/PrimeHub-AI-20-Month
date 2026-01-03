@@ -59,7 +59,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -246,7 +246,7 @@ export const generateImage = async (prompt: string, aspectRatio: "1:1" | "16:9" 
     }
     throw new Error("Model returned no image data.");
   } catch (error: any) {
-    console.error("[Synthesis Error] Image failure:", error);
-    throw error;
+    console.warn("[Synthesis Warning] Image failure, returning null for fallback:", error);
+    return ""; // Return empty string to trigger fallback in the hook
   }
 };

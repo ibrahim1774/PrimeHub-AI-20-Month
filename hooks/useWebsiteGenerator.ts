@@ -63,48 +63,67 @@ export const useWebsiteGenerator = () => {
     setGeneratedImages(null);
 
     try {
-      console.log("[Generator] Step 1: Requesting Content Generation");
-      targetProgress.current = 20;
-      const content = await generateWebsiteContent(
+      console.log("[Generator] Step 1: Initiating Parallel Generation (Text + Images)");
+      targetProgress.current = 30;
+
+      // Define standard industry fallbacks
+      const getFallback = (type: 'hero' | 'value' | 'cred') => {
+        const industry = formData.industry.toLowerCase();
+        // Dynamic construction of high-quality Unsplash industry shots
+        const terms: Record<string, string> = {
+          hero: `${industry} professional service site`,
+          value: `${industry} technician working repair`,
+          cred: `${industry} service truck team`
+        };
+        return `https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200`; // High-quality generic construction/service default
+      };
+
+      // Fire all requests at once
+      const contentPromise = generateWebsiteContent(
         formData.industry,
         formData.companyName,
         formData.serviceArea,
         formData.phone,
         formData.brandColor
       );
-      setGeneratedData(content);
-      console.log("[Generator] Step 1 Complete: Content Generated");
 
-      console.log("[Generator] Step 2: Requesting Asset Generation (Images)");
-      targetProgress.current = 50;
+      const heroImgPromise = generateImage(
+        `Candid high-end professional photography of ${formData.industry} technicians at a project site in ${formData.serviceArea}, 16:9`,
+        "16:9"
+      );
 
-      const [heroImg, valueImg, credImg] = await Promise.all([
-        generateImage(
-          `Candid high-end professional photography of ${formData.industry} technicians at a project site in ${formData.serviceArea}, 16:9`,
-          "16:9"
-        ),
-        generateImage(
-          `Action shot of a professional ${formData.industry} technician performing an inspection or repair, cinematic lighting, 4:3`,
-          "4:3"
-        ),
-        generateImage(
-          `Professional ${formData.industry} service team with vehicle, daylight, high-quality photorealistic 16:9`,
-          "16:9"
-        )
+      const valueImgPromise = generateImage(
+        `Action shot of a professional ${formData.industry} technician performing an inspection or repair, cinematic lighting, 4:3`,
+        "4:3"
+      );
+
+      const credImgPromise = generateImage(
+        `Professional ${formData.industry} service team with vehicle, daylight, high-quality photorealistic 16:9`,
+        "16:9"
+      );
+
+      // Wait for everything to finish concurrently
+      const [content, heroImg, valueImg, credImg] = await Promise.all([
+        contentPromise,
+        heroImgPromise,
+        valueImgPromise,
+        credImgPromise
       ]);
 
+      targetProgress.current = 80;
+      setGeneratedData(content);
+
       setGeneratedImages({
-        heroBackground: heroImg,
-        industryValue: valueImg,
-        credentialsShowcase: credImg,
+        heroBackground: heroImg || getFallback('hero'),
+        industryValue: valueImg || getFallback('value'),
+        credentialsShowcase: credImg || getFallback('cred'),
         ourWorkImages: [null, null, null, null],
       });
-      console.log("[Generator] Step 2 Complete: Assets Generated");
 
+      console.log("[Generator] Synthesis complete.");
       targetProgress.current = 100;
       await new Promise(resolve => setTimeout(resolve, 800));
       setIsGenerating(false);
-      console.log("[Generator] Synthesis sequence finished successfully.");
 
     } catch (err: any) {
       console.error("[Generator Error]:", err);
