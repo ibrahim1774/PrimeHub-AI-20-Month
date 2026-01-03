@@ -264,13 +264,19 @@ export const generateImage = async (prompt: string, aspectRatio: "1:1" | "16:9" 
   }
 };
 
-export const searchUnsplashImage = async (query: string, orientation: "landscape" | "portrait" | "squarish" = "landscape"): Promise<string> => {
+export const searchUnsplashImages = async (
+  query: string,
+  orientation: "landscape" | "portrait" | "squarish" = "landscape",
+  count: number = 1,
+  excludeIds: string[] = []
+): Promise<{ url: string; id: string }[]> => {
   const apiKey = getUnsplashKey();
-  console.log(`[Unsplash] Searching for: ${query}`);
+  console.log(`[Unsplash] Human-like search for: "${query}" (Target: ${count} images)`);
 
   try {
+    // 1. Fetch a "page" of results to simulate scanning the top of Unsplash.com
     const response = await fetch(
-      `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=${orientation}&client_id=${apiKey}`
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${orientation}&per_page=25&order_by=relevant&content_filter=high&client_id=${apiKey}`
     );
 
     if (!response.ok) {
@@ -278,9 +284,60 @@ export const searchUnsplashImage = async (query: string, orientation: "landscape
     }
 
     const data = await response.json();
-    return data.urls.regular;
+    const results = data.results || [];
+
+    if (results.length === 0) return [];
+
+    // 2. Human-like Filtering & Scoring Logic
+    const scoredResults = results.map((img: any, index: number) => {
+      let score = 0;
+      const meta = (img.alt_description || "" + " " + (img.description || "")).toLowerCase();
+      const tags = (img.tags || []).map((t: any) => t.title.toLowerCase()).join(" ");
+
+      // Prefer "top of page" results (relevance ranking from Unsplash)
+      if (index < 8) score += 10;
+
+      // Relevance Check: Boost if primary keywords are found
+      const primaryQuery = query.split(" ")[0].toLowerCase();
+      if (meta.includes(primaryQuery) || tags.includes(primaryQuery)) score += 5;
+
+      // "Action/Professional" Boost
+      const actionKeywords = ["work", "technician", "tools", "repair", "service", "contractor", "crew", "project"];
+      if (actionKeywords.some(k => meta.includes(k) || tags.includes(k))) score += 3;
+
+      // Quality Check: Penalize illustrations/graphics
+      const graphicKeywords = ["illustration", "vector", "3d render", "drawing", "graphic", "logo"];
+      if (graphicKeywords.some(k => meta.includes(k) || tags.includes(k))) score -= 20;
+
+      // Penalize off-topic vibes for contractors
+      const offTopicKeywords = ["office", "laptop", "meeting", "suit", "fashion", "nature"];
+      if (offTopicKeywords.some(k => meta.includes(k) || tags.includes(k))) score -= 5;
+
+      return { img, score };
+    });
+
+    // 3. Selection
+    // Filter out excluded IDs and very low scores
+    const filtered = scoredResults
+      .filter((item: any) => !excludeIds.includes(item.img.id) && item.score > 0)
+      .sort((a: any, b: any) => b.score - a.score);
+
+    // Take the top requested number
+    return filtered.slice(0, count).map((item: any) => ({
+      url: item.img.urls.regular,
+      id: item.img.id
+    }));
+
   } catch (error) {
     console.error("[Unsplash Error]:", error);
-    return "";
+    return [];
   }
+};
+
+/**
+ * Legacy wrapper for single image search
+ */
+export const searchUnsplashImage = async (query: string, orientation: "landscape" | "portrait" | "squarish" = "landscape"): Promise<string> => {
+  const results = await searchUnsplashImages(query, orientation, 1);
+  return results.length > 0 ? results[0].url : "";
 };

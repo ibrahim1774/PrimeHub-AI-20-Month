@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { FormData, GeneratedWebsite, GeneratedImages } from '../types';
-import { generateWebsiteContent, generateImage, searchUnsplashImage } from '../services/geminiService';
+import { generateWebsiteContent, generateImage, searchUnsplashImages } from '../services/geminiService';
 
 const LOADING_MESSAGES = [
   "Initializing project structure...",
@@ -87,18 +87,33 @@ export const useWebsiteGenerator = () => {
         formData.brandColor
       );
 
-      // Smart Image Intent Strategy
-      const heroImgPromise = searchUnsplashImage(`${formData.industry} professional technician working`, "landscape");
-      const valueImgPromise = searchUnsplashImage(`${formData.industry} home service repair`, "landscape");
-      const credImgPromise = searchUnsplashImage(`${formData.industry} contractor team professional`, "landscape");
+      // Smart Image Intent Strategy (Batched for deduplication)
+      const heroBatchPromise = searchUnsplashImages(`${formData.industry} professional technician working`, "landscape", 5);
+      const valueBatchPromise = searchUnsplashImages(`${formData.industry} repair tools`, "landscape", 5);
+      const credBatchPromise = searchUnsplashImages(`${formData.industry} team professional`, "landscape", 5);
 
       // Wait for everything to finish concurrently
-      const [content, heroImg, valueImg, credImg] = await Promise.all([
+      const [content, heroBatch, valueBatch, credBatch] = await Promise.all([
         contentPromise,
-        heroImgPromise,
-        valueImgPromise,
-        credImgPromise
+        heroBatchPromise,
+        valueBatchPromise,
+        credBatchPromise
       ]);
+
+      // Resolve images while ensuring uniqueness (Deduplication)
+      const usedIds = new Set<string>();
+      const pickUnique = (batch: { url: string; id: string }[]) => {
+        const found = batch.find(img => !usedIds.has(img.id)) || batch[0];
+        if (found) {
+          usedIds.add(found.id);
+          return found.url;
+        }
+        return "";
+      };
+
+      const heroImg = pickUnique(heroBatch);
+      const valueImg = pickUnique(valueBatch);
+      const credImg = pickUnique(credBatch);
 
       targetProgress.current = 80;
       setGeneratedData(content);
