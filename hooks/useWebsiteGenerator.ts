@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { FormData, GeneratedWebsite, GeneratedImages } from '../types';
-import { generateWebsiteContent, generateImage, searchUnsplashImages } from '../services/geminiService';
+import { generateWebsiteContent, generateImage, searchUnsplashImages, searchGoogleImages } from '../services/geminiService';
 
 const LOADING_MESSAGES = [
   "Initializing project structure...",
@@ -87,41 +87,52 @@ export const useWebsiteGenerator = () => {
         formData.brandColor
       );
 
-      // Smart Image Intent Strategy (Batched for deduplication)
-      const heroBatchPromise = searchUnsplashImages(`${formData.industry} professional technician working`, "landscape", 5);
-      const valueBatchPromise = searchUnsplashImages(`${formData.industry} repair tools`, "landscape", 5);
-      const credBatchPromise = searchUnsplashImages(`${formData.industry} team professional`, "landscape", 5);
+      // Google Search Strategy (Primary) with Batched Results
+      const heroBatchPromise = searchGoogleImages(`${formData.industry} professional technician working`, 5);
+      const valueBatchPromise = searchGoogleImages(`${formData.industry} repair tools`, 5);
+      const credBatchPromise = searchGoogleImages(`${formData.industry} team professional`, 5);
 
       // Wait for everything to finish concurrently
-      const [content, heroBatch, valueBatch, credBatch] = await Promise.all([
+      let [content, heroBatch, valueBatch, credBatch] = await Promise.all([
         contentPromise,
         heroBatchPromise,
         valueBatchPromise,
         credBatchPromise
       ]);
 
-      // Resolve images while ensuring uniqueness (Deduplication)
+      // Resolve images with deduplication and TIERED FALLBACK (Google -> Unsplash -> Static)
       const usedIds = new Set<string>();
-      const pickUnique = (batch: { url: string; id: string }[]) => {
-        const found = batch.find(img => !usedIds.has(img.id)) || batch[0];
+      const resolveImage = async (batch: { url: string; id: string }[], query: string, fallbackType: 'hero' | 'value' | 'cred') => {
+        // 1. Try Google Batch
+        let found = batch.find(img => !usedIds.has(img.id));
         if (found) {
           usedIds.add(found.id);
           return found.url;
         }
-        return "";
+
+        // 2. Fallback to Unsplash if Google fails/duplicates
+        console.log(`[Generator] Google fallback triggered for ${fallbackType}, trying Unsplash...`);
+        const unsplashResults = await searchUnsplashImages(query, "landscape", 3, Array.from(usedIds));
+        if (unsplashResults.length > 0) {
+          usedIds.add(unsplashResults[0].id);
+          return unsplashResults[0].url;
+        }
+
+        // 3. Last Resort: Static Industry Fallback
+        return getFallback(fallbackType);
       };
 
-      const heroImg = pickUnique(heroBatch);
-      const valueImg = pickUnique(valueBatch);
-      const credImg = pickUnique(credBatch);
+      const heroImg = await resolveImage(heroBatch, `${formData.industry} technician working`, 'hero');
+      const valueImg = await resolveImage(valueBatch, `${formData.industry} repair tools`, 'value');
+      const credImg = await resolveImage(credBatch, `${formData.industry} team professional`, 'cred');
 
       targetProgress.current = 80;
       setGeneratedData(content);
 
       setGeneratedImages({
-        heroBackground: heroImg || getFallback('hero'),
-        industryValue: valueImg || getFallback('value'),
-        credentialsShowcase: credImg || getFallback('cred'),
+        heroBackground: heroImg,
+        industryValue: valueImg,
+        credentialsShowcase: credImg,
         ourWorkImages: [null, null, null, null],
       });
 

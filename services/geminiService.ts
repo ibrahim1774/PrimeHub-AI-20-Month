@@ -18,6 +18,13 @@ const getUnsplashKey = () => {
   return process.env.UNSPLASH_ACCESS_KEY || "3JabxFut430D5h-XZmnhE4eMhGHgDfiD_IuqtoSfWZo";
 };
 
+const getGoogleConfig = () => {
+  return {
+    apiKey: process.env.GOOGLE_SEARCH_API_KEY || "AIzaSyDSUTwE7I5zF9_HThtH6ygfT076nM531U4",
+    cx: process.env.GOOGLE_SEARCH_CX || "25fe3248de2554915"
+  };
+};
+
 /**
  * Robustly extracts and parses JSON from a model response, 
  * handling potential markdown code blocks or extra text.
@@ -340,4 +347,67 @@ export const searchUnsplashImages = async (
 export const searchUnsplashImage = async (query: string, orientation: "landscape" | "portrait" | "squarish" = "landscape"): Promise<string> => {
   const results = await searchUnsplashImages(query, orientation, 1);
   return results.length > 0 ? results[0].url : "";
+};
+export const searchGoogleImages = async (
+  query: string,
+  count: number = 1,
+  excludeUrls: string[] = []
+): Promise<{ url: string; id: string }[]> => {
+  const { apiKey, cx } = getGoogleConfig();
+  console.log(`[GoogleSearch] Human-like search for: "${query}" (Target: ${count} images)`);
+
+  const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}&searchType=image&num=10&safe=active&imgSize=large`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(`Google API error: ${err.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    const items = data.items || [];
+
+    if (items.length === 0) return [];
+
+    // Human-like Filtering & Scoring Logic for Google
+    const scoredResults = items.map((item: any, index: number) => {
+      let score = 0;
+      const title = (item.title || "").toLowerCase();
+      const snippet = (item.snippet || "").toLowerCase();
+      const link = item.link.toLowerCase();
+
+      // Top results are usually more relevant
+      if (index < 3) score += 10;
+
+      // Relevance Check: Boost if primary keywords are found
+      const primaryQuery = query.toLowerCase();
+      if (title.includes(primaryQuery) || snippet.includes(primaryQuery)) score += 5;
+
+      // "Action/Professional" Boost
+      const actionKeywords = ["work", "technician", "tools", "repair", "service", "contractor", "crew", "project"];
+      if (actionKeywords.some(k => title.includes(k) || snippet.includes(k))) score += 3;
+
+      // Penalize stock images with heavy watermarking/licensing vibes if possible
+      if (link.includes("istockphoto") || link.includes("shutterstock") || link.includes("dreamstime") || link.includes("gettyimages")) {
+        score -= 2;
+      }
+
+      return { item, score };
+    });
+
+    // Selection
+    const filtered = scoredResults
+      .filter((res: any) => !excludeUrls.includes(res.item.link) && res.score > 0)
+      .sort((a: any, b: any) => b.score - a.score);
+
+    return filtered.slice(0, count).map((res: any) => ({
+      url: res.item.link,
+      id: res.item.link
+    }));
+
+  } catch (error) {
+    console.error("[Google Search Error]:", error);
+    return [];
+  }
 };
