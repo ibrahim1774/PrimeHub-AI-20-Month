@@ -100,19 +100,35 @@ export const useWebsiteGenerator = () => {
         credGenPromise
       ]);
 
-      // Resolve images with robust fallback logic
+      // Resolve images with robust fallback logic and GUARANTEED UNIQUENESS
+      const usedUrls = new Set<string>();
+
       const resolveWithFallback = async (primaryUrl: string, query: string, fallbackType: 'hero' | 'value' | 'cred') => {
-        if (primaryUrl) return primaryUrl;
+        // 1. If OpenAI succeeded and is unique, use it
+        if (primaryUrl && !usedUrls.has(primaryUrl)) {
+          usedUrls.add(primaryUrl);
+          return primaryUrl;
+        }
 
-        console.warn(`[Generator] OpenAI fallback for ${fallbackType}, trying search APIs...`);
-        // Try Pixabay search as second tier
-        const pixabayHits = await searchPixabayImages(query, "landscape", 1);
-        if (pixabayHits.length > 0) return pixabayHits[0].url;
+        console.warn(`[Generator] OpenAI fallback or duplicate for ${fallbackType}, searching alternatives...`);
 
-        // Try Unsplash search as third tier
-        const unsplashHits = await searchUnsplashImages(query, "landscape", 1);
-        if (unsplashHits.length > 0) return unsplashHits[0].url;
+        // 2. Try Pixabay search (fetch 5 to ensure we find a unique one)
+        const pixabayHits = await searchPixabayImages(query, "landscape", 5);
+        const uniquePixabay = pixabayHits.find(h => !usedUrls.has(h.url));
+        if (uniquePixabay) {
+          usedUrls.add(uniquePixabay.url);
+          return uniquePixabay.url;
+        }
 
+        // 3. Try Unsplash search (fetch 5 to ensure we find a unique one)
+        const unsplashHits = await searchUnsplashImages(query, "landscape", 5);
+        const uniqueUnsplash = unsplashHits.find(h => !usedUrls.has(h.url));
+        if (uniqueUnsplash) {
+          usedUrls.add(uniqueUnsplash.url);
+          return uniqueUnsplash.url;
+        }
+
+        // 4. Last resort: Static
         return getFallback(fallbackType);
       };
 
