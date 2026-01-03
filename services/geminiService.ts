@@ -291,11 +291,10 @@ export const generateOpenAIImage = async (prompt: string): Promise<string> => {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "dall-e-3",
-        prompt: `${prompt}. Photorealistic, professional contractor photography. High-end, natural lighting, real job site environment. No text, no logos.`,
+        model: "dall-e-2",
+        prompt: `${prompt}. Photorealistic, professional contractor photography. Natural lighting, real job site environment. No text, no logos.`,
         n: 1,
-        size: "1024x1024",
-        quality: "standard"
+        size: "1024x1024"
       })
     });
 
