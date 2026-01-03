@@ -92,21 +92,12 @@ export const useWebsiteGenerator = () => {
       const valueImgPromise = searchUnsplashImage(`${formData.industry} home service repair`, "landscape");
       const credImgPromise = searchUnsplashImage(`${formData.industry} contractor team professional`, "landscape");
 
-      // Inject images into the "Our Work" gallery
-      const galleryPromises = [
-        searchUnsplashImage(`${formData.industry} service project`, "landscape"),
-        searchUnsplashImage(`${formData.industry} installation work`, "landscape"),
-        searchUnsplashImage(`${formData.industry} maintenance result`, "landscape"),
-        searchUnsplashImage(`${formData.industry} contractor site`, "landscape"),
-      ];
-
       // Wait for everything to finish concurrently
-      const [content, heroImg, valueImg, credImg, ...galleryImgs] = await Promise.all([
+      const [content, heroImg, valueImg, credImg] = await Promise.all([
         contentPromise,
         heroImgPromise,
         valueImgPromise,
-        credImgPromise,
-        ...galleryPromises
+        credImgPromise
       ]);
 
       targetProgress.current = 80;
@@ -116,7 +107,7 @@ export const useWebsiteGenerator = () => {
         heroBackground: heroImg || getFallback('hero'),
         industryValue: valueImg || getFallback('value'),
         credentialsShowcase: credImg || getFallback('cred'),
-        ourWorkImages: (galleryImgs.length === 4 ? galleryImgs : [null, null, null, null]) as [string | null, string | null, string | null, string | null],
+        ourWorkImages: [null, null, null, null],
       });
 
       console.log("[Generator] Synthesis complete.");
