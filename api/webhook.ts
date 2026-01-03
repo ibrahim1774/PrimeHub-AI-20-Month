@@ -1,9 +1,53 @@
 import Stripe from 'stripe';
 import { Storage } from '@google-cloud/storage';
+import crypto from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
 });
+
+const FB_PIXEL_ID = '1287427660086229';
+const FB_ACCESS_TOKEN = 'EAACebucvHOIBQPm2X9KVM7KUfgVReFoTw86OwhXxZBYpf8j2I73RfTJZBmxYfukroUMReZBpBNsT1WlFMoCBkZAzKn0OrIgnRz5bsl5PZCf3TREeSX9RcdR2vI8ZBpyZBwq3fYvPnB95gU0LkXEZCBZCjlO290VYuBwSNf6a3VrZAufCW4N8wR4GIDlLNNjfZCl71aYhwZDZD';
+
+async function sendFBConversionsEvent(pixelId: string, accessToken: string, data: any) {
+    try {
+        const hash = (text: string) => {
+            if (!text) return undefined;
+            return crypto.createHash('sha256').update(text.trim().toLowerCase()).digest('hex');
+        };
+
+        const eventData = {
+            data: [
+                {
+                    event_name: 'Purchase',
+                    event_time: Math.floor(Date.now() / 1000),
+                    action_source: 'website',
+                    user_data: {
+                        em: data.email ? [hash(data.email)] : undefined,
+                        client_ip_address: data.clientIp,
+                        client_user_agent: data.userAgent,
+                    },
+                    custom_data: {
+                        currency: 'USD',
+                        value: data.value,
+                    },
+                },
+            ],
+        };
+
+        const response = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData),
+        });
+
+        const result = await response.json();
+        console.log('[FB CAPI Result]', result);
+        return result;
+    } catch (error) {
+        console.error('[FB CAPI Error]', error);
+    }
+}
 
 export const config = {
     api: {
@@ -40,8 +84,21 @@ export default async function handler(req: any, res: any) {
         const session = event.data.object as Stripe.Checkout.Session;
         const pendingId = session.metadata?.pendingId;
         const companyName = session.metadata?.companyName || 'site';
+        const clientIp = session.metadata?.clientIp;
+        const userAgent = session.metadata?.userAgent;
+        const email = session.customer_details?.email;
+        const value = (session.amount_total || 0) / 100;
 
         console.log(`[Webhook] Payment confirmed for: ${companyName} (Pending ID: ${pendingId})`);
+
+        // Trigger Facebook CAPI Purchase Event
+        sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
+            email,
+            clientIp,
+            userAgent,
+            value,
+        });
+
 
         if (pendingId) {
             try {

@@ -19,6 +19,8 @@ export default async function handler(req: any, res: any) {
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
+        const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const userAgent = req.headers['user-agent'];
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -42,6 +44,8 @@ export default async function handler(req: any, res: any) {
             metadata: {
                 pendingId,
                 companyName,
+                clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
+                userAgent: userAgent || '',
             },
             success_url: `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/?status=cancelled`,
