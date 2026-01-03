@@ -88,9 +88,10 @@ export const useWebsiteGenerator = () => {
       );
 
       // Google Search Strategy (Primary) with Batched Results
-      const heroBatchPromise = searchGoogleImages(`${formData.industry} professional technician working`, 5);
-      const valueBatchPromise = searchGoogleImages(`${formData.industry} repair tools`, 5);
-      const credBatchPromise = searchGoogleImages(`${formData.industry} team professional`, 5);
+      const searchSuffix = " -site:pinterest.com -site:facebook.com -site:istockphoto.com -site:shutterstock.com";
+      const heroBatchPromise = searchGoogleImages(`${formData.industry} professional technician working${searchSuffix}`, 5);
+      const valueBatchPromise = searchGoogleImages(`${formData.industry} repair tools${searchSuffix}`, 5);
+      const credBatchPromise = searchGoogleImages(`${formData.industry} team professional${searchSuffix}`, 5);
 
       // Wait for everything to finish concurrently
       let [content, heroBatch, valueBatch, credBatch] = await Promise.all([

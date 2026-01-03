@@ -377,6 +377,22 @@ export const searchGoogleImages = async (
       const snippet = (item.snippet || "").toLowerCase();
       const link = item.link.toLowerCase();
 
+      // HOTLINK PROTECTION FILTER: Reject domains known to block direct image linking
+      const blacklist = [
+        "pinterest.com", "facebook.com", "instagram.com", "linkedin.com",
+        "dreamstime.com", "shutterstock.com", "istockphoto.com", "alamy.com",
+        "twitter.com", "x.com", "youtube.com", "vimeo.com", "yelp.com"
+      ];
+
+      if (blacklist.some(domain => link.includes(domain))) {
+        score -= 100; // Effectively discard
+      }
+
+      // Ensure it's a direct image link
+      if (!/\.(jpg|jpeg|png|webp|avif)$/i.test(link)) {
+        score -= 50;
+      }
+
       // Top results are usually more relevant
       if (index < 3) score += 10;
 
