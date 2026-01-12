@@ -10,11 +10,11 @@ const OfferPopup: React.FC = () => {
             OWN THIS SITE
           </h3>
           <p className="text-gray-500 font-bold text-[9px] uppercase tracking-wide leading-relaxed mb-4 px-1 max-sm:mb-0 max-sm:px-0 max-sm:normal-case max-sm:text-[11px]">
-            Pay only $20/month for hosting the site. After purchase, the PrimeHub team can customize your images and text and finalize your site design for launch.
+            PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE
           </p>
         </div>
-        
-        <a 
+
+        <a
           href="https://buy.stripe.com/8x2cN49i4bKScboeiG3cc03"
           target="_blank"
           rel="noopener noreferrer"
@@ -23,7 +23,7 @@ const OfferPopup: React.FC = () => {
           LAUNCH WEBSITE
         </a>
       </div>
-      
+
       <style>{`
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(20px) scale(0.95); }

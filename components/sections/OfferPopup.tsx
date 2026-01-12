@@ -15,7 +15,7 @@ const OfferPopup: React.FC<OfferPopupProps> = ({ onClaim, isClaiming }) => {
             OWN THIS SITE
           </h3>
           <p className="text-gray-500 font-bold text-[8px] uppercase tracking-wide leading-relaxed mb-4 px-1 max-sm:mb-0 max-sm:px-0 max-sm:normal-case max-sm:text-[10px]">
-            $20/mo hosting. PrimeHub handles all edits and design finalization.
+            PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE
           </p>
         </div>
 

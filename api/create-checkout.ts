@@ -30,7 +30,7 @@ export default async function handler(req: any, res: any) {
                         currency: 'usd',
                         product_data: {
                             name: `${companyName} - Premium Subscription`,
-                            description: '$20/month for website hosting and AI management.',
+                            description: 'PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE',
                         },
                         unit_amount: 2000, // $20.00
                         recurring: {
