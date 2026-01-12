@@ -72,7 +72,7 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ pendingId, companyName }) => 
                         <div className="space-y-2">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900">Finalizing Your Site</h2>
                             <p className="text-gray-500 font-medium italic">
-                                "$20/mo hosting. PrimeHub is now finalizing your custom image and text edits."
+                                "PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE"
                             </p>
                             <p className="text-sm text-gray-400">Deploying {companyName} to Vercel...</p>
                         </div>
