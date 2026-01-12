@@ -26,7 +26,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
       <header className="px-6 md:px-8 py-1 flex justify-between items-center max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2">
           <div className="bg-white text-black p-0.5 rounded font-bold">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h3L12 22l2-10h-3l2-10z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h3L12 22l2-10h-3l2-10z" /></svg>
           </div>
           <span className="font-black tracking-tighter text-base uppercase">PRIMEHUB.AI</span>
         </div>
@@ -36,17 +36,13 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
       <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-6 pt-2 md:pt-2 pb-6 md:pb-8 relative overflow-hidden">
         {/* Background Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] md:w-[350px] h-[250px] md:h-[350px] bg-blue-900/10 blur-[70px] rounded-full -z-10"></div>
-        
+
         {/* Headline section - slightly increased mb from 3 to 4 */}
         <div className="text-center max-w-xl mb-4">
           <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold tracking-tight mb-1 leading-tight">
             Generate your <br className="hidden md:block" /> custom home service website <br />
             <span className="text-blue-500 italic">under a minute.</span>
           </h1>
-          <p className="text-sm md:text-base text-gray-400 font-medium mb-1">Create a sample mockup of your custom site.</p>
-          <p className="text-[7px] text-gray-500 uppercase tracking-widest max-w-[280px] mx-auto leading-relaxed px-4">
-            THIS IS A SAMPLE GENERATED WEBSITE THAT'S CUSTOM TO YOUR BUSINESS. THE PRIMEHUB TEAM WILL DESIGN A SIMILAR LOOKING SITE AFTER PURCHASE.
-          </p>
         </div>
 
         {/* Form Container - Increased slightly from pt-2.5 to pt-3.5 */}
