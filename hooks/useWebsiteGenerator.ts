@@ -143,7 +143,6 @@ export const useWebsiteGenerator = () => {
         heroBackground: heroImg,
         industryValue: valueImg,
         credentialsShowcase: credImg,
-        ourWorkImages: [null, null, null, null],
       });
 
       console.log("[Generator] Synthesis complete.");

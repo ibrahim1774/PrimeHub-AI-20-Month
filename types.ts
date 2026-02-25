@@ -58,10 +58,6 @@ export interface GeneratedWebsite {
       icon: string;
     }>;
   };
-  ourWork?: {
-    title: string;
-    subtitle: string;
-  };
   faqs: Array<{
     question: string;
     answer: string;
@@ -90,7 +86,6 @@ export interface GeneratedImages {
   heroBackground: string;
   industryValue: string;
   credentialsShowcase: string;
-  ourWorkImages: [string | null, string | null, string | null, string | null];
 }
 
 export interface FormData {

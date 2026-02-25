@@ -10,8 +10,7 @@ import Process from './sections/Process';
 import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
 import Credentials from './sections/Credentials';
-import OurWork from './sections/OurWork';
-import OfferPopup from './sections/OfferPopup';
+import DeployPopup from './sections/DeployPopup';
 import EditableText from './EditableText';
 import Icon from './Icon';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -115,18 +114,8 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           location={data.location}
         />
 
-        {data.ourWork && (
-          <OurWork
-            data={data.ourWork}
-            images={images.ourWorkImages}
-            brandColor={data.brandColor}
-          />
-        )}
-
         <FAQ faqs={data.faqs} brandColor={data.brandColor} />
       </main>
-
-      {/* We exclude popup from static export to avoid instant popup on load usually, or keep it if desired */}
     </div>
   );
 };
@@ -183,24 +172,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
       imageKeys.forEach(key => {
         const value = images[key];
 
-        if (key === 'ourWorkImages' && Array.isArray(value)) {
-          value.forEach((base64, i) => {
-            if (base64 && typeof base64 === 'string' && base64.startsWith('data:')) {
-              const filename = `pending/assets/${data.companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_ourwork_${i}_${Date.now()}.png`;
-              uploadTasks.push(
-                fetch('/api/upload', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ image: base64, filename })
-                }).then(async res => {
-                  if (!res.ok) throw new Error(`Failed to upload ourWork image ${i}`);
-                  const { url } = await res.json();
-                  uploadedImages.ourWorkImages[i] = url;
-                })
-              );
-            }
-          });
-        } else if (typeof value === 'string' && value.startsWith('data:')) {
+        if (typeof value === 'string' && value.startsWith('data:')) {
           const filename = `pending/assets/${data.companyName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${key}_${Date.now()}.png`;
           uploadTasks.push(
             fetch('/api/upload', {
@@ -485,16 +457,6 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           onUpdateImage={(v) => setImages(prev => ({ ...prev, credentialsShowcase: v }))}
         />
 
-        {data.ourWork && (
-          <OurWork
-            data={data.ourWork}
-            images={images.ourWorkImages}
-            brandColor={data.brandColor}
-            onUpdateData={(d) => updateData({ ourWork: { ...data.ourWork!, ...d } })}
-            onUpdateImages={(v) => setImages(prev => ({ ...prev, ourWorkImages: v }))}
-          />
-        )}
-
         <FAQ
           faqs={data.faqs}
           brandColor={data.brandColor}
@@ -503,7 +465,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
       </main>
 
 
-      {showPopup && <OfferPopup onClaim={handleClaimSite} isClaiming={isClaiming} />}
+      {showPopup && <DeployPopup onClaim={handleClaimSite} isClaiming={isClaiming} />}
     </div>
   );
 };
