@@ -67,13 +67,12 @@ export const useWebsiteGenerator = () => {
       targetProgress.current = 30;
 
       // Define standard industry fallbacks
-      const getFallback = (type: 'hero' | 'value' | 'cred') => {
+      const getFallback = (type: 'hero' | 'value') => {
         const industry = formData.industry.toLowerCase();
         // Dynamic construction of high-quality Unsplash industry shots
         const terms: Record<string, string> = {
           hero: `${industry} professional service site`,
-          value: `${industry} technician working repair`,
-          cred: `${industry} service truck team`
+          value: `${industry} technician working repair`
         };
         return `https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200`; // High-quality generic construction/service default
       };
@@ -90,20 +89,18 @@ export const useWebsiteGenerator = () => {
       // Gemini 2.5 Strategy (Parallel Generation for Maximum Speed)
       const heroGenPromise = generateImage(`Wide angle hero shot of ${formData.industry} professional team on site, daylight`, "16:9");
       const valueGenPromise = generateImage(`Close-up of ${formData.industry} technician working with specialized tools`, "4:3");
-      const credGenPromise = generateImage(`Professional ${formData.industry} contractor in uniform and safety gear smiling`, "3:4");
 
       // Wait for content and Gemini images
-      const [content, heroUrl, valueUrl, credUrl] = await Promise.all([
+      const [content, heroUrl, valueUrl] = await Promise.all([
         contentPromise,
         heroGenPromise,
-        valueGenPromise,
-        credGenPromise
+        valueGenPromise
       ]);
 
       // Resolve images with robust fallback logic and GUARANTEED UNIQUENESS
       const usedUrls = new Set<string>();
 
-      const resolveWithFallback = async (primaryUrl: string, query: string, fallbackType: 'hero' | 'value' | 'cred') => {
+      const resolveWithFallback = async (primaryUrl: string, query: string, fallbackType: 'hero' | 'value') => {
         // 1. If Gemini succeeded and is unique, use it
         if (primaryUrl && !usedUrls.has(primaryUrl)) {
           usedUrls.add(primaryUrl);
@@ -134,7 +131,6 @@ export const useWebsiteGenerator = () => {
 
       const heroImg = await resolveWithFallback(heroUrl, `${formData.industry} service truck team`, 'hero');
       const valueImg = await resolveWithFallback(valueUrl, `${formData.industry} technician tools detail`, 'value');
-      const credImg = await resolveWithFallback(credUrl, `${formData.industry} professional worker uniform`, 'cred');
 
       targetProgress.current = 80;
       setGeneratedData(content);
@@ -142,7 +138,6 @@ export const useWebsiteGenerator = () => {
       setGeneratedImages({
         heroBackground: heroImg,
         industryValue: valueImg,
-        credentialsShowcase: credImg,
       });
 
       console.log("[Generator] Synthesis complete.");

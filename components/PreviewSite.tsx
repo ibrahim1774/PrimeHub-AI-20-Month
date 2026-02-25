@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { GeneratedWebsite, GeneratedImages } from '../types';
 import Hero from './sections/Hero';
 import Services from './sections/Services';
@@ -9,10 +9,7 @@ import BenefitsList from './sections/BenefitsList';
 import Process from './sections/Process';
 import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
-import Credentials from './sections/Credentials';
 import DeployPopup from './sections/DeployPopup';
-import EditableText from './EditableText';
-import Icon from './Icon';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 // Helper to gather styles
@@ -106,14 +103,6 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           ctaText={data.ctaVariations.speakWithTeam}
         />
 
-        <Credentials
-          data={data.credentials}
-          image={images.credentialsShowcase}
-          brandColor={data.brandColor}
-          industry={data.industry}
-          location={data.location}
-        />
-
         <FAQ faqs={data.faqs} brandColor={data.brandColor} />
       </main>
     </div>
@@ -127,34 +116,13 @@ interface PreviewSiteProps {
 }
 
 const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: initialImages, onExit }) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup] = useState(true);
   const [isClaiming, setIsClaiming] = useState(false);
   const [claimStatus, setClaimStatus] = useState('');
   const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
 
-  // Editable state
-  const [data, setData] = useState<GeneratedWebsite>(initialData);
-  const [images, setImages] = useState<GeneratedImages>(initialImages);
-  const bannerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const updateBannerHeight = () => {
-      if (bannerRef.current) {
-        document.documentElement.style.setProperty('--banner-height', `${bannerRef.current.offsetHeight}px`);
-      }
-    };
-    updateBannerHeight();
-    window.addEventListener('resize', updateBannerHeight);
-    return () => window.removeEventListener('resize', updateBannerHeight);
-  }, []);
-
-  const updateData = (newData: Partial<GeneratedWebsite>) => {
-    setData(prev => ({ ...prev, ...newData }));
-  };
-
-  const updateHero = (heroData: Partial<GeneratedWebsite['hero']>) => {
-    setData(prev => ({ ...prev, hero: { ...prev.hero, ...heroData } }));
-  };
+  const [data] = useState<GeneratedWebsite>(initialData);
+  const [images] = useState<GeneratedImages>(initialImages);
 
   const handleClaimSite = async () => {
     if (isClaiming) return;
@@ -335,11 +303,6 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
     }
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowPopup(true), 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const formattedPhone = data.phone || "(555) 123-4567";
 
   return (
@@ -358,27 +321,11 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
         }
       `}</style>
 
-      {/* Sticky Editing Banner */}
-      <div
-        ref={bannerRef}
-        className="fixed top-0 left-0 w-full z-[70] bg-red-600 text-white py-3 px-4 text-center font-bold text-sm md:text-base shadow-lg transition-all"
-      >
-        <p className="max-w-4xl mx-auto leading-tight">
-          You can edit text or replace images by clicking on it. Changes save automatically.
-        </p>
-      </div>
-
-      {/* Spacer to push content down below fixed banner */}
-      <div style={{ height: 'var(--banner-height, 0px)' }} />
-
       {/* Site Navigation */}
-      <div className="bg-white border-b border-gray-100 py-3 md:py-4 px-4 md:px-6 flex items-center justify-between sticky top-[var(--banner-height,0px)] z-50 shadow-sm transition-all">
+      <div className="bg-white border-b border-gray-100 py-3 md:py-4 px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div className="flex flex-col">
           <span className="font-black tracking-tighter text-base md:text-lg uppercase leading-none text-[#1A1D2E] max-sm:text-sm">
-            <EditableText
-              value={data.companyName}
-              onChange={(v) => updateData({ companyName: v })}
-            />
+            {data.companyName}
           </span>
         </div>
 
@@ -400,15 +347,12 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
-          onUpdateData={updateHero}
-          onUpdateImage={(v) => setImages(prev => ({ ...prev, heroBackground: v }))}
         />
 
         <Services
           data={data.services}
           brandColor={data.brandColor}
           phone={formattedPhone}
-          onUpdateData={(d) => updateData({ services: { ...data.services, ...d } })}
         />
 
         <IndustryValue
@@ -416,52 +360,29 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           image={images.industryValue}
           brandColor={data.brandColor}
           companyName={data.companyName}
-          onUpdateData={(d) => updateData({ industryValue: { ...data.industryValue, ...d } })}
-          onUpdateImage={(v) => setImages(prev => ({ ...prev, industryValue: v }))}
         />
 
         <Feature
           data={data.featureHighlight}
           brandColor={data.brandColor}
-          onUpdateData={(d) => updateData({ featureHighlight: { ...data.featureHighlight, ...d } })}
         />
 
         <BenefitsList
           data={data.benefits}
           brandColor={data.brandColor}
           companyName={data.companyName}
-          onUpdateData={(d) => updateData({ benefits: { ...data.benefits, ...d } })}
         />
 
-        <Process
-          data={data.processSteps}
-          brandColor={data.brandColor}
-          onUpdateData={(d) => updateData({ processSteps: { ...data.processSteps, ...d } })}
-        />
+        <Process data={data.processSteps} brandColor={data.brandColor} />
 
         <EmergencyCTA
           data={data.emergencyCTA}
           brandColor={data.brandColor}
           phone={formattedPhone}
           ctaText={data.ctaVariations.speakWithTeam}
-          onUpdateData={(d) => updateData({ emergencyCTA: { ...data.emergencyCTA, ...d } })}
         />
 
-        <Credentials
-          data={data.credentials}
-          image={images.credentialsShowcase}
-          brandColor={data.brandColor}
-          industry={data.industry}
-          location={data.location}
-          onUpdateData={(d) => updateData({ credentials: { ...data.credentials, ...d } })}
-          onUpdateImage={(v) => setImages(prev => ({ ...prev, credentialsShowcase: v }))}
-        />
-
-        <FAQ
-          faqs={data.faqs}
-          brandColor={data.brandColor}
-          onUpdateData={(d) => updateData({ faqs: d })}
-        />
+        <FAQ faqs={data.faqs} brandColor={data.brandColor} />
       </main>
 
 

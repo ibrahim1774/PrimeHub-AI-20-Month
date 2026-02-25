@@ -202,17 +202,6 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
               properties: { headline: { type: Type.STRING }, subtext: { type: Type.STRING }, buttonText: { type: Type.STRING } },
               required: ["headline", "subtext", "buttonText"]
             },
-            credentials: {
-              type: Type.OBJECT,
-              properties: {
-                badge: { type: Type.STRING },
-                headline: { type: Type.STRING },
-                description: { type: Type.STRING },
-                items: { type: Type.ARRAY, items: { type: Type.STRING } },
-                certificationText: { type: Type.STRING }
-              },
-              required: ["badge", "headline", "description", "items", "certificationText"]
-            },
             ctaVariations: {
               type: Type.OBJECT,
               properties: {
@@ -224,7 +213,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
               required: ["requestQuote", "getEstimate", "speakWithTeam", "callAndText"]
             }
           },
-          required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "faqs", "emergencyCTA", "credentials", "ctaVariations"]
+          required: ["companyName", "brandColor", "industry", "location", "phone", "hero", "services", "industryValue", "featureHighlight", "benefits", "processSteps", "faqs", "emergencyCTA", "ctaVariations"]
         }
       }
     });

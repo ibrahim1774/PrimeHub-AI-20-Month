@@ -67,13 +67,6 @@ export interface GeneratedWebsite {
     subtext: string;
     buttonText: string;
   };
-  credentials: {
-    badge: string;
-    headline: string;
-    description: string;
-    items: string[];
-    certificationText: string;
-  };
   ctaVariations: {
     requestQuote: string;
     getEstimate: string;
@@ -85,7 +78,6 @@ export interface GeneratedWebsite {
 export interface GeneratedImages {
   heroBackground: string;
   industryValue: string;
-  credentialsShowcase: string;
 }
 
 export interface FormData {
