@@ -134,20 +134,21 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         }
 
         .dply-btn-how {
-          padding: 10px 20px;
+          padding: 12px 28px;
           border-radius: 8px;
           font-family: 'DM Sans', sans-serif;
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #e2e8f0;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #f1f5f9;
+          white-space: nowrap;
         }
         .dply-btn-how:hover {
-          background: rgba(255, 255, 255, 0.12);
-          border-color: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.3);
         }
 
         .dply-btn-deploy {
@@ -206,7 +207,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           background: linear-gradient(160deg, #0f0f1a 0%, #0a0a14 50%, #0d1117 100%);
           border: 1px solid rgba(255, 255, 255, 0.06);
           border-radius: 20px;
-          overflow: hidden;
+          overflow-y: auto;
+          max-height: calc(100vh - 48px);
           box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03);
         }
 
@@ -263,22 +265,22 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           position: absolute;
           top: 24px;
           right: 24px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 10px;
-          width: 36px;
-          height: 36px;
+          width: 42px;
+          height: 42px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #64748b;
+          color: #cbd5e1;
           cursor: pointer;
-          font-size: 16px;
+          font-size: 20px;
           transition: all 0.2s;
         }
         .dply-modal-close:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: #e2e8f0;
+          background: rgba(255, 255, 255, 0.2);
+          color: #fff;
         }
 
         .dply-modal-steps {
@@ -438,12 +440,32 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           }
           .dply-banner-actions {
             width: 100%;
-            justify-content: flex-end;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+          .dply-btn-how {
+            width: 100%;
+            text-align: center;
+            order: -1;
+            padding: 14px 28px;
+            font-size: 15px;
+          }
+          .dply-btn-deploy {
+            flex: 1;
+          }
+          .deploy-modal {
+            bottom: 12px;
+          }
+          .dply-modal-card {
+            max-height: calc(100vh - 24px);
           }
           .dply-modal-header { padding: 24px 20px 0; }
-          .dply-modal-steps { padding: 20px; }
+          .dply-modal-steps { padding: 16px 20px; gap: 2px; }
+          .dply-step-item { padding: 10px 12px; }
           .dply-modal-footer { padding: 0 20px 24px; }
-          .dply-modal-title { font-size: 26px; }
+          .dply-modal-title { font-size: 24px; }
+          .dply-modal-subtitle { font-size: 13px; }
           .dply-footer-price { font-size: 30px; }
         }
       `}</style>
