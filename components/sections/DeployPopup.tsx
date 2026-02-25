@@ -41,12 +41,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
       desc: "Swap images, change text, update pages — anytime you want. It's your site, your account, total control.",
       icon: "🔑",
     },
-    {
-      num: "05",
-      title: "Just $20/Month Hosting — That's It",
-      desc: "No setup fees. No hidden charges. No contracts. You pay for web hosting — we handle building and deploying everything.",
-      icon: "✅",
-    },
   ];
 
   if (!showBanner && !isExpanded) return null;
@@ -542,12 +536,9 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   <span className="dply-footer-price">$20</span>
                   <span className="dply-footer-per">/month — hosting only</span>
                 </div>
-                <div className="dply-footer-perks">
-                  <span className="dply-perk"><span className="dply-perk-check">✓</span> No setup fees</span>
-                  <span className="dply-perk"><span className="dply-perk-check">✓</span> No contracts</span>
-                  <span className="dply-perk"><span className="dply-perk-check">✓</span> Full account access</span>
-                  <span className="dply-perk"><span className="dply-perk-check">✓</span> No hidden charges</span>
-                </div>
+                <p style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', margin: 0, lineHeight: 1.5 }}>
+                  No setup fees. No hidden charges. No contracts. You pay for web hosting — we handle building and deploying everything.
+                </p>
                 <button
                   className="dply-btn-deploy-big"
                   onClick={onClaim}
