@@ -19,24 +19,18 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
   const steps = [
     {
       num: "01",
-      title: "You're Viewing a Sample",
-      desc: "This generated site is a proof of concept — a preview showing how professional and modern your business can look online.",
-      icon: "👁️",
-    },
-    {
-      num: "02",
       title: "5–10 Fully Custom Pages",
       desc: "Services, About, Gallery, Contact, Testimonials, and more — every page built and tailored specifically to your business.",
       icon: "🏗️",
     },
     {
-      num: "03",
+      num: "02",
       title: "Lead Forms · Live Chat · Business App",
       desc: "A built-in lead capture form so you never miss a customer, a live chat widget for instant visitor communication, and a dedicated app to manage it all.",
       icon: "⚡",
     },
     {
-      num: "04",
+      num: "03",
       title: "Full Account Access — Edit Anything",
       desc: "Swap images, change text, update pages — anytime you want. It's your site, your account, total control.",
       icon: "🔑",
@@ -146,10 +140,10 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         }
 
         .dply-btn-deploy {
-          padding: 10px 24px;
+          padding: 12px 28px;
           border-radius: 8px;
           font-family: 'DM Sans', sans-serif;
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -207,7 +201,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         }
 
         .dply-modal-header {
-          padding: 32px 32px 0;
+          padding: 24px 32px 0;
           position: relative;
         }
 
@@ -224,7 +218,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           color: #22c55e;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          margin-bottom: 16px;
+          margin-bottom: 10px;
         }
 
         .dply-modal-badge-dot {
@@ -240,7 +234,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           font-size: 32px;
           color: #fff;
           line-height: 1.2;
-          margin: 0 0 8px;
+          margin: 0 0 6px;
         }
 
         .dply-modal-title em {
@@ -278,7 +272,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         }
 
         .dply-modal-steps {
-          padding: 24px 32px;
+          padding: 16px 32px;
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -288,7 +282,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           display: flex;
           align-items: flex-start;
           gap: 14px;
-          padding: 14px 16px;
+          padding: 10px 16px;
           border-radius: 12px;
           cursor: pointer;
           transition: all 0.25s ease;
@@ -446,7 +440,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
             font-size: 15px;
           }
           .dply-btn-deploy {
-            flex: 1;
+            width: 100%;
+            text-align: center;
           }
           .deploy-modal {
             bottom: 12px;
