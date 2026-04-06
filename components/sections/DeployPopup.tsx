@@ -578,8 +578,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                 disabled={isClaiming}
               >
                 {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                  ? "Deploy My Real Site \u2014 $99/yr \u2192"
-                  : "Deploy My Real Site \u2014 $20/mo \u2192"}
+                  ? "Publish My Website \u2014 $99/yr \u2192"
+                  : "Publish My Website \u2014 $20/mo \u2192"}
               </button>
             </div>
           </div>
@@ -602,7 +602,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   <em>All yours for $20/mo.</em>
                 </h2>
                 <p className="dply-modal-subtitle">
-                  This is just a preview. Once you deploy, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access. Design & content are free, you only pay for hosting to keep it live.
+                  This is just a preview. Once you publish, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access. Design & content are free, you only pay for hosting to keep it live.
                 </p>
                 <button className="dply-modal-close" onClick={() => { setIsExpanded(false); setShowBanner(true); }}>✕</button>
               </div>
@@ -681,8 +681,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   disabled={isClaiming}
                 >
                   {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                    ? "Deploy My Real Site \u2014 $99/yr \u2192"
-                    : "Deploy My Real Site \u2014 $20/mo \u2192"}
+                    ? "Publish My Website \u2014 $99/yr \u2192"
+                    : "Publish My Website \u2014 $20/mo \u2192"}
                 </button>
               </div>
             </div>

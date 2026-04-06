@@ -23,7 +23,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ progress, statusMessage, 
           {statusMessage}
         </h2>
         <p className="text-gray-600 font-bold uppercase tracking-[0.4em] text-[10px] mb-4">
-          PrimeHub Automated Deployment
+          PrimeHub Automated Publishing
         </p>
       </div>
 

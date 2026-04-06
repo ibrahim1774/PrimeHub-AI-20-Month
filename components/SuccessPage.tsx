@@ -74,7 +74,7 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ pendingId, companyName }) => 
                             <p className="text-gray-500 font-medium italic">
                                 "PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE"
                             </p>
-                            <p className="text-sm text-gray-400">Deploying {companyName} to Vercel...</p>
+                            <p className="text-sm text-gray-400">Publishing {companyName}...</p>
                         </div>
                     </div>
                 )}
