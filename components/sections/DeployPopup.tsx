@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 interface DeployPopupProps {
-  onClaim: () => void;
+  onClaim: (plan: 'monthly' | 'yearly') => void;
   isClaiming: boolean;
 }
 
@@ -10,6 +10,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
+
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 500);
@@ -19,20 +21,20 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
   const steps = [
     {
       num: "01",
-      title: "5–10 Fully Custom Pages",
-      desc: "Services, About, Gallery, Contact, Testimonials, and more — every page built and tailored specifically to your business.",
+      title: "A Few Fully Custom Pages",
+      desc: "Services, About, Gallery, Contact, and more — every page built and tailored specifically to your business.",
       icon: "🏗️",
     },
     {
       num: "02",
-      title: "Lead Forms · Live Chat · Business App",
-      desc: "A built-in lead capture form so you never miss a customer, a live chat widget for instant visitor communication, and a dedicated app to manage it all.",
-      icon: "⚡",
+      title: "SEO Optimized & Mobile Responsive",
+      desc: "Every page is built with search engine optimization in mind and looks great on all devices — phones, tablets, and desktops.",
+      icon: "📱",
     },
     {
       num: "03",
-      title: "Full Account Access — Edit Anything",
-      desc: "Swap images, change text, update pages — anytime you want. It's your site, your account, total control.",
+      title: "Full Account Access — Edit Anything, Anytime",
+      desc: "Swap images, change text, update pages — whenever you want. It's your site, your account, total control. No need to contact us for simple changes.",
       icon: "🔑",
     },
   ];
@@ -163,19 +165,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           transform: none;
         }
 
-        .dply-btn-close-banner {
-          background: none;
-          border: none;
-          color: rgba(255, 255, 255, 0.3);
-          cursor: pointer;
-          font-size: 18px;
-          padding: 4px;
-          line-height: 1;
-          transition: color 0.2s;
-        }
-        .dply-btn-close-banner:hover {
-          color: rgba(255, 255, 255, 0.7);
-        }
 
         /* Expanded Modal */
         .deploy-modal {
@@ -405,6 +394,96 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           transform: none;
         }
 
+        /* Benefits Section */
+        .dply-benefits-section {
+          padding: 0 32px 16px;
+        }
+        .dply-benefits-title {
+          font-size: 13px;
+          font-weight: 700;
+          color: #94a3b8;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          margin: 0 0 10px;
+        }
+        .dply-benefits-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .dply-benefit-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          padding: 10px 14px;
+          background: rgba(34, 197, 94, 0.04);
+          border: 1px solid rgba(34, 197, 94, 0.08);
+          border-radius: 10px;
+        }
+        .dply-benefit-icon {
+          font-size: 16px;
+          flex-shrink: 0;
+          padding-top: 1px;
+        }
+        .dply-benefit-item strong {
+          color: #e2e8f0;
+          font-size: 13px;
+          font-weight: 600;
+          display: block;
+          margin-bottom: 2px;
+        }
+        .dply-benefit-item p {
+          color: #64748b;
+          font-size: 12px;
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        /* Pricing Toggle */
+        .dply-pricing-toggle-row {
+          display: flex;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+          padding: 3px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .dply-pricing-tab {
+          flex: 1;
+          padding: 10px 16px;
+          border: none;
+          border-radius: 8px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          background: transparent;
+          color: #94a3b8;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+        .dply-pricing-tab.active {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+        .dply-pricing-save-badge {
+          background: #22c55e;
+          color: #000;
+          font-size: 10px;
+          font-weight: 700;
+          padding: 2px 6px;
+          border-radius: 4px;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+        .dply-pricing-was {
+          color: #64748b;
+          font-size: 13px;
+          text-decoration: line-through;
+        }
+
         @keyframes dplySlideUp {
           to { transform: translateY(0); }
         }
@@ -451,6 +530,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           }
           .dply-modal-header { padding: 24px 20px 0; }
           .dply-modal-steps { padding: 16px 20px; gap: 2px; }
+          .dply-benefits-section { padding: 0 20px 16px; }
           .dply-step-item { padding: 10px 12px; }
           .dply-modal-footer { padding: 0 20px 24px; }
           .dply-modal-title { font-size: 24px; }
@@ -466,7 +546,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
             <div className="dply-banner-left">
               <div className="dply-banner-pulse" />
               <div className="dply-banner-text">
-                <strong>This is a sample site.</strong> Your real site will be fully custom with 5-10 pages, lead forms, live chat, full account access & more —{" "}
+                <strong>This is a sample site.</strong> Your real site will be fully custom with a few pages that is SEO optimized —{" "}
                 <span className="dply-banner-price">just $20/mo</span>
               </div>
             </div>
@@ -476,12 +556,11 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
               </button>
               <button
                 className="dply-btn-deploy"
-                onClick={onClaim}
+                onClick={() => onClaim('monthly')}
                 disabled={isClaiming}
               >
                 {isClaiming ? "Launching..." : "Deploy My Real Site \u2014 $20/mo \u2192"}
               </button>
-              <button className="dply-btn-close-banner" onClick={() => setShowBanner(false)}>✕</button>
             </div>
           </div>
         </div>
@@ -499,12 +578,12 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   Sample Site Preview
                 </div>
                 <h2 className="dply-modal-title">
-                  5-10 Custom Pages. Lead Forms.<br />
-                  Live Chat. A Business App.<br />
+                  A Few Custom Pages. SEO Optimized.<br />
+                  Full Account Access.<br />
                   <em>All yours for $20/mo.</em>
                 </h2>
                 <p className="dply-modal-subtitle">
-                  What you see here is a sample — a proof of concept. When you deploy, we build the real thing with full account access so you can edit text, swap images, and update anything, anytime.
+                  What you see here is a sample — a proof of concept. When you deploy, we build the real thing with full account access so you can edit text, swap images, and update anything, anytime. You own your site completely.
                 </p>
                 <button className="dply-modal-close" onClick={() => { setIsExpanded(false); setShowBanner(true); }}>✕</button>
               </div>
@@ -526,20 +605,75 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                 ))}
               </div>
 
+              <div className="dply-benefits-section">
+                <h3 className="dply-benefits-title">Why You Need a Website</h3>
+                <div className="dply-benefits-list">
+                  <div className="dply-benefit-item">
+                    <span className="dply-benefit-icon">📍</span>
+                    <div>
+                      <strong>Rank Higher on Google</strong>
+                      <p>A website linked to your Google Business Profile helps you rank higher in local search results.</p>
+                    </div>
+                  </div>
+                  <div className="dply-benefit-item">
+                    <span className="dply-benefit-icon">💼</span>
+                    <div>
+                      <strong>Look More Professional</strong>
+                      <p>Clients trust businesses with a professional web presence over those without one.</p>
+                    </div>
+                  </div>
+                  <div className="dply-benefit-item">
+                    <span className="dply-benefit-icon">🏆</span>
+                    <div>
+                      <strong>Showcase Your Work</strong>
+                      <p>Display your services and past projects to build trust before customers even call.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="dply-modal-footer">
+                <div className="dply-pricing-toggle-row">
+                  <button
+                    className={`dply-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
+                    onClick={() => setPricingPlan('monthly')}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    className={`dply-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
+                    onClick={() => setPricingPlan('yearly')}
+                  >
+                    Yearly
+                    <span className="dply-pricing-save-badge">Save 59%</span>
+                  </button>
+                </div>
+
                 <div className="dply-footer-price-row">
-                  <span className="dply-footer-price">$20</span>
-                  <span className="dply-footer-per">/month — hosting only</span>
+                  {pricingPlan === 'monthly' ? (
+                    <>
+                      <span className="dply-footer-price">$20</span>
+                      <span className="dply-footer-per">/month</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="dply-footer-price">$99</span>
+                      <span className="dply-footer-per">/year</span>
+                      <span className="dply-pricing-was">$240/yr</span>
+                    </>
+                  )}
                 </div>
                 <p style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', margin: 0, lineHeight: 1.5 }}>
                   No setup fees. No hidden charges. No contracts. You pay for web hosting — we handle building and deploying everything.
                 </p>
                 <button
                   className="dply-btn-deploy-big"
-                  onClick={onClaim}
+                  onClick={() => onClaim(pricingPlan)}
                   disabled={isClaiming}
                 >
-                  {isClaiming ? "Launching..." : "Deploy My Real Site \u2014 $20/mo \u2192"}
+                  {isClaiming ? "Launching..." : pricingPlan === 'yearly'
+                    ? "Deploy My Real Site \u2014 $99/yr \u2192"
+                    : "Deploy My Real Site \u2014 $20/mo \u2192"}
                 </button>
               </div>
             </div>

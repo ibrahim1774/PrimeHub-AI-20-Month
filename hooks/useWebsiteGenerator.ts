@@ -24,6 +24,20 @@ export const useWebsiteGenerator = () => {
   const progressTimer = useRef<number | null>(null);
   const messageInterval = useRef<number | null>(null);
 
+  // Restore persisted state on mount
+  useEffect(() => {
+    try {
+      const savedData = sessionStorage.getItem('primehub_generatedData');
+      const savedImages = sessionStorage.getItem('primehub_generatedImages');
+      if (savedData && savedImages) {
+        setGeneratedData(JSON.parse(savedData));
+        setGeneratedImages(JSON.parse(savedImages));
+      }
+    } catch (e) {
+      console.warn('[Generator] Failed to restore from sessionStorage:', e);
+    }
+  }, []);
+
   useEffect(() => {
     if (isGenerating) {
       progressTimer.current = window.setInterval(() => {
@@ -145,6 +159,17 @@ export const useWebsiteGenerator = () => {
       await new Promise(resolve => setTimeout(resolve, 800));
       setIsGenerating(false);
 
+      // Persist to sessionStorage for refresh resilience
+      try {
+        sessionStorage.setItem('primehub_generatedData', JSON.stringify(content));
+        sessionStorage.setItem('primehub_generatedImages', JSON.stringify({
+          heroBackground: heroImg,
+          industryValue: valueImg,
+        }));
+      } catch (e) {
+        console.warn('[Generator] Failed to persist to sessionStorage:', e);
+      }
+
     } catch (err: any) {
       console.error("[Generator Error]:", err);
       // Surface actual error message if it's readable, else fallback
@@ -162,6 +187,10 @@ export const useWebsiteGenerator = () => {
     setStatusMessage('');
     setError(null);
     setIsGenerating(false);
+    try {
+      sessionStorage.removeItem('primehub_generatedData');
+      sessionStorage.removeItem('primehub_generatedImages');
+    } catch (e) {}
   };
 
   return {

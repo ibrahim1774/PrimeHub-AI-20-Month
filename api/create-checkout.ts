@@ -10,12 +10,13 @@ export default async function handler(req: any, res: any) {
     }
 
     try {
-        const { pendingId, companyName } = req.body;
+        const { pendingId, companyName, plan = 'monthly' } = req.body;
 
         if (!pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
         }
 
+        const isYearly = plan === 'yearly';
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -29,12 +30,14 @@ export default async function handler(req: any, res: any) {
                     price_data: {
                         currency: 'usd',
                         product_data: {
-                            name: `${companyName} - Premium Subscription`,
-                            description: 'PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE',
+                            name: `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`,
+                            description: isYearly
+                                ? 'PAY ONLY $99/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE'
+                                : 'PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE',
                         },
-                        unit_amount: 2000, // $20.00
+                        unit_amount: isYearly ? 9900 : 2000,
                         recurring: {
-                            interval: 'month',
+                            interval: isYearly ? 'year' : 'month',
                         },
                     },
                     quantity: 1,
@@ -44,6 +47,7 @@ export default async function handler(req: any, res: any) {
             metadata: {
                 pendingId,
                 companyName,
+                plan,
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',
             },

@@ -124,7 +124,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
   const [data] = useState<GeneratedWebsite>(initialData);
   const [images] = useState<GeneratedImages>(initialImages);
 
-  const handleClaimSite = async () => {
+  const handleClaimSite = async (plan: 'monthly' | 'yearly' = 'monthly') => {
     if (isClaiming) return;
 
     setIsClaiming(true);
@@ -286,7 +286,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
       const checkoutRes = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pendingId, companyName: data.companyName })
+        body: JSON.stringify({ pendingId, companyName: data.companyName, plan })
       });
 
       if (!checkoutRes.ok) throw new Error("Failed to create checkout session");
