@@ -71,7 +71,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
 
   CONCISENESS RULES (VERY IMPORTANT):
   9. Keep ALL text short and concise. Use simple, clear language a 5th grader can read.
-  10. Hero headline line1 MUST contain "${companyName}". Line2 or line3 MUST mention "${location}".
+  10. Hero headline MUST be SHORT — just a few words per line. line1: just "${companyName}". line2: just "${location}". line3: a short tagline (3-5 words max, like "Trusted Local Service").
   11. Service card descriptions: 1 short sentence max.
   12. Feature card descriptions: 1 short sentence max.
   13. Benefits items: short phrases, not full sentences.

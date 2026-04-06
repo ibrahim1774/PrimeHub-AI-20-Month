@@ -9,7 +9,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
-  const [activeStep, setActiveStep] = useState<number | null>(null);
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
 
 
@@ -17,12 +16,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
     const timer = setTimeout(() => setIsVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
-
-  const steps = [
-    { title: "Custom pages built for your business", icon: "🏗️" },
-    { title: "Shows up on Google & looks great on phones", icon: "📱" },
-    { title: "You can edit text & images anytime", icon: "🔑" },
-  ];
 
   if (!showBanner && !isExpanded) return null;
 
@@ -282,28 +275,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           color: #fff;
         }
 
-        .dply-modal-steps {
-          padding: 10px 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .dply-step-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 6px 12px;
-          border-radius: 8px;
-        }
-
-        .dply-step-content h4 {
-          margin: 0;
-          font-size: 13px;
-          font-weight: 500;
-          color: #e2e8f0;
-        }
-
         .dply-modal-footer {
           padding: 0 24px 20px;
           display: flex;
@@ -531,9 +502,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
             max-height: calc(100vh - 24px);
           }
           .dply-modal-header { padding: 16px 16px 0; }
-          .dply-modal-steps { padding: 8px 16px; }
           .dply-benefits-section { padding: 0 16px 8px; }
-          .dply-step-item { padding: 4px 8px; }
           .dply-modal-footer { padding: 0 16px 16px; }
           .dply-modal-title { font-size: 22px; }
           .dply-modal-subtitle { font-size: 12px; }
@@ -605,16 +574,6 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   This is just a preview. Once you publish, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access. Design & content are free, you only pay for hosting to keep it live.
                 </p>
                 <button className="dply-modal-close" onClick={() => { setIsExpanded(false); setShowBanner(true); }}>✕</button>
-              </div>
-
-              <div className="dply-modal-steps">
-                {steps.map((step, i) => (
-                  <div key={i} className="dply-step-item">
-                    <div className="dply-step-content">
-                      <h4>{step.icon} {step.title}</h4>
-                    </div>
-                  </div>
-                ))}
               </div>
 
               <div className="dply-benefits-section">
