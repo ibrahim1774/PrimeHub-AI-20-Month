@@ -364,14 +364,20 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         }
         .dply-benefit-item {
           display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 10px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+          padding: 8px 10px;
           background: rgba(34, 197, 94, 0.04);
           border: 1px solid rgba(34, 197, 94, 0.08);
           border-radius: 8px;
           flex: 1;
           min-width: 140px;
+        }
+        .dply-benefit-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
         }
         .dply-benefit-icon {
           font-size: 14px;
@@ -381,6 +387,13 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           color: #e2e8f0;
           font-size: 11px;
           font-weight: 600;
+        }
+        .dply-benefit-desc {
+          color: #94a3b8;
+          font-size: 10px;
+          font-weight: 400;
+          margin: 0;
+          padding-left: 20px;
         }
 
         /* Pricing Toggle */
@@ -526,7 +539,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   <em>All yours for $20/mo.</em>
                 </h2>
                 <p className="dply-modal-subtitle">
-                  This is just a sample. When you deploy, we build the real thing and you get full control.
+                  This is just a preview. Once you deploy, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access.
                 </p>
                 <button className="dply-modal-close" onClick={() => { setIsExpanded(false); setShowBanner(true); }}>✕</button>
               </div>
@@ -545,16 +558,25 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                 <h3 className="dply-benefits-title">Why You Need a Website</h3>
                 <div className="dply-benefits-list">
                   <div className="dply-benefit-item">
-                    <span className="dply-benefit-icon">📍</span>
-                    <strong>Rank higher on Google</strong>
+                    <div className="dply-benefit-row">
+                      <span className="dply-benefit-icon">📍</span>
+                      <strong>Rank higher on Google</strong>
+                    </div>
+                    <span className="dply-benefit-desc">A website linked to your Google Business Profile helps you rank higher in search.</span>
                   </div>
                   <div className="dply-benefit-item">
-                    <span className="dply-benefit-icon">💼</span>
-                    <strong>Look more professional</strong>
+                    <div className="dply-benefit-row">
+                      <span className="dply-benefit-icon">💼</span>
+                      <strong>Look more professional</strong>
+                    </div>
+                    <span className="dply-benefit-desc">A polished site can help build trust with customers before they even call.</span>
                   </div>
                   <div className="dply-benefit-item">
-                    <span className="dply-benefit-icon">🏆</span>
-                    <strong>Show off your work</strong>
+                    <div className="dply-benefit-row">
+                      <span className="dply-benefit-icon">🏆</span>
+                      <strong>Show off your work</strong>
+                    </div>
+                    <span className="dply-benefit-desc">Display your services and photos all in one place.</span>
                   </div>
                 </div>
               </div>
