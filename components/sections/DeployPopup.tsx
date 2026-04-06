@@ -535,11 +535,11 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   className={`dply-banner-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
                   onClick={() => setPricingPlan('yearly')}
                 >
-                  Yearly <span className="dply-pricing-save-badge">Save 40%</span>
+                  Yearly <span className="dply-pricing-save-badge">Save 59%</span>
                 </button>
               </div>
               {pricingPlan === 'yearly' && (
-                <span className="dply-banner-discount">$144/yr <s>$240/yr</s></span>
+                <span className="dply-banner-discount">$99/yr <s>$240/yr</s></span>
               )}
               <button
                 className="dply-btn-deploy"
@@ -547,7 +547,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                 disabled={isClaiming}
               >
                 {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                  ? "Build My Website \u2014 $144/yr \u2192"
+                  ? "Build My Website \u2014 $99/yr \u2192"
                   : "Build My Website \u2014 $20/mo \u2192"}
               </button>
             </div>
@@ -616,7 +616,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                     onClick={() => setPricingPlan('yearly')}
                   >
                     Yearly
-                    <span className="dply-pricing-save-badge">Save 40%</span>
+                    <span className="dply-pricing-save-badge">Save 59%</span>
                   </button>
                 </div>
 
@@ -628,7 +628,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                     </>
                   ) : (
                     <>
-                      <span className="dply-footer-price">$144</span>
+                      <span className="dply-footer-price">$99</span>
                       <span className="dply-footer-per">/year</span>
                       <span className="dply-pricing-was">$240/yr</span>
                     </>
@@ -640,7 +640,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   disabled={isClaiming}
                 >
                   {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                    ? "Build My Website \u2014 $144/yr \u2192"
+                    ? "Build My Website \u2014 $99/yr \u2192"
                     : "Build My Website \u2014 $20/mo \u2192"}
                 </button>
               </div>

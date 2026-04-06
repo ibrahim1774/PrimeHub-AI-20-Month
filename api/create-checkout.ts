@@ -32,10 +32,10 @@ export default async function handler(req: any, res: any) {
                         product_data: {
                             name: `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`,
                             description: isYearly
-                                ? 'PAY ONLY $144/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE'
+                                ? 'PAY ONLY $99/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE'
                                 : 'PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE',
                         },
-                        unit_amount: isYearly ? 14400 : 2000,
+                        unit_amount: isYearly ? 9900 : 2000,
                         recurring: {
                             interval: isYearly ? 'year' : 'month',
                         },
