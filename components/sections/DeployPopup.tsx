@@ -547,8 +547,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                 disabled={isClaiming}
               >
                 {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                  ? "Publish My Website \u2014 $99/yr \u2192"
-                  : "Publish My Website \u2014 $20/mo \u2192"}
+                  ? "Build My Website \u2014 $99/yr \u2192"
+                  : "Build My Website \u2014 $20/mo \u2192"}
               </button>
             </div>
           </div>
@@ -640,8 +640,8 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   disabled={isClaiming}
                 >
                   {isClaiming ? "Launching..." : pricingPlan === 'yearly'
-                    ? "Publish My Website \u2014 $99/yr \u2192"
-                    : "Publish My Website \u2014 $20/mo \u2192"}
+                    ? "Build My Website \u2014 $99/yr \u2192"
+                    : "Build My Website \u2014 $20/mo \u2192"}
                 </button>
               </div>
             </div>
