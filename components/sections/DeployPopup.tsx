@@ -150,6 +150,33 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
           transform: none;
         }
 
+        .dply-banner-toggle {
+          display: flex;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          padding: 2px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dply-banner-tab {
+          padding: 8px 14px;
+          border-radius: 6px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: transparent;
+          border: none;
+          color: #94a3b8;
+          white-space: nowrap;
+        }
+        .dply-banner-tab.active {
+          background: rgba(34, 197, 94, 0.15);
+          color: #22c55e;
+        }
+        .dply-banner-tab:hover:not(.active) {
+          color: #e2e8f0;
+        }
 
         /* Expanded Modal */
         .deploy-modal {
@@ -479,6 +506,14 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
             width: 100%;
             text-align: center;
           }
+          .dply-banner-toggle {
+            width: 100%;
+            justify-content: center;
+          }
+          .dply-banner-tab {
+            flex: 1;
+            text-align: center;
+          }
           .deploy-modal {
             bottom: 12px;
           }
@@ -503,20 +538,35 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
             <div className="dply-banner-left">
               <div className="dply-banner-pulse" />
               <div className="dply-banner-text">
-                <strong>This is a sample site.</strong> Your real site will be fully custom with a few pages that is SEO optimized —{" "}
-                <span className="dply-banner-price">just $20/mo</span>
+                <strong>This is a sample site.</strong> Design & content are free — you only pay for hosting to keep it live.
               </div>
             </div>
             <div className="dply-banner-actions">
               <button className="dply-btn-how" onClick={() => { setIsExpanded(true); setShowBanner(false); }}>
                 How It Works
               </button>
+              <div className="dply-banner-toggle">
+                <button
+                  className={`dply-banner-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
+                  onClick={() => setPricingPlan('monthly')}
+                >
+                  Monthly
+                </button>
+                <button
+                  className={`dply-banner-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
+                  onClick={() => setPricingPlan('yearly')}
+                >
+                  Yearly
+                </button>
+              </div>
               <button
                 className="dply-btn-deploy"
-                onClick={() => onClaim('monthly')}
+                onClick={() => onClaim(pricingPlan)}
                 disabled={isClaiming}
               >
-                {isClaiming ? "Launching..." : "Deploy My Real Site \u2014 $20/mo \u2192"}
+                {isClaiming ? "Launching..." : pricingPlan === 'yearly'
+                  ? "Deploy My Real Site \u2014 $99/yr \u2192"
+                  : "Deploy My Real Site \u2014 $20/mo \u2192"}
               </button>
             </div>
           </div>
@@ -539,7 +589,7 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   <em>All yours for $20/mo.</em>
                 </h2>
                 <p className="dply-modal-subtitle">
-                  This is just a preview. Once you deploy, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access.
+                  This is just a preview. Once you deploy, we build your real multi-page, SEO-optimized site — fully custom, fully yours to edit, with complete account access. Design & content are free, you only pay for hosting to keep it live.
                 </p>
                 <button className="dply-modal-close" onClick={() => { setIsExpanded(false); setShowBanner(true); }}>✕</button>
               </div>
