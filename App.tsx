@@ -30,6 +30,11 @@ const App: React.FC = () => {
     return <SuccessPage pendingId={pendingIdParam} companyName={companyNameParam} />;
   }
 
+  // Handle cancelled Stripe checkout — clean URL and restore preview from sessionStorage
+  if (statusParam === 'cancelled') {
+    window.history.replaceState({}, '', '/');
+  }
+
   const handleGenerate = (data: FormData) => {
     setLastUsedName(data.companyName);
     generateWebsite(data);
