@@ -177,6 +177,16 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
         .dply-banner-tab:hover:not(.active) {
           color: #e2e8f0;
         }
+        .dply-banner-discount {
+          font-size: 12px;
+          color: #22c55e;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+        .dply-banner-discount s {
+          color: #64748b;
+          font-weight: 400;
+        }
 
         /* Expanded Modal */
         .deploy-modal {
@@ -556,9 +566,12 @@ const DeployPopup: React.FC<DeployPopupProps> = ({ onClaim, isClaiming }) => {
                   className={`dply-banner-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
                   onClick={() => setPricingPlan('yearly')}
                 >
-                  Yearly
+                  Yearly <span className="dply-pricing-save-badge">Save 59%</span>
                 </button>
               </div>
+              {pricingPlan === 'yearly' && (
+                <span className="dply-banner-discount">$99/yr <s>$240/yr</s></span>
+              )}
               <button
                 className="dply-btn-deploy"
                 onClick={() => onClaim(pricingPlan)}
