@@ -78,6 +78,8 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           phone={formattedPhone}
         />
 
+        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
+
         <IndustryValue
           data={data.industryValue}
           image={images.industryValue}
@@ -104,8 +106,6 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           phone={formattedPhone}
           ctaText={data.ctaVariations.speakWithTeam}
         />
-
-        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <FAQ faqs={data.faqs} brandColor={data.brandColor} />
       </main>
@@ -359,6 +359,8 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           phone={formattedPhone}
         />
 
+        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
+
         <IndustryValue
           data={data.industryValue}
           image={images.industryValue}
@@ -385,8 +387,6 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           phone={formattedPhone}
           ctaText={data.ctaVariations.speakWithTeam}
         />
-
-        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <FAQ faqs={data.faqs} brandColor={data.brandColor} />
       </main>
