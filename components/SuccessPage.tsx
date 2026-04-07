@@ -126,9 +126,23 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ pendingId, companyName }) => 
                             </a>
                         </div>
 
-                        <p className="text-gray-400 text-sm">
-                            Bookmark this link. You can also manage your site through the PrimeHub dashboard.
-                        </p>
+                        <div className="bg-amber-50 border border-amber-200 p-5 rounded-2xl space-y-3">
+                            <div className="flex items-center justify-center gap-2">
+                                <span className="text-xl">⚠️</span>
+                                <h3 className="text-lg font-bold text-gray-900">One Last Step</h3>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                                Fill out this short form so we can finish building your website.
+                            </p>
+                            <a
+                                href="https://app.gohighlevel.com/v2/preview/4Cfl2ya9UdYFoYuW868F"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-amber-500 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 transition-all shadow-lg hover:scale-[1.02] active:scale-95"
+                            >
+                                Complete Your Setup →
+                            </a>
+                        </div>
                     </div>
                 )}
 
