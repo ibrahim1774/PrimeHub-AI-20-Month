@@ -117,10 +117,9 @@ const Hero: React.FC<HeroProps> = ({ data, image, brandColor, location, phone, c
           {/* Right: Lead Form */}
           <div id="contact" className="lg:w-[380px] shrink-0 mt-8 lg:mt-0">
             <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
-              <h3 className="text-gray-900 font-extrabold text-lg mb-1 text-center">GET A FREE QUOTE</h3>
-              <p className="text-gray-500 text-xs text-center mb-4">
-                {companyName ? `from ${companyName}` : 'Fill out the form below'}
-              </p>
+              <h3 className="text-gray-900 font-extrabold text-lg mb-4 text-center">
+                Get a Free Quote{companyName ? ` from ${companyName}` : ''}
+              </h3>
               <form
                 data-lead-form
                 onSubmit={(e) => {
