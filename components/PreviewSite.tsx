@@ -9,7 +9,6 @@ import BenefitsList from './sections/BenefitsList';
 import Process from './sections/Process';
 import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
-import LeadForm from './sections/LeadForm';
 import ChatWidget from './sections/ChatWidget';
 import DeployPopup from './sections/DeployPopup';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -62,7 +61,7 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
         </a>
       </div>
 
-      <main className="pb-16">
+      <main className="pb-52">
         <Hero
           data={data.hero}
           image={images.heroBackground}
@@ -70,6 +69,7 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
+          companyName={data.companyName}
         />
 
         <Services
@@ -77,8 +77,6 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           brandColor={data.brandColor}
           phone={formattedPhone}
         />
-
-        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <IndustryValue
           data={data.industryValue}
@@ -343,7 +341,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
         </a>
       </div>
 
-      <main className="pb-16">
+      <main className="pb-52">
         <Hero
           data={data.hero}
           image={images.heroBackground}
@@ -351,6 +349,7 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
+          companyName={data.companyName}
         />
 
         <Services
@@ -358,8 +357,6 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           brandColor={data.brandColor}
           phone={formattedPhone}
         />
-
-        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <IndustryValue
           data={data.industryValue}
