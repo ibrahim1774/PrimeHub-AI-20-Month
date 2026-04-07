@@ -18,7 +18,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ brandColor, phone, companyName }) =
     <section id="contact" className="bg-[#0f1724] py-16 md:py-20 px-4">
       <div className="max-w-lg mx-auto">
         <h2 className="text-center text-white font-extrabold text-2xl md:text-3xl tracking-tight mb-2">
-          GET A FREE QUOTE
+          Get a Free Quote from {companyName}
         </h2>
         <p className="text-center text-gray-400 text-sm mb-8">
           Fill out the form below and we'll get back to you right away.
