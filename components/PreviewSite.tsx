@@ -9,6 +9,7 @@ import BenefitsList from './sections/BenefitsList';
 import Process from './sections/Process';
 import FAQ from './sections/FAQ';
 import EmergencyCTA from './sections/EmergencyCTA';
+import LeadForm from './sections/LeadForm';
 import ChatWidget from './sections/ChatWidget';
 import DeployPopup from './sections/DeployPopup';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -69,8 +70,9 @@ const SiteContent: React.FC<{ data: GeneratedWebsite; images: GeneratedImages }>
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
-          companyName={data.companyName}
         />
+
+        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <Services
           data={data.services}
@@ -349,8 +351,9 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
           location={data.location}
           phone={formattedPhone}
           ctaText={data.ctaVariations.callAndText}
-          companyName={data.companyName}
         />
+
+        <LeadForm brandColor={data.brandColor} phone={formattedPhone} companyName={data.companyName} />
 
         <Services
           data={data.services}
