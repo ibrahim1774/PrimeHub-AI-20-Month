@@ -104,23 +104,13 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
                 className="flex items-center gap-2 text-[11px] text-gray-400 hover:text-white uppercase tracking-widest transition-colors"
               >
                 <span className={`inline-block transition-transform ${showProfiles ? 'rotate-90' : ''}`}>&#9654;</span>
-                Have a Google, Instagram, or Facebook page? Import your content
+                Have an Instagram or Facebook page? Import your content
               </button>
               {showProfiles && (
                 <div className="mt-4 space-y-6">
                   <p className="text-[10px] text-gray-500 uppercase tracking-widest">
                     Optional — we'll pull your real photos and info to personalize your site
                   </p>
-                  <div className="space-y-2 border-b border-white/10 pb-3">
-                    <label className="text-[10px] font-bold text-white uppercase tracking-widest block">Google Business Profile</label>
-                    <input
-                      type="text"
-                      placeholder="Paste your Google Maps link"
-                      className="w-full bg-transparent text-white placeholder-gray-700 focus:outline-none text-lg"
-                      value={formData.profileLinks?.googleBusiness || ''}
-                      onChange={(e) => setFormData({ ...formData, profileLinks: { ...formData.profileLinks, googleBusiness: e.target.value } })}
-                    />
-                  </div>
                   <div className="space-y-2 border-b border-white/10 pb-3">
                     <label className="text-[10px] font-bold text-white uppercase tracking-widest block">Instagram</label>
                     <input

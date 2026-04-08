@@ -53,29 +53,13 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
 
   // Build extracted context block if available
   let extractedContext = '';
-  if (extractedContent && extractedContent.source.length > 0) {
-    const parts: string[] = [];
-    if (extractedContent.businessDescription) {
-      parts.push(`- Business Description: "${extractedContent.businessDescription}"`);
-    }
-    if (extractedContent.services?.length) {
-      parts.push(`- Actual Services Offered: ${extractedContent.services.join(', ')}`);
-    }
-    if (extractedContent.reviewSnippets?.length) {
-      parts.push(`- Customer Review Highlights: ${extractedContent.reviewSnippets.join(' | ')}`);
-    }
-    if (extractedContent.rating) {
-      parts.push(`- Google Rating: ${extractedContent.rating}`);
-    }
-    if (parts.length > 0) {
-      extractedContext = `
+  if (extractedContent && extractedContent.source.length > 0 && extractedContent.businessDescription) {
+    extractedContext = `
 
   REAL BUSINESS CONTEXT (use this to make content more authentic and specific):
-  ${parts.join('\n  ')}
+  - Business Description: "${extractedContent.businessDescription}"
 
-  IMPORTANT: Use the real services and descriptions above instead of making up generic ones.
-  Incorporate themes from real customer reviews into trust indicators and benefit copy.`;
-    }
+  IMPORTANT: Use this real description to write more specific, authentic copy that reflects the actual business.`;
   }
 
   const prompt = `Act as a senior conversion-focused copywriter for ${industry}.

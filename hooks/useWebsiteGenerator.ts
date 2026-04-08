@@ -80,7 +80,7 @@ export const useWebsiteGenerator = () => {
       // Step 0: Extract content from profiles if provided
       let extractedContent: ExtractedContent | undefined;
       const hasProfileLinks = formData.profileLinks &&
-        (formData.profileLinks.googleBusiness || formData.profileLinks.instagram || formData.profileLinks.facebook);
+        (formData.profileLinks.instagram || formData.profileLinks.facebook);
 
       if (hasProfileLinks) {
         console.log("[Generator] Step 0: Extracting content from profiles...");
@@ -93,7 +93,6 @@ export const useWebsiteGenerator = () => {
             body: JSON.stringify({
               profileLinks: formData.profileLinks,
               companyName: formData.companyName,
-              serviceArea: formData.serviceArea,
             }),
           });
           if (extractRes.ok) {

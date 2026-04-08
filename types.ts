@@ -81,19 +81,14 @@ export interface GeneratedImages {
 }
 
 export interface ProfileLinks {
-  googleBusiness?: string;
   instagram?: string;
   facebook?: string;
 }
 
 export interface ExtractedContent {
   businessDescription?: string;
-  services?: string[];
   photos?: string[];
-  reviewSnippets?: string[];
-  hours?: string;
-  rating?: string;
-  source: ('google' | 'instagram' | 'facebook')[];
+  source: ('instagram' | 'facebook')[];
 }
 
 export interface FormData {

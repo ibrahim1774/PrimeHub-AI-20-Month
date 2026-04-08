@@ -36,130 +36,10 @@ async function downloadImage(url: string): Promise<Buffer | null> {
   }
 }
 
-// ─── Google Business Profile ────────────────────────────────
-
-function extractPlaceIdFromUrl(url: string): string | null {
-  // Try ChIJ... format from data param
-  const chiMatch = url.match(/!1s(0x[a-f0-9]+:[a-f0-9]+)/i) || url.match(/(ChI[a-zA-Z0-9_-]+)/);
-  if (chiMatch) return chiMatch[1];
-
-  // Try place_id= query param
-  const paramMatch = url.match(/place_id=([^&]+)/);
-  if (paramMatch) return paramMatch[1];
-
-  return null;
-}
-
-async function extractFromGoogle(
-  url: string,
-  companyName: string,
-  serviceArea: string
-): Promise<Partial<ExtractedContent>> {
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_SEARCH_API_KEY;
-  if (!apiKey) {
-    console.warn('[Extractor] No Google API key available for Places API');
-    return {};
-  }
-
-  try {
-    // Step 1: Resolve place ID
-    let placeId = extractPlaceIdFromUrl(url);
-
-    if (!placeId) {
-      // Text Search to find the business
-      const searchQuery = encodeURIComponent(`${companyName} ${serviceArea}`);
-      const searchRes = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchQuery}&inputtype=textquery&fields=place_id&key=${apiKey}`,
-        { signal: AbortSignal.timeout(10000) }
-      );
-      const searchData = await searchRes.json();
-      if (searchData.candidates?.[0]?.place_id) {
-        placeId = searchData.candidates[0].place_id;
-      }
-    }
-
-    if (!placeId) {
-      console.warn('[Extractor] Could not resolve Google place ID');
-      return {};
-    }
-
-    // Step 2: Place Details
-    const fields = 'name,formatted_address,editorial_summary,photos,reviews,rating,opening_hours,types';
-    const detailsRes = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&key=${apiKey}`,
-      { signal: AbortSignal.timeout(10000) }
-    );
-    const detailsData = await detailsRes.json();
-    const place = detailsData.result;
-
-    if (!place) return {};
-
-    const result: Partial<ExtractedContent> = { source: ['google'] };
-
-    // Description
-    if (place.editorial_summary?.overview) {
-      result.businessDescription = place.editorial_summary.overview;
-    }
-
-    // Rating
-    if (place.rating) {
-      result.rating = `${place.rating}/5`;
-    }
-
-    // Hours
-    if (place.opening_hours?.weekday_text) {
-      result.hours = place.opening_hours.weekday_text.join(', ');
-    }
-
-    // Services from types
-    if (place.types?.length) {
-      result.services = place.types
-        .filter((t: string) => !['point_of_interest', 'establishment', 'political', 'geocode'].includes(t))
-        .map((t: string) => t.replace(/_/g, ' '));
-    }
-
-    // Reviews
-    if (place.reviews?.length) {
-      result.reviewSnippets = place.reviews
-        .slice(0, 5)
-        .filter((r: any) => r.rating >= 4 && r.text)
-        .map((r: any) => {
-          const text = r.text.length > 150 ? r.text.substring(0, 150) + '...' : r.text;
-          return text;
-        });
-    }
-
-    // Photos — download up to 6, upload to GCS
-    if (place.photos?.length) {
-      const photoRefs = place.photos.slice(0, 6);
-      const companySlug = slugify(companyName);
-      const timestamp = Date.now();
-
-      const photoPromises = photoRefs.map(async (photo: any, i: number) => {
-        const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=${photo.photo_reference}&key=${apiKey}`;
-        const buffer = await downloadImage(photoUrl);
-        if (!buffer) return null;
-        const gcsFilename = `extracted/${companySlug}_google_${i}_${timestamp}.jpg`;
-        return uploadImageToGCS(buffer, gcsFilename);
-      });
-
-      const photoUrls = await Promise.all(photoPromises);
-      result.photos = photoUrls.filter((u): u is string => u !== null);
-    }
-
-    return result;
-  } catch (err) {
-    console.error('[Extractor] Google extraction failed:', err);
-    return {};
-  }
-}
-
 // ─── Instagram ──────────────────────────────────────────────
 
 function parseInstagramHandle(input: string): string | null {
-  // Handle @handle format
   if (input.startsWith('@')) return input.slice(1);
-  // Handle URL format
   const match = input.match(/instagram\.com\/([a-zA-Z0-9_.]+)/);
   return match ? match[1] : input.trim();
 }
@@ -172,7 +52,6 @@ async function extractFromInstagram(
   if (!handle) return {};
 
   try {
-    // Fetch public profile page server-side
     const res = await fetch(`https://www.instagram.com/${handle}/`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -268,14 +147,10 @@ async function extractFromFacebook(
 
 export async function extractFromProfiles(
   profileLinks: ProfileLinks,
-  companyName: string,
-  serviceArea: string
+  companyName: string
 ): Promise<ExtractedContent> {
   const tasks: Promise<Partial<ExtractedContent>>[] = [];
 
-  if (profileLinks.googleBusiness?.trim()) {
-    tasks.push(extractFromGoogle(profileLinks.googleBusiness.trim(), companyName, serviceArea));
-  }
   if (profileLinks.instagram?.trim()) {
     tasks.push(extractFromInstagram(profileLinks.instagram.trim(), companyName));
   }
@@ -289,8 +164,6 @@ export async function extractFromProfiles(
   const merged: ExtractedContent = {
     source: [],
     photos: [],
-    services: [],
-    reviewSnippets: [],
   };
 
   for (const result of results) {
@@ -299,22 +172,13 @@ export async function extractFromProfiles(
 
     if (data.source) merged.source.push(...data.source);
     if (data.photos?.length) merged.photos!.push(...data.photos);
-    if (data.services?.length) merged.services!.push(...data.services);
-    if (data.reviewSnippets?.length) merged.reviewSnippets!.push(...data.reviewSnippets);
     if (data.businessDescription && !merged.businessDescription) {
       merged.businessDescription = data.businessDescription;
     }
-    if (data.rating && !merged.rating) merged.rating = data.rating;
-    if (data.hours && !merged.hours) merged.hours = data.hours;
   }
-
-  // Limit photos to 10
-  if (merged.photos!.length > 10) merged.photos = merged.photos!.slice(0, 10);
 
   // Clean empty arrays
   if (!merged.photos!.length) delete merged.photos;
-  if (!merged.services!.length) delete merged.services;
-  if (!merged.reviewSnippets!.length) delete merged.reviewSnippets;
 
   console.log(`[Extractor] Extraction complete. Sources: ${merged.source.join(', ')}. Photos: ${merged.photos?.length || 0}`);
 

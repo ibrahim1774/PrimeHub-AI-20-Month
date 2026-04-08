@@ -13,16 +13,15 @@ export default async function handler(req: Request | any, res: Response | any) {
   }
 
   try {
-    const { profileLinks, companyName, serviceArea } = req.body;
+    const { profileLinks, companyName } = req.body;
 
-    if (!profileLinks || (!profileLinks.googleBusiness && !profileLinks.instagram && !profileLinks.facebook)) {
+    if (!profileLinks || (!profileLinks.instagram && !profileLinks.facebook)) {
       return res.status(400).json({ error: 'No profile links provided' });
     }
 
     const extracted = await extractFromProfiles(
       profileLinks,
-      companyName || '',
-      serviceArea || ''
+      companyName || ''
     );
 
     return res.status(200).json(extracted);
