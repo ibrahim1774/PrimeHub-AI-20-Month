@@ -80,10 +80,27 @@ export interface GeneratedImages {
   industryValue: string;
 }
 
+export interface ProfileLinks {
+  googleBusiness?: string;
+  instagram?: string;
+  facebook?: string;
+}
+
+export interface ExtractedContent {
+  businessDescription?: string;
+  services?: string[];
+  photos?: string[];
+  reviewSnippets?: string[];
+  hours?: string;
+  rating?: string;
+  source: ('google' | 'instagram' | 'facebook')[];
+}
+
 export interface FormData {
   industry: string;
   companyName: string;
   serviceArea: string;
   phone: string;
   brandColor: string;
+  profileLinks?: ProfileLinks;
 }

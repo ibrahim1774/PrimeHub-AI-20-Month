@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GeneratedWebsite } from "../types";
+import { GeneratedWebsite, ExtractedContent } from "../types";
 
 const getAI = () => {
   // Prioritize GEMINI_API_KEY for Vercel production, fallback to API_KEY for Studio/Local
@@ -46,10 +46,38 @@ const parseModelResponse = (text: string) => {
   }
 };
 
-export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string): Promise<GeneratedWebsite> => {
+export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string, extractedContent?: ExtractedContent): Promise<GeneratedWebsite> => {
   console.log(`[Synthesis] Starting content generation for: ${companyName} (${industry})`);
 
   const ai = getAI();
+
+  // Build extracted context block if available
+  let extractedContext = '';
+  if (extractedContent && extractedContent.source.length > 0) {
+    const parts: string[] = [];
+    if (extractedContent.businessDescription) {
+      parts.push(`- Business Description: "${extractedContent.businessDescription}"`);
+    }
+    if (extractedContent.services?.length) {
+      parts.push(`- Actual Services Offered: ${extractedContent.services.join(', ')}`);
+    }
+    if (extractedContent.reviewSnippets?.length) {
+      parts.push(`- Customer Review Highlights: ${extractedContent.reviewSnippets.join(' | ')}`);
+    }
+    if (extractedContent.rating) {
+      parts.push(`- Google Rating: ${extractedContent.rating}`);
+    }
+    if (parts.length > 0) {
+      extractedContext = `
+
+  REAL BUSINESS CONTEXT (use this to make content more authentic and specific):
+  ${parts.join('\n  ')}
+
+  IMPORTANT: Use the real services and descriptions above instead of making up generic ones.
+  Incorporate themes from real customer reviews into trust indicators and benefit copy.`;
+    }
+  }
+
   const prompt = `Act as a senior conversion-focused copywriter for ${industry}.
   Generate website content JSON for "${companyName}" in ${location}. Phone: ${phone}.
 
@@ -68,6 +96,7 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
      CRITICAL: DO NOT include the phone number ${phone} in these text strings.
      Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
      The application will append the phone number to these phrases automatically.
+${extractedContext}
 
   CONCISENESS RULES (VERY IMPORTANT):
   9. Keep ALL text short and concise. Use simple, clear language a 5th grader can read.

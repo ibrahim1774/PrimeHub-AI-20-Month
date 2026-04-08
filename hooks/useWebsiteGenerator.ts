@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { FormData, GeneratedWebsite, GeneratedImages } from '../types';
+import { FormData, GeneratedWebsite, GeneratedImages, ExtractedContent } from '../types';
 import { generateWebsiteContent, generateImage, searchUnsplashImages, searchPixabayImages } from '../services/geminiService';
 
 const LOADING_MESSAGES = [
@@ -77,6 +77,34 @@ export const useWebsiteGenerator = () => {
     setGeneratedImages(null);
 
     try {
+      // Step 0: Extract content from profiles if provided
+      let extractedContent: ExtractedContent | undefined;
+      const hasProfileLinks = formData.profileLinks &&
+        (formData.profileLinks.googleBusiness || formData.profileLinks.instagram || formData.profileLinks.facebook);
+
+      if (hasProfileLinks) {
+        console.log("[Generator] Step 0: Extracting content from profiles...");
+        setStatusMessage("Importing content from your profiles...");
+        targetProgress.current = 15;
+        try {
+          const extractRes = await fetch('/api/extract-profiles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              profileLinks: formData.profileLinks,
+              companyName: formData.companyName,
+              serviceArea: formData.serviceArea,
+            }),
+          });
+          if (extractRes.ok) {
+            extractedContent = await extractRes.json();
+            console.log(`[Generator] Extracted ${extractedContent?.photos?.length || 0} photos, source: ${extractedContent?.source?.join(', ')}`);
+          }
+        } catch (extractErr) {
+          console.warn("[Generator] Profile extraction failed, continuing with AI generation:", extractErr);
+        }
+      }
+
       console.log("[Generator] Step 1: Initiating Parallel Generation (Text + Images)");
       targetProgress.current = 30;
 
@@ -97,14 +125,21 @@ export const useWebsiteGenerator = () => {
         formData.companyName,
         formData.serviceArea,
         formData.phone,
-        formData.brandColor
+        formData.brandColor,
+        extractedContent
       );
 
-      // Gemini 2.5 Strategy (Parallel Generation for Maximum Speed)
-      const heroGenPromise = generateImage(`Wide angle hero shot of ${formData.industry} professional team on site, daylight`, "16:9");
-      const valueGenPromise = generateImage(`Close-up of ${formData.industry} technician working with specialized tools`, "4:3");
+      // Use extracted photos when available, fall back to AI generation
+      const extractedPhotos = extractedContent?.photos || [];
 
-      // Wait for content and Gemini images
+      const heroGenPromise = extractedPhotos.length >= 1
+        ? Promise.resolve(extractedPhotos[0])
+        : generateImage(`Wide angle hero shot of ${formData.industry} professional team on site, daylight`, "16:9");
+      const valueGenPromise = extractedPhotos.length >= 2
+        ? Promise.resolve(extractedPhotos[1])
+        : generateImage(`Close-up of ${formData.industry} technician working with specialized tools`, "4:3");
+
+      // Wait for content and images
       const [content, heroUrl, valueUrl] = await Promise.all([
         contentPromise,
         heroGenPromise,
