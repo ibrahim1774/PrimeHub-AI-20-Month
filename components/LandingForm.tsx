@@ -14,7 +14,6 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
     phone: '',
     brandColor: '#3B82F6' // Default blue accent
   });
-  const [showProfiles, setShowProfiles] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,45 +93,6 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 />
               </div>
-            </div>
-
-            {/* Import from profiles — collapsible */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setShowProfiles(!showProfiles)}
-                className="flex items-center gap-2 text-[11px] text-gray-400 hover:text-white uppercase tracking-widest transition-colors"
-              >
-                <span className={`inline-block transition-transform ${showProfiles ? 'rotate-90' : ''}`}>&#9654;</span>
-                Have an Instagram or Facebook page? Import your content
-              </button>
-              {showProfiles && (
-                <div className="mt-4 space-y-6">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-widest">
-                    Optional — we'll pull your real photos and info to personalize your site
-                  </p>
-                  <div className="space-y-2 border-b border-white/10 pb-3">
-                    <label className="text-[10px] font-bold text-white uppercase tracking-widest block">Instagram</label>
-                    <input
-                      type="text"
-                      placeholder="@handle or profile URL"
-                      className="w-full bg-transparent text-white placeholder-gray-700 focus:outline-none text-lg"
-                      value={formData.profileLinks?.instagram || ''}
-                      onChange={(e) => setFormData({ ...formData, profileLinks: { ...formData.profileLinks, instagram: e.target.value } })}
-                    />
-                  </div>
-                  <div className="space-y-2 border-b border-white/10 pb-3">
-                    <label className="text-[10px] font-bold text-white uppercase tracking-widest block">Facebook</label>
-                    <input
-                      type="text"
-                      placeholder="Paste your Facebook page URL"
-                      className="w-full bg-transparent text-white placeholder-gray-700 focus:outline-none text-lg"
-                      value={formData.profileLinks?.facebook || ''}
-                      onChange={(e) => setFormData({ ...formData, profileLinks: { ...formData.profileLinks, facebook: e.target.value } })}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Button Container */}

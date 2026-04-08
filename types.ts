@@ -80,22 +80,10 @@ export interface GeneratedImages {
   industryValue: string;
 }
 
-export interface ProfileLinks {
-  instagram?: string;
-  facebook?: string;
-}
-
-export interface ExtractedContent {
-  businessDescription?: string;
-  photos?: string[];
-  source: ('instagram' | 'facebook')[];
-}
-
 export interface FormData {
   industry: string;
   companyName: string;
   serviceArea: string;
   phone: string;
   brandColor: string;
-  profileLinks?: ProfileLinks;
 }

@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GeneratedWebsite, ExtractedContent } from "../types";
+import { GeneratedWebsite } from "../types";
 
 const getAI = () => {
   // Prioritize GEMINI_API_KEY for Vercel production, fallback to API_KEY for Studio/Local
@@ -46,22 +46,10 @@ const parseModelResponse = (text: string) => {
   }
 };
 
-export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string, extractedContent?: ExtractedContent): Promise<GeneratedWebsite> => {
+export const generateWebsiteContent = async (industry: string, companyName: string, location: string, phone: string, brandColor: string): Promise<GeneratedWebsite> => {
   console.log(`[Synthesis] Starting content generation for: ${companyName} (${industry})`);
 
   const ai = getAI();
-
-  // Build extracted context block if available
-  let extractedContext = '';
-  if (extractedContent && extractedContent.source.length > 0 && extractedContent.businessDescription) {
-    extractedContext = `
-
-  REAL BUSINESS CONTEXT (use this to make content more authentic and specific):
-  - Business Description: "${extractedContent.businessDescription}"
-
-  IMPORTANT: Use this real description to write more specific, authentic copy that reflects the actual business.`;
-  }
-
   const prompt = `Act as a senior conversion-focused copywriter for ${industry}.
   Generate website content JSON for "${companyName}" in ${location}. Phone: ${phone}.
 
@@ -80,7 +68,6 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
      CRITICAL: DO NOT include the phone number ${phone} in these text strings.
      Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
      The application will append the phone number to these phrases automatically.
-${extractedContext}
 
   CONCISENESS RULES (VERY IMPORTANT):
   9. Keep ALL text short and concise. Use simple, clear language a 5th grader can read.
