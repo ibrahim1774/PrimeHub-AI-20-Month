@@ -60,10 +60,11 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
   4. Use neutral, trustworthy language. DO NOT use "best", "elite", "#1". Use "Local", "Trusted", "Reliable".
   5. Mention "${companyName}" exactly 3-4 times total across the page.
   6. Industry Value: Explain why ${industry} is critical for ${location} property owners.
-  7. Generate EXACTLY 3 FAQ items. These should be universal, non-industry-specific common sense topics:
+  7. Generate EXACTLY 4 FAQ items. These should be universal, non-industry-specific common sense topics:
      - Scheduling (How quickly can you start?)
      - Estimates (How do your estimates work?)
      - Service Area (Where do you work?)
+     - Satisfaction Guarantee (What if I'm not happy with the work?)
   8. Provide 4 unique CTA variations.
      CRITICAL: DO NOT include the phone number ${phone} in these text strings.
      Only provide the action phrase (e.g., "Request a Quote", "Get an Estimate", "Speak With Our Team", "Call & Text").
@@ -128,8 +129,8 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
                 subtitle: { type: Type.STRING },
                 cards: {
                   type: Type.ARRAY,
-                  minItems: 3,
-                  maxItems: 3,
+                  minItems: 4,
+                  maxItems: 4,
                   items: {
                     type: Type.OBJECT,
                     properties: { icon: { type: Type.STRING }, title: { type: Type.STRING }, description: { type: Type.STRING } },
@@ -202,8 +203,8 @@ export const generateWebsiteContent = async (industry: string, companyName: stri
                 },
                 required: ["question", "answer"]
               },
-              minItems: 3,
-              maxItems: 3
+              minItems: 4,
+              maxItems: 4
             },
 
             emergencyCTA: {
