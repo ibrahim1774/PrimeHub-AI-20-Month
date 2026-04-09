@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
 });
 
-const FB_PIXEL_ID = '1287427660086229';
+const FB_PIXEL_ID = '26490568997297314';
 const FB_ACCESS_TOKEN = 'EAACebucvHOIBQPm2X9KVM7KUfgVReFoTw86OwhXxZBYpf8j2I73RfTJZBmxYfukroUMReZBpBNsT1WlFMoCBkZAzKn0OrIgnRz5bsl5PZCf3TREeSX9RcdR2vI8ZBpyZBwq3fYvPnB95gU0LkXEZCBZCjlO290VYuBwSNf6a3VrZAufCW4N8wR4GIDlLNNjfZCl71aYhwZDZD';
 
 async function sendFBConversionsEvent(pixelId: string, accessToken: string, data: any) {
