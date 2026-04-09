@@ -37,6 +37,10 @@ const App: React.FC = () => {
 
   const handleGenerate = (data: FormData) => {
     setLastUsedName(data.companyName);
+    // Fire-and-forget: send lead data to Make webhook
+    import('./services/leadService').then(({ captureLead }) => {
+      captureLead(data).catch(err => console.error('Lead capture failed:', err));
+    }).catch(err => console.error('Lead service import failed:', err));
     generateWebsite(data);
   };
 
