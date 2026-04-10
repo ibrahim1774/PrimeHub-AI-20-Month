@@ -40,8 +40,8 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
         {/* Headline section - slightly increased mb from 3 to 4 */}
         <div className="text-center max-w-2xl mb-4">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-1 leading-tight">
-            Hey home service contractors — we'll build you a free sample site in 60 seconds.{' '}
-            <span className="block mt-2 text-[0.5em] text-blue-500 italic font-normal">No catch. No credit card. Just see what we can do.</span>
+            Hey home service contractors — we'll build you a free sample site in 60 seconds using AI.{' '}
+            <span className="block mt-2 text-[0.625em] text-blue-500 italic font-normal">No catch. No credit card. Just see what we can do.</span>
           </h1>
         </div>
 
