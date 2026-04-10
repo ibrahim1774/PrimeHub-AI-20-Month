@@ -38,10 +38,10 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] md:w-[350px] h-[250px] md:h-[350px] bg-blue-900/10 blur-[70px] rounded-full -z-10"></div>
 
         {/* Headline section - slightly increased mb from 3 to 4 */}
-        <div className="text-center max-w-xl mb-4">
+        <div className="text-center max-w-2xl mb-4">
           <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold tracking-tight mb-1 leading-tight">
-            Generate your <br className="hidden md:block" /> custom home service website <br />
-            <span className="text-blue-500 italic">under a minute.</span>
+            Hey home service contractors — we'll build you a free sample site.{' '}
+            <span className="text-blue-500 italic">No catch. No credit card. Just see what we can do.</span>
           </h1>
         </div>
 
@@ -95,13 +95,17 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
               </div>
             </div>
 
+            <p className="text-center text-sm text-white/60 -mt-2">
+              We'll build a sample site on the spot — and if you love it, we'll make you one
+            </p>
+
             {/* Button Container */}
             <div className="flex justify-center pt-3">
               <button
                 type="submit"
                 className="w-full md:w-auto bg-white text-black font-bold py-5 px-12 rounded-full text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
               >
-                Generate My Website <span className="text-2xl">→</span>
+                Click To See My Free Custom Site In 60 Seconds <span className="text-2xl">→</span>
               </button>
             </div>
           </form>
