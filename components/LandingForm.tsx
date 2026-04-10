@@ -39,7 +39,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
 
         {/* Headline section - slightly increased mb from 3 to 4 */}
         <div className="text-center max-w-2xl mb-4">
-          <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold tracking-tight mb-1 leading-tight">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-1 leading-tight">
             Hey home service contractors — we'll build you a free sample site.{' '}
             <span className="text-blue-500 italic">No catch. No credit card. Just see what we can do.</span>
           </h1>
@@ -96,7 +96,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
             </div>
 
             <p className="text-center text-sm text-white/60 -mt-2">
-              We'll build a sample site on the spot — and if you love it, we'll make you one
+              We'll build your free site on the spot — in under 60 seconds
             </p>
 
             {/* Button Container */}
@@ -105,7 +105,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
                 type="submit"
                 className="w-full md:w-auto bg-white text-black font-bold py-5 px-12 rounded-full text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
               >
-                Click To See My Free Custom Site In 60 Seconds <span className="text-2xl">→</span>
+                Click To See My Free Custom Site <span className="text-2xl">→</span>
               </button>
             </div>
           </form>
