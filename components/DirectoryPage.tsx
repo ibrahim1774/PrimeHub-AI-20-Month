@@ -410,8 +410,22 @@ const DirectoryPage = () => {
             Get the Help You Need with a <em>Custom Website for Your Business</em>
           </h1>
           <p className="dir-subtitle">
-            A fully custom, AI-built website for your business — live in 60 seconds, starting at $20/mo.
+            A fully custom website for your business — starting at {priceLabel}.
           </p>
+          <div className="dir-pricing-toggle" style={{ marginBottom: 24 }}>
+            <button
+              className={`dir-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
+              onClick={() => setPricingPlan('monthly')}
+            >
+              Monthly
+            </button>
+            <button
+              className={`dir-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
+              onClick={() => setPricingPlan('yearly')}
+            >
+              Yearly <span className="dir-save-badge">Save 44%</span>
+            </button>
+          </div>
           <CtaButton />
         </section>
 
