@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight } from 'lucide-react';
 
 const galleryItems = [
@@ -12,6 +12,17 @@ const galleryItems = [
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
+  const [showSticky, setShowSticky] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSticky(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    if (heroRef.current) observer.observe(heroRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -264,14 +275,19 @@ const DirectoryPage = () => {
           z-index: 100;
           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
           border-top: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 12px 24px;
+          padding: 8px 20px;
           font-family: 'DM Sans', sans-serif;
           backdrop-filter: blur(12px);
+          transform: translateY(100%);
+          transition: transform 0.3s ease;
+        }
+        .dir-sticky-bar.visible {
+          transform: translateY(0);
         }
         .dir-sticky-inner {
           max-width: 1080px; margin: 0 auto;
           display: flex; align-items: center;
-          justify-content: space-between; gap: 16px;
+          justify-content: space-between; gap: 12px;
         }
         .dir-sticky-toggle {
           display: flex;
@@ -280,7 +296,7 @@ const DirectoryPage = () => {
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .dir-sticky-tab {
-          padding: 8px 14px; border-radius: 6px;
+          padding: 6px 12px; border-radius: 6px;
           font-family: 'DM Sans', sans-serif;
           font-size: 12px; font-weight: 600;
           cursor: pointer; transition: all 0.2s ease;
@@ -298,7 +314,7 @@ const DirectoryPage = () => {
           font-style: italic; white-space: nowrap;
         }
         .dir-sticky-btn {
-          padding: 12px 28px; border-radius: 8px;
+          padding: 10px 24px; border-radius: 8px;
           font-family: 'DM Sans', sans-serif;
           font-size: 14px; font-weight: 700;
           cursor: pointer; transition: all 0.2s ease;
@@ -344,7 +360,7 @@ const DirectoryPage = () => {
         </header>
 
         {/* 1. Hero */}
-        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 28, paddingBottom: 32 }}>
+        <section ref={heroRef} className="dir-section" style={{ textAlign: 'center', paddingTop: 28, paddingBottom: 32 }}>
           <div className="dir-section-label" style={{ fontSize: 13, padding: '7px 18px' }}>For Home Service Contractors</div>
           <h1 className="dir-hero-title">
             Get a Website That Can Help You <em>Win More Jobs</em>
@@ -481,19 +497,18 @@ const DirectoryPage = () => {
       </div>
 
       {/* Sticky Bar */}
-      <div className="dir-sticky-bar">
+      <div className={`dir-sticky-bar ${showSticky ? 'visible' : ''}`}>
         <div className="dir-sticky-inner">
           <div className="dir-sticky-toggle">
             <button
               className={`dir-sticky-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
               onClick={() => setPricingPlan('monthly')}
-            >Monthly</button>
+            >Monthly &middot; $20/mo</button>
             <button
               className={`dir-sticky-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
               onClick={() => setPricingPlan('yearly')}
-            >Yearly <span className="dir-save-badge">Save 44%</span></button>
+            >Yearly &middot; $99/yr <span className="dir-save-badge">Save 44%</span></button>
           </div>
-          <span className="dir-sticky-price">{pricingPlan === 'monthly' ? '$20/mo' : '$99/yr'}</span>
           <button className="dir-sticky-btn" onClick={handleCheckout} disabled={isLoading}>
             {isLoading ? 'Loading...' : 'Get Started'}
             {!isLoading && <ArrowRight size={16} />}
