@@ -6,7 +6,6 @@ const galleryItems = [
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
   { src: '/gallery/roofing.png', label: 'Roofing' },
   { src: '/gallery/barbershop.png', label: 'HVAC' },
-  { src: '/gallery/home-services-2.png', label: 'Home Services' },
 ];
 
 const DirectoryPage = () => {
@@ -387,7 +386,7 @@ const DirectoryPage = () => {
             Get a Website That Can Help You <em>Win More Jobs</em>
           </h1>
           <p className="dir-subtitle">
-            Built for home service contractors — we design, build, and manage everything for you. Typically ready in 48 hours.
+            Built for home service contractors — we design, build, and manage everything for you. Typically ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.
           </p>
           <div className="dir-offer-box">One-time offer today: Get a free Google Business Profile review with your website</div>
           <div style={{ marginTop: 16 }}>
@@ -480,14 +479,14 @@ const DirectoryPage = () => {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
             {[
-              { step: '1', title: 'Sign Up', desc: 'Choose monthly or yearly and get started in less than a minute.' },
-              { step: '2', title: 'Tell Us About Your Business', desc: 'Fill out a quick form with your services, location, and preferences.' },
-              { step: '3', title: 'We Build Your Website', desc: 'We design and deliver your site, typically within 48 hours.' },
+              { step: '1', title: 'Sign Up', content: 'Choose monthly or yearly and get started in less than a minute.' },
+              { step: '2', title: 'Tell Us About Your Business', content: 'Fill out a quick form with your services, location, and preferences.' },
+              { step: '3', title: 'We Build Your Website', content: <>We design and deliver your site, typically within <strong style={{ color: '#3B82F6' }}>48 hours</strong>.</> },
             ].map((item, i) => (
               <div className="dir-card" key={i} style={{ textAlign: 'center' }}>
                 <div className="dir-step-number">{item.step}</div>
                 <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{item.title}</h3>
-                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
+                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.content}</p>
               </div>
             ))}
           </div>
