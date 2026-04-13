@@ -501,8 +501,8 @@ const DirectoryPage = () => {
         {/* 5. Why Contractors Choose This */}
         <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
           <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <div className="dir-section-label">Why Contractors Choose This</div>
-            <h2 className="dir-section-title">Why Contractors <em>Choose This</em></h2>
+            <div className="dir-section-label">Benefits</div>
+            <h2 className="dir-section-title">What's the <em>Benefit?</em></h2>
           </div>
           <div style={{ maxWidth: 560, margin: '0 auto' }}>
             {[
