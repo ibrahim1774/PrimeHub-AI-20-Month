@@ -3,10 +3,16 @@ import LandingForm from './components/LandingForm';
 import LoadingScreen from './components/LoadingScreen';
 import PreviewSite from './components/PreviewSite';
 import SuccessPage from './components/SuccessPage';
+import DirectoryPage from './components/DirectoryPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
 const App: React.FC = () => {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+  if (pathname === '/1') {
+    return <DirectoryPage />;
+  }
+
   const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const statusParam = urlParams.get('status');
   const pendingIdParam = urlParams.get('pendingId');
