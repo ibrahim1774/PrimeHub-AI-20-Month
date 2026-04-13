@@ -5,7 +5,7 @@ const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
   { src: '/gallery/roofing.png', label: 'Roofing' },
-  { src: '/gallery/barbershop.png', label: 'HVAC' },
+  { src: '/gallery/barbershop.png', label: 'Barbershop' },
 ];
 
 const DirectoryPage = () => {
@@ -78,7 +78,7 @@ const DirectoryPage = () => {
           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
           color: #fff;
           font-family: 'DM Sans', sans-serif;
-          padding-bottom: 80px;
+          padding-bottom: 70px;
         }
         .dir-section {
           max-width: 1080px;
@@ -99,7 +99,7 @@ const DirectoryPage = () => {
           font-size: 16px;
           line-height: 1.6;
           max-width: 540px;
-          margin: 0 auto 16px;
+          margin: 0 auto 12px;
         }
         .dir-btn-primary {
           display: inline-flex;
@@ -129,7 +129,7 @@ const DirectoryPage = () => {
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 14px;
-          padding: 16px;
+          padding: 12px;
           transition: all 0.2s ease;
         }
         .dir-card:hover {
@@ -169,7 +169,7 @@ const DirectoryPage = () => {
           border-radius: 10px; padding: 3px;
           border: 1px solid rgba(255, 255, 255, 0.08);
           max-width: 300px;
-          margin: 0 auto 16px;
+          margin: 0 auto 12px;
         }
         .dir-pricing-tab {
           flex: 1; padding: 9px 14px;
@@ -214,7 +214,7 @@ const DirectoryPage = () => {
         }
         .dir-carousel {
           position: relative;
-          max-width: 520px;
+          max-width: 460px;
           margin: 0 auto;
         }
         .dir-carousel-frame {
@@ -273,7 +273,7 @@ const DirectoryPage = () => {
           color: #60A5FA;
           font-size: 13px;
           font-weight: 600;
-          margin-top: 12px;
+          margin-top: 8px;
           animation: dirOfferPulse 2.5s ease-in-out infinite;
         }
         @keyframes dirOfferPulse {
@@ -282,7 +282,7 @@ const DirectoryPage = () => {
         }
         .dir-trust {
           color: #64748b; font-size: 12px;
-          margin-top: 10px; letter-spacing: 0.02em;
+          margin-top: 8px; letter-spacing: 0.02em;
         }
         .dir-divider {
           height: 1px;
@@ -297,7 +297,7 @@ const DirectoryPage = () => {
           z-index: 100;
           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
           border-top: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 8px 20px;
+          padding: 6px 16px;
           font-family: 'DM Sans', sans-serif;
           backdrop-filter: blur(12px);
           transform: translateY(100%);
@@ -380,7 +380,7 @@ const DirectoryPage = () => {
         </header>
 
         {/* 1. Hero */}
-        <section ref={heroRef} className="dir-section" style={{ textAlign: 'center', paddingTop: 28, paddingBottom: 32 }}>
+        <section ref={heroRef} className="dir-section" style={{ textAlign: 'center', paddingTop: 22, paddingBottom: 26 }}>
           <div className="dir-section-label" style={{ fontSize: 13, padding: '7px 18px' }}>For Home Service Contractors</div>
           <h1 className="dir-hero-title">
             Get a Website That Can Help You <em>Win More Jobs</em>
@@ -389,10 +389,10 @@ const DirectoryPage = () => {
             Built for home service contractors — we design, build, and manage everything for you. Typically ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.
           </p>
           <div className="dir-offer-box">One-time offer today: Get a free Google Business Profile review with your website</div>
-          <div style={{ marginTop: 16 }}>
+          <div style={{ marginTop: 12 }}>
             <PricingToggle />
           </div>
-          <div style={{ marginBottom: 16 }}>
+          <div style={{ marginBottom: 12 }}>
             <span className="dir-price">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
             <span className="dir-price-per">{pricingPlan === 'monthly' ? '/month' : '/year'}</span>
             {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
@@ -404,8 +404,8 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 2. Portfolio */}
-        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
+          <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">Recent Websites</div>
             <h2 className="dir-section-title">Websites Built for <em>Contractors Like You</em></h2>
             <p className="dir-muted" style={{ maxWidth: 480, margin: '6px auto 0' }}>
@@ -437,7 +437,7 @@ const DirectoryPage = () => {
               ))}
             </div>
           </div>
-          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 16 }}>
+          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 10 }}>
             Every website also includes a free Google Business Profile review for a limited time.
           </p>
         </section>
@@ -445,8 +445,8 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 3. What You Get */}
-        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
+          <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">What You Get</div>
             <h2 className="dir-section-title">Everything You Need to <em>Get More Work</em></h2>
           </div>
@@ -464,7 +464,7 @@ const DirectoryPage = () => {
               </div>
             ))}
           </div>
-          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 14 }}>
+          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 10 }}>
             Plus, for a limited time, your website includes a free Google Business Profile review.
           </p>
         </section>
@@ -472,8 +472,8 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 4. How It Works */}
-        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
+          <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">How It Works</div>
             <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
           </div>
@@ -490,17 +490,17 @@ const DirectoryPage = () => {
               </div>
             ))}
           </div>
-          <div style={{ textAlign: 'center', marginTop: 14 }}>
+          <div style={{ textAlign: 'center', marginTop: 10 }}>
             <p className="dir-muted">Questions anytime? You'll have 24/7 access to our team by email or message.</p>
-            <div className="dir-offer-box" style={{ marginTop: 8 }}>One-time offer today: Free Google Business Profile review included with your website.</div>
+            <div className="dir-offer-box" style={{ marginTop: 6 }}>One-time offer today: Free Google Business Profile review included with your website.</div>
           </div>
         </section>
 
         <hr className="dir-divider" />
 
         {/* 5. Why Contractors Choose This */}
-        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
+          <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">Why Contractors Choose This</div>
             <h2 className="dir-section-title">Why Contractors <em>Choose This</em></h2>
           </div>
@@ -521,7 +521,7 @@ const DirectoryPage = () => {
         </section>
 
         {/* Footer */}
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
+        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '12px 20px' }}>
           <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 10, textTransform: 'uppercase' as const, opacity: 0.5 }}>AMALVERA</span>
             <span style={{ fontSize: 8, color: '#4b5563', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>© 2024 HIGH IMPACT CREATIVE. ALL RIGHTS RESERVED.</span>
