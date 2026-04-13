@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight } from 'lucide-react';
+import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const galleryItems = [
-  { src: '/gallery/home-services.png', label: 'Roofing' },
+  { src: '/gallery/home-services.png', label: 'Home Services' },
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
-  { src: '/gallery/cleaning.png', label: 'Plumbing' },
+  { src: '/gallery/roofing.png', label: 'Roofing' },
   { src: '/gallery/barbershop.png', label: 'HVAC' },
   { src: '/gallery/home-services-2.png', label: 'Home Services' },
 ];
@@ -13,6 +13,7 @@ const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(1);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -212,31 +213,53 @@ const DirectoryPage = () => {
           width: 5px; height: 5px;
           background: #3B82F6; border-radius: 50%;
         }
-        .dir-gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
+        .dir-carousel {
+          position: relative;
+          max-width: 520px;
+          margin: 0 auto;
         }
-        .dir-gallery-item {
-          border-radius: 10px; overflow: hidden;
+        .dir-carousel-frame {
+          border-radius: 12px;
+          overflow: hidden;
           border: 1px solid rgba(255, 255, 255, 0.08);
           background: rgba(255, 255, 255, 0.03);
-          transition: all 0.2s ease;
         }
-        .dir-gallery-item:hover {
-          border-color: rgba(255, 255, 255, 0.15);
-          transform: translateY(-3px);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        .dir-gallery-item img {
+        .dir-carousel-frame img {
           width: 100%; aspect-ratio: 1;
           object-fit: cover; object-position: center top;
           transform: scale(1.15); display: block;
         }
-        .dir-gallery-label {
-          padding: 8px 12px; font-weight: 600;
-          font-size: 12px; color: #e2e8f0;
+        .dir-carousel-label {
+          text-align: center; padding: 10px 0 0;
+          font-weight: 600; font-size: 13px; color: #e2e8f0;
         }
+        .dir-carousel-arrow {
+          position: absolute; top: 50%;
+          transform: translateY(-50%);
+          width: 36px; height: 36px;
+          border-radius: 50%;
+          background: rgba(0,0,0,0.6);
+          border: 1px solid rgba(255,255,255,0.15);
+          color: #fff;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; transition: all 0.2s; z-index: 2;
+          padding: 0;
+        }
+        .dir-carousel-arrow:hover {
+          background: rgba(0,0,0,0.85);
+          border-color: rgba(255,255,255,0.3);
+        }
+        .dir-carousel-dots {
+          display: flex; justify-content: center;
+          gap: 8px; margin-top: 12px;
+        }
+        .dir-carousel-dot {
+          width: 7px; height: 7px; border-radius: 50%;
+          background: rgba(255,255,255,0.2);
+          transition: all 0.2s; cursor: pointer;
+          border: none; padding: 0;
+        }
+        .dir-carousel-dot.active { background: #3B82F6; }
         .dir-step-number {
           font-family: 'Instrument Serif', serif;
           font-size: 36px; color: #3B82F6;
@@ -334,7 +357,6 @@ const DirectoryPage = () => {
         }
 
         @media (max-width: 768px) {
-          .dir-gallery-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 640px) {
           .dir-hero-title { font-size: 30px; }
@@ -349,7 +371,6 @@ const DirectoryPage = () => {
           .dir-sticky-tab { flex: 1; justify-content: center; }
         }
         @media (max-width: 480px) {
-          .dir-gallery-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -392,13 +413,30 @@ const DirectoryPage = () => {
               Built to look professional, work on any device, and make a strong first impression.
             </p>
           </div>
-          <div className="dir-gallery-grid">
-            {galleryItems.map((item, i) => (
-              <div className="dir-gallery-item" key={i}>
-                <img src={item.src} alt={`${item.label} sample website`} loading="lazy" />
-                <div className="dir-gallery-label">{item.label}</div>
-              </div>
-            ))}
+          <div className="dir-carousel">
+            <button
+              className="dir-carousel-arrow"
+              style={{ left: -18 }}
+              onClick={() => setCarouselIndex((carouselIndex - 1 + galleryItems.length) % galleryItems.length)}
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <div className="dir-carousel-frame">
+              <img src={galleryItems[carouselIndex].src} alt={`${galleryItems[carouselIndex].label} sample website`} />
+            </div>
+            <button
+              className="dir-carousel-arrow"
+              style={{ right: -18 }}
+              onClick={() => setCarouselIndex((carouselIndex + 1) % galleryItems.length)}
+            >
+              <ChevronRight size={20} />
+            </button>
+            <div className="dir-carousel-label">{galleryItems[carouselIndex].label}</div>
+            <div className="dir-carousel-dots">
+              {galleryItems.map((_, i) => (
+                <button key={i} className={`dir-carousel-dot ${i === carouselIndex ? 'active' : ''}`} onClick={() => setCarouselIndex(i)} />
+              ))}
+            </div>
           </div>
           <p className="dir-muted" style={{ textAlign: 'center', marginTop: 16 }}>
             Every website also includes a free Google Business Profile review for a limited time.
