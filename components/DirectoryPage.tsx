@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Globe, Smartphone, Target, Users, CheckCircle, ArrowRight } from 'lucide-react';
+import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight } from 'lucide-react';
 
 const galleryItems = [
-  { src: '/gallery/home-services.png', label: 'Home Services' },
+  { src: '/gallery/home-services.png', label: 'Roofing' },
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
-  { src: '/gallery/cleaning.png', label: 'Cleaning Services' },
-  { src: '/gallery/barbershop.png', label: 'Barbershop' },
+  { src: '/gallery/cleaning.png', label: 'Plumbing' },
+  { src: '/gallery/barbershop.png', label: 'HVAC' },
   { src: '/gallery/home-services-2.png', label: 'Home Services' },
 ];
 
@@ -33,11 +33,28 @@ const DirectoryPage = () => {
 
   const priceLabel = pricingPlan === 'yearly' ? '$99/yr' : '$20/mo';
 
-  const CtaButton = ({ className = '' }: { className?: string }) => (
-    <button className={`dir-btn-primary ${className}`} onClick={handleCheckout} disabled={isLoading}>
-      {isLoading ? 'Loading...' : `Get Started — ${priceLabel}`}
+  const CtaButton = () => (
+    <button className="dir-btn-primary" onClick={handleCheckout} disabled={isLoading}>
+      {isLoading ? 'Loading...' : 'Get Started'}
       {!isLoading && <ArrowRight size={18} />}
     </button>
+  );
+
+  const PricingToggle = () => (
+    <div className="dir-pricing-toggle">
+      <button
+        className={`dir-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
+        onClick={() => setPricingPlan('monthly')}
+      >
+        Monthly
+      </button>
+      <button
+        className={`dir-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
+        onClick={() => setPricingPlan('yearly')}
+      >
+        Yearly <span className="dir-save-badge">Save 44%</span>
+      </button>
+    </div>
   );
 
   return (
@@ -52,34 +69,27 @@ const DirectoryPage = () => {
           font-family: 'DM Sans', sans-serif;
           padding-bottom: 80px;
         }
-
         .dir-section {
           max-width: 1080px;
           margin: 0 auto;
           padding: 0 24px;
         }
-
         .dir-hero-title {
           font-family: 'Instrument Serif', serif;
-          font-size: 48px;
-          line-height: 1.15;
+          font-size: 46px;
+          line-height: 1.12;
           color: #fff;
-          max-width: 720px;
-          margin: 0 auto 12px;
+          max-width: 700px;
+          margin: 0 auto 10px;
         }
-        .dir-hero-title em {
-          color: #22c55e;
-          font-style: italic;
-        }
-
+        .dir-hero-title em { color: #3B82F6; font-style: italic; }
         .dir-subtitle {
           color: #94a3b8;
-          font-size: 18px;
+          font-size: 16px;
           line-height: 1.6;
-          max-width: 560px;
-          margin: 0 auto 24px;
+          max-width: 540px;
+          margin: 0 auto 16px;
         }
-
         .dir-btn-primary {
           display: inline-flex;
           align-items: center;
@@ -91,209 +101,154 @@ const DirectoryPage = () => {
           font-weight: 700;
           cursor: pointer;
           transition: all 0.25s ease;
-          background: linear-gradient(135deg, #22c55e, #16a34a);
+          background: linear-gradient(135deg, #3B82F6, #2563EB);
           border: none;
           color: #fff;
           letter-spacing: 0.02em;
-          box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
         }
         .dir-btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(34, 197, 94, 0.45);
+          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.45);
         }
         .dir-btn-primary:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          transform: none;
+          opacity: 0.6; cursor: not-allowed; transform: none;
         }
-
         .dir-card {
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 16px;
-          padding: 20px;
+          border-radius: 14px;
+          padding: 16px;
           transition: all 0.2s ease;
         }
         .dir-card:hover {
           background: rgba(255, 255, 255, 0.06);
           border-color: rgba(255, 255, 255, 0.12);
         }
-
         .dir-card-icon {
-          width: 40px;
-          height: 40px;
+          width: 38px; height: 38px;
           border-radius: 10px;
-          background: rgba(34, 197, 94, 0.1);
-          border: 1px solid rgba(34, 197, 94, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #22c55e;
-          margin-bottom: 12px;
+          background: rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          display: flex; align-items: center; justify-content: center;
+          color: #3B82F6;
+          margin-bottom: 10px;
         }
-
         .dir-section-label {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: rgba(34, 197, 94, 0.1);
-          border: 1px solid rgba(34, 197, 94, 0.2);
+          display: inline-flex; align-items: center; gap: 6px;
+          background: rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
           border-radius: 100px;
-          padding: 6px 14px;
-          font-size: 11px;
-          font-weight: 600;
-          color: #22c55e;
+          padding: 5px 12px;
+          font-size: 10px; font-weight: 600;
+          color: #3B82F6;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
-
         .dir-section-title {
           font-family: 'Instrument Serif', serif;
-          font-size: 32px;
-          color: #fff;
-          line-height: 1.2;
-          margin: 0 0 8px;
+          font-size: 30px; color: #fff;
+          line-height: 1.2; margin: 0 0 6px;
         }
-        .dir-section-title em {
-          color: #22c55e;
-          font-style: italic;
-        }
-
+        .dir-section-title em { color: #3B82F6; font-style: italic; }
         .dir-pricing-toggle {
           display: flex;
           background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-          padding: 3px;
+          border-radius: 10px; padding: 3px;
           border: 1px solid rgba(255, 255, 255, 0.08);
-          max-width: 320px;
-          margin: 0 auto 20px;
+          max-width: 300px;
+          margin: 0 auto 16px;
         }
         .dir-pricing-tab {
-          flex: 1;
-          padding: 10px 16px;
-          border: none;
-          border-radius: 8px;
+          flex: 1; padding: 9px 14px;
+          border: none; border-radius: 8px;
           font-family: 'DM Sans', sans-serif;
-          font-size: 13px;
-          font-weight: 600;
-          cursor: pointer;
-          background: transparent;
-          color: #94a3b8;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
+          font-size: 12px; font-weight: 600;
+          cursor: pointer; background: transparent;
+          color: #94a3b8; transition: all 0.2s;
+          display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .dir-pricing-tab.active {
-          background: rgba(34, 197, 94, 0.15);
-          color: #22c55e;
+          background: rgba(59, 130, 246, 0.15);
+          color: #3B82F6;
         }
         .dir-save-badge {
-          background: #22c55e;
-          color: #000;
-          font-size: 10px;
-          font-weight: 700;
-          padding: 2px 6px;
-          border-radius: 4px;
+          background: #3B82F6; color: #fff;
+          font-size: 9px; font-weight: 700;
+          padding: 2px 5px; border-radius: 4px;
           text-transform: uppercase;
         }
-
         .dir-price {
           font-family: 'Instrument Serif', serif;
-          font-size: 56px;
-          color: #22c55e;
-          font-style: italic;
-          line-height: 1;
+          font-size: 52px; color: #3B82F6;
+          font-style: italic; line-height: 1;
         }
-        .dir-price-per {
-          color: #64748b;
-          font-size: 18px;
-          margin-left: 4px;
-        }
+        .dir-price-per { color: #64748b; font-size: 16px; margin-left: 4px; }
         .dir-price-was {
-          color: #64748b;
-          font-size: 16px;
-          text-decoration: line-through;
-          margin-left: 12px;
+          color: #64748b; font-size: 14px;
+          text-decoration: line-through; margin-left: 10px;
         }
-
         .dir-perks {
-          display: flex;
-          justify-content: center;
-          gap: 24px;
-          flex-wrap: wrap;
-          margin-top: 14px;
+          display: flex; justify-content: center;
+          gap: 20px; flex-wrap: wrap; margin-top: 12px;
         }
         .dir-perk {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 13px;
-          color: #94a3b8;
+          display: flex; align-items: center;
+          gap: 6px; font-size: 12px; color: #94a3b8;
         }
         .dir-perk-dot {
-          width: 6px;
-          height: 6px;
-          background: #22c55e;
-          border-radius: 50%;
+          width: 5px; height: 5px;
+          background: #3B82F6; border-radius: 50%;
         }
-
         .dir-gallery-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
+          gap: 12px;
         }
         .dir-gallery-item {
-          border-radius: 12px;
-          overflow: hidden;
+          border-radius: 10px; overflow: hidden;
           border: 1px solid rgba(255, 255, 255, 0.08);
           background: rgba(255, 255, 255, 0.03);
           transition: all 0.2s ease;
         }
         .dir-gallery-item:hover {
           border-color: rgba(255, 255, 255, 0.15);
-          transform: translateY(-4px);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         .dir-gallery-item img {
-          width: 100%;
-          aspect-ratio: 1;
-          object-fit: cover;
-          object-position: center top;
-          transform: scale(1.15);
-          display: block;
+          width: 100%; aspect-ratio: 1;
+          object-fit: cover; object-position: center top;
+          transform: scale(1.15); display: block;
         }
         .dir-gallery-label {
-          padding: 10px 14px;
-          font-weight: 600;
-          font-size: 13px;
-          color: #e2e8f0;
+          padding: 8px 12px; font-weight: 600;
+          font-size: 12px; color: #e2e8f0;
         }
-
         .dir-step-number {
           font-family: 'Instrument Serif', serif;
-          font-size: 40px;
-          color: #22c55e;
-          font-style: italic;
-          line-height: 1;
-          margin-bottom: 8px;
+          font-size: 36px; color: #3B82F6;
+          font-style: italic; line-height: 1; margin-bottom: 6px;
         }
-
+        .dir-offer {
+          color: #60A5FA; font-size: 14px;
+          font-weight: 600; margin-top: 12px;
+        }
+        .dir-trust {
+          color: #64748b; font-size: 12px;
+          margin-top: 10px; letter-spacing: 0.02em;
+        }
         .dir-divider {
           height: 1px;
           background: rgba(255, 255, 255, 0.06);
-          margin: 0;
-          border: none;
+          margin: 0; border: none;
         }
+        .dir-muted { color: #94a3b8; font-size: 13px; line-height: 1.5; }
 
-        /* Sticky Add to Cart Bar */
+        /* Sticky Bar */
         .dir-sticky-bar {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
+          position: fixed; bottom: 0; left: 0; right: 0;
           z-index: 100;
           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
           border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -302,93 +257,66 @@ const DirectoryPage = () => {
           backdrop-filter: blur(12px);
         }
         .dir-sticky-inner {
-          max-width: 1080px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
+          max-width: 1080px; margin: 0 auto;
+          display: flex; align-items: center;
+          justify-content: space-between; gap: 16px;
         }
         .dir-sticky-toggle {
           display: flex;
           background: rgba(255, 255, 255, 0.05);
-          border-radius: 8px;
-          padding: 2px;
+          border-radius: 8px; padding: 2px;
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .dir-sticky-tab {
-          padding: 8px 14px;
-          border-radius: 6px;
+          padding: 8px 14px; border-radius: 6px;
           font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          background: transparent;
-          border: none;
-          color: #94a3b8;
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 5px;
+          font-size: 12px; font-weight: 600;
+          cursor: pointer; transition: all 0.2s ease;
+          background: transparent; border: none;
+          color: #94a3b8; white-space: nowrap;
+          display: flex; align-items: center; gap: 5px;
         }
         .dir-sticky-tab.active {
-          background: rgba(34, 197, 94, 0.15);
-          color: #22c55e;
+          background: rgba(59, 130, 246, 0.15);
+          color: #3B82F6;
         }
         .dir-sticky-price {
           font-family: 'Instrument Serif', serif;
-          font-size: 22px;
-          color: #22c55e;
-          font-style: italic;
-          white-space: nowrap;
+          font-size: 22px; color: #3B82F6;
+          font-style: italic; white-space: nowrap;
         }
         .dir-sticky-btn {
-          padding: 12px 28px;
-          border-radius: 8px;
+          padding: 12px 28px; border-radius: 8px;
           font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          background: linear-gradient(135deg, #22c55e, #16a34a);
-          border: none;
-          color: #fff;
+          font-size: 14px; font-weight: 700;
+          cursor: pointer; transition: all 0.2s ease;
+          background: linear-gradient(135deg, #3B82F6, #2563EB);
+          border: none; color: #fff;
           letter-spacing: 0.02em;
-          box-shadow: 0 2px 12px rgba(34, 197, 94, 0.3);
+          box-shadow: 0 2px 12px rgba(59, 130, 246, 0.3);
           white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          display: flex; align-items: center; gap: 8px;
         }
         .dir-sticky-btn:hover {
           transform: translateY(-1px);
-          box-shadow: 0 4px 20px rgba(34, 197, 94, 0.45);
+          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.45);
         }
         .dir-sticky-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          transform: none;
+          opacity: 0.6; cursor: not-allowed; transform: none;
         }
 
         @media (max-width: 768px) {
           .dir-gallery-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 640px) {
-          .dir-hero-title { font-size: 32px; }
-          .dir-subtitle { font-size: 15px; }
-          .dir-section-title { font-size: 26px; }
-          .dir-price { font-size: 44px; }
+          .dir-hero-title { font-size: 30px; }
+          .dir-subtitle { font-size: 14px; }
+          .dir-section-title { font-size: 24px; }
+          .dir-price { font-size: 40px; }
           .dir-btn-primary { width: 100%; justify-content: center; }
-          .dir-step-number { font-size: 32px; }
-          .dir-sticky-inner {
-            flex-direction: column;
-            gap: 10px;
-          }
-          .dir-sticky-btn {
-            width: 100%;
-            justify-content: center;
-          }
+          .dir-step-number { font-size: 28px; }
+          .dir-sticky-inner { flex-direction: column; gap: 10px; }
+          .dir-sticky-btn { width: 100%; justify-content: center; }
           .dir-sticky-toggle { width: 100%; }
           .dir-sticky-tab { flex: 1; justify-content: center; }
         }
@@ -399,69 +327,36 @@ const DirectoryPage = () => {
 
       <div className="dir-page">
         {/* Nav */}
-        <header className="dir-section" style={{ paddingTop: 16, paddingBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 14, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
+        <header className="dir-section" style={{ paddingTop: 14, paddingBottom: 14, display: 'flex', alignItems: 'center' }}>
+          <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 13, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
         </header>
 
-        {/* Hero */}
-        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 40, paddingBottom: 48 }}>
-          <div className="dir-section-label" style={{ fontSize: 14, padding: '8px 20px' }}>For Home Service Contractors</div>
+        {/* 1. Hero */}
+        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 36, paddingBottom: 40 }}>
+          <div className="dir-section-label" style={{ fontSize: 13, padding: '7px 18px' }}>For Home Service Contractors</div>
           <h1 className="dir-hero-title">
-            Get the Help You Need with a <em>Custom Website for Your Business</em>
+            Get a Website That Can Help You <em>Win More Jobs</em>
           </h1>
           <p className="dir-subtitle">
-            A fully custom website for your business — starting at {priceLabel}.
+            Built for home service contractors — we design, build, and manage everything for you. Typically ready in 48 hours.
           </p>
-          <div className="dir-pricing-toggle" style={{ marginBottom: 24 }}>
-            <button
-              className={`dir-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('monthly')}
-            >
-              Monthly
-            </button>
-            <button
-              className={`dir-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('yearly')}
-            >
-              Yearly <span className="dir-save-badge">Save 44%</span>
-            </button>
+          <p className="dir-offer">One-time offer today: Get a free Google Business Profile review with your website</p>
+          <div style={{ marginTop: 16 }}>
+            <PricingToggle />
           </div>
           <CtaButton />
+          <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
         </section>
 
         <hr className="dir-divider" />
 
-        {/* What You Get */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 20 }}>
-            <div className="dir-section-label">Everything Included</div>
-            <h2 className="dir-section-title">Everything You Need to <em>Grow Your Business</em></h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
-            {[
-              { icon: <Globe size={20} />, title: 'Fully Custom Website', desc: 'AI-built, multi-page, SEO-optimized, and fully editable.' },
-              { icon: <Smartphone size={20} />, title: 'Mobile App', desc: 'Your business on your customer\'s phone.' },
-              { icon: <Target size={20} />, title: 'Lead Connector', desc: 'Capture and manage leads directly from your site.' },
-              { icon: <Users size={20} />, title: 'CRM System', desc: 'Track customers, jobs, and follow-ups in one place.' },
-            ].map((item, i) => (
-              <div className="dir-card" key={i}>
-                <div className="dir-card-icon">{item.icon}</div>
-                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{item.title}</h3>
-                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* Gallery */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div className="dir-section-label">Custom Websites</div>
-            <h2 className="dir-section-title">See What We <em>Build for Contractors</em></h2>
-            <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.6, maxWidth: 520, margin: '8px auto 0' }}>
-              Each site is fully custom — designed to showcase your services and help grow your business.
+        {/* 2. Portfolio */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <div className="dir-section-label">Recent Websites</div>
+            <h2 className="dir-section-title">Websites Built for <em>Contractors Like You</em></h2>
+            <p className="dir-muted" style={{ maxWidth: 480, margin: '6px auto 0' }}>
+              Built to look professional, work on any device, and make a strong first impression.
             </p>
           </div>
           <div className="dir-gallery-grid">
@@ -472,57 +367,84 @@ const DirectoryPage = () => {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* CTA #2 — Mid-page */}
-        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 16, paddingBottom: 48 }}>
-          <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 16 }}>Ready to get started?</p>
-          <CtaButton />
+          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 16 }}>
+            Every website also includes a free Google Business Profile review for a limited time.
+          </p>
         </section>
 
         <hr className="dir-divider" />
 
-        {/* How It Works */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div className="dir-section-label">How It Works</div>
-            <h2 className="dir-section-title">Your Website in <em>3 Simple Steps</em></h2>
+        {/* 3. What You Get */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <div className="dir-section-label">What You Get</div>
+            <h2 className="dir-section-title">Everything You Need to <em>Get More Work</em></h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { step: '1', title: 'Subscribe', desc: 'Pay $20/month for hosting — that\'s it. No setup fees, no hidden costs.' },
-              { step: '2', title: 'Onboarding Form', desc: 'After payment, fill out a quick form with your business details, services, and preferences.' },
-              { step: '3', title: 'Get Your Website', desc: 'We build and deliver your fully custom, multi-page website within 48–72 hours.' },
+              { icon: <Globe size={18} />, title: 'Professional Website', desc: 'Built to showcase your services and help your business look more established online.' },
+              { icon: <Smartphone size={18} />, title: 'Mobile-Friendly Design', desc: 'Designed to look great on phones, tablets, and desktops.' },
+              { icon: <MessageSquare size={18} />, title: 'Lead Capture', desc: 'Make it easy for customers to call, message, or request a quote.' },
+              { icon: <Headphones size={18} />, title: 'Ongoing Support', desc: 'Access our team 24/7 by email or message anytime you need help.' },
+            ].map((item, i) => (
+              <div className="dir-card" key={i}>
+                <div className="dir-card-icon">{item.icon}</div>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{item.title}</h3>
+                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 14 }}>
+            Plus, for a limited time, your website includes a free Google Business Profile review.
+          </p>
+        </section>
+
+        <hr className="dir-divider" />
+
+        {/* 4. How It Works */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <div className="dir-section-label">How It Works</div>
+            <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+            {[
+              { step: '1', title: 'Sign Up', desc: 'Choose monthly or yearly and get started in less than a minute.' },
+              { step: '2', title: 'Tell Us About Your Business', desc: 'Fill out a quick form with your services, location, and preferences.' },
+              { step: '3', title: 'We Build Your Website', desc: 'We design and deliver your site, typically within 48 hours.' },
             ].map((item, i) => (
               <div className="dir-card" key={i} style={{ textAlign: 'center' }}>
                 <div className="dir-step-number">{item.step}</div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>{item.title}</h3>
-                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{item.title}</h3>
+                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 14 }}>
+            <p className="dir-muted">Questions anytime? You'll have 24/7 access to our team by email or message.</p>
+            <p className="dir-offer" style={{ marginTop: 6 }}>One-time offer today: Free Google Business Profile review included with your website.</p>
           </div>
         </section>
 
         <hr className="dir-divider" />
 
-        {/* Why You Need a Website */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div className="dir-section-label">Why It Matters</div>
-            <h2 className="dir-section-title">Why You Need a <em>Website</em></h2>
+        {/* 5. Why Contractors Choose This */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <div className="dir-section-label">Why Contractors Choose This</div>
+            <h2 className="dir-section-title">Why Contractors <em>Choose This</em></h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, maxWidth: 720, margin: '0 auto' }}>
+          <div style={{ maxWidth: 560, margin: '0 auto' }}>
             {[
-              'Rank higher on Google',
-              'Look more professional',
-              'Show off your work',
-              'Get found by new customers',
-              'Book more jobs online',
-              'Build trust before the first call',
+              'Can help your business look more professional',
+              'Can help you stand out from local competitors',
+              'Makes it easier for customers to call or request a quote',
+              'Helps build trust before the first conversation',
+              'Includes a free Google Business Profile review for a limited time',
             ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0' }}>
-                <CheckCircle size={18} color="#22c55e" />
-                <span style={{ fontSize: 14, fontWeight: 500, color: '#e2e8f0' }}>{item}</span>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0' }}>
+                <CheckCircle size={16} color="#3B82F6" />
+                <span style={{ fontSize: 13, fontWeight: 500, color: '#e2e8f0' }}>{item}</span>
               </div>
             ))}
           </div>
@@ -530,53 +452,45 @@ const DirectoryPage = () => {
 
         <hr className="dir-divider" />
 
-        {/* Pricing — CTA #3 */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48, textAlign: 'center' }}>
+        {/* 6. Pricing */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40, textAlign: 'center' }}>
           <div className="dir-section-label">Simple Pricing</div>
-          <h2 className="dir-section-title" style={{ marginBottom: 24 }}>
-            One Plan. <em>Everything Included.</em>
+          <h2 className="dir-section-title" style={{ marginBottom: 20 }}>
+            One Simple Price. <em>Everything Done for You.</em>
           </h2>
-
-          <div className="dir-pricing-toggle">
-            <button
-              className={`dir-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('monthly')}
-            >
-              Monthly
-            </button>
-            <button
-              className={`dir-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('yearly')}
-            >
-              Yearly <span className="dir-save-badge">Save 44%</span>
-            </button>
-          </div>
-
-          <div style={{ marginBottom: 24 }}>
-            <span className="dir-price">
-              {pricingPlan === 'monthly' ? '$20' : '$99'}
-            </span>
-            <span className="dir-price-per">
-              {pricingPlan === 'monthly' ? '/month' : '/year'}
-            </span>
+          <PricingToggle />
+          <div style={{ marginBottom: 20 }}>
+            <span className="dir-price">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
+            <span className="dir-price-per">{pricingPlan === 'monthly' ? '/month' : '/year'}</span>
             {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
           </div>
-
+          <p className="dir-muted" style={{ maxWidth: 480, margin: '0 auto 16px' }}>
+            Includes your website, hosting, 24/7 support, and a free Google Business Profile review for a limited time.
+          </p>
           <CtaButton />
+          <p className="dir-trust">No setup fees &bull; No contracts &bull; 24/7 team access</p>
+        </section>
 
-          <div className="dir-perks">
-            <div className="dir-perk"><div className="dir-perk-dot" /> Cancel anytime</div>
-            <div className="dir-perk"><div className="dir-perk-dot" /> Free design</div>
-            <div className="dir-perk"><div className="dir-perk-dot" /> Full account access</div>
-          </div>
+        <hr className="dir-divider" />
+
+        {/* 7. Final CTA */}
+        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40, textAlign: 'center' }}>
+          <h2 className="dir-section-title" style={{ maxWidth: 560, margin: '0 auto 8px' }}>
+            Ready to Get a Website That Can Help You <em>Win More Jobs?</em>
+          </h2>
+          <p className="dir-muted" style={{ maxWidth: 480, margin: '0 auto 16px' }}>
+            Start today and get a free Google Business Profile review as a one-time offer.
+          </p>
+          <CtaButton />
+          <p className="dir-trust">Questions? Message or email our team anytime, 24/7.</p>
         </section>
 
         {/* Footer */}
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '20px 24px' }}>
-          <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 11, textTransform: 'uppercase' as const, opacity: 0.5 }}>AMALVERA</span>
+        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
+          <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 10, textTransform: 'uppercase' as const, opacity: 0.5 }}>AMALVERA</span>
             <span style={{ fontSize: 8, color: '#4b5563', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>© 2024 HIGH IMPACT CREATIVE. ALL RIGHTS RESERVED.</span>
-            <div style={{ display: 'flex', gap: 24 }}>
+            <div style={{ display: 'flex', gap: 20 }}>
               <a href="#" style={{ fontSize: 8, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.1em', textDecoration: 'none' }}>PRIVACY</a>
               <a href="#" style={{ fontSize: 8, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.1em', textDecoration: 'none' }}>SUPPORT</a>
             </div>
@@ -584,28 +498,22 @@ const DirectoryPage = () => {
         </footer>
       </div>
 
-      {/* Sticky Add to Cart Bar */}
+      {/* Sticky Bar */}
       <div className="dir-sticky-bar">
         <div className="dir-sticky-inner">
           <div className="dir-sticky-toggle">
             <button
               className={`dir-sticky-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
               onClick={() => setPricingPlan('monthly')}
-            >
-              Monthly
-            </button>
+            >Monthly</button>
             <button
               className={`dir-sticky-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
               onClick={() => setPricingPlan('yearly')}
-            >
-              Yearly <span className="dir-save-badge">Save 44%</span>
-            </button>
+            >Yearly <span className="dir-save-badge">Save 44%</span></button>
           </div>
-          <span className="dir-sticky-price">
-            {pricingPlan === 'monthly' ? '$20/mo' : '$99/yr'}
-          </span>
+          <span className="dir-sticky-price">{pricingPlan === 'monthly' ? '$20/mo' : '$99/yr'}</span>
           <button className="dir-sticky-btn" onClick={handleCheckout} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Add to Cart'}
+            {isLoading ? 'Loading...' : 'Get Started'}
             {!isLoading && <ArrowRight size={16} />}
           </button>
         </div>
