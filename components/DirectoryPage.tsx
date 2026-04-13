@@ -261,6 +261,8 @@ const DirectoryPage = () => {
           width: 100%;
           aspect-ratio: 1;
           object-fit: cover;
+          object-position: center top;
+          transform: scale(1.15);
           display: block;
         }
         .dir-gallery-label {
@@ -398,17 +400,14 @@ const DirectoryPage = () => {
       <div className="dir-page">
         {/* Nav */}
         <header className="dir-section" style={{ paddingTop: 16, paddingBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ background: '#fff', color: '#000', padding: 2, borderRadius: 4, fontWeight: 700 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h3L12 22l2-10h-3l2-10z" /></svg>
-          </div>
-          <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 14, textTransform: 'uppercase' as const }}>PRIMEHUB.AI</span>
+          <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 14, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
         </header>
 
         {/* Hero */}
         <section className="dir-section" style={{ textAlign: 'center', paddingTop: 40, paddingBottom: 48 }}>
-          <div className="dir-section-label">For Home Service Contractors</div>
+          <div className="dir-section-label" style={{ fontSize: 14, padding: '8px 20px' }}>For Home Service Contractors</div>
           <h1 className="dir-hero-title">
-            Get More Booked Jobs with a <em>Website That Works for You</em>
+            Get the Help You Need with a <em>Custom Website for Your Business</em>
           </h1>
           <p className="dir-subtitle">
             A fully custom, AI-built website for your business — live in 60 seconds, starting at $20/mo.
@@ -418,36 +417,9 @@ const DirectoryPage = () => {
 
         <hr className="dir-divider" />
 
-        {/* Gallery */}
-        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div className="dir-section-label">Built for Contractors</div>
-            <h2 className="dir-section-title">Custom Websites That <em>Win More Jobs</em></h2>
-            <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.6, maxWidth: 520, margin: '8px auto 0' }}>
-              Each site is fully custom — designed to showcase your services, build trust, and convert visitors into booked jobs.
-            </p>
-          </div>
-          <div className="dir-gallery-grid">
-            {galleryItems.map((item, i) => (
-              <div className="dir-gallery-item" key={i}>
-                <img src={item.src} alt={`${item.label} sample website`} loading="lazy" />
-                <div className="dir-gallery-label">{item.label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA #2 — Mid-page */}
-        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 16, paddingBottom: 48 }}>
-          <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 16 }}>Ready to get your own custom site?</p>
-          <CtaButton />
-        </section>
-
-        <hr className="dir-divider" />
-
         {/* What You Get */}
         <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <div className="dir-section-label">Everything Included</div>
             <h2 className="dir-section-title">Everything You Need to <em>Grow Your Business</em></h2>
           </div>
@@ -465,6 +437,33 @@ const DirectoryPage = () => {
               </div>
             ))}
           </div>
+        </section>
+
+        <hr className="dir-divider" />
+
+        {/* Gallery */}
+        <section className="dir-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <div className="dir-section-label">Custom Websites</div>
+            <h2 className="dir-section-title">See What We <em>Build for Contractors</em></h2>
+            <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.6, maxWidth: 520, margin: '8px auto 0' }}>
+              Each site is fully custom — designed to showcase your services and help grow your business.
+            </p>
+          </div>
+          <div className="dir-gallery-grid">
+            {galleryItems.map((item, i) => (
+              <div className="dir-gallery-item" key={i}>
+                <img src={item.src} alt={`${item.label} sample website`} loading="lazy" />
+                <div className="dir-gallery-label">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA #2 — Mid-page */}
+        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 16, paddingBottom: 48 }}>
+          <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 16 }}>Ready to get started?</p>
+          <CtaButton />
         </section>
 
         <hr className="dir-divider" />
@@ -561,7 +560,7 @@ const DirectoryPage = () => {
         {/* Footer */}
         <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '20px 24px' }}>
           <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 11, textTransform: 'uppercase' as const, opacity: 0.5 }}>PRIMEHUB.AI</span>
+            <span style={{ fontWeight: 900, letterSpacing: '-0.05em', fontSize: 11, textTransform: 'uppercase' as const, opacity: 0.5 }}>AMALVERA</span>
             <span style={{ fontSize: 8, color: '#4b5563', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>© 2024 HIGH IMPACT CREATIVE. ALL RIGHTS RESERVED.</span>
             <div style={{ display: 'flex', gap: 24 }}>
               <a href="#" style={{ fontSize: 8, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.1em', textDecoration: 'none' }}>PRIVACY</a>
