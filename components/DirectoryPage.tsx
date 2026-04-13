@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { Globe, Smartphone, Target, Users, CheckCircle, ArrowRight } from 'lucide-react';
 
+const galleryItems = [
+  { src: '/gallery/home-services.png', label: 'Home Services' },
+  { src: '/gallery/landscaping.png', label: 'Landscaping' },
+  { src: '/gallery/cleaning.png', label: 'Cleaning Services' },
+  { src: '/gallery/barbershop.png', label: 'Barbershop' },
+  { src: '/gallery/home-services-2.png', label: 'Home Services' },
+];
+
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +32,13 @@ const DirectoryPage = () => {
   };
 
   const priceLabel = pricingPlan === 'yearly' ? '$99/yr' : '$20/mo';
+
+  const CtaButton = ({ className = '' }: { className?: string }) => (
+    <button className={`dir-btn-primary ${className}`} onClick={handleCheckout} disabled={isLoading}>
+      {isLoading ? 'Loading...' : `Get Started — ${priceLabel}`}
+      {!isLoading && <ArrowRight size={18} />}
+    </button>
+  );
 
   return (
     <>
@@ -224,38 +239,43 @@ const DirectoryPage = () => {
           border-radius: 50%;
         }
 
-        .dir-sample-card {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+        .dir-gallery-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .dir-gallery-item {
           border-radius: 12px;
           overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.03);
+          transition: all 0.2s ease;
         }
-        .dir-sample-bar {
-          padding: 8px 12px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        .dir-gallery-item:hover {
+          border-color: rgba(255, 255, 255, 0.15);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
-        .dir-sample-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
+        .dir-gallery-item img {
+          width: 100%;
+          aspect-ratio: 1;
+          object-fit: cover;
+          display: block;
         }
-        .dir-sample-body {
-          height: 200px;
-          background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(26, 26, 46, 0.5));
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #64748b;
-          font-size: 14px;
-        }
-        .dir-sample-label {
+        .dir-gallery-label {
           padding: 12px 16px;
           font-weight: 600;
           font-size: 14px;
           color: #e2e8f0;
+        }
+
+        .dir-step-number {
+          font-family: 'Instrument Serif', serif;
+          font-size: 48px;
+          color: #22c55e;
+          font-style: italic;
+          line-height: 1;
+          margin-bottom: 12px;
         }
 
         .dir-divider {
@@ -265,12 +285,19 @@ const DirectoryPage = () => {
           border: none;
         }
 
+        @media (max-width: 768px) {
+          .dir-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+          .dir-gallery-grid { grid-template-columns: 1fr; }
+        }
         @media (max-width: 640px) {
           .dir-hero-title { font-size: 32px; }
           .dir-subtitle { font-size: 15px; }
           .dir-section-title { font-size: 26px; }
           .dir-price { font-size: 44px; }
           .dir-btn-primary { width: 100%; justify-content: center; }
+          .dir-step-number { font-size: 36px; }
         }
       `}</style>
 
@@ -292,10 +319,35 @@ const DirectoryPage = () => {
           <p className="dir-subtitle">
             A fully custom, AI-built website for your business — live in 60 seconds, starting at $20/mo.
           </p>
-          <button className="dir-btn-primary" onClick={handleCheckout} disabled={isLoading}>
-            {isLoading ? 'Loading...' : `Get Started — ${priceLabel}`}
-            {!isLoading && <ArrowRight size={18} />}
-          </button>
+          {/* CTA #1 */}
+          <CtaButton />
+        </section>
+
+        <hr className="dir-divider" />
+
+        {/* Gallery */}
+        <section className="dir-section" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="dir-section-label">Built for Contractors</div>
+            <h2 className="dir-section-title">Custom Websites That <em>Win More Jobs</em></h2>
+            <p style={{ color: '#94a3b8', fontSize: 15, lineHeight: 1.6, maxWidth: 560, margin: '12px auto 0' }}>
+              Each site is fully custom — designed to showcase your services, build trust, and convert visitors into booked jobs.
+            </p>
+          </div>
+          <div className="dir-gallery-grid">
+            {galleryItems.map((item, i) => (
+              <div className="dir-gallery-item" key={i}>
+                <img src={item.src} alt={`${item.label} sample website`} loading="lazy" />
+                <div className="dir-gallery-label">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA #2 — Mid-page */}
+        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 24, paddingBottom: 80 }}>
+          <p style={{ color: '#94a3b8', fontSize: 16, marginBottom: 20 }}>Ready to get your own custom site?</p>
+          <CtaButton />
         </section>
 
         <hr className="dir-divider" />
@@ -317,6 +369,29 @@ const DirectoryPage = () => {
                 <div className="dir-card-icon">{item.icon}</div>
                 <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{item.title}</h3>
                 <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="dir-divider" />
+
+        {/* How It Works */}
+        <section className="dir-section" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="dir-section-label">How It Works</div>
+            <h2 className="dir-section-title">Your Website in <em>3 Simple Steps</em></h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20 }}>
+            {[
+              { step: '1', title: 'Subscribe', desc: 'Pay $20/month for hosting — that\'s it. No setup fees, no hidden costs.' },
+              { step: '2', title: 'Onboarding Form', desc: 'After payment, fill out a quick form with your business details, services, and preferences.' },
+              { step: '3', title: 'Get Your Website', desc: 'We build and deliver your fully custom, multi-page website within 48–72 hours.' },
+            ].map((item, i) => (
+              <div className="dir-card" key={i} style={{ textAlign: 'center' }}>
+                <div className="dir-step-number">{item.step}</div>
+                <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>{item.title}</h3>
+                <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -349,30 +424,7 @@ const DirectoryPage = () => {
 
         <hr className="dir-divider" />
 
-        {/* Sample Sites */}
-        <section className="dir-section" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <div className="dir-section-label">Sample Sites</div>
-            <h2 className="dir-section-title">See What We <em>Build</em></h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-            {['Plumbing', 'HVAC', 'Landscaping'].map((industry) => (
-              <div className="dir-sample-card" key={industry}>
-                <div className="dir-sample-bar">
-                  <div className="dir-sample-dot" style={{ background: '#ef4444' }} />
-                  <div className="dir-sample-dot" style={{ background: '#eab308' }} />
-                  <div className="dir-sample-dot" style={{ background: '#22c55e' }} />
-                </div>
-                <div className="dir-sample-body">Coming Soon</div>
-                <div className="dir-sample-label">{industry}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* Pricing */}
+        {/* Pricing — CTA #3 */}
         <section className="dir-section" style={{ paddingTop: 80, paddingBottom: 80, textAlign: 'center' }}>
           <div className="dir-section-label">Simple Pricing</div>
           <h2 className="dir-section-title" style={{ marginBottom: 32 }}>
@@ -404,10 +456,7 @@ const DirectoryPage = () => {
             {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
           </div>
 
-          <button className="dir-btn-primary" onClick={handleCheckout} disabled={isLoading}>
-            {isLoading ? 'Loading...' : `Get Started — ${priceLabel}`}
-            {!isLoading && <ArrowRight size={18} />}
-          </button>
+          <CtaButton />
 
           <div className="dir-perks">
             <div className="dir-perk"><div className="dir-perk-dot" /> Cancel anytime</div>
