@@ -231,9 +231,21 @@ const DirectoryPage = () => {
           font-size: 36px; color: #3B82F6;
           font-style: italic; line-height: 1; margin-bottom: 6px;
         }
-        .dir-offer {
-          color: #60A5FA; font-size: 14px;
-          font-weight: 600; margin-top: 12px;
+        .dir-offer-box {
+          display: inline-block;
+          background: rgba(59, 130, 246, 0.08);
+          border: 1px solid rgba(59, 130, 246, 0.25);
+          border-radius: 10px;
+          padding: 10px 20px;
+          color: #60A5FA;
+          font-size: 13px;
+          font-weight: 600;
+          margin-top: 12px;
+          animation: dirOfferPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes dirOfferPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.15); }
+          50% { box-shadow: 0 0 20px 4px rgba(59, 130, 246, 0.2); }
         }
         .dir-trust {
           color: #64748b; font-size: 12px;
@@ -332,7 +344,7 @@ const DirectoryPage = () => {
         </header>
 
         {/* 1. Hero */}
-        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 36, paddingBottom: 40 }}>
+        <section className="dir-section" style={{ textAlign: 'center', paddingTop: 28, paddingBottom: 32 }}>
           <div className="dir-section-label" style={{ fontSize: 13, padding: '7px 18px' }}>For Home Service Contractors</div>
           <h1 className="dir-hero-title">
             Get a Website That Can Help You <em>Win More Jobs</em>
@@ -340,9 +352,14 @@ const DirectoryPage = () => {
           <p className="dir-subtitle">
             Built for home service contractors — we design, build, and manage everything for you. Typically ready in 48 hours.
           </p>
-          <p className="dir-offer">One-time offer today: Get a free Google Business Profile review with your website</p>
+          <div className="dir-offer-box">One-time offer today: Get a free Google Business Profile review with your website</div>
           <div style={{ marginTop: 16 }}>
             <PricingToggle />
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <span className="dir-price">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
+            <span className="dir-price-per">{pricingPlan === 'monthly' ? '/month' : '/year'}</span>
+            {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
           </div>
           <CtaButton />
           <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
@@ -351,7 +368,7 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 2. Portfolio */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div className="dir-section-label">Recent Websites</div>
             <h2 className="dir-section-title">Websites Built for <em>Contractors Like You</em></h2>
@@ -375,7 +392,7 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 3. What You Get */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div className="dir-section-label">What You Get</div>
             <h2 className="dir-section-title">Everything You Need to <em>Get More Work</em></h2>
@@ -402,7 +419,7 @@ const DirectoryPage = () => {
         <hr className="dir-divider" />
 
         {/* 4. How It Works */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div className="dir-section-label">How It Works</div>
             <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
@@ -422,14 +439,14 @@ const DirectoryPage = () => {
           </div>
           <div style={{ textAlign: 'center', marginTop: 14 }}>
             <p className="dir-muted">Questions anytime? You'll have 24/7 access to our team by email or message.</p>
-            <p className="dir-offer" style={{ marginTop: 6 }}>One-time offer today: Free Google Business Profile review included with your website.</p>
+            <div className="dir-offer-box" style={{ marginTop: 8 }}>One-time offer today: Free Google Business Profile review included with your website.</div>
           </div>
         </section>
 
         <hr className="dir-divider" />
 
         {/* 5. Why Contractors Choose This */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <section className="dir-section" style={{ paddingTop: 32, paddingBottom: 32 }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <div className="dir-section-label">Why Contractors Choose This</div>
             <h2 className="dir-section-title">Why Contractors <em>Choose This</em></h2>
@@ -448,41 +465,6 @@ const DirectoryPage = () => {
               </div>
             ))}
           </div>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* 6. Pricing */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40, textAlign: 'center' }}>
-          <div className="dir-section-label">Simple Pricing</div>
-          <h2 className="dir-section-title" style={{ marginBottom: 20 }}>
-            One Simple Price. <em>Everything Done for You.</em>
-          </h2>
-          <PricingToggle />
-          <div style={{ marginBottom: 20 }}>
-            <span className="dir-price">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
-            <span className="dir-price-per">{pricingPlan === 'monthly' ? '/month' : '/year'}</span>
-            {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
-          </div>
-          <p className="dir-muted" style={{ maxWidth: 480, margin: '0 auto 16px' }}>
-            Includes your website, hosting, 24/7 support, and a free Google Business Profile review for a limited time.
-          </p>
-          <CtaButton />
-          <p className="dir-trust">No setup fees &bull; No contracts &bull; 24/7 team access</p>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* 7. Final CTA */}
-        <section className="dir-section" style={{ paddingTop: 40, paddingBottom: 40, textAlign: 'center' }}>
-          <h2 className="dir-section-title" style={{ maxWidth: 560, margin: '0 auto 8px' }}>
-            Ready to Get a Website That Can Help You <em>Win More Jobs?</em>
-          </h2>
-          <p className="dir-muted" style={{ maxWidth: 480, margin: '0 auto 16px' }}>
-            Start today and get a free Google Business Profile review as a one-time offer.
-          </p>
-          <CtaButton />
-          <p className="dir-trust">Questions? Message or email our team anytime, 24/7.</p>
         </section>
 
         {/* Footer */}
