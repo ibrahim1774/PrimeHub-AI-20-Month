@@ -388,6 +388,9 @@ const DirectoryPage = () => {
           <p className="dir-subtitle">
             Built for home service contractors — we design, build, and manage everything for you. Typically ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.
           </p>
+          <div style={{ maxWidth: 380, margin: '16px auto', borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }}>
+            <wistia-player media-id="nq97ub8w34" aspect="1.7777777777777777"></wistia-player>
+          </div>
           <div className="dir-offer-box">One-time offer today: Get a free Google Business Profile review with your website</div>
           <div style={{ marginTop: 12 }}>
             <PricingToggle />
