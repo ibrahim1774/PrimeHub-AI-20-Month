@@ -4,12 +4,21 @@ import LoadingScreen from './components/LoadingScreen';
 import PreviewSite from './components/PreviewSite';
 import SuccessPage from './components/SuccessPage';
 import DirectoryPage from './components/DirectoryPage';
+import DirectorySuccessPage from './components/DirectorySuccessPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
 const App: React.FC = () => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
   if (pathname === '/1') {
+    const dirParams = new URLSearchParams(window.location.search);
+    const dirStatus = dirParams.get('status');
+    if (dirStatus === 'success') {
+      return <DirectorySuccessPage />;
+    }
+    if (dirStatus === 'cancelled') {
+      window.history.replaceState({}, '', '/1');
+    }
     return <DirectoryPage />;
   }
 
