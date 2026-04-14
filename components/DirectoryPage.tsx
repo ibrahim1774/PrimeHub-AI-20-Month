@@ -454,17 +454,19 @@ const DirectoryPage = () => {
             <div className="dir-section-label">What You Get</div>
             <h2 className="dir-section-title">Everything You Need to <em>Get More Work</em></h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
             {[
-              { icon: <Globe size={18} />, title: 'Professional Website', desc: 'Built to showcase your services and help your business look more established online.' },
-              { icon: <Smartphone size={18} />, title: 'Mobile-Friendly Design', desc: 'Designed to look great on phones, tablets, and desktops.' },
-              { icon: <MessageSquare size={18} />, title: 'Lead Capture', desc: 'Make it easy for customers to call, message, or request a quote.' },
-              { icon: <Headphones size={18} />, title: 'Ongoing Support', desc: 'Access our team 24/7 by email or message anytime you need help.' },
+              { icon: <Globe size={16} />, title: 'Professional Website', desc: 'Showcase your services and look established online.' },
+              { icon: <Smartphone size={16} />, title: 'Mobile-Friendly', desc: 'Looks great on phones, tablets, and desktops.' },
+              { icon: <MessageSquare size={16} />, title: 'Lead Capture', desc: 'Customers can call, message, or request a quote.' },
+              { icon: <Headphones size={16} />, title: '24/7 Support', desc: 'Reach our team anytime by email or message.' },
             ].map((item, i) => (
-              <div className="dir-card" key={i}>
-                <div className="dir-card-icon">{item.icon}</div>
-                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{item.title}</h3>
-                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
+              <div className="dir-card" key={i} style={{ padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div className="dir-card-icon" style={{ marginBottom: 0, flexShrink: 0 }}>{item.icon}</div>
+                <div>
+                  <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.title}</h3>
+                  <p style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4, margin: 0 }}>{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -481,16 +483,16 @@ const DirectoryPage = () => {
             <div className="dir-section-label">How It Works</div>
             <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
             {[
-              { step: '1', title: 'Sign Up', content: 'Choose monthly or yearly and get started in less than a minute.' },
-              { step: '2', title: 'Tell Us About Your Business', content: 'Fill out a quick form with your services, location, and preferences.' },
-              { step: '3', title: 'We Build Your Website', content: <>We design and deliver your site, typically within <strong style={{ color: '#3B82F6' }}>48 hours</strong>.</> },
+              { step: '1', title: 'Sign Up', content: 'Get started in less than a minute.' },
+              { step: '2', title: 'Tell Us About You', content: 'Quick form with your services & location.' },
+              { step: '3', title: 'We Build It', content: <>Ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.</> },
             ].map((item, i) => (
-              <div className="dir-card" key={i} style={{ textAlign: 'center' }}>
-                <div className="dir-step-number">{item.step}</div>
-                <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{item.title}</h3>
-                <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>{item.content}</p>
+              <div className="dir-card" key={i} style={{ textAlign: 'center', flex: 1, padding: '12px 10px' }}>
+                <div className="dir-step-number" style={{ fontSize: 22, marginBottom: 4 }}>{item.step}</div>
+                <h3 style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{item.title}</h3>
+                <p style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4, margin: 0 }}>{item.content}</p>
               </div>
             ))}
           </div>
