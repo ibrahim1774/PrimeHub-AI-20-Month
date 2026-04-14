@@ -178,6 +178,9 @@ const PreviewSite: React.FC<PreviewSiteProps> = ({ data: initialData, images: in
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${data.companyName} - Trusted ${data.industry} Services</title>
     <meta name="description" content="Professional ${data.industry} services in ${data.location}. Trusted, reliable, and local. Call ${data.phone}.">
+    <script src="https://fast.wistia.com/player.js" async></script>
+    <script src="https://fast.wistia.com/embed/nq97ub8w34.js" async type="module"></script>
+    <style>wistia-player[media-id='nq97ub8w34']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/nq97ub8w34/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

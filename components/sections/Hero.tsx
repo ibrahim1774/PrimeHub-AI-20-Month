@@ -68,14 +68,8 @@ const Hero: React.FC<HeroProps> = ({ data, image, brandColor, location, phone, c
             />
           </div>
 
-          <div className="max-w-sm mb-8 max-sm:mb-5 max-sm:max-w-[280px]">
-            <video
-              autoPlay
-              playsInline
-              controls
-              className="w-full rounded-lg shadow-lg"
-              src="/Contractor Intro.mp4"
-            />
+          <div className="max-w-sm mb-8 max-sm:mb-5 max-sm:max-w-[280px] rounded-lg shadow-lg overflow-hidden">
+            <wistia-player media-id="nq97ub8w34" aspect="1.7777777777777777"></wistia-player>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-20 max-sm:mb-10">
