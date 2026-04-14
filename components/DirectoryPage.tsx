@@ -264,6 +264,10 @@ const DirectoryPage = () => {
           font-size: 36px; color: #3B82F6;
           font-style: italic; line-height: 1; margin-bottom: 6px;
         }
+        @keyframes offerFlash {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
         .dir-offer-box {
           display: inline-block;
           background: rgba(59, 130, 246, 0.08);
@@ -274,6 +278,7 @@ const DirectoryPage = () => {
           font-size: 13px;
           font-weight: 600;
           margin-top: 8px;
+          animation: offerFlash 2s ease-in-out infinite;
           animation: dirOfferPulse 2.5s ease-in-out infinite;
         }
         @keyframes dirOfferPulse {
@@ -409,11 +414,7 @@ const DirectoryPage = () => {
         {/* 2. Portfolio */}
         <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
           <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <div className="dir-section-label">Recent Websites</div>
-            <h2 className="dir-section-title">Websites Built for <em>Contractors Like You</em></h2>
-            <p className="dir-muted" style={{ maxWidth: 480, margin: '6px auto 0' }}>
-              Built to look professional, work on any device, and make a strong first impression.
-            </p>
+            <h2 className="dir-section-title">Custom Professional Websites for <em>Home Service Contractors</em></h2>
           </div>
           <div className="dir-carousel">
             <button
