@@ -464,9 +464,9 @@ const DirectoryPage = () => {
               { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/mastercard.svg', alt: 'Mastercard' },
               { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/amex.svg', alt: 'Amex' },
               { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/discover.svg', alt: 'Discover' },
-              { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/paypal.svg', alt: 'PayPal' },
-            ].map((icon) => (
-              <img key={icon.alt} src={icon.src} alt={icon.alt} style={{ height: 24, width: 'auto', borderRadius: 4, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
+              { src: 'https://cdn.simpleicons.org/applepay/white', alt: 'Apple Pay', dark: true },
+            ].map((icon: any) => (
+              <img key={icon.alt} src={icon.src} alt={icon.alt} style={{ height: 24, width: 'auto', borderRadius: 4, boxShadow: '0 1px 3px rgba(0,0,0,0.2)', background: icon.dark ? '#000' : undefined, padding: icon.dark ? '3px 6px' : undefined }} />
             ))}
           </div>
 
