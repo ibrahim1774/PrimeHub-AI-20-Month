@@ -479,6 +479,11 @@ const DirectoryPage = () => {
 
         {/* 4. How It Works */}
         <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+            <div style={{ width: 150 }}>
+              <wistia-player media-id="p4uzw25p63" aspect="0.5625"></wistia-player>
+            </div>
+          </div>
           <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">How It Works</div>
             <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
