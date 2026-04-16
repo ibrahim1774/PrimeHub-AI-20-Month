@@ -470,8 +470,6 @@ const DirectoryPage = () => {
             ))}
           </div>
 
-          {/* Offer box */}
-          <div className="dir-offer-box"><span style={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>One-Time Offer Today:</span> Get a <span style={{ fontWeight: 900, textTransform: 'uppercase' }}>FREE</span> Google Business Profile Review With Your Website</div>
           <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
         </section>
 
