@@ -411,7 +411,7 @@ const DirectoryPage = () => {
                 { step: '2', title: 'Tell Us About You', content: 'Quick form with your services & location.' },
                 { step: '3', title: 'We Build It', content: <><strong style={{ color: '#3B82F6' }}>48 hours</strong> turnaround.</> },
               ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: i === 2 ? 6 : 10 }}>
                   <span style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, color: '#3B82F6', fontStyle: 'italic', lineHeight: 1, flexShrink: 0, width: 18 }}>{item.step}</span>
                   <div>
                     <div style={{ fontSize: 12, fontWeight: 700, color: '#f1f5f9' }}>{item.title}</div>
@@ -419,6 +419,20 @@ const DirectoryPage = () => {
                   </div>
                 </div>
               ))}
+              {/* Bullet points under We Build It */}
+              <div style={{ paddingLeft: 26, marginTop: 2 }}>
+                {[
+                  'SEO OPTIMIZED',
+                  'MULTIPLE PAGES W/ CUSTOM PHOTOS',
+                  'CHAT WIDGET & LEAD FORM INCLUDED',
+                  <><strong style={{ color: '#f1f5f9', fontWeight: 900 }}>FULL ACCOUNT ACCESS</strong></>,
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+                    <span style={{ color: '#3B82F6', fontSize: 8 }}>●</span>
+                    <span style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, letterSpacing: '0.03em' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
