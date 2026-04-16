@@ -448,35 +448,6 @@ const DirectoryPage = () => {
 
         <hr className="dir-divider" />
 
-        {/* 3. What You Get */}
-        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <div className="dir-section-label">What You Get</div>
-            <h2 className="dir-section-title">Everything You Need to <em>Get More Work</em></h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-            {[
-              { icon: <Globe size={16} />, title: 'Professional Website', desc: 'Showcase your services and look established online.' },
-              { icon: <Smartphone size={16} />, title: 'Mobile-Friendly', desc: 'Looks great on phones, tablets, and desktops.' },
-              { icon: <MessageSquare size={16} />, title: 'Lead Capture', desc: 'Customers can call, message, or request a quote.' },
-              { icon: <Headphones size={16} />, title: '24/7 Support', desc: 'Reach our team anytime by email or message.' },
-            ].map((item, i) => (
-              <div className="dir-card" key={i} style={{ padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                <div className="dir-card-icon" style={{ marginBottom: 0, flexShrink: 0 }}>{item.icon}</div>
-                <div>
-                  <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.title}</h3>
-                  <p style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4, margin: 0 }}>{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 10 }}>
-            Plus, for a limited time, your website includes a free Google Business Profile review.
-          </p>
-        </section>
-
-        <hr className="dir-divider" />
-
         {/* 4. How It Works */}
         <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
           <div style={{ textAlign: 'center', marginBottom: 12 }}>
