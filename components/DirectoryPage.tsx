@@ -456,6 +456,43 @@ const DirectoryPage = () => {
           </div>
           <CtaButton />
 
+          {/* Payment icons */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 10, marginBottom: 4 }}>
+            <span style={{ fontSize: 9, color: '#4b5563', letterSpacing: '0.05em', marginRight: 2 }}>SECURE PAYMENT</span>
+            {/* Visa */}
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 4, background: '#fff' }}>
+              <rect width="38" height="24" rx="4" fill="white"/>
+              <text x="19" y="16" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="11" fill="#1A1F71" letterSpacing="1">VISA</text>
+            </svg>
+            {/* Mastercard */}
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 4, background: '#fff' }}>
+              <rect width="38" height="24" rx="4" fill="white"/>
+              <circle cx="15" cy="12" r="7" fill="#EB001B"/>
+              <circle cx="23" cy="12" r="7" fill="#F79E1B"/>
+              <path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#FF5F00"/>
+            </svg>
+            {/* Amex */}
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 4 }}>
+              <rect width="38" height="24" rx="4" fill="#2E77BC"/>
+              <text x="19" y="16" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="800" fontSize="8.5" fill="white" letterSpacing="0.5">AMEX</text>
+            </svg>
+            {/* Apple Pay */}
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 4, background: '#000' }}>
+              <rect width="38" height="24" rx="4" fill="black"/>
+              <text x="19" y="10" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="600" fontSize="6" fill="white"></text>
+              <text x="19" y="16" textAnchor="middle" fontFamily="-apple-system, Arial, sans-serif" fontWeight="500" fontSize="8" fill="white">Apple Pay</text>
+            </svg>
+            {/* Google Pay */}
+            <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: 4, background: '#fff', border: '1px solid #e5e7eb' }}>
+              <rect width="38" height="24" rx="4" fill="white"/>
+              <text x="5" y="16" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8" fill="#4285F4">G</text>
+              <text x="11" y="16" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8" fill="#EA4335">o</text>
+              <text x="16.5" y="16" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8" fill="#FBBC05">o</text>
+              <text x="22" y="16" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8" fill="#4285F4">g</text>
+              <text x="27" y="16" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="8" fill="#5F6368">Pay</text>
+            </svg>
+          </div>
+
           {/* Offer box */}
           <div className="dir-offer-box"><span style={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>One-Time Offer Today:</span> Get a <span style={{ fontWeight: 900, textTransform: 'uppercase' }}>FREE</span> Google Business Profile Review With Your Website</div>
           <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
