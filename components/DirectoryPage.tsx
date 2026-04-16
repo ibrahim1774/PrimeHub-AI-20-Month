@@ -479,11 +479,6 @@ const DirectoryPage = () => {
 
         {/* 4. How It Works */}
         <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
-            <div style={{ width: 150 }}>
-              <wistia-player media-id="p4uzw25p63" aspect="0.5625"></wistia-player>
-            </div>
-          </div>
           <div style={{ textAlign: 'center', marginBottom: 12 }}>
             <div className="dir-section-label">How It Works</div>
             <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
@@ -504,30 +499,6 @@ const DirectoryPage = () => {
           <div style={{ textAlign: 'center', marginTop: 10 }}>
             <p className="dir-muted">Questions anytime? You'll have 24/7 access to our team by email or message.</p>
             <div className="dir-offer-box" style={{ marginTop: 6 }}>One-time offer today: Free Google Business Profile review included with your website.</div>
-          </div>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* 5. Why Contractors Choose This */}
-        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <div className="dir-section-label">Benefits</div>
-            <h2 className="dir-section-title">What's the <em>Benefit?</em></h2>
-          </div>
-          <div style={{ maxWidth: 560, margin: '0 auto' }}>
-            {[
-              'Can help your business look more professional',
-              'Can help you stand out from local competitors',
-              'Makes it easier for customers to call or request a quote',
-              'Helps build trust before the first conversation',
-              'Includes a free Google Business Profile review for a limited time',
-            ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0' }}>
-                <CheckCircle size={16} color="#3B82F6" />
-                <span style={{ fontSize: 13, fontWeight: 500, color: '#e2e8f0' }}>{item}</span>
-              </div>
-            ))}
           </div>
         </section>
 
