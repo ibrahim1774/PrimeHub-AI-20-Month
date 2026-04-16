@@ -271,19 +271,25 @@ const DirectoryPage = () => {
         .dir-offer-box {
           display: inline-block;
           background: rgba(59, 130, 246, 0.08);
-          border: 1px solid rgba(59, 130, 246, 0.25);
+          border: 1px solid rgba(59, 130, 246, 0.35);
           border-radius: 10px;
           padding: 10px 20px;
           color: #60A5FA;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 700;
           margin-top: 8px;
-          animation: offerFlash 2s ease-in-out infinite;
-          animation: dirOfferPulse 2.5s ease-in-out infinite;
+          animation: dirOfferPulse 2.5s ease-in-out infinite, dirOfferShake 3.5s ease-in-out infinite;
         }
         @keyframes dirOfferPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.15); }
-          50% { box-shadow: 0 0 20px 4px rgba(59, 130, 246, 0.2); }
+          0%, 100% { box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.2); }
+          50% { box-shadow: 0 0 28px 8px rgba(59, 130, 246, 0.45); }
+        }
+        @keyframes dirOfferShake {
+          0%, 85%, 100% { transform: translateX(0); }
+          88% { transform: translateX(-2px); }
+          91% { transform: translateX(2px); }
+          94% { transform: translateX(-1px); }
+          97% { transform: translateX(1px); }
         }
         .dir-trust {
           color: #64748b; font-size: 12px;
@@ -393,11 +399,31 @@ const DirectoryPage = () => {
           <p className="dir-subtitle">
             Built for home service contractors — we design, build, and manage everything for you. Typically ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.
           </p>
-          <div style={{ maxWidth: 200, margin: '16px auto', borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.12)' }}>
-            <wistia-player media-id="p4uzw25p63" aspect="0.5625"></wistia-player>
+          {/* Video + How It Works side by side */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px auto', maxWidth: 500, textAlign: 'left' }}>
+            <div style={{ flexShrink: 0, width: 160, borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+              <wistia-player media-id="p4uzw25p63" aspect="0.5625"></wistia-player>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="dir-section-label" style={{ marginBottom: 10, display: 'inline-block' }}>How It Works</div>
+              {[
+                { step: '1', title: 'Sign Up', content: 'Get started in less than a minute.' },
+                { step: '2', title: 'Tell Us About You', content: 'Quick form with your services & location.' },
+                { step: '3', title: 'We Build It', content: <><strong style={{ color: '#3B82F6' }}>48 hours</strong> turnaround.</> },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, color: '#3B82F6', fontStyle: 'italic', lineHeight: 1, flexShrink: 0, width: 18 }}>{item.step}</span>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#f1f5f9' }}>{item.title}</div>
+                    <div style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4 }}>{item.content}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="dir-offer-box">One-time offer today: Get a free Google Business Profile review with your website</div>
-          <div style={{ marginTop: 12 }}>
+
+          {/* Pricing + CTA */}
+          <div style={{ marginTop: 4 }}>
             <PricingToggle />
           </div>
           <div style={{ marginBottom: 12 }}>
@@ -406,6 +432,9 @@ const DirectoryPage = () => {
             {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
           </div>
           <CtaButton />
+
+          {/* Offer box */}
+          <div className="dir-offer-box"><span style={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>One-Time Offer Today:</span> Get a <span style={{ fontWeight: 900, textTransform: 'uppercase' }}>FREE</span> Google Business Profile Review With Your Website</div>
           <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
         </section>
 
@@ -444,33 +473,6 @@ const DirectoryPage = () => {
           <p className="dir-muted" style={{ textAlign: 'center', marginTop: 10 }}>
             Every website also includes a free Google Business Profile review for a limited time.
           </p>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* 4. How It Works */}
-        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <div className="dir-section-label">How It Works</div>
-            <h2 className="dir-section-title">Get Your Website in <em>3 Simple Steps</em></h2>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {[
-              { step: '1', title: 'Sign Up', content: 'Get started in less than a minute.' },
-              { step: '2', title: 'Tell Us About You', content: 'Quick form with your services & location.' },
-              { step: '3', title: 'We Build It', content: <>Ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.</> },
-            ].map((item, i) => (
-              <div className="dir-card" key={i} style={{ textAlign: 'center', flex: 1, padding: '12px 10px' }}>
-                <div className="dir-step-number" style={{ fontSize: 22, marginBottom: 4 }}>{item.step}</div>
-                <h3 style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{item.title}</h3>
-                <p style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4, margin: 0 }}>{item.content}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 10 }}>
-            <p className="dir-muted">Questions anytime? You'll have 24/7 access to our team by email or message.</p>
-            <div className="dir-offer-box" style={{ marginTop: 6 }}>One-time offer today: Free Google Business Profile review included with your website.</div>
-          </div>
         </section>
 
         {/* Footer */}
