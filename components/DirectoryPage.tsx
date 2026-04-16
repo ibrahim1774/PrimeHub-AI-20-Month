@@ -422,14 +422,23 @@ const DirectoryPage = () => {
               {/* Bullet points under We Build It */}
               <div style={{ paddingLeft: 26, marginTop: 2 }}>
                 {[
-                  'SEO OPTIMIZED',
-                  'MULTIPLE PAGES W/ CUSTOM PHOTOS',
-                  'CHAT WIDGET & LEAD FORM INCLUDED',
-                  <><strong style={{ color: '#f1f5f9', fontWeight: 900 }}>FULL ACCOUNT ACCESS</strong></>,
+                  { label: 'Full account access', highlight: true },
+                  { label: 'SEO Optimized' },
+                  { label: 'Multiple pages' },
+                  { label: 'Custom photos' },
+                  { label: 'Chat widget, lead form, and app' },
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
                     <span style={{ color: '#3B82F6', fontSize: 8 }}>●</span>
-                    <span style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, letterSpacing: '0.03em' }}>{item}</span>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: item.highlight ? 900 : 600,
+                      letterSpacing: '0.03em',
+                      color: item.highlight ? '#f1f5f9' : '#94a3b8',
+                      background: item.highlight ? 'rgba(59,130,246,0.18)' : 'transparent',
+                      borderRadius: item.highlight ? 4 : 0,
+                      padding: item.highlight ? '1px 5px' : undefined,
+                    }}>{item.label}</span>
                   </div>
                 ))}
               </div>
