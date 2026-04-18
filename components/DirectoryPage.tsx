@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
@@ -7,6 +7,8 @@ const galleryItems = [
   { src: '/gallery/roofing.png', label: 'Roofing' },
   { src: '/gallery/barbershop.png', label: 'Barbershop' },
 ];
+
+const roman = ['I', 'II', 'III', 'IV', 'V'];
 
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
@@ -42,28 +44,28 @@ const DirectoryPage = () => {
     }
   };
 
-  const priceLabel = pricingPlan === 'yearly' ? '$99/yr' : '$20/mo';
-
-  const CtaButton = () => (
-    <button className="dir-btn-primary" onClick={handleCheckout} disabled={isLoading}>
-      {isLoading ? 'Loading...' : 'Get Started'}
-      {!isLoading && <ArrowRight size={18} />}
+  const CtaButton = ({ large = true }: { large?: boolean }) => (
+    <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
+      <span className="mv-cta-inner">
+        {isLoading ? 'Processing…' : 'Commission'}
+        {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
+      </span>
     </button>
   );
 
-  const PricingToggle = () => (
-    <div className="dir-pricing-toggle">
+  const PricingToggle = ({ compact = false }: { compact?: boolean }) => (
+    <div className={`mv-toggle ${compact ? 'mv-toggle-compact' : ''}`}>
       <button
-        className={`dir-pricing-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
+        className={`mv-toggle-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('monthly')}
       >
         Monthly
       </button>
       <button
-        className={`dir-pricing-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
+        className={`mv-toggle-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('yearly')}
       >
-        Yearly <span className="dir-save-badge">Save 44%</span>
+        Yearly <span className="mv-save">Save 44%</span>
       </button>
     </div>
   );
@@ -71,562 +73,822 @@ const DirectoryPage = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-        .dir-page {
+        .mv-page {
           min-height: 100vh;
-          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-          color: #fff;
-          font-family: 'DM Sans', sans-serif;
-          padding-bottom: 70px;
-        }
-        .dir-section {
-          max-width: 1080px;
-          margin: 0 auto;
-          padding: 0 24px;
-        }
-        .dir-hero-title {
-          font-family: 'Instrument Serif', serif;
-          font-size: 46px;
-          line-height: 1.12;
-          color: #fff;
-          max-width: 700px;
-          margin: 0 auto 10px;
-        }
-        .dir-hero-title em { color: #3B82F6; font-style: italic; }
-        .dir-subtitle {
-          color: #94a3b8;
-          font-size: 16px;
-          line-height: 1.6;
-          max-width: 540px;
-          margin: 0 auto 12px;
-        }
-        .dir-btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 14px 32px;
-          border-radius: 12px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          background: linear-gradient(135deg, #3B82F6, #2563EB);
-          border: none;
-          color: #fff;
-          letter-spacing: 0.02em;
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-        }
-        .dir-btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.45);
-        }
-        .dir-btn-primary:disabled {
-          opacity: 0.6; cursor: not-allowed; transform: none;
-        }
-        .dir-card {
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 12px;
-          transition: all 0.2s ease;
-        }
-        .dir-card:hover {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(255, 255, 255, 0.12);
-        }
-        .dir-card-icon {
-          width: 38px; height: 38px;
-          border-radius: 10px;
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.2);
-          display: flex; align-items: center; justify-content: center;
-          color: #3B82F6;
-          margin-bottom: 10px;
-        }
-        .dir-section-label {
-          display: inline-flex; align-items: center; gap: 6px;
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.2);
-          border-radius: 100px;
-          padding: 5px 12px;
-          font-size: 10px; font-weight: 600;
-          color: #3B82F6;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          margin-bottom: 10px;
-        }
-        .dir-section-title {
-          font-family: 'Instrument Serif', serif;
-          font-size: 30px; color: #fff;
-          line-height: 1.2; margin: 0 0 6px;
-        }
-        .dir-section-title em { color: #3B82F6; font-style: italic; }
-        .dir-pricing-toggle {
-          display: flex;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px; padding: 3px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          max-width: 300px;
-          margin: 0 auto 12px;
-        }
-        .dir-pricing-tab {
-          flex: 1; padding: 9px 14px;
-          border: none; border-radius: 8px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px; font-weight: 600;
-          cursor: pointer; background: transparent;
-          color: #94a3b8; transition: all 0.2s;
-          display: flex; align-items: center; justify-content: center; gap: 6px;
-        }
-        .dir-pricing-tab.active {
-          background: rgba(59, 130, 246, 0.15);
-          color: #3B82F6;
-        }
-        .dir-save-badge {
-          background: #3B82F6; color: #fff;
-          font-size: 9px; font-weight: 700;
-          padding: 2px 5px; border-radius: 4px;
-          text-transform: uppercase;
-        }
-        .dir-price {
-          font-family: 'Instrument Serif', serif;
-          font-size: 52px; color: #3B82F6;
-          font-style: italic; line-height: 1;
-        }
-        .dir-price-per { color: #64748b; font-size: 16px; margin-left: 4px; }
-        .dir-price-was {
-          color: #64748b; font-size: 14px;
-          text-decoration: line-through; margin-left: 10px;
-        }
-        .dir-perks {
-          display: flex; justify-content: center;
-          gap: 20px; flex-wrap: wrap; margin-top: 12px;
-        }
-        .dir-perk {
-          display: flex; align-items: center;
-          gap: 6px; font-size: 12px; color: #94a3b8;
-        }
-        .dir-perk-dot {
-          width: 5px; height: 5px;
-          background: #3B82F6; border-radius: 50%;
-        }
-        .dir-carousel {
+          background:
+            radial-gradient(ellipse 900px 600px at 50% -10%, rgba(201,169,110,0.06), transparent 60%),
+            radial-gradient(ellipse 800px 600px at 110% 110%, rgba(201,169,110,0.06), transparent 60%),
+            #0a0a0a;
+          color: #e8dcc4;
+          font-family: 'Inter', sans-serif;
+          padding-bottom: 86px;
           position: relative;
-          max-width: 460px;
+          overflow-x: hidden;
+        }
+
+        /* Top ribbon */
+        .mv-ribbon {
+          background: linear-gradient(180deg, #c9a96e 0%, #b8975c 100%);
+          color: #0a0a0a;
+          text-align: center;
+          padding: 8px 16px;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.38em;
+          text-transform: uppercase;
+          font-family: 'Inter', sans-serif;
+        }
+        .mv-ribbon-diamond { margin: 0 10px; opacity: 0.65; }
+
+        /* Header */
+        .mv-header {
+          max-width: 1200px; margin: 0 auto;
+          padding: 22px 28px 14px;
+          display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .mv-wordmark {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 22px;
+          font-weight: 400;
+          font-style: italic;
+          color: #c9a96e;
+          letter-spacing: 0.04em;
+          line-height: 1;
+        }
+        .mv-wordmark-sub {
+          display: block;
+          font-family: 'Inter', sans-serif;
+          font-style: normal;
+          font-size: 8px;
+          color: #8a8072;
+          letter-spacing: 0.45em;
+          text-transform: uppercase;
+          margin-top: 4px;
+          font-weight: 500;
+        }
+        .mv-call {
+          text-decoration: none;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 2px;
+          padding: 8px 14px;
+          border: 1px solid rgba(201,169,110,0.35);
+          position: relative;
+          background: transparent;
+          transition: border-color 0.25s ease, background 0.25s ease;
+        }
+        .mv-call::before {
+          content: '';
+          position: absolute; inset: 3px;
+          border: 1px solid rgba(201,169,110,0.2);
+          pointer-events: none;
+        }
+        .mv-call:hover {
+          border-color: rgba(201,169,110,0.7);
+          background: rgba(201,169,110,0.04);
+        }
+        .mv-call-label {
+          font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+          color: #c9a96e; font-weight: 500;
+        }
+        .mv-call-number {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 17px; color: #e8dcc4; letter-spacing: 0.02em;
+          font-weight: 400;
+        }
+
+        /* Containers */
+        .mv-shell { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+        /* Eyebrow */
+        .mv-eyebrow {
+          display: inline-flex; align-items: center; gap: 12px;
+          color: #c9a96e; font-size: 10px; letter-spacing: 0.5em;
+          text-transform: uppercase; font-weight: 500;
+          margin-bottom: 22px;
+        }
+        .mv-eyebrow-bar {
+          width: 32px; height: 1px; background: #c9a96e;
+        }
+
+        /* Hero */
+        .mv-hero {
+          text-align: center;
+          padding: 56px 0 48px;
+        }
+        .mv-hero-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-size: 66px;
+          line-height: 1.08;
+          color: #e8dcc4;
+          max-width: 820px;
+          margin: 0 auto 22px;
+          letter-spacing: 0.005em;
+        }
+        .mv-hero-title em {
+          color: #c9a96e;
+          font-style: italic;
+          font-weight: 300;
+        }
+        .mv-hero-sub {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 20px;
+          line-height: 1.5;
+          color: #c8bca2;
+          font-weight: 300;
+          font-style: italic;
+          max-width: 620px;
           margin: 0 auto;
         }
-        .dir-carousel-frame {
-          border-radius: 12px;
-          overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: rgba(255, 255, 255, 0.03);
-        }
-        .dir-carousel-frame img {
-          width: 100%; aspect-ratio: 1;
-          object-fit: cover; object-position: center top;
-          transform: scale(1.15); display: block;
-        }
-        .dir-carousel-label {
-          text-align: center; padding: 10px 0 0;
-          font-weight: 600; font-size: 13px; color: #e2e8f0;
-        }
-        .dir-carousel-arrow {
-          position: absolute; top: 50%;
-          transform: translateY(-50%);
-          width: 36px; height: 36px;
-          border-radius: 50%;
-          background: rgba(0,0,0,0.6);
-          border: 1px solid rgba(255,255,255,0.15);
-          color: #fff;
+
+        /* Crest divider */
+        .mv-crest {
           display: flex; align-items: center; justify-content: center;
-          cursor: pointer; transition: all 0.2s; z-index: 2;
-          padding: 0;
+          gap: 18px;
+          margin: 40px auto;
+          max-width: 680px;
+          color: #c9a96e;
+          font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; font-weight: 500;
         }
-        .dir-carousel-arrow:hover {
-          background: rgba(0,0,0,0.85);
-          border-color: rgba(255,255,255,0.3);
+        .mv-crest-line {
+          flex: 1; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(201,169,110,0.35), transparent);
         }
-        .dir-carousel-dots {
-          display: flex; justify-content: center;
-          gap: 8px; margin-top: 12px;
-        }
-        .dir-carousel-dot {
-          width: 7px; height: 7px; border-radius: 50%;
-          background: rgba(255,255,255,0.2);
-          transition: all 0.2s; cursor: pointer;
-          border: none; padding: 0;
-        }
-        .dir-carousel-dot.active { background: #3B82F6; }
-        .dir-step-number {
-          font-family: 'Instrument Serif', serif;
-          font-size: 36px; color: #3B82F6;
-          font-style: italic; line-height: 1; margin-bottom: 6px;
-        }
-        @keyframes offerFlash {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-        .dir-offer-box {
-          display: inline-block;
-          background: rgba(59, 130, 246, 0.08);
-          border: 1px solid rgba(59, 130, 246, 0.35);
-          border-radius: 10px;
-          padding: 10px 20px;
-          color: #60A5FA;
-          font-size: 13px;
-          font-weight: 700;
-          margin-top: 8px;
-          animation: dirOfferPulse 2.5s ease-in-out infinite, dirOfferShake 3.5s ease-in-out infinite;
-        }
-        @keyframes dirOfferPulse {
-          0%, 100% { box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.2); }
-          50% { box-shadow: 0 0 28px 8px rgba(59, 130, 246, 0.45); }
-        }
-        @keyframes dirOfferShake {
-          0%, 85%, 100% { transform: translateX(0); }
-          88% { transform: translateX(-2px); }
-          91% { transform: translateX(2px); }
-          94% { transform: translateX(-1px); }
-          97% { transform: translateX(1px); }
-        }
-        .dir-trust {
-          color: #64748b; font-size: 12px;
-          margin-top: 8px; letter-spacing: 0.02em;
-        }
-        .dir-divider {
-          height: 1px;
-          background: rgba(255, 255, 255, 0.06);
-          margin: 0; border: none;
-        }
-        .dir-muted { color: #94a3b8; font-size: 13px; line-height: 1.5; }
+        .mv-diamond { color: #c9a96e; }
 
-        /* Sticky Bar */
-        .dir-sticky-bar {
-          position: fixed; bottom: 0; left: 0; right: 0;
-          z-index: 100;
-          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 6px 16px;
-          font-family: 'DM Sans', sans-serif;
-          backdrop-filter: blur(12px);
-          transform: translateY(100%);
-          transition: transform 0.3s ease;
+        /* Commission row: video + steps */
+        .mv-commission-row {
+          display: grid;
+          grid-template-columns: 220px 1fr;
+          gap: 42px;
+          align-items: start;
+          max-width: 720px;
+          margin: 36px auto 0;
         }
-        .dir-sticky-bar.visible {
-          transform: translateY(0);
+        .mv-frame {
+          position: relative;
+          padding: 8px;
+          background: rgba(201,169,110,0.04);
         }
-        .dir-sticky-inner {
-          max-width: 1080px; margin: 0 auto;
-          display: flex; align-items: center;
-          justify-content: space-between; gap: 12px;
+        .mv-frame::before,
+        .mv-frame::after {
+          content: '';
+          position: absolute;
+          pointer-events: none;
         }
-        .dir-sticky-toggle {
-          display: flex;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 8px; padding: 2px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+        .mv-frame::before {
+          inset: 0;
+          border: 1px solid rgba(201,169,110,0.45);
         }
-        .dir-sticky-tab {
-          padding: 6px 12px; border-radius: 6px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px; font-weight: 600;
-          cursor: pointer; transition: all 0.2s ease;
-          background: transparent; border: none;
-          color: #94a3b8; white-space: nowrap;
-          display: flex; align-items: center; gap: 5px;
+        .mv-frame::after {
+          inset: 5px;
+          border: 1px solid rgba(201,169,110,0.18);
         }
-        .dir-sticky-tab.active {
-          background: rgba(59, 130, 246, 0.15);
-          color: #3B82F6;
+        .mv-video-hint {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+          color: #c9a96e; font-weight: 500;
+          margin-bottom: 10px;
+          padding: 3px 0;
         }
-        .dir-sticky-price {
-          font-family: 'Instrument Serif', serif;
-          font-size: 22px; color: #3B82F6;
-          font-style: italic; white-space: nowrap;
-        }
-        .dir-sticky-btn {
-          padding: 10px 24px; border-radius: 8px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px; font-weight: 700;
-          cursor: pointer; transition: all 0.2s ease;
-          background: linear-gradient(135deg, #3B82F6, #2563EB);
-          border: none; color: #fff;
-          letter-spacing: 0.02em;
-          box-shadow: 0 2px 12px rgba(59, 130, 246, 0.3);
-          white-space: nowrap;
-          display: flex; align-items: center; gap: 8px;
-        }
-        .dir-sticky-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.45);
-        }
-        .dir-sticky-btn:disabled {
-          opacity: 0.6; cursor: not-allowed; transform: none;
+        .mv-video-hint::before,
+        .mv-video-hint::after {
+          content: '';
+          display: inline-block; width: 16px; height: 1px;
+          background: #c9a96e;
         }
 
-        @keyframes dirCallPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.55), 0 6px 20px rgba(59,130,246,0.25); }
-          50% { box-shadow: 0 0 0 8px rgba(59,130,246,0), 0 6px 24px rgba(59,130,246,0.45); }
+        .mv-steps { text-align: left; padding-top: 4px; }
+        .mv-step-eyebrow {
+          font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
+          color: #8a8072; margin-bottom: 14px;
         }
-        .dir-call-cta {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          text-decoration: none;
-          padding: 8px 14px;
-          border-radius: 999px;
-          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-          border: 1px solid rgba(255,255,255,0.15);
-          transition: transform 0.15s ease, box-shadow 0.2s ease;
-          animation: dirCallPulse 2s ease-in-out infinite;
-          white-space: nowrap;
+        .mv-step {
+          display: grid;
+          grid-template-columns: 32px 1fr;
+          gap: 12px;
+          padding: 10px 0;
+          border-bottom: 1px solid rgba(201,169,110,0.12);
         }
-        .dir-call-cta:hover {
-          transform: translateY(-1px) scale(1.02);
+        .mv-step:last-child { border-bottom: none; }
+        .mv-step-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 300;
+          font-size: 22px;
+          color: #c9a96e;
+          line-height: 1.2;
         }
-        .dir-call-cta:active {
-          transform: translateY(0) scale(0.98);
+        .mv-step-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 17px; color: #e8dcc4;
+          font-weight: 400; line-height: 1.2;
+          margin-bottom: 2px;
         }
-        .dir-call-icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 22px;
-          height: 22px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.2);
-          color: #fff;
+        .mv-step-body {
+          font-size: 11px; color: #8a8072; line-height: 1.5;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .mv-incl {
+          margin-top: 16px;
+          padding: 14px 0 4px;
+          border-top: 1px solid rgba(201,169,110,0.18);
+        }
+        .mv-incl-label {
+          font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+          color: #8a8072; margin-bottom: 8px;
+        }
+        .mv-incl-list { list-style: none; padding: 0; margin: 0; }
+        .mv-incl-item {
+          display: flex; align-items: center; gap: 10px;
+          padding: 3px 0;
+          font-size: 11px; color: #c8bca2;
+          letter-spacing: 0.04em;
+          font-family: 'Inter', sans-serif;
+        }
+        .mv-incl-item.is-key {
+          color: #e8dcc4; font-weight: 600;
+        }
+        .mv-incl-item.is-key .mv-incl-dot { background: #d4af37; }
+        .mv-incl-dot {
+          width: 4px; height: 4px;
+          background: #c9a96e; border-radius: 50%;
           flex-shrink: 0;
         }
-        .dir-call-text {
+
+        /* Price card */
+        .mv-price-card {
+          max-width: 520px;
+          margin: 40px auto 20px;
+          padding: 28px 28px 24px;
+          position: relative;
+          background: #141210;
+        }
+        .mv-price-card::before,
+        .mv-price-card::after {
+          content: '';
+          position: absolute; pointer-events: none;
+        }
+        .mv-price-card::before {
+          inset: 0; border: 1px solid rgba(201,169,110,0.4);
+        }
+        .mv-price-card::after {
+          inset: 6px; border: 1px solid rgba(201,169,110,0.18);
+        }
+        .mv-price-eyebrow {
+          font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
+          color: #c9a96e; text-align: center; margin-bottom: 12px;
+          font-weight: 500;
+        }
+        .mv-toggle {
           display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          line-height: 1.1;
+          border: 1px solid rgba(201,169,110,0.3);
+          margin: 0 auto 22px;
+          max-width: 320px;
+          background: rgba(0,0,0,0.35);
         }
-        .dir-call-label {
-          font-size: 9px;
-          font-weight: 800;
+        .mv-toggle-compact { max-width: 280px; margin: 0; }
+        .mv-toggle-tab {
+          flex: 1; padding: 10px 14px;
+          border: none; background: transparent;
+          font-family: 'Inter', sans-serif;
+          font-size: 10px; font-weight: 500;
+          letter-spacing: 0.25em;
           text-transform: uppercase;
-          letter-spacing: 0.09em;
-          color: rgba(255,255,255,0.9);
+          color: #8a8072;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .dir-call-number {
-          font-size: 14px;
-          font-weight: 900;
-          color: #fff;
-          letter-spacing: -0.01em;
+        .mv-toggle-tab.active {
+          background: rgba(201,169,110,0.12);
+          color: #c9a96e;
+        }
+        .mv-save {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8px; letter-spacing: 0.1em;
+          color: #d4af37; font-weight: 400;
+          text-transform: uppercase;
+        }
+        .mv-price-big {
+          text-align: center;
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          color: #e8dcc4;
+          line-height: 1;
+        }
+        .mv-price-big .mv-num {
+          font-size: 68px; letter-spacing: 0.01em;
+          color: #c9a96e;
+        }
+        .mv-price-big .mv-per {
+          font-size: 14px; color: #8a8072;
+          letter-spacing: 0.4em; text-transform: uppercase;
+          margin-left: 10px;
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+        }
+        .mv-price-was {
+          text-align: center;
+          margin-top: 6px;
+          font-size: 10px; letter-spacing: 0.3em;
+          color: #8a8072; text-transform: uppercase;
+          font-family: 'JetBrains Mono', monospace;
+        }
+        .mv-price-was s { opacity: 0.6; }
+
+        /* CTA */
+        .mv-cta {
+          display: inline-block;
+          padding: 6px;
+          border: 1px solid rgba(201,169,110,0.55);
+          background: transparent;
+          cursor: pointer;
+          transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+          color: inherit;
+          font-family: inherit;
+        }
+        .mv-cta-inner {
+          display: inline-flex; align-items: center; justify-content: center;
+          padding: 14px 42px;
+          border: 1px solid rgba(201,169,110,0.55);
+          color: #c9a96e;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.5em;
+          text-transform: uppercase;
+          font-family: 'Inter', sans-serif;
+          min-width: 240px;
+        }
+        .mv-cta-lg .mv-cta-inner { padding: 16px 54px; min-width: 300px; }
+        .mv-cta:hover {
+          border-color: #c9a96e;
+          background: rgba(201,169,110,0.06);
+        }
+        .mv-cta:hover .mv-cta-inner {
+          border-color: #d4af37;
+          color: #d4af37;
+        }
+        .mv-cta:active { transform: translateY(1px); }
+        .mv-cta:disabled {
+          opacity: 0.5; cursor: not-allowed; transform: none;
+        }
+        .mv-cta-wrap {
+          text-align: center;
+          margin-top: 10px;
         }
 
+        /* Payment icons */
+        .mv-pay {
+          display: flex; align-items: center; justify-content: center;
+          gap: 10px;
+          margin-top: 22px;
+          flex-wrap: wrap;
+        }
+        .mv-pay-label {
+          font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase;
+          color: #8a8072; font-family: 'JetBrains Mono', monospace;
+        }
+        .mv-pay img {
+          height: 22px; width: auto;
+          opacity: 0.8; filter: grayscale(20%);
+          transition: opacity 0.2s ease, filter 0.2s ease;
+        }
+        .mv-pay img:hover { opacity: 1; filter: none; }
+        .mv-pay-dark {
+          background: #000;
+          padding: 3px 6px;
+        }
+
+        .mv-trust {
+          margin-top: 18px;
+          font-size: 9px; letter-spacing: 0.4em;
+          text-transform: uppercase; color: #8a8072;
+          text-align: center;
+          font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Portfolio */
+        .mv-portfolio { padding: 56px 0; }
+        .mv-portfolio-title {
+          text-align: center;
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-style: italic;
+          font-size: 42px;
+          color: #e8dcc4;
+          margin: 0 0 8px;
+        }
+        .mv-portfolio-title em {
+          color: #c9a96e; font-style: italic;
+        }
+        .mv-portfolio-sub {
+          text-align: center;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+          color: #8a8072;
+          margin-bottom: 32px;
+        }
+        .mv-carousel {
+          position: relative;
+          max-width: 520px;
+          margin: 0 auto;
+          padding: 10px;
+        }
+        .mv-carousel::before {
+          content: '';
+          position: absolute; inset: 0;
+          border: 1px solid rgba(201,169,110,0.4);
+          pointer-events: none;
+        }
+        .mv-carousel::after {
+          content: '';
+          position: absolute; inset: 6px;
+          border: 1px solid rgba(201,169,110,0.18);
+          pointer-events: none;
+        }
+        .mv-carousel-frame {
+          overflow: hidden;
+          background: #0f0e0c;
+          position: relative;
+          z-index: 1;
+        }
+        .mv-carousel-frame img {
+          width: 100%; aspect-ratio: 4/3;
+          object-fit: cover; object-position: center top;
+          display: block;
+          filter: sepia(12%) saturate(90%) contrast(95%);
+        }
+        .mv-carousel-arrow {
+          position: absolute; top: 50%;
+          transform: translateY(-50%);
+          width: 40px; height: 40px;
+          background: #0a0a0a;
+          border: 1px solid rgba(201,169,110,0.4);
+          color: #c9a96e;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; z-index: 3;
+          transition: all 0.25s ease;
+          padding: 0;
+        }
+        .mv-carousel-arrow:hover {
+          border-color: #c9a96e; color: #d4af37;
+        }
+        .mv-carousel-caption {
+          text-align: center;
+          margin-top: 18px;
+        }
+        .mv-carousel-no {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; letter-spacing: 0.4em;
+          color: #8a8072; text-transform: uppercase;
+          margin-bottom: 6px;
+        }
+        .mv-carousel-label {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 20px; color: #c9a96e;
+          font-style: italic; font-weight: 400;
+        }
+        .mv-carousel-dots {
+          display: flex; justify-content: center; gap: 10px;
+          margin-top: 16px;
+        }
+        .mv-carousel-dot {
+          width: 8px; height: 8px; padding: 0;
+          background: transparent;
+          border: 1px solid rgba(201,169,110,0.4);
+          cursor: pointer;
+          transform: rotate(45deg);
+          transition: all 0.25s ease;
+        }
+        .mv-carousel-dot.active {
+          background: #c9a96e;
+          border-color: #c9a96e;
+        }
+
+        /* Footer */
+        .mv-footer {
+          border-top: 1px solid rgba(201,169,110,0.18);
+          padding: 22px 28px 24px;
+          margin-top: 20px;
+        }
+        .mv-footer-inner {
+          max-width: 1100px; margin: 0 auto;
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 16px; flex-wrap: wrap;
+        }
+        .mv-footer-mark {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: 14px;
+          color: #c9a96e;
+          letter-spacing: 0.05em;
+        }
+        .mv-footer-meta {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+          color: #8a8072;
+        }
+        .mv-footer-links { display: flex; gap: 22px; }
+        .mv-footer-link {
+          font-family: 'Inter', sans-serif;
+          font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+          color: #8a8072; text-decoration: none; font-weight: 500;
+          transition: color 0.2s ease;
+        }
+        .mv-footer-link:hover { color: #c9a96e; }
+
+        /* Sticky bar */
+        .mv-sticky {
+          position: fixed; bottom: 0; left: 0; right: 0;
+          z-index: 100;
+          background: #0a0a0a;
+          border-top: 1px solid rgba(201,169,110,0.35);
+          padding: 12px 22px;
+          transform: translateY(110%);
+          transition: transform 0.35s ease;
+        }
+        .mv-sticky.visible { transform: translateY(0); }
+        .mv-sticky-inner {
+          max-width: 1100px; margin: 0 auto;
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 14px;
+        }
+        .mv-sticky-left {
+          display: flex; align-items: center; gap: 18px;
+          flex-wrap: wrap;
+        }
+        .mv-sticky-price {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 300;
+          color: #c9a96e;
+          font-size: 22px;
+          line-height: 1;
+          white-space: nowrap;
+        }
+        .mv-sticky-price .mv-sticky-per {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px; color: #8a8072;
+          letter-spacing: 0.3em; text-transform: uppercase;
+          font-style: normal;
+          margin-left: 8px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
+          .mv-hero-title { font-size: 46px; }
+          .mv-hero-sub { font-size: 16px; }
+          .mv-commission-row {
+            grid-template-columns: 1fr;
+            gap: 28px;
+            max-width: 360px;
+          }
+          .mv-portfolio-title { font-size: 32px; }
+          .mv-carousel-arrow { width: 34px; height: 34px; }
         }
         @media (max-width: 640px) {
-          .dir-hero-title { font-size: 30px; }
-          .dir-subtitle { font-size: 14px; }
-          .dir-section-title { font-size: 24px; }
-          .dir-price { font-size: 40px; }
-          .dir-btn-primary { width: 100%; justify-content: center; }
-          .dir-step-number { font-size: 28px; }
-          .dir-sticky-inner { flex-direction: column; gap: 10px; }
-          .dir-sticky-btn { width: 100%; justify-content: center; }
-          .dir-sticky-toggle { width: 100%; }
-          .dir-sticky-tab { flex: 1; justify-content: center; }
-          .dir-call-label { font-size: 8px; letter-spacing: 0.06em; }
-          .dir-call-number { font-size: 12px; }
-          .dir-call-cta { padding: 5px 9px; border-radius: 8px; }
-        }
-        @media (max-width: 480px) {
+          .mv-ribbon { font-size: 8px; letter-spacing: 0.3em; padding: 7px 10px; }
+          .mv-ribbon-diamond { margin: 0 6px; }
+          .mv-header { padding: 16px 18px 10px; }
+          .mv-wordmark { font-size: 18px; }
+          .mv-wordmark-sub { font-size: 7px; letter-spacing: 0.35em; }
+          .mv-call { padding: 6px 10px; }
+          .mv-call-label { font-size: 7px; letter-spacing: 0.3em; }
+          .mv-call-number { font-size: 14px; }
+          .mv-shell { padding: 0 18px; }
+          .mv-hero { padding: 32px 0 28px; }
+          .mv-hero-title { font-size: 36px; }
+          .mv-hero-sub { font-size: 14px; }
+          .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
+          .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
+          .mv-price-card { padding: 22px 18px 20px; }
+          .mv-price-big .mv-num { font-size: 54px; }
+          .mv-cta-inner { padding: 13px 28px; min-width: 200px; letter-spacing: 0.35em; font-size: 10px; }
+          .mv-cta-lg .mv-cta-inner { padding: 14px 32px; min-width: 220px; }
+          .mv-portfolio-title { font-size: 28px; }
+          .mv-sticky { padding: 10px 14px; }
+          .mv-sticky-inner { flex-direction: column; align-items: stretch; gap: 10px; }
+          .mv-sticky-left { justify-content: center; }
+          .mv-toggle-compact { max-width: none; width: 100%; }
+          .mv-sticky .mv-cta { width: 100%; }
+          .mv-sticky .mv-cta-inner { width: 100%; }
         }
       `}</style>
 
-      <div className="dir-page">
-        {/* Nav */}
-        <header className="dir-section" style={{ paddingTop: 14, paddingBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 13, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
-          <a href="tel:+18302549274" className="dir-call-cta" aria-label="Tap to call 24/7 customer representative">
-            <span className="dir-call-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-            </span>
-            <span className="dir-call-text">
-              <span className="dir-call-label">Tap to Call • 24/7 Rep</span>
-              <span className="dir-call-number">(830) 254-9274</span>
-            </span>
+      <div className="mv-page">
+        {/* Top ribbon */}
+        <div className="mv-ribbon">
+          Maison Amalvera
+          <span className="mv-ribbon-diamond">◊</span>
+          Est. 2020
+          <span className="mv-ribbon-diamond">◊</span>
+          Austin · TX
+        </div>
+
+        {/* Header */}
+        <header className="mv-header">
+          <div>
+            <div className="mv-wordmark">Amalvera</div>
+            <span className="mv-wordmark-sub">Atelier of the Web</span>
+          </div>
+          <a href="tel:+18302549274" className="mv-call" aria-label="Call our 24-hour concierge">
+            <span className="mv-call-label">Concierge · XXIV / VII</span>
+            <span className="mv-call-number">(830) 254-9274</span>
           </a>
         </header>
 
-        {/* 1. Hero */}
-        <section ref={heroRef} className="dir-section" style={{ textAlign: 'center', paddingTop: 22, paddingBottom: 26 }}>
-          <div className="dir-section-label" style={{ fontSize: 13, padding: '7px 18px' }}>For Home Service Contractors</div>
-          <h1 className="dir-hero-title">
-            Get a Website That Can Help You <em>Win More Jobs</em>
+        {/* Hero */}
+        <section ref={heroRef} className="mv-shell mv-hero">
+          <div className="mv-eyebrow">
+            <span className="mv-eyebrow-bar" />
+            <span>◊ I ◊ The Invitation</span>
+            <span className="mv-eyebrow-bar" />
+          </div>
+          <h1 className="mv-hero-title">
+            A website <em>worthy</em> of the trade<br />
+            you practice.
           </h1>
-          <p className="dir-subtitle">
-            Built for home service contractors — we design, build, and manage everything for you. Typically ready in <strong style={{ color: '#3B82F6' }}>48 hours</strong>.
+          <p className="mv-hero-sub">
+            A private commission, designed and managed end-to-end for home-service
+            contractors. Delivered in forty-eight hours — on the house.
           </p>
-          {/* Video + How It Works side by side */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px auto', maxWidth: 500, textAlign: 'left' }}>
-            <div style={{ flexShrink: 0, width: 160 }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '4px 9px',
-                marginBottom: 6,
-                borderRadius: 999,
-                background: 'rgba(59,130,246,0.18)',
-                border: '1px solid rgba(59,130,246,0.45)',
-                boxShadow: '0 0 10px rgba(59,130,246,0.35)',
-                color: '#f1f5f9',
-                fontSize: 9,
-                fontWeight: 800,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase' as const,
-                lineHeight: 1,
-              }}>
-                <span aria-hidden="true">🔊</span>
-                <span>Tap to Unmute</span>
-              </div>
-              <div style={{ borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-                <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+
+          {/* Commission row: video + steps */}
+          <div className="mv-commission-row">
+            <div>
+              <div className="mv-video-hint">Tap to Unmute</div>
+              <div className="mv-frame">
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+                </div>
               </div>
             </div>
-            <div style={{ flex: 1 }}>
-              <div className="dir-section-label" style={{ marginBottom: 10, display: 'inline-block' }}>How It Works</div>
+            <div className="mv-steps">
+              <div className="mv-step-eyebrow">◊ The Process</div>
               {[
-                { step: '1', title: 'Sign Up', content: 'Get started in less than a minute.' },
-                { step: '2', title: 'Tell Us About You', content: 'Quick form with your services & location.' },
-                { step: '3', title: 'We Build It', content: <><strong style={{ color: '#3B82F6' }}>48 hours</strong> turnaround.</> },
+                { title: 'Commission', body: 'Select monthly or annual. Sign in under a minute.' },
+                { title: 'Confide', body: 'Share your trade, your territory, your voice.' },
+                { title: 'Receive', body: 'Delivered in 48ʜʀꜱ, built by hand.' },
               ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: i === 2 ? 6 : 10 }}>
-                  <span style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, color: '#3B82F6', fontStyle: 'italic', lineHeight: 1, flexShrink: 0, width: 18 }}>{item.step}</span>
+                <div className="mv-step" key={i}>
+                  <span className="mv-step-num">{roman[i]}.</span>
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: '#f1f5f9' }}>{item.title}</div>
-                    <div style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.4 }}>{item.content}</div>
+                    <div className="mv-step-title">{item.title}</div>
+                    <div className="mv-step-body">{item.body}</div>
                   </div>
                 </div>
               ))}
-              {/* Bullet points under We Build It */}
-              <div style={{ paddingLeft: 26, marginTop: 2 }}>
-                {[
-                  { label: 'Full account access', highlight: true },
-                  { label: 'SEO Optimized' },
-                  { label: 'Multiple pages' },
-                  { label: 'Custom photos' },
-                  { label: 'Chat widget, lead form, and app' },
-                ].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
-                    <span style={{ color: '#3B82F6', fontSize: 8 }}>●</span>
-                    <span style={{
-                      fontSize: 10,
-                      fontWeight: item.highlight ? 900 : 600,
-                      letterSpacing: '0.03em',
-                      color: item.highlight ? '#f1f5f9' : '#94a3b8',
-                      background: item.highlight ? 'rgba(59,130,246,0.18)' : 'transparent',
-                      borderRadius: item.highlight ? 4 : 0,
-                      padding: item.highlight ? '1px 5px' : undefined,
-                    }}>{item.label}</span>
-                  </div>
-                ))}
+              <div className="mv-incl">
+                <div className="mv-incl-label">◊ Appointments of the House</div>
+                <ul className="mv-incl-list">
+                  <li className="mv-incl-item is-key">
+                    <span className="mv-incl-dot" /> Full Account Access
+                  </li>
+                  <li className="mv-incl-item">
+                    <span className="mv-incl-dot" /> SEO Optimised
+                  </li>
+                  <li className="mv-incl-item">
+                    <span className="mv-incl-dot" /> Multiple pages
+                  </li>
+                  <li className="mv-incl-item">
+                    <span className="mv-incl-dot" /> Custom photographs
+                  </li>
+                  <li className="mv-incl-item">
+                    <span className="mv-incl-dot" /> Chat widget, lead form, and app
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
 
-          {/* Pricing + CTA */}
-          <div style={{ marginTop: 4 }}>
+          {/* Price card */}
+          <div className="mv-price-card">
+            <div className="mv-price-eyebrow">◊ Commission Fee ◊</div>
             <PricingToggle />
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <span className="dir-price">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
-            <span className="dir-price-per">{pricingPlan === 'monthly' ? '/month' : '/year'}</span>
-            {pricingPlan === 'yearly' && <span className="dir-price-was">$240/yr</span>}
-          </div>
-          <CtaButton />
-
-          {/* Payment icons */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 10, marginBottom: 4, flexWrap: 'wrap' as const }}>
-            <span style={{ fontSize: 9, color: '#4b5563', letterSpacing: '0.05em', marginRight: 2 }}>SECURE PAYMENT</span>
-            {[
-              { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/visa.svg', alt: 'Visa' },
-              { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/mastercard.svg', alt: 'Mastercard' },
-              { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/amex.svg', alt: 'Amex' },
-              { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/discover.svg', alt: 'Discover' },
-              { src: 'https://cdn.simpleicons.org/applepay/white', alt: 'Apple Pay', dark: true },
-            ].map((icon: any) => (
-              <img key={icon.alt} src={icon.src} alt={icon.alt} style={{ height: 24, width: 'auto', borderRadius: 4, boxShadow: '0 1px 3px rgba(0,0,0,0.2)', background: icon.dark ? '#000' : undefined, padding: icon.dark ? '3px 6px' : undefined }} />
-            ))}
-          </div>
-
-          <p className="dir-trust">No contracts &bull; Cancel anytime &bull; 24/7 team access</p>
-        </section>
-
-        <hr className="dir-divider" />
-
-        {/* 2. Portfolio */}
-        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <h2 className="dir-section-title">Custom Professional Websites for <em>Home Service Contractors</em></h2>
-          </div>
-          <div className="dir-carousel">
-            <button
-              className="dir-carousel-arrow"
-              style={{ left: -18 }}
-              onClick={() => setCarouselIndex((carouselIndex - 1 + galleryItems.length) % galleryItems.length)}
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <div className="dir-carousel-frame">
-              <img src={galleryItems[carouselIndex].src} alt={`${galleryItems[carouselIndex].label} sample website`} />
+            <div className="mv-price-big">
+              <span className="mv-num">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
+              <span className="mv-per">per {pricingPlan === 'monthly' ? 'month' : 'year'}</span>
             </div>
-            <button
-              className="dir-carousel-arrow"
-              style={{ right: -18 }}
-              onClick={() => setCarouselIndex((carouselIndex + 1) % galleryItems.length)}
-            >
-              <ChevronRight size={20} />
-            </button>
-            <div className="dir-carousel-label">{galleryItems[carouselIndex].label}</div>
-            <div className="dir-carousel-dots">
-              {galleryItems.map((_, i) => (
-                <button key={i} className={`dir-carousel-dot ${i === carouselIndex ? 'active' : ''}`} onClick={() => setCarouselIndex(i)} />
+            {pricingPlan === 'yearly' && (
+              <div className="mv-price-was"><s>$240 / yr</s> &nbsp; Save 44%</div>
+            )}
+            <div className="mv-cta-wrap">
+              <CtaButton />
+            </div>
+
+            <div className="mv-pay">
+              <span className="mv-pay-label">Secure Payment</span>
+              {[
+                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/visa.svg', alt: 'Visa' },
+                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/mastercard.svg', alt: 'Mastercard' },
+                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/amex.svg', alt: 'Amex' },
+                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/discover.svg', alt: 'Discover' },
+                { src: 'https://cdn.simpleicons.org/applepay/white', alt: 'Apple Pay', dark: true },
+              ].map((icon: any) => (
+                <img
+                  key={icon.alt}
+                  src={icon.src}
+                  alt={icon.alt}
+                  className={icon.dark ? 'mv-pay-dark' : ''}
+                />
               ))}
             </div>
           </div>
+
+          <div className="mv-trust">No contracts &nbsp; ◊ &nbsp; Cancel anytime &nbsp; ◊ &nbsp; Concierge XXIV / VII</div>
         </section>
 
+        {/* Crest divider */}
+        <div className="mv-shell">
+          <div className="mv-crest">
+            <span className="mv-crest-line" />
+            <span>◊ II ◊ The Portfolio</span>
+            <span className="mv-crest-line" />
+          </div>
+        </div>
+
+        {/* Portfolio */}
+        <section className="mv-shell mv-portfolio">
+          <h2 className="mv-portfolio-title">
+            Commissions for the <em>trades</em>
+          </h2>
+          <div className="mv-portfolio-sub">Selected works · {galleryItems.length} pieces</div>
+          <div className="mv-carousel">
+            <button
+              className="mv-carousel-arrow"
+              style={{ left: -20 }}
+              onClick={() => setCarouselIndex((carouselIndex - 1 + galleryItems.length) % galleryItems.length)}
+              aria-label="Previous piece"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <div className="mv-carousel-frame">
+              <img src={galleryItems[carouselIndex].src} alt={`${galleryItems[carouselIndex].label} commission`} />
+            </div>
+            <button
+              className="mv-carousel-arrow"
+              style={{ right: -20 }}
+              onClick={() => setCarouselIndex((carouselIndex + 1) % galleryItems.length)}
+              aria-label="Next piece"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+          <div className="mv-carousel-caption">
+            <div className="mv-carousel-no">Commission No. {roman[carouselIndex]} of {roman[galleryItems.length - 1]}</div>
+            <div className="mv-carousel-label">{galleryItems[carouselIndex].label}</div>
+          </div>
+          <div className="mv-carousel-dots">
+            {galleryItems.map((_, i) => (
+              <button
+                key={i}
+                className={`mv-carousel-dot ${i === carouselIndex ? 'active' : ''}`}
+                onClick={() => setCarouselIndex(i)}
+                aria-label={`Go to piece ${i + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Crest closing */}
+        <div className="mv-shell">
+          <div className="mv-crest">
+            <span className="mv-crest-line" />
+            <span>◊ Fin ◊</span>
+            <span className="mv-crest-line" />
+          </div>
+        </div>
+
         {/* Footer */}
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '12px 20px' }}>
-          <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 10, textTransform: 'uppercase' as const, opacity: 0.5 }}>AMALVERA</span>
-            <span style={{ fontSize: 8, color: '#4b5563', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>© 2024 HIGH IMPACT CREATIVE. ALL RIGHTS RESERVED.</span>
-            <div style={{ display: 'flex', gap: 20 }}>
-              <a href="#" style={{ fontSize: 8, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.1em', textDecoration: 'none' }}>PRIVACY</a>
-              <a href="#" style={{ fontSize: 8, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.1em', textDecoration: 'none' }}>SUPPORT</a>
+        <footer className="mv-footer">
+          <div className="mv-footer-inner">
+            <span className="mv-footer-mark">Maison Amalvera</span>
+            <span className="mv-footer-meta">MMXXIV · All rights reserved</span>
+            <div className="mv-footer-links">
+              <a href="#" className="mv-footer-link">Privacy</a>
+              <a href="#" className="mv-footer-link">Support</a>
             </div>
           </div>
         </footer>
       </div>
 
-      {/* Sticky Bar */}
-      <div className={`dir-sticky-bar ${showSticky ? 'visible' : ''}`}>
-        <div className="dir-sticky-inner">
-          <div className="dir-sticky-toggle">
-            <button
-              className={`dir-sticky-tab ${pricingPlan === 'monthly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('monthly')}
-            >Monthly &middot; $20/mo</button>
-            <button
-              className={`dir-sticky-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
-              onClick={() => setPricingPlan('yearly')}
-            >Yearly &middot; $99/yr <span className="dir-save-badge">Save 44%</span></button>
+      {/* Sticky */}
+      <div className={`mv-sticky ${showSticky ? 'visible' : ''}`}>
+        <div className="mv-sticky-inner">
+          <div className="mv-sticky-left">
+            <PricingToggle compact />
+            <span className="mv-sticky-price">
+              {pricingPlan === 'monthly' ? '$20' : '$99'}
+              <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
+            </span>
           </div>
-          <button className="dir-sticky-btn" onClick={handleCheckout} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Get Started'}
-            {!isLoading && <ArrowRight size={16} />}
-          </button>
+          <CtaButton large={false} />
         </div>
       </div>
     </>
