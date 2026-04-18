@@ -505,9 +505,6 @@ const DirectoryPage = () => {
               ))}
             </div>
           </div>
-          <p className="dir-muted" style={{ textAlign: 'center', marginTop: 10 }}>
-            Every website also includes a free Google Business Profile review for a limited time.
-          </p>
         </section>
 
         {/* Footer */}
