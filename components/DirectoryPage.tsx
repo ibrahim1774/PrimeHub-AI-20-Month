@@ -469,8 +469,30 @@ const DirectoryPage = () => {
           </p>
           {/* Video + How It Works side by side */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px auto', maxWidth: 500, textAlign: 'left' }}>
-            <div style={{ flexShrink: 0, width: 160, borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-              <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+            <div style={{ flexShrink: 0, width: 160 }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 5,
+                padding: '4px 9px',
+                marginBottom: 6,
+                borderRadius: 999,
+                background: 'rgba(59,130,246,0.18)',
+                border: '1px solid rgba(59,130,246,0.45)',
+                boxShadow: '0 0 10px rgba(59,130,246,0.35)',
+                color: '#f1f5f9',
+                fontSize: 9,
+                fontWeight: 800,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase' as const,
+                lineHeight: 1,
+              }}>
+                <span aria-hidden="true">🔊</span>
+                <span>Tap to Unmute</span>
+              </div>
+              <div style={{ borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+                <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+              </div>
             </div>
             <div style={{ flex: 1 }}>
               <div className="dir-section-label" style={{ marginBottom: 10, display: 'inline-block' }}>How It Works</div>
