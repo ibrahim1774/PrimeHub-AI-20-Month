@@ -366,6 +366,36 @@ const DirectoryPage = () => {
           opacity: 0.6; cursor: not-allowed; transform: none;
         }
 
+        .dir-call-cta {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          text-decoration: none;
+          padding: 6px 12px;
+          border-radius: 10px;
+          background: rgba(59, 130, 246, 0.08);
+          border: 1px solid rgba(59, 130, 246, 0.25);
+          transition: background 0.2s ease, border-color 0.2s ease;
+          line-height: 1.15;
+        }
+        .dir-call-cta:hover {
+          background: rgba(59, 130, 246, 0.14);
+          border-color: rgba(59, 130, 246, 0.4);
+        }
+        .dir-call-label {
+          font-size: 9px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #3B82F6;
+        }
+        .dir-call-number {
+          font-size: 14px;
+          font-weight: 900;
+          color: #f1f5f9;
+          letter-spacing: -0.01em;
+        }
+
         @media (max-width: 768px) {
         }
         @media (max-width: 640px) {
@@ -379,6 +409,9 @@ const DirectoryPage = () => {
           .dir-sticky-btn { width: 100%; justify-content: center; }
           .dir-sticky-toggle { width: 100%; }
           .dir-sticky-tab { flex: 1; justify-content: center; }
+          .dir-call-label { font-size: 8px; letter-spacing: 0.06em; }
+          .dir-call-number { font-size: 12px; }
+          .dir-call-cta { padding: 5px 9px; border-radius: 8px; }
         }
         @media (max-width: 480px) {
         }
@@ -386,8 +419,12 @@ const DirectoryPage = () => {
 
       <div className="dir-page">
         {/* Nav */}
-        <header className="dir-section" style={{ paddingTop: 14, paddingBottom: 14, display: 'flex', alignItems: 'center' }}>
+        <header className="dir-section" style={{ paddingTop: 14, paddingBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 13, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
+          <a href="tel:+18302549274" className="dir-call-cta">
+            <span className="dir-call-label">24/7 Customer Representative</span>
+            <span className="dir-call-number">(830) 254-9274</span>
+          </a>
         </header>
 
         {/* 1. Hero */}
