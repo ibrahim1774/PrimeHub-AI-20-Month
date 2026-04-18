@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight, ChevronLeft, ChevronRight, X, ExternalLink } from 'lucide-react';
+import { Globe, Smartphone, MessageSquare, Headphones, CheckCircle, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
@@ -8,36 +8,12 @@ const galleryItems = [
   { src: '/gallery/barbershop.png', label: 'Barbershop' },
 ];
 
-const showcaseItems = [
-  { url: 'https://app.gohighlevel.com/v2/preview/rR8XB0oK4DpjYYrcD5N3', label: 'Sample Website 1' },
-  { url: 'https://app.gohighlevel.com/v2/preview/ZwA9lP8m5ddNGG16IK8W', label: 'Sample Website 2' },
-  { url: 'https://app.gohighlevel.com/v2/preview/ZzdQLNjLvyQ6xgPUugJn', label: 'Sample Website 3' },
-  { url: 'https://app.gohighlevel.com/v2/preview/PZZ8KtOOJxvS3kvXLQsL', label: 'Sample Website 4' },
-  { url: 'https://app.gohighlevel.com/v2/preview/Otzf92Rd6qi8sls5OZwh', label: 'Sample Website 5' },
-];
-
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(1);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const heroRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (previewUrl) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [previewUrl]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setPreviewUrl(null); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -390,139 +366,6 @@ const DirectoryPage = () => {
           opacity: 0.6; cursor: not-allowed; transform: none;
         }
 
-        .dir-showcase-row {
-          display: flex; gap: 14px; overflow-x: auto;
-          padding: 4px 4px 16px; margin: 0 -4px;
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-        }
-        .dir-showcase-row::-webkit-scrollbar { height: 6px; }
-        .dir-showcase-row::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 3px; }
-        .dir-showcase-row::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.5); border-radius: 3px; }
-        .dir-showcase-card {
-          flex: 0 0 auto;
-          width: 260px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 12px;
-          padding: 10px;
-          cursor: pointer;
-          scroll-snap-align: start;
-          transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-          font-family: inherit;
-          color: inherit;
-          text-align: left;
-        }
-        .dir-showcase-card:hover {
-          transform: translateY(-3px);
-          border-color: rgba(59,130,246,0.5);
-          background: rgba(59,130,246,0.06);
-        }
-        .dir-showcase-thumb {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 16 / 10;
-          border-radius: 8px;
-          overflow: hidden;
-          background: #0b1220;
-          border: 1px solid rgba(255,255,255,0.06);
-        }
-        .dir-showcase-thumb iframe {
-          position: absolute;
-          top: 0; left: 0;
-          width: 1440px;
-          height: 900px;
-          border: 0;
-          transform: scale(0.17);
-          transform-origin: top left;
-          pointer-events: none;
-        }
-        .dir-showcase-overlay {
-          position: absolute; inset: 0;
-          background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%);
-          display: flex; align-items: flex-end; justify-content: center;
-          padding: 10px;
-          opacity: 0;
-          transition: opacity 0.2s ease;
-        }
-        .dir-showcase-card:hover .dir-showcase-overlay { opacity: 1; }
-        .dir-showcase-btn {
-          display: inline-flex; align-items: center; gap: 6px;
-          background: #3B82F6; color: #fff;
-          padding: 6px 12px; border-radius: 999px;
-          font-size: 11px; font-weight: 700;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-        .dir-showcase-label {
-          text-align: center;
-          font-size: 12px;
-          font-weight: 700;
-          color: #e2e8f0;
-          margin-top: 8px;
-        }
-
-        .dir-preview-backdrop {
-          position: fixed; inset: 0;
-          background: rgba(0,0,0,0.85);
-          backdrop-filter: blur(4px);
-          z-index: 9999;
-          display: flex; align-items: center; justify-content: center;
-          padding: 20px;
-          animation: dirFadeIn 0.2s ease;
-        }
-        @keyframes dirFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .dir-preview-modal {
-          width: 100%;
-          max-width: 1200px;
-          height: calc(100vh - 40px);
-          max-height: 900px;
-          background: #0b1220;
-          border-radius: 14px;
-          overflow: hidden;
-          display: flex; flex-direction: column;
-          border: 1px solid rgba(255,255,255,0.1);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-        }
-        .dir-preview-bar {
-          display: flex; align-items: center; justify-content: space-between;
-          gap: 10px;
-          padding: 10px 14px;
-          background: rgba(255,255,255,0.04);
-          border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .dir-preview-url {
-          font-size: 11px; color: #94a3b8;
-          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-          flex: 1;
-        }
-        .dir-preview-icon-btn {
-          display: inline-flex; align-items: center; justify-content: center;
-          width: 32px; height: 32px;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.04);
-          border-radius: 8px;
-          color: #e2e8f0;
-          cursor: pointer;
-          text-decoration: none;
-          transition: background 0.15s ease;
-        }
-        .dir-preview-icon-btn:hover { background: rgba(255,255,255,0.1); }
-        .dir-preview-frame {
-          width: 100%;
-          flex: 1;
-          border: 0;
-          background: #fff;
-        }
-        @media (max-width: 640px) {
-          .dir-showcase-card { width: 200px; }
-          .dir-showcase-thumb iframe { transform: scale(0.13); }
-          .dir-preview-modal { height: calc(100vh - 20px); border-radius: 10px; }
-          .dir-preview-backdrop { padding: 10px; }
-        }
-
         @keyframes dirCallPulse {
           0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.55), 0 6px 20px rgba(59,130,246,0.25); }
           50% { box-shadow: 0 0 0 8px rgba(59,130,246,0), 0 6px 24px rgba(59,130,246,0.45); }
@@ -627,7 +470,7 @@ const DirectoryPage = () => {
           {/* Video + How It Works side by side */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px auto', maxWidth: 500, textAlign: 'left' }}>
             <div style={{ flexShrink: 0, width: 160, borderRadius: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-              <wistia-player media-id="p4uzw25p63" aspect="0.5625"></wistia-player>
+              <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
             </div>
             <div style={{ flex: 1 }}>
               <div className="dir-section-label" style={{ marginBottom: 10, display: 'inline-block' }}>How It Works</div>
@@ -731,85 +574,6 @@ const DirectoryPage = () => {
             </div>
           </div>
         </section>
-
-        <hr className="dir-divider" />
-
-        {/* 3. Live Showcase */}
-        <section className="dir-section" style={{ paddingTop: 26, paddingBottom: 26 }}>
-          <div style={{ textAlign: 'center', marginBottom: 14 }}>
-            <div className="dir-section-label">Live Showcase</div>
-            <h2 className="dir-section-title">Browse Real Sample <em>Websites</em></h2>
-            <p className="dir-muted" style={{ maxWidth: 480, margin: '6px auto 0' }}>
-              Tap any site below to open a full interactive preview.
-            </p>
-          </div>
-          <div className="dir-showcase-row">
-            {showcaseItems.map((item) => (
-              <button
-                key={item.url}
-                className="dir-showcase-card"
-                onClick={() => setPreviewUrl(item.url)}
-                aria-label={`Open preview of ${item.label}`}
-              >
-                <div className="dir-showcase-thumb">
-                  <iframe
-                    src={item.url}
-                    title={item.label}
-                    loading="lazy"
-                    scrolling="no"
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                  <div className="dir-showcase-overlay">
-                    <span className="dir-showcase-btn">
-                      <ExternalLink size={14} /> View Site
-                    </span>
-                  </div>
-                </div>
-                <div className="dir-showcase-label">{item.label}</div>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Preview Modal */}
-        {previewUrl && (
-          <div
-            className="dir-preview-backdrop"
-            onClick={() => setPreviewUrl(null)}
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="dir-preview-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="dir-preview-bar">
-                <span className="dir-preview-url">{previewUrl}</span>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <a
-                    href={previewUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="dir-preview-icon-btn"
-                    aria-label="Open in new tab"
-                  >
-                    <ExternalLink size={16} />
-                  </a>
-                  <button
-                    className="dir-preview-icon-btn"
-                    onClick={() => setPreviewUrl(null)}
-                    aria-label="Close preview"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-              </div>
-              <iframe
-                src={previewUrl}
-                title="Website preview"
-                className="dir-preview-frame"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              />
-            </div>
-          </div>
-        )}
 
         {/* Footer */}
         <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '12px 20px' }}>
