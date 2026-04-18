@@ -366,33 +366,57 @@ const DirectoryPage = () => {
           opacity: 0.6; cursor: not-allowed; transform: none;
         }
 
+        @keyframes dirCallPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.55), 0 6px 20px rgba(59,130,246,0.25); }
+          50% { box-shadow: 0 0 0 8px rgba(59,130,246,0), 0 6px 24px rgba(59,130,246,0.45); }
+        }
         .dir-call-cta {
           display: flex;
-          flex-direction: column;
-          align-items: flex-end;
+          align-items: center;
+          gap: 8px;
           text-decoration: none;
-          padding: 6px 12px;
-          border-radius: 10px;
-          background: rgba(59, 130, 246, 0.08);
-          border: 1px solid rgba(59, 130, 246, 0.25);
-          transition: background 0.2s ease, border-color 0.2s ease;
-          line-height: 1.15;
+          padding: 8px 14px;
+          border-radius: 999px;
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+          border: 1px solid rgba(255,255,255,0.15);
+          transition: transform 0.15s ease, box-shadow 0.2s ease;
+          animation: dirCallPulse 2s ease-in-out infinite;
+          white-space: nowrap;
         }
         .dir-call-cta:hover {
-          background: rgba(59, 130, 246, 0.14);
-          border-color: rgba(59, 130, 246, 0.4);
+          transform: translateY(-1px) scale(1.02);
+        }
+        .dir-call-cta:active {
+          transform: translateY(0) scale(0.98);
+        }
+        .dir-call-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.2);
+          color: #fff;
+          flex-shrink: 0;
+        }
+        .dir-call-text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          line-height: 1.1;
         }
         .dir-call-label {
           font-size: 9px;
-          font-weight: 700;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #3B82F6;
+          letter-spacing: 0.09em;
+          color: rgba(255,255,255,0.9);
         }
         .dir-call-number {
           font-size: 14px;
           font-weight: 900;
-          color: #f1f5f9;
+          color: #fff;
           letter-spacing: -0.01em;
         }
 
@@ -421,9 +445,16 @@ const DirectoryPage = () => {
         {/* Nav */}
         <header className="dir-section" style={{ paddingTop: 14, paddingBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <span style={{ fontWeight: 900, letterSpacing: '-0.04em', fontSize: 13, textTransform: 'uppercase' as const }}>AMALVERA WEBSITE AGENCY</span>
-          <a href="tel:+18302549274" className="dir-call-cta">
-            <span className="dir-call-label">24/7 Customer Representative</span>
-            <span className="dir-call-number">(830) 254-9274</span>
+          <a href="tel:+18302549274" className="dir-call-cta" aria-label="Tap to call 24/7 customer representative">
+            <span className="dir-call-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </span>
+            <span className="dir-call-text">
+              <span className="dir-call-label">Tap to Call • 24/7 Rep</span>
+              <span className="dir-call-number">(830) 254-9274</span>
+            </span>
           </a>
         </header>
 
