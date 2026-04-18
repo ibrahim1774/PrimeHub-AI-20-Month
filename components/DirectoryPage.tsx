@@ -47,7 +47,7 @@ const DirectoryPage = () => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Processing…' : 'Commission'}
+        {isLoading ? 'Loading…' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -684,9 +684,9 @@ const DirectoryPage = () => {
       <div className="mv-page">
         {/* Top ribbon */}
         <div className="mv-ribbon">
-          Maison Amalvera
+          Amalvera
           <span className="mv-ribbon-diamond">◊</span>
-          Est. 2020
+          Since 2020
           <span className="mv-ribbon-diamond">◊</span>
           Austin · TX
         </div>
@@ -695,10 +695,10 @@ const DirectoryPage = () => {
         <header className="mv-header">
           <div>
             <div className="mv-wordmark">Amalvera</div>
-            <span className="mv-wordmark-sub">Atelier of the Web</span>
+            <span className="mv-wordmark-sub">We Build Websites</span>
           </div>
-          <a href="tel:+18302549274" className="mv-call" aria-label="Call our 24-hour concierge">
-            <span className="mv-call-label">Concierge · XXIV / VII</span>
+          <a href="tel:+18302549274" className="mv-call" aria-label="Tap to call our 24/7 help line">
+            <span className="mv-call-label">Tap to Call · 24/7 Help</span>
             <span className="mv-call-number">(830) 254-9274</span>
           </a>
         </header>
@@ -707,16 +707,16 @@ const DirectoryPage = () => {
         <section ref={heroRef} className="mv-shell mv-hero">
           <div className="mv-eyebrow">
             <span className="mv-eyebrow-bar" />
-            <span>◊ I ◊ The Invitation</span>
+            <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
           <h1 className="mv-hero-title">
-            A website <em>worthy</em> of the trade<br />
-            you practice.
+            A website that helps you <em>win</em><br />
+            more jobs.
           </h1>
           <p className="mv-hero-sub">
-            A private commission, designed and managed end-to-end for home-service
-            contractors. Delivered in forty-eight hours — on the house.
+            We build websites for home service pros. You tell us about your
+            business. We do the rest. Ready in 48 hours.
           </p>
 
           {/* Commission row: video + steps */}
@@ -730,11 +730,11 @@ const DirectoryPage = () => {
               </div>
             </div>
             <div className="mv-steps">
-              <div className="mv-step-eyebrow">◊ The Process</div>
+              <div className="mv-step-eyebrow">◊ How It Works</div>
               {[
-                { title: 'Commission', body: 'Select monthly or annual. Sign in under a minute.' },
-                { title: 'Confide', body: 'Share your trade, your territory, your voice.' },
-                { title: 'Receive', body: 'Delivered in 48ʜʀꜱ, built by hand.' },
+                { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
+                { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
+                { title: 'We Build It', body: 'Your website is ready in 48 hours.' },
               ].map((item, i) => (
                 <div className="mv-step" key={i}>
                   <span className="mv-step-num">{roman[i]}.</span>
@@ -745,19 +745,19 @@ const DirectoryPage = () => {
                 </div>
               ))}
               <div className="mv-incl">
-                <div className="mv-incl-label">◊ Appointments of the House</div>
+                <div className="mv-incl-label">◊ What You Get</div>
                 <ul className="mv-incl-list">
                   <li className="mv-incl-item is-key">
                     <span className="mv-incl-dot" /> Full Account Access
                   </li>
                   <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> SEO Optimised
+                    <span className="mv-incl-dot" /> SEO ready (so people find you on Google)
                   </li>
                   <li className="mv-incl-item">
                     <span className="mv-incl-dot" /> Multiple pages
                   </li>
                   <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> Custom photographs
+                    <span className="mv-incl-dot" /> Custom photos
                   </li>
                   <li className="mv-incl-item">
                     <span className="mv-incl-dot" /> Chat widget, lead form, and app
@@ -769,7 +769,7 @@ const DirectoryPage = () => {
 
           {/* Price card */}
           <div className="mv-price-card">
-            <div className="mv-price-eyebrow">◊ Commission Fee ◊</div>
+            <div className="mv-price-eyebrow">◊ The Price ◊</div>
             <PricingToggle />
             <div className="mv-price-big">
               <span className="mv-num">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
@@ -801,14 +801,14 @@ const DirectoryPage = () => {
             </div>
           </div>
 
-          <div className="mv-trust">No contracts &nbsp; ◊ &nbsp; Cancel anytime &nbsp; ◊ &nbsp; Concierge XXIV / VII</div>
+          <div className="mv-trust">No contracts &nbsp; ◊ &nbsp; Cancel anytime &nbsp; ◊ &nbsp; 24/7 Help</div>
         </section>
 
         {/* Crest divider */}
         <div className="mv-shell">
           <div className="mv-crest">
             <span className="mv-crest-line" />
-            <span>◊ II ◊ The Portfolio</span>
+            <span>◊ Step 2 ◊ Our Work</span>
             <span className="mv-crest-line" />
           </div>
         </div>
@@ -816,9 +816,9 @@ const DirectoryPage = () => {
         {/* Portfolio */}
         <section className="mv-shell mv-portfolio">
           <h2 className="mv-portfolio-title">
-            Commissions for the <em>trades</em>
+            Websites we've built for <em>pros</em>
           </h2>
-          <div className="mv-portfolio-sub">Selected works · {galleryItems.length} pieces</div>
+          <div className="mv-portfolio-sub">A few of our favorites</div>
           <div className="mv-carousel">
             <button
               className="mv-carousel-arrow"
@@ -841,7 +841,7 @@ const DirectoryPage = () => {
             </button>
           </div>
           <div className="mv-carousel-caption">
-            <div className="mv-carousel-no">Commission No. {roman[carouselIndex]} of {roman[galleryItems.length - 1]}</div>
+            <div className="mv-carousel-no">Site {carouselIndex + 1} of {galleryItems.length}</div>
             <div className="mv-carousel-label">{galleryItems[carouselIndex].label}</div>
           </div>
           <div className="mv-carousel-dots">
@@ -860,7 +860,7 @@ const DirectoryPage = () => {
         <div className="mv-shell">
           <div className="mv-crest">
             <span className="mv-crest-line" />
-            <span>◊ Fin ◊</span>
+            <span>◊ That's It ◊</span>
             <span className="mv-crest-line" />
           </div>
         </div>
@@ -868,11 +868,11 @@ const DirectoryPage = () => {
         {/* Footer */}
         <footer className="mv-footer">
           <div className="mv-footer-inner">
-            <span className="mv-footer-mark">Maison Amalvera</span>
-            <span className="mv-footer-meta">MMXXIV · All rights reserved</span>
+            <span className="mv-footer-mark">Amalvera</span>
+            <span className="mv-footer-meta">© 2024 · All rights reserved</span>
             <div className="mv-footer-links">
               <a href="#" className="mv-footer-link">Privacy</a>
-              <a href="#" className="mv-footer-link">Support</a>
+              <a href="#" className="mv-footer-link">Help</a>
             </div>
           </div>
         </footer>
