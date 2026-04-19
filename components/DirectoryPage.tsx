@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
@@ -12,6 +12,14 @@ const roman = ['I', 'II', 'III', 'IV', 'V'];
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setIsLoading(false);
+    };
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, []);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -392,40 +400,45 @@ const DirectoryPage = () => {
         .mv-price-was s { opacity: 0.6; }
 
         /* CTA */
+        @keyframes mvCtaGlow {
+          0%, 100% { box-shadow: 0 0 14px rgba(212,175,55,0.35), 0 0 0 1px rgba(212,175,55,0.45); }
+          50% { box-shadow: 0 0 22px rgba(212,175,55,0.6), 0 0 0 2px rgba(212,175,55,0.65); }
+        }
         .mv-cta {
           display: inline-block;
-          padding: 6px;
-          border: 1px solid rgba(201,169,110,0.55);
+          padding: 3px;
+          border: 1px solid rgba(212,175,55,0.5);
           background: transparent;
           cursor: pointer;
-          transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+          transition: transform 0.15s ease, box-shadow 0.25s ease;
           color: inherit;
           font-family: inherit;
+          animation: mvCtaGlow 2.4s ease-in-out infinite;
         }
         .mv-cta-inner {
           display: inline-flex; align-items: center; justify-content: center;
-          padding: 9px 26px;
-          border: 1px solid rgba(201,169,110,0.55);
-          color: #c9a96e;
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 0.32em;
+          padding: 10px 26px;
+          background: linear-gradient(180deg, #e0bf5a 0%, #c9a96e 60%, #b89556 100%);
+          color: #0a0a0a;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.28em;
           text-transform: uppercase;
           font-family: 'Inter', sans-serif;
           min-width: 170px;
+          text-shadow: 0 1px 0 rgba(255,255,255,0.15);
         }
-        .mv-cta-lg .mv-cta-inner { padding: 10px 30px; min-width: 190px; }
+        .mv-cta-lg .mv-cta-inner { padding: 11px 32px; min-width: 200px; font-size: 12px; }
         .mv-cta:hover {
-          border-color: #c9a96e;
-          background: rgba(201,169,110,0.06);
+          transform: translateY(-1px);
         }
         .mv-cta:hover .mv-cta-inner {
-          border-color: #d4af37;
-          color: #d4af37;
+          background: linear-gradient(180deg, #ebcc6a 0%, #d4af37 60%, #c29a47 100%);
+          color: #000;
         }
         .mv-cta:active { transform: translateY(1px); }
         .mv-cta:disabled {
-          opacity: 0.5; cursor: not-allowed; transform: none;
+          opacity: 0.55; cursor: not-allowed; animation: none;
         }
         .mv-cta-wrap {
           text-align: center;
@@ -665,18 +678,21 @@ const DirectoryPage = () => {
         .mv-sticky-price {
           font-family: 'Cormorant Garamond', serif;
           font-style: italic;
-          font-weight: 300;
-          color: #c9a96e;
-          font-size: 30px;
+          font-weight: 400;
+          color: #d4af37;
+          font-size: 38px;
           line-height: 1;
           white-space: nowrap;
+          text-shadow: 0 0 18px rgba(212,175,55,0.35);
         }
         .mv-sticky-price .mv-sticky-per {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; color: #8a8072;
+          font-size: 10px; color: #c9a96e;
           letter-spacing: 0.3em; text-transform: uppercase;
           font-style: normal;
+          font-weight: 500;
           margin-left: 8px;
+          text-shadow: none;
         }
 
         /* Responsive */
@@ -721,7 +737,7 @@ const DirectoryPage = () => {
           .mv-sticky { padding: 6px 12px; }
           .mv-sticky-inner { flex-direction: column; align-items: stretch; gap: 6px; }
           .mv-sticky-left { justify-content: space-between; gap: 10px; }
-          .mv-sticky-price { font-size: 26px; }
+          .mv-sticky-price { font-size: 32px; }
           .mv-toggle-compact { max-width: 170px; width: auto; }
           .mv-sticky .mv-cta { width: 100%; }
           .mv-sticky .mv-cta-inner { width: 100%; }
