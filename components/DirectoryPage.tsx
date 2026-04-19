@@ -24,6 +24,19 @@ const DirectoryPage = () => {
 
   const handleCheckout = async () => {
     setIsLoading(true);
+
+    // Fire Meta Pixel InitiateCheckout event when user starts checkout
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      const value = pricingPlan === 'yearly' ? 99 : 20;
+      const eventID = `ic_${pricingPlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      (window as any).fbq('track', 'InitiateCheckout', {
+        value,
+        currency: 'USD',
+        content_name: pricingPlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan',
+        content_category: 'subscription',
+      }, { eventID });
+    }
+
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
