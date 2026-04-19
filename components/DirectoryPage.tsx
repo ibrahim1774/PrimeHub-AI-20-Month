@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
 const galleryItems = [
-  { src: '/gallery/home-services.png', label: 'Home Services' },
-  { src: '/gallery/landscaping.png', label: 'Landscaping' },
-  { src: '/gallery/roofing.png', label: 'Roofing' },
-  { src: '/gallery/cleaning.png', label: 'Cleaning' },
-  { src: '/gallery/barbershop.png', label: 'Barbershop' },
+  { src: '/gallery/home-services.jpg', label: 'Home Services' },
+  { src: '/gallery/landscaping.jpg', label: 'Landscaping' },
+  { src: '/gallery/roofing.jpg', label: 'Roofing' },
+  { src: '/gallery/cleaning.jpg', label: 'Cleaning' },
+  { src: '/gallery/barbershop.jpg', label: 'Barbershop' },
 ];
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
@@ -881,12 +881,17 @@ const DirectoryPage = () => {
           <div className="mv-portfolio-sub">A few of our favorites</div>
           <div className="mv-gallery-wrap">
           <div className="mv-gallery">
-            {galleryItems.map((item) => (
+            {galleryItems.map((item, i) => (
               <div key={item.src} className="mv-gallery-card">
                 <div className="mv-gallery-thumb">
                   <img
                     src={item.src}
                     alt={`${item.label} sample website`}
+                    width={1200}
+                    height={900}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    {...({ fetchpriority: i === 0 ? 'high' : 'low' } as any)}
                     onError={(e) => {
                       const img = e.currentTarget;
                       if (!img.dataset.fallback) {
