@@ -166,9 +166,9 @@ const DirectoryPage = () => {
         /* Eyebrow */
         .mv-eyebrow {
           display: inline-flex; align-items: center; gap: 12px;
-          color: #c9a96e; font-size: 10px; letter-spacing: 0.5em;
+          color: #c9a96e; font-size: 10px; letter-spacing: 0.4em;
           text-transform: uppercase; font-weight: 500;
-          margin-bottom: 22px;
+          margin-bottom: 12px;
         }
         .mv-eyebrow-bar {
           width: 32px; height: 1px; background: #c9a96e;
@@ -177,16 +177,16 @@ const DirectoryPage = () => {
         /* Hero */
         .mv-hero {
           text-align: center;
-          padding: 56px 0 48px;
+          padding: 22px 0 20px;
         }
         .mv-hero-title {
           font-family: 'Cormorant Garamond', serif;
           font-weight: 300;
-          font-size: 66px;
-          line-height: 1.08;
+          font-size: 40px;
+          line-height: 1.1;
           color: #e8dcc4;
-          max-width: 820px;
-          margin: 0 auto 22px;
+          max-width: 620px;
+          margin: 0 auto 10px;
           letter-spacing: 0.005em;
         }
         .mv-hero-title em {
@@ -196,12 +196,12 @@ const DirectoryPage = () => {
         }
         .mv-hero-sub {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 20px;
+          font-size: 15px;
           line-height: 1.5;
           color: #c8bca2;
           font-weight: 300;
           font-style: italic;
-          max-width: 620px;
+          max-width: 500px;
           margin: 0 auto;
         }
 
@@ -209,7 +209,7 @@ const DirectoryPage = () => {
         .mv-crest {
           display: flex; align-items: center; justify-content: center;
           gap: 14px;
-          margin: 22px auto;
+          margin: 14px auto;
           max-width: 680px;
           color: #c9a96e;
           font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; font-weight: 500;
@@ -223,11 +223,11 @@ const DirectoryPage = () => {
         /* Commission row: video + steps */
         .mv-commission-row {
           display: grid;
-          grid-template-columns: 120px 1fr;
-          gap: 28px;
+          grid-template-columns: 1.15fr 1fr;
+          gap: 24px;
           align-items: start;
-          max-width: 580px;
-          margin: 28px auto 0;
+          max-width: 720px;
+          margin: 14px auto 0;
         }
         .mv-frame {
           position: relative;
@@ -324,8 +324,8 @@ const DirectoryPage = () => {
         /* Price card */
         .mv-price-card {
           max-width: 520px;
-          margin: 40px auto 20px;
-          padding: 28px 28px 24px;
+          margin: 20px auto 12px;
+          padding: 16px 18px 14px;
           position: relative;
           background: #141210;
         }
@@ -341,29 +341,29 @@ const DirectoryPage = () => {
           inset: 6px; border: 1px solid rgba(201,169,110,0.18);
         }
         .mv-price-eyebrow {
-          font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
-          color: #c9a96e; text-align: center; margin-bottom: 12px;
+          font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase;
+          color: #c9a96e; text-align: center; margin-bottom: 8px;
           font-weight: 500;
         }
         .mv-toggle {
           display: flex;
           border: 1px solid rgba(201,169,110,0.3);
-          margin: 0 auto 22px;
-          max-width: 320px;
+          margin: 0 auto 12px;
+          max-width: 230px;
           background: rgba(0,0,0,0.35);
         }
-        .mv-toggle-compact { max-width: 280px; margin: 0; }
+        .mv-toggle-compact { max-width: 230px; margin: 0; }
         .mv-toggle-tab {
-          flex: 1; padding: 10px 14px;
+          flex: 1; padding: 6px 10px;
           border: none; background: transparent;
           font-family: 'Inter', sans-serif;
-          font-size: 10px; font-weight: 500;
-          letter-spacing: 0.25em;
+          font-size: 9px; font-weight: 500;
+          letter-spacing: 0.2em;
           text-transform: uppercase;
           color: #8a8072;
           cursor: pointer;
           transition: all 0.25s ease;
-          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+          display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         }
         .mv-toggle-tab.active {
           background: rgba(201,169,110,0.12);
@@ -383,20 +383,20 @@ const DirectoryPage = () => {
           line-height: 1;
         }
         .mv-price-big .mv-num {
-          font-size: 68px; letter-spacing: 0.01em;
+          font-size: 44px; letter-spacing: 0.01em;
           color: #c9a96e;
         }
         .mv-price-big .mv-per {
-          font-size: 14px; color: #8a8072;
-          letter-spacing: 0.4em; text-transform: uppercase;
-          margin-left: 10px;
+          font-size: 11px; color: #8a8072;
+          letter-spacing: 0.3em; text-transform: uppercase;
+          margin-left: 8px;
           font-family: 'Inter', sans-serif;
           font-weight: 400;
         }
         .mv-price-was {
           text-align: center;
-          margin-top: 6px;
-          font-size: 10px; letter-spacing: 0.3em;
+          margin-top: 4px;
+          font-size: 9px; letter-spacing: 0.3em;
           color: #8a8072; text-transform: uppercase;
           font-family: 'JetBrains Mono', monospace;
         }
@@ -415,17 +415,17 @@ const DirectoryPage = () => {
         }
         .mv-cta-inner {
           display: inline-flex; align-items: center; justify-content: center;
-          padding: 14px 42px;
+          padding: 9px 26px;
           border: 1px solid rgba(201,169,110,0.55);
           color: #c9a96e;
-          font-size: 11px;
+          font-size: 10px;
           font-weight: 500;
-          letter-spacing: 0.5em;
+          letter-spacing: 0.32em;
           text-transform: uppercase;
           font-family: 'Inter', sans-serif;
-          min-width: 240px;
+          min-width: 170px;
         }
-        .mv-cta-lg .mv-cta-inner { padding: 16px 54px; min-width: 300px; }
+        .mv-cta-lg .mv-cta-inner { padding: 10px 30px; min-width: 190px; }
         .mv-cta:hover {
           border-color: #c9a96e;
           background: rgba(201,169,110,0.06);
@@ -440,14 +440,14 @@ const DirectoryPage = () => {
         }
         .mv-cta-wrap {
           text-align: center;
-          margin-top: 10px;
+          margin-top: 6px;
         }
 
         /* Payment icons */
         .mv-pay {
           display: flex; align-items: center; justify-content: center;
           gap: 10px;
-          margin-top: 22px;
+          margin-top: 14px;
           flex-wrap: wrap;
         }
         .mv-pay-label {
@@ -455,7 +455,7 @@ const DirectoryPage = () => {
           color: #8a8072; font-family: 'JetBrains Mono', monospace;
         }
         .mv-pay img {
-          height: 22px; width: auto;
+          height: 18px; width: auto;
           opacity: 0.8; filter: grayscale(20%);
           transition: opacity 0.2s ease, filter 0.2s ease;
         }
@@ -466,21 +466,21 @@ const DirectoryPage = () => {
         }
 
         .mv-trust {
-          margin-top: 18px;
-          font-size: 9px; letter-spacing: 0.4em;
+          margin-top: 12px;
+          font-size: 8px; letter-spacing: 0.4em;
           text-transform: uppercase; color: #8a8072;
           text-align: center;
           font-family: 'JetBrains Mono', monospace;
         }
 
         /* Portfolio */
-        .mv-portfolio { padding: 24px 0 28px; }
+        .mv-portfolio { padding: 14px 0 20px; }
         .mv-portfolio-title {
           text-align: center;
           font-family: 'Cormorant Garamond', serif;
           font-weight: 300;
           font-style: italic;
-          font-size: 26px;
+          font-size: 22px;
           color: #e8dcc4;
           line-height: 1.15;
           margin: 0 0 4px;
@@ -493,7 +493,7 @@ const DirectoryPage = () => {
           font-family: 'JetBrains Mono', monospace;
           font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
           color: #8a8072;
-          margin-bottom: 16px;
+          margin-bottom: 12px;
         }
 
         /* Gallery grid (compact) */
@@ -692,14 +692,14 @@ const DirectoryPage = () => {
 
         /* Responsive */
         @media (max-width: 768px) {
-          .mv-hero-title { font-size: 46px; }
-          .mv-hero-sub { font-size: 16px; }
+          .mv-hero-title { font-size: 34px; }
+          .mv-hero-sub { font-size: 14px; }
           .mv-commission-row {
-            grid-template-columns: 120px 1fr;
-            gap: 20px;
-            max-width: 460px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 500px;
           }
-          .mv-portfolio-title { font-size: 24px; }
+          .mv-portfolio-title { font-size: 20px; }
           .mv-gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 380px; }
           .mv-gallery-label { font-size: 12px; }
         }
@@ -713,9 +713,15 @@ const DirectoryPage = () => {
           .mv-call-label { font-size: 6px; letter-spacing: 0.25em; }
           .mv-call-number { font-size: 12px; }
           .mv-shell { padding: 0 18px; }
-          .mv-hero { padding: 32px 0 28px; }
-          .mv-hero-title { font-size: 36px; }
-          .mv-hero-sub { font-size: 14px; }
+          .mv-hero { padding: 16px 0 14px; }
+          .mv-hero-title { font-size: 28px; }
+          .mv-hero-sub { font-size: 13px; }
+          .mv-commission-row {
+            grid-template-columns: 1fr;
+            gap: 14px;
+            max-width: 320px;
+          }
+          .mv-commission-row > *:first-child { max-width: 220px; margin: 0 auto; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
           .mv-price-card { padding: 22px 18px 20px; }
@@ -874,7 +880,17 @@ const DirectoryPage = () => {
             {galleryItems.map((item) => (
               <div key={item.src} className="mv-gallery-card">
                 <div className="mv-gallery-thumb">
-                  <img src={item.src} alt={`${item.label} sample website`} />
+                  <img
+                    src={item.src}
+                    alt={`${item.label} sample website`}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (!img.dataset.fallback) {
+                        img.dataset.fallback = '1';
+                        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%23141210"/><rect x="0.4" y="1.1" width="3.2" height="0.15" fill="%23c9a96e" opacity="0.5"/><rect x="0.6" y="1.4" width="2.8" height="0.1" fill="%23c9a96e" opacity="0.3"/></svg>';
+                      }
+                    }}
+                  />
                 </div>
                 <div className="mv-gallery-label">{item.label}</div>
               </div>
