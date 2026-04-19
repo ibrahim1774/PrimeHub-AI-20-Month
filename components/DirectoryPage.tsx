@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
+  { src: '/gallery/home-services-2.png', label: 'Home Services II' },
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
   { src: '/gallery/roofing.png', label: 'Roofing' },
+  { src: '/gallery/cleaning.png', label: 'Cleaning' },
   { src: '/gallery/barbershop.png', label: 'Barbershop' },
 ];
 
@@ -498,19 +500,32 @@ const DirectoryPage = () => {
           margin-bottom: 12px;
         }
 
-        /* Gallery grid (compact) */
+        /* Gallery — horizontal scroller */
+        .mv-gallery-wrap {
+          margin: 0 -28px;
+          padding: 2px 28px 12px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .mv-gallery-wrap::-webkit-scrollbar { height: 6px; }
+        .mv-gallery-wrap::-webkit-scrollbar-track { background: rgba(201,169,110,0.06); }
+        .mv-gallery-wrap::-webkit-scrollbar-thumb {
+          background: rgba(201,169,110,0.4); border-radius: 3px;
+        }
         .mv-gallery {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 10px;
-          max-width: 640px;
-          margin: 0 auto;
+          display: flex;
+          gap: 18px;
+          padding: 4px 0;
         }
         .mv-gallery-card {
           position: relative;
-          padding: 5px;
+          flex: 0 0 auto;
+          width: 420px;
+          padding: 9px;
           background: transparent;
           cursor: default;
+          scroll-snap-align: center;
         }
         .mv-gallery-card::before,
         .mv-gallery-card::after {
@@ -519,11 +534,11 @@ const DirectoryPage = () => {
         }
         .mv-gallery-card::before {
           inset: 0;
-          border: 1px solid rgba(201,169,110,0.4);
+          border: 1px solid rgba(201,169,110,0.45);
         }
         .mv-gallery-card::after {
-          inset: 3px;
-          border: 1px solid rgba(201,169,110,0.16);
+          inset: 5px;
+          border: 1px solid rgba(201,169,110,0.2);
         }
         .mv-gallery-thumb {
           position: relative; z-index: 1;
@@ -535,16 +550,21 @@ const DirectoryPage = () => {
           width: 100%; height: 100%;
           object-fit: cover; object-position: center top;
           display: block;
-          filter: sepia(12%) saturate(90%) contrast(95%);
+          filter: sepia(10%) saturate(92%) contrast(96%);
+          transition: filter 0.35s ease, transform 0.6s ease;
+        }
+        .mv-gallery-card:hover .mv-gallery-thumb img {
+          filter: none;
+          transform: scale(1.03);
         }
         .mv-gallery-label {
           position: relative; z-index: 1;
           text-align: center;
           font-family: 'Cormorant Garamond', serif;
           font-style: italic;
-          font-size: 13px;
+          font-size: 18px;
           color: #c9a96e;
-          padding-top: 6px;
+          padding-top: 10px;
         }
         .mv-carousel {
           position: relative;
@@ -710,8 +730,10 @@ const DirectoryPage = () => {
             max-width: 500px;
           }
           .mv-portfolio-title { font-size: 20px; }
-          .mv-gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 380px; }
-          .mv-gallery-label { font-size: 12px; }
+          .mv-gallery-card { width: 300px; padding: 7px; }
+          .mv-gallery-label { font-size: 15px; padding-top: 8px; }
+          .mv-gallery-wrap { margin: 0 -18px; padding: 2px 18px 10px; }
+          .mv-gallery { gap: 14px; }
         }
         @media (max-width: 640px) {
           .mv-ribbon { font-size: 7px; letter-spacing: 0.26em; padding: 4px 10px; }
@@ -858,6 +880,7 @@ const DirectoryPage = () => {
             Sample websites for <em>home service contractors</em>
           </h2>
           <div className="mv-portfolio-sub">A few of our favorites</div>
+          <div className="mv-gallery-wrap">
           <div className="mv-gallery">
             {galleryItems.map((item) => (
               <div key={item.src} className="mv-gallery-card">
@@ -877,6 +900,7 @@ const DirectoryPage = () => {
                 <div className="mv-gallery-label">{item.label}</div>
               </div>
             ))}
+          </div>
           </div>
         </section>
 
