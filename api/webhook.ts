@@ -6,8 +6,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
 });
 
-const FB_PIXEL_ID = '26490568997297314';
-const FB_ACCESS_TOKEN = 'EAACebucvHOIBQPm2X9KVM7KUfgVReFoTw86OwhXxZBYpf8j2I73RfTJZBmxYfukroUMReZBpBNsT1WlFMoCBkZAzKn0OrIgnRz5bsl5PZCf3TREeSX9RcdR2vI8ZBpyZBwq3fYvPnB95gU0LkXEZCBZCjlO290VYuBwSNf6a3VrZAufCW4N8wR4GIDlLNNjfZCl71aYhwZDZD';
+const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
+const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
 
 async function sendFBConversionsEvent(pixelId: string, accessToken: string, data: any) {
     try {
@@ -21,6 +21,8 @@ async function sendFBConversionsEvent(pixelId: string, accessToken: string, data
                 {
                     event_name: 'Purchase',
                     event_time: Math.floor(Date.now() / 1000),
+                    event_id: data.eventId,
+                    event_source_url: data.eventSourceUrl,
                     action_source: 'website',
                     user_data: {
                         em: data.email ? [hash(data.email)] : undefined,
@@ -91,13 +93,24 @@ export default async function handler(req: any, res: any) {
 
         console.log(`[Webhook] Payment confirmed for: ${companyName} (Pending ID: ${pendingId})`);
 
-        // Trigger Facebook CAPI Purchase Event
-        sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
-            email,
-            clientIp,
-            userAgent,
-            value,
-        });
+        // Trigger Facebook CAPI Purchase Event (dedup via eventId = purchase_<stripe session id>)
+        if (FB_ACCESS_TOKEN) {
+            const source = session.metadata?.source;
+            const origin = req.headers?.origin || 'https://www.amalvera.com';
+            const eventSourceUrl = source === 'directory'
+                ? `${origin}/1?status=success&session_id=${session.id}`
+                : `${origin}/?status=success&pendingId=${pendingId}&session_id=${session.id}`;
+            sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
+                email,
+                clientIp,
+                userAgent,
+                value,
+                eventId: `purchase_${session.id}`,
+                eventSourceUrl,
+            });
+        } else {
+            console.warn('[Webhook] FB_ACCESS_TOKEN not set; skipping CAPI event');
+        }
 
 
         if (pendingId) {

@@ -12,12 +12,14 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ pendingId, companyName }) => 
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Trigger FB Pixel Purchase Event
+        // Trigger FB Pixel Purchase Event with dedup eventID from Stripe session
         if (typeof window !== 'undefined' && (window as any).fbq) {
+            const sessionId = new URLSearchParams(window.location.search).get('session_id');
+            const eventID = sessionId ? `purchase_${sessionId}` : `purchase_${Date.now()}`;
             (window as any).fbq('track', 'Purchase', {
                 currency: 'USD',
                 value: 20.00,
-            });
+            }, { eventID });
         }
     }, []);
 

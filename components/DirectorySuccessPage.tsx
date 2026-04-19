@@ -7,12 +7,14 @@ const DirectorySuccessPage: React.FC = () => {
   const [phase, setPhase] = useState<'success' | 'onboarding'>('success');
 
   useEffect(() => {
-    // Fire FB Pixel Purchase event
+    // Fire FB Pixel Purchase event with dedup eventID from Stripe session
     if (typeof window !== 'undefined' && (window as any).fbq) {
+      const sessionId = new URLSearchParams(window.location.search).get('session_id');
+      const eventID = sessionId ? `purchase_${sessionId}` : `purchase_${Date.now()}`;
       (window as any).fbq('track', 'Purchase', {
         currency: 'USD',
         value: 20.00,
-      });
+      }, { eventID });
     }
 
     // After 2.5s, show onboarding message
