@@ -489,6 +489,75 @@ const DirectoryPage = () => {
           font-family: 'JetBrains Mono', monospace;
         }
 
+        /* Walkthrough */
+        .mv-walkthrough { padding: 4px 0 22px; text-align: center; }
+        .mv-walkthrough-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-style: italic;
+          font-size: 24px;
+          color: #e8dcc4;
+          line-height: 1.2;
+          margin: 0 0 4px;
+        }
+        .mv-walkthrough-title em { color: #c9a96e; font-style: italic; }
+        .mv-walkthrough-sub {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+          color: #8a8072;
+          margin-bottom: 14px;
+        }
+        .mv-walkthrough-frame {
+          max-width: 760px;
+          margin: 0 auto;
+          padding: 9px;
+          position: relative;
+        }
+        .mv-walkthrough-frame::before,
+        .mv-walkthrough-frame::after {
+          content: '';
+          position: absolute;
+          pointer-events: none;
+        }
+        .mv-walkthrough-frame::before {
+          inset: 0;
+          border: 1px solid rgba(201,169,110,0.45);
+        }
+        .mv-walkthrough-frame::after {
+          inset: 5px;
+          border: 1px solid rgba(201,169,110,0.2);
+        }
+        .mv-walkthrough-player {
+          position: relative;
+          z-index: 1;
+          overflow: hidden;
+          background: #0f0e0c;
+          box-shadow: inset 0 0 60px rgba(0,0,0,0.55);
+        }
+        .mv-walkthrough-player wistia-player {
+          display: block;
+          width: 100%;
+          filter: saturate(95%) contrast(97%);
+        }
+        /* Hide any Wistia branding that slips through */
+        .mv-walkthrough-player [class*="w-bottom-bar"],
+        .mv-walkthrough-player [class*="w-big-play-button"],
+        .mv-walkthrough-player [class*="w-vulcan"],
+        .mv-walkthrough-player [class*="w-branding"] {
+          display: none !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+        /* Soft vignette to blend video edges into page */
+        .mv-walkthrough-player::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at center, transparent 55%, rgba(10,10,10,0.45) 100%);
+          pointer-events: none;
+          z-index: 3;
+        }
+
         /* Portfolio */
         .mv-portfolio { padding: 14px 0 20px; }
         .mv-portfolio-title {
@@ -735,6 +804,8 @@ const DirectoryPage = () => {
         /* Responsive */
         @media (max-width: 768px) {
           .mv-hero-title { font-size: 26px; }
+          .mv-walkthrough-title { font-size: 20px; }
+          .mv-walkthrough-frame { padding: 7px; }
           .mv-hero-sub { font-size: 14px; }
           .mv-commission-row {
             grid-template-columns: 1fr 1fr;
@@ -877,11 +948,54 @@ const DirectoryPage = () => {
 
         </section>
 
-        {/* Crest divider */}
+        {/* Crest divider — Walkthrough */}
         <div className="mv-shell">
           <div className="mv-crest">
             <span className="mv-crest-line" />
-            <span>◊ Step 2 ◊ Our Work</span>
+            <span>◊ Step 2 ◊ The Walkthrough</span>
+            <span className="mv-crest-line" />
+          </div>
+        </div>
+
+        {/* Walkthrough */}
+        <section className="mv-shell mv-walkthrough">
+          <h2 className="mv-walkthrough-title">
+            A quick tour of your <em>account</em>
+          </h2>
+          <div className="mv-walkthrough-sub">Everything you'll see after you sign up</div>
+          <div className="mv-walkthrough-frame">
+            <div className="mv-walkthrough-player">
+              <wistia-player
+                media-id="eq8u22i00x"
+                aspect="1.7391304347826086"
+                autoplay="true"
+                muted="true"
+                {...({
+                  loop: 'true',
+                  'playbar': 'false',
+                  'play-button': 'false',
+                  'small-play-button': 'false',
+                  'fullscreen-button': 'false',
+                  'volume-control': 'false',
+                  'settings-control': 'false',
+                  'playback-rate-control': 'false',
+                  'controls-visible-on-load': 'false',
+                  'big-play-button': 'false',
+                  'silent-auto-play': 'true',
+                  'end-video-behavior': 'loop',
+                  'resumable': 'false',
+                  'player-color': 'c9a96e',
+                } as any)}
+              ></wistia-player>
+            </div>
+          </div>
+        </section>
+
+        {/* Crest divider — Our Work */}
+        <div className="mv-shell">
+          <div className="mv-crest">
+            <span className="mv-crest-line" />
+            <span>◊ Step 3 ◊ Our Work</span>
             <span className="mv-crest-line" />
           </div>
         </div>
