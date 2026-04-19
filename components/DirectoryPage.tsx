@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
@@ -12,17 +12,6 @@ const roman = ['I', 'II', 'III', 'IV', 'V'];
 const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
-  const [showSticky, setShowSticky] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowSticky(!entry.isIntersecting),
-      { threshold: 0 }
-    );
-    if (heroRef.current) observer.observe(heroRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -761,7 +750,7 @@ const DirectoryPage = () => {
         </header>
 
         {/* Hero */}
-        <section ref={heroRef} className="mv-shell mv-hero">
+        <section className="mv-shell mv-hero">
           <div className="mv-eyebrow">
             <span className="mv-eyebrow-bar" />
             <span>◊ Step 1 ◊ Hello</span>
@@ -824,40 +813,6 @@ const DirectoryPage = () => {
             </div>
           </div>
 
-          {/* Price card */}
-          <div className="mv-price-card">
-            <div className="mv-price-eyebrow">◊ The Price ◊</div>
-            <div className="mv-price-big">
-              <span className="mv-num">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
-              <span className="mv-per">per {pricingPlan === 'monthly' ? 'month' : 'year'}</span>
-            </div>
-            {pricingPlan === 'yearly' && (
-              <div className="mv-price-was"><s>$240 / yr</s> &nbsp; Save 44%</div>
-            )}
-            <div className="mv-cta-wrap">
-              <CtaButton />
-            </div>
-
-            <div className="mv-pay">
-              <span className="mv-pay-label">Secure Payment</span>
-              {[
-                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/visa.svg', alt: 'Visa' },
-                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/mastercard.svg', alt: 'Mastercard' },
-                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/amex.svg', alt: 'Amex' },
-                { src: 'https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/discover.svg', alt: 'Discover' },
-                { src: 'https://cdn.simpleicons.org/applepay/white', alt: 'Apple Pay', dark: true },
-              ].map((icon: any) => (
-                <img
-                  key={icon.alt}
-                  src={icon.src}
-                  alt={icon.alt}
-                  className={icon.dark ? 'mv-pay-dark' : ''}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mv-trust">No contracts &nbsp; ◊ &nbsp; Cancel anytime &nbsp; ◊ &nbsp; 24/7 Help</div>
         </section>
 
         {/* Crest divider */}
@@ -920,7 +875,7 @@ const DirectoryPage = () => {
       </div>
 
       {/* Sticky */}
-      <div className={`mv-sticky ${showSticky ? 'visible' : ''}`}>
+      <div className="mv-sticky visible">
         <div className="mv-sticky-inner">
           <div className="mv-sticky-left">
             <PricingToggle compact />
