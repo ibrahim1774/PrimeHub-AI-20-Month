@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
@@ -14,7 +13,6 @@ const DirectoryPage = () => {
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState(1);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -225,11 +223,11 @@ const DirectoryPage = () => {
         /* Commission row: video + steps */
         .mv-commission-row {
           display: grid;
-          grid-template-columns: 220px 1fr;
-          gap: 42px;
+          grid-template-columns: 120px 1fr;
+          gap: 28px;
           align-items: start;
-          max-width: 720px;
-          margin: 36px auto 0;
+          max-width: 580px;
+          margin: 28px auto 0;
         }
         .mv-frame {
           position: relative;
@@ -476,16 +474,16 @@ const DirectoryPage = () => {
         }
 
         /* Portfolio */
-        .mv-portfolio { padding: 32px 0 36px; }
+        .mv-portfolio { padding: 24px 0 28px; }
         .mv-portfolio-title {
           text-align: center;
           font-family: 'Cormorant Garamond', serif;
           font-weight: 300;
           font-style: italic;
-          font-size: 30px;
+          font-size: 26px;
           color: #e8dcc4;
           line-height: 1.15;
-          margin: 0 0 6px;
+          margin: 0 0 4px;
         }
         .mv-portfolio-title em {
           color: #c9a96e; font-style: italic;
@@ -493,9 +491,58 @@ const DirectoryPage = () => {
         .mv-portfolio-sub {
           text-align: center;
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+          font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
           color: #8a8072;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
+        }
+
+        /* Gallery grid (compact) */
+        .mv-gallery {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 10px;
+          max-width: 640px;
+          margin: 0 auto;
+        }
+        .mv-gallery-card {
+          position: relative;
+          padding: 5px;
+          background: transparent;
+          cursor: default;
+        }
+        .mv-gallery-card::before,
+        .mv-gallery-card::after {
+          content: '';
+          position: absolute; pointer-events: none;
+        }
+        .mv-gallery-card::before {
+          inset: 0;
+          border: 1px solid rgba(201,169,110,0.4);
+        }
+        .mv-gallery-card::after {
+          inset: 3px;
+          border: 1px solid rgba(201,169,110,0.16);
+        }
+        .mv-gallery-thumb {
+          position: relative; z-index: 1;
+          overflow: hidden;
+          background: #0f0e0c;
+          aspect-ratio: 4/3;
+        }
+        .mv-gallery-thumb img {
+          width: 100%; height: 100%;
+          object-fit: cover; object-position: center top;
+          display: block;
+          filter: sepia(12%) saturate(90%) contrast(95%);
+        }
+        .mv-gallery-label {
+          position: relative; z-index: 1;
+          text-align: center;
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: 13px;
+          color: #c9a96e;
+          padding-top: 6px;
         }
         .mv-carousel {
           position: relative;
@@ -648,12 +695,13 @@ const DirectoryPage = () => {
           .mv-hero-title { font-size: 46px; }
           .mv-hero-sub { font-size: 16px; }
           .mv-commission-row {
-            grid-template-columns: 1fr;
-            gap: 28px;
-            max-width: 360px;
+            grid-template-columns: 120px 1fr;
+            gap: 20px;
+            max-width: 460px;
           }
-          .mv-portfolio-title { font-size: 32px; }
-          .mv-carousel-arrow { width: 34px; height: 34px; }
+          .mv-portfolio-title { font-size: 24px; }
+          .mv-gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 380px; }
+          .mv-gallery-label { font-size: 12px; }
         }
         @media (max-width: 640px) {
           .mv-ribbon { font-size: 7px; letter-spacing: 0.26em; padding: 4px 10px; }
@@ -822,39 +870,14 @@ const DirectoryPage = () => {
             Sample websites for <em>home service contractors</em>
           </h2>
           <div className="mv-portfolio-sub">A few of our favorites</div>
-          <div className="mv-carousel">
-            <button
-              className="mv-carousel-arrow"
-              style={{ left: -20 }}
-              onClick={() => setCarouselIndex((carouselIndex - 1 + galleryItems.length) % galleryItems.length)}
-              aria-label="Previous piece"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <div className="mv-carousel-frame">
-              <img src={galleryItems[carouselIndex].src} alt={`${galleryItems[carouselIndex].label} commission`} />
-            </div>
-            <button
-              className="mv-carousel-arrow"
-              style={{ right: -20 }}
-              onClick={() => setCarouselIndex((carouselIndex + 1) % galleryItems.length)}
-              aria-label="Next piece"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-          <div className="mv-carousel-caption">
-            <div className="mv-carousel-no">Site {carouselIndex + 1} of {galleryItems.length}</div>
-            <div className="mv-carousel-label">{galleryItems[carouselIndex].label}</div>
-          </div>
-          <div className="mv-carousel-dots">
-            {galleryItems.map((_, i) => (
-              <button
-                key={i}
-                className={`mv-carousel-dot ${i === carouselIndex ? 'active' : ''}`}
-                onClick={() => setCarouselIndex(i)}
-                aria-label={`Go to piece ${i + 1}`}
-              />
+          <div className="mv-gallery">
+            {galleryItems.map((item) => (
+              <div key={item.src} className="mv-gallery-card">
+                <div className="mv-gallery-thumb">
+                  <img src={item.src} alt={`${item.label} sample website`} />
+                </div>
+                <div className="mv-gallery-label">{item.label}</div>
+              </div>
             ))}
           </div>
         </section>
