@@ -93,24 +93,25 @@ const DirectoryPage = () => {
           background: linear-gradient(180deg, #c9a96e 0%, #b8975c 100%);
           color: #0a0a0a;
           text-align: center;
-          padding: 8px 16px;
-          font-size: 10px;
+          padding: 5px 16px;
+          font-size: 9px;
           font-weight: 600;
-          letter-spacing: 0.38em;
+          letter-spacing: 0.34em;
           text-transform: uppercase;
           font-family: 'Inter', sans-serif;
         }
-        .mv-ribbon-diamond { margin: 0 10px; opacity: 0.65; }
+        .mv-ribbon-diamond { margin: 0 8px; opacity: 0.65; }
 
         /* Header */
         .mv-header {
           max-width: 1200px; margin: 0 auto;
-          padding: 22px 28px 14px;
-          display: flex; align-items: center; justify-content: space-between; gap: 16px;
+          padding: 10px 22px;
+          display: flex; align-items: center; justify-content: space-between; gap: 14px;
+          border-bottom: 1px solid rgba(201,169,110,0.12);
         }
         .mv-wordmark {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 22px;
+          font-size: 18px;
           font-weight: 400;
           font-style: italic;
           color: #c9a96e;
@@ -121,11 +122,11 @@ const DirectoryPage = () => {
           display: block;
           font-family: 'Inter', sans-serif;
           font-style: normal;
-          font-size: 8px;
+          font-size: 7px;
           color: #8a8072;
-          letter-spacing: 0.45em;
+          letter-spacing: 0.4em;
           text-transform: uppercase;
-          margin-top: 4px;
+          margin-top: 2px;
           font-weight: 500;
         }
         .mv-call {
@@ -133,8 +134,8 @@ const DirectoryPage = () => {
           display: inline-flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 2px;
-          padding: 8px 14px;
+          gap: 1px;
+          padding: 5px 10px;
           border: 1px solid rgba(201,169,110,0.35);
           position: relative;
           background: transparent;
@@ -142,7 +143,7 @@ const DirectoryPage = () => {
         }
         .mv-call::before {
           content: '';
-          position: absolute; inset: 3px;
+          position: absolute; inset: 2px;
           border: 1px solid rgba(201,169,110,0.2);
           pointer-events: none;
         }
@@ -151,13 +152,14 @@ const DirectoryPage = () => {
           background: rgba(201,169,110,0.04);
         }
         .mv-call-label {
-          font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+          font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase;
           color: #c9a96e; font-weight: 500;
         }
         .mv-call-number {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 17px; color: #e8dcc4; letter-spacing: 0.02em;
+          font-size: 14px; color: #e8dcc4; letter-spacing: 0.02em;
           font-weight: 400;
+          line-height: 1.1;
         }
 
         /* Containers */
@@ -208,11 +210,11 @@ const DirectoryPage = () => {
         /* Crest divider */
         .mv-crest {
           display: flex; align-items: center; justify-content: center;
-          gap: 18px;
-          margin: 40px auto;
+          gap: 14px;
+          margin: 22px auto;
           max-width: 680px;
           color: #c9a96e;
-          font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; font-weight: 500;
+          font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; font-weight: 500;
         }
         .mv-crest-line {
           flex: 1; height: 1px;
@@ -474,15 +476,16 @@ const DirectoryPage = () => {
         }
 
         /* Portfolio */
-        .mv-portfolio { padding: 56px 0; }
+        .mv-portfolio { padding: 32px 0 36px; }
         .mv-portfolio-title {
           text-align: center;
           font-family: 'Cormorant Garamond', serif;
           font-weight: 300;
           font-style: italic;
-          font-size: 42px;
+          font-size: 30px;
           color: #e8dcc4;
-          margin: 0 0 8px;
+          line-height: 1.15;
+          margin: 0 0 6px;
         }
         .mv-portfolio-title em {
           color: #c9a96e; font-style: italic;
@@ -492,13 +495,13 @@ const DirectoryPage = () => {
           font-family: 'JetBrains Mono', monospace;
           font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
           color: #8a8072;
-          margin-bottom: 32px;
+          margin-bottom: 20px;
         }
         .mv-carousel {
           position: relative;
-          max-width: 520px;
+          max-width: 420px;
           margin: 0 auto;
-          padding: 10px;
+          padding: 8px;
         }
         .mv-carousel::before {
           content: '';
@@ -527,7 +530,7 @@ const DirectoryPage = () => {
         .mv-carousel-arrow {
           position: absolute; top: 50%;
           transform: translateY(-50%);
-          width: 40px; height: 40px;
+          width: 32px; height: 32px;
           background: #0a0a0a;
           border: 1px solid rgba(201,169,110,0.4);
           color: #c9a96e;
@@ -541,22 +544,22 @@ const DirectoryPage = () => {
         }
         .mv-carousel-caption {
           text-align: center;
-          margin-top: 18px;
+          margin-top: 12px;
         }
         .mv-carousel-no {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9px; letter-spacing: 0.4em;
+          font-size: 8px; letter-spacing: 0.35em;
           color: #8a8072; text-transform: uppercase;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
         .mv-carousel-label {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 20px; color: #c9a96e;
+          font-size: 17px; color: #c9a96e;
           font-style: italic; font-weight: 400;
         }
         .mv-carousel-dots {
-          display: flex; justify-content: center; gap: 10px;
-          margin-top: 16px;
+          display: flex; justify-content: center; gap: 8px;
+          margin-top: 10px;
         }
         .mv-carousel-dot {
           width: 8px; height: 8px; padding: 0;
@@ -653,14 +656,14 @@ const DirectoryPage = () => {
           .mv-carousel-arrow { width: 34px; height: 34px; }
         }
         @media (max-width: 640px) {
-          .mv-ribbon { font-size: 8px; letter-spacing: 0.3em; padding: 7px 10px; }
-          .mv-ribbon-diamond { margin: 0 6px; }
-          .mv-header { padding: 16px 18px 10px; }
-          .mv-wordmark { font-size: 18px; }
-          .mv-wordmark-sub { font-size: 7px; letter-spacing: 0.35em; }
-          .mv-call { padding: 6px 10px; }
-          .mv-call-label { font-size: 7px; letter-spacing: 0.3em; }
-          .mv-call-number { font-size: 14px; }
+          .mv-ribbon { font-size: 7px; letter-spacing: 0.26em; padding: 4px 10px; }
+          .mv-ribbon-diamond { margin: 0 5px; }
+          .mv-header { padding: 8px 14px; gap: 10px; }
+          .mv-wordmark { font-size: 15px; }
+          .mv-wordmark-sub { font-size: 6px; letter-spacing: 0.3em; }
+          .mv-call { padding: 4px 8px; }
+          .mv-call-label { font-size: 6px; letter-spacing: 0.25em; }
+          .mv-call-number { font-size: 12px; }
           .mv-shell { padding: 0 18px; }
           .mv-hero { padding: 32px 0 28px; }
           .mv-hero-title { font-size: 36px; }
@@ -816,7 +819,7 @@ const DirectoryPage = () => {
         {/* Portfolio */}
         <section className="mv-shell mv-portfolio">
           <h2 className="mv-portfolio-title">
-            Websites we've built for <em>pros</em>
+            Sample websites for <em>home service contractors</em>
           </h2>
           <div className="mv-portfolio-sub">A few of our favorites</div>
           <div className="mv-carousel">
