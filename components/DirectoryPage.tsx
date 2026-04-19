@@ -768,7 +768,7 @@ const DirectoryPage = () => {
             <span className="mv-eyebrow-bar" />
           </div>
           <h1 className="mv-hero-title">
-            A website that helps you <em>win</em><br />
+            A website that can help you <em>win</em><br />
             more jobs.
           </h1>
           <p className="mv-hero-sub">
@@ -827,7 +827,6 @@ const DirectoryPage = () => {
           {/* Price card */}
           <div className="mv-price-card">
             <div className="mv-price-eyebrow">◊ The Price ◊</div>
-            <PricingToggle />
             <div className="mv-price-big">
               <span className="mv-num">{pricingPlan === 'monthly' ? '$20' : '$99'}</span>
               <span className="mv-per">per {pricingPlan === 'monthly' ? 'month' : 'year'}</span>
