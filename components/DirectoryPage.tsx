@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 
 const galleryItems = [
   { src: '/gallery/home-services.png', label: 'Home Services' },
-  { src: '/gallery/home-services-2.png', label: 'Home Services II' },
   { src: '/gallery/landscaping.png', label: 'Landscaping' },
   { src: '/gallery/roofing.png', label: 'Roofing' },
   { src: '/gallery/cleaning.png', label: 'Cleaning' },
