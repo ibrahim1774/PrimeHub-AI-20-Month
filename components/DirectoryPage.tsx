@@ -668,9 +668,14 @@ const DirectoryPage = () => {
         .mv-sticky.visible { transform: translateY(0); }
         .mv-sticky-inner {
           max-width: 1100px; margin: 0 auto;
-          display: flex; align-items: center; justify-content: space-between;
-          gap: 10px;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 14px;
         }
+        .mv-sticky-inner > :first-child { justify-self: start; }
+        .mv-sticky-inner > :last-child { justify-self: end; }
+        .mv-sticky-inner > :nth-child(2) { justify-self: center; }
         .mv-sticky-left {
           display: flex; align-items: center; gap: 14px;
           flex-wrap: wrap;
@@ -735,9 +740,15 @@ const DirectoryPage = () => {
           .mv-cta-lg .mv-cta-inner { padding: 14px 32px; min-width: 220px; }
           .mv-portfolio-title { font-size: 28px; }
           .mv-sticky { padding: 6px 12px; }
-          .mv-sticky-inner { flex-direction: column; align-items: stretch; gap: 6px; }
-          .mv-sticky-left { justify-content: space-between; gap: 10px; }
-          .mv-sticky-price { font-size: 32px; }
+          .mv-sticky-inner {
+            grid-template-columns: auto 1fr;
+            grid-template-areas: "price toggle" "cta cta";
+            gap: 8px 10px;
+          }
+          .mv-sticky-inner > :nth-child(1) { grid-area: price; justify-self: start; }
+          .mv-sticky-inner > :nth-child(2) { grid-area: toggle; justify-self: end; }
+          .mv-sticky-inner > :nth-child(3) { grid-area: cta; justify-self: stretch; }
+          .mv-sticky-price { font-size: 28px; }
           .mv-toggle-compact { max-width: 170px; width: auto; }
           .mv-sticky .mv-cta { width: 100%; }
           .mv-sticky .mv-cta-inner { width: 100%; }
@@ -894,13 +905,11 @@ const DirectoryPage = () => {
       {/* Sticky */}
       <div className="mv-sticky visible">
         <div className="mv-sticky-inner">
-          <div className="mv-sticky-left">
-            <PricingToggle compact />
-            <span className="mv-sticky-price">
-              {pricingPlan === 'monthly' ? '$20' : '$99'}
-              <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
-            </span>
-          </div>
+          <span className="mv-sticky-price">
+            {pricingPlan === 'monthly' ? '$20' : '$99'}
+            <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
+          </span>
+          <PricingToggle compact />
           <CtaButton large={false} />
         </div>
       </div>
