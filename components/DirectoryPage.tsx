@@ -648,7 +648,7 @@ const DirectoryPage = () => {
           z-index: 100;
           background: #0a0a0a;
           border-top: 1px solid rgba(201,169,110,0.35);
-          padding: 12px 22px;
+          padding: 7px 16px;
           transform: translateY(110%);
           transition: transform 0.35s ease;
         }
@@ -656,10 +656,10 @@ const DirectoryPage = () => {
         .mv-sticky-inner {
           max-width: 1100px; margin: 0 auto;
           display: flex; align-items: center; justify-content: space-between;
-          gap: 14px;
+          gap: 10px;
         }
         .mv-sticky-left {
-          display: flex; align-items: center; gap: 18px;
+          display: flex; align-items: center; gap: 14px;
           flex-wrap: wrap;
         }
         .mv-sticky-price {
@@ -667,13 +667,13 @@ const DirectoryPage = () => {
           font-style: italic;
           font-weight: 300;
           color: #c9a96e;
-          font-size: 22px;
+          font-size: 30px;
           line-height: 1;
           white-space: nowrap;
         }
         .mv-sticky-price .mv-sticky-per {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 9px; color: #8a8072;
+          font-size: 10px; color: #8a8072;
           letter-spacing: 0.3em; text-transform: uppercase;
           font-style: normal;
           margin-left: 8px;
@@ -718,10 +718,11 @@ const DirectoryPage = () => {
           .mv-cta-inner { padding: 13px 28px; min-width: 200px; letter-spacing: 0.35em; font-size: 10px; }
           .mv-cta-lg .mv-cta-inner { padding: 14px 32px; min-width: 220px; }
           .mv-portfolio-title { font-size: 28px; }
-          .mv-sticky { padding: 10px 14px; }
-          .mv-sticky-inner { flex-direction: column; align-items: stretch; gap: 10px; }
-          .mv-sticky-left { justify-content: center; }
-          .mv-toggle-compact { max-width: none; width: 100%; }
+          .mv-sticky { padding: 6px 12px; }
+          .mv-sticky-inner { flex-direction: column; align-items: stretch; gap: 6px; }
+          .mv-sticky-left { justify-content: space-between; gap: 10px; }
+          .mv-sticky-price { font-size: 26px; }
+          .mv-toggle-compact { max-width: 170px; width: auto; }
           .mv-sticky .mv-cta { width: 100%; }
           .mv-sticky .mv-cta-inner { width: 100%; }
         }
