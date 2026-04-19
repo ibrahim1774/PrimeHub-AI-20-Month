@@ -921,11 +921,7 @@ const DirectoryPage = () => {
         <footer className="mv-footer">
           <div className="mv-footer-inner">
             <span className="mv-footer-mark">Amalvera</span>
-            <span className="mv-footer-meta">© 2024 · All rights reserved</span>
-            <div className="mv-footer-links">
-              <a href="#" className="mv-footer-link">Privacy</a>
-              <a href="#" className="mv-footer-link">Help</a>
-            </div>
+            <span className="mv-footer-meta">© 2026 · All rights reserved</span>
           </div>
         </footer>
       </div>
