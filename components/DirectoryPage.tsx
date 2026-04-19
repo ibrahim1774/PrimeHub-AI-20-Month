@@ -180,10 +180,10 @@ const DirectoryPage = () => {
         .mv-hero-title {
           font-family: 'Cormorant Garamond', serif;
           font-weight: 300;
-          font-size: 40px;
-          line-height: 1.1;
+          font-size: 32px;
+          line-height: 1.15;
           color: #e8dcc4;
-          max-width: 620px;
+          max-width: 560px;
           margin: 0 auto 10px;
           letter-spacing: 0.005em;
         }
@@ -721,7 +721,7 @@ const DirectoryPage = () => {
 
         /* Responsive */
         @media (max-width: 768px) {
-          .mv-hero-title { font-size: 34px; }
+          .mv-hero-title { font-size: 26px; }
           .mv-hero-sub { font-size: 14px; }
           .mv-commission-row {
             grid-template-columns: 1fr 1fr;
@@ -745,7 +745,7 @@ const DirectoryPage = () => {
           .mv-call-number { font-size: 12px; }
           .mv-shell { padding: 0 18px; }
           .mv-hero { padding: 16px 0 14px; }
-          .mv-hero-title { font-size: 28px; }
+          .mv-hero-title { font-size: 22px; }
           .mv-hero-sub { font-size: 13px; }
           .mv-commission-row {
             grid-template-columns: 1fr;
@@ -806,8 +806,8 @@ const DirectoryPage = () => {
             <span className="mv-eyebrow-bar" />
           </div>
           <h1 className="mv-hero-title">
-            A website that can help you <em>win</em><br />
-            more jobs.
+            A website that can help<br />
+            <em>home service contractors</em> win more jobs.
           </h1>
           <p className="mv-hero-sub">
             We build websites for home service pros. You tell us about your
