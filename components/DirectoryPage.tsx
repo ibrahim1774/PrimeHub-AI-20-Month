@@ -33,7 +33,7 @@ const REGIONS: Record<Region, {
     monthlyAmount: 20,
     yearlyAmount: 99,
     yearlyWas: 240,
-    ribbonEstYear: 'Since 2020',
+    ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
     phoneLabel: 'Tap to Call · 24/7 Help',
