@@ -847,6 +847,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           margin-left: 8px;
           text-shadow: none;
         }
+        .mv-sticky-price .mv-sticky-cur {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px; color: #c9a96e;
+          letter-spacing: 0.28em; text-transform: uppercase;
+          font-style: normal;
+          font-weight: 600;
+          margin-left: 6px;
+          text-shadow: none;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -1105,6 +1114,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <div className="mv-sticky-inner">
           <span className="mv-sticky-price">
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
+            {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
           </span>
           <PricingToggle compact />
