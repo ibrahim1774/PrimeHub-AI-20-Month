@@ -30,7 +30,7 @@ async function sendFBConversionsEvent(pixelId: string, accessToken: string, data
                         client_user_agent: data.userAgent,
                     },
                     custom_data: {
-                        currency: 'USD',
+                        currency: (data.currency || 'USD').toUpperCase(),
                         value: data.value,
                     },
                 },
@@ -96,15 +96,19 @@ export default async function handler(req: any, res: any) {
         // Trigger Facebook CAPI Purchase Event (dedup via eventId = purchase_<stripe session id>)
         if (FB_ACCESS_TOKEN) {
             const source = session.metadata?.source;
+            const isAus = source === 'australia';
+            const isDirectory = source === 'directory' || isAus;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
-            const eventSourceUrl = source === 'directory'
-                ? `${origin}/1?status=success&session_id=${session.id}`
+            const directoryPath = isAus ? '/aus' : '/1';
+            const eventSourceUrl = isDirectory
+                ? `${origin}${directoryPath}?status=success&session_id=${session.id}`
                 : `${origin}/?status=success&pendingId=${pendingId}&session_id=${session.id}`;
             sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
                 email,
                 clientIp,
                 userAgent,
                 value,
+                currency: session.currency || 'usd',
                 eventId: `purchase_${session.id}`,
                 eventSourceUrl,
             });
