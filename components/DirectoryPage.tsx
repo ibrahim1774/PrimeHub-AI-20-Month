@@ -19,6 +19,7 @@ const REGIONS: Record<Region, {
   monthlyAmount: number;
   yearlyAmount: number;
   yearlyWas: number;
+  ribbonEstYear: string;
   ribbonLocation: string;
   phoneHref: string;
   phoneLabel: string;
@@ -32,6 +33,7 @@ const REGIONS: Record<Region, {
     monthlyAmount: 20,
     yearlyAmount: 99,
     yearlyWas: 240,
+    ribbonEstYear: 'Since 2020',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
     phoneLabel: 'Tap to Call · 24/7 Help',
@@ -45,6 +47,7 @@ const REGIONS: Record<Region, {
     monthlyAmount: 20,
     yearlyAmount: 99,
     yearlyWas: 240,
+    ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Australia Wide',
     phoneHref: 'tel:+18302549274',
     phoneLabel: 'Tap to Call · 24/7 Help',
@@ -909,7 +912,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <div className="mv-ribbon">
           Amalvera
           <span className="mv-ribbon-diamond">◊</span>
-          Since 2020
+          {cfg.ribbonEstYear}
           <span className="mv-ribbon-diamond">◊</span>
           {cfg.ribbonLocation}
         </div>
