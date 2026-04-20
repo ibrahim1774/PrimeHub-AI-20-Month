@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const galleryItems = [
   { src: '/gallery/home-services.jpg', label: 'Home Services' },
@@ -10,7 +10,51 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-const DirectoryPage = () => {
+type Region = 'us' | 'aus';
+
+const REGIONS: Record<Region, {
+  source: string;
+  currency: string;
+  currencySymbol: string;
+  monthlyAmount: number;
+  yearlyAmount: number;
+  yearlyWas: number;
+  ribbonLocation: string;
+  phoneHref: string;
+  phoneLabel: string;
+  phoneNumber: string;
+  heroTaglineRegion: string;
+}> = {
+  us: {
+    source: 'directory',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 20,
+    yearlyAmount: 99,
+    yearlyWas: 240,
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'home service contractors',
+  },
+  aus: {
+    source: 'australia',
+    currency: 'AUD',
+    currencySymbol: '$',
+    monthlyAmount: 20,
+    yearlyAmount: 99,
+    yearlyWas: 240,
+    ribbonLocation: 'Australia Wide',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'Australian home service contractors',
+  },
+};
+
+const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
+  const cfg = REGIONS[region];
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,11 +71,11 @@ const DirectoryPage = () => {
 
     // Fire Meta Pixel InitiateCheckout event when user starts checkout
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      const value = pricingPlan === 'yearly' ? 99 : 20;
+      const value = pricingPlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount;
       const eventID = `ic_${pricingPlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       (window as any).fbq('track', 'InitiateCheckout', {
         value,
-        currency: 'USD',
+        currency: cfg.currency,
         content_name: pricingPlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan',
         content_category: 'subscription',
       }, { eventID });
@@ -41,7 +85,7 @@ const DirectoryPage = () => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: 'directory' }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source }),
       });
       const data = await res.json();
       if (data.url) {
@@ -867,7 +911,7 @@ const DirectoryPage = () => {
           <span className="mv-ribbon-diamond">◊</span>
           Since 2020
           <span className="mv-ribbon-diamond">◊</span>
-          Austin · TX
+          {cfg.ribbonLocation}
         </div>
 
         {/* Header */}
@@ -876,9 +920,9 @@ const DirectoryPage = () => {
             <div className="mv-wordmark">Amalvera</div>
             <span className="mv-wordmark-sub">We Build Websites</span>
           </div>
-          <a href="tel:+18302549274" className="mv-call" aria-label="Tap to call our 24/7 help line">
-            <span className="mv-call-label">Tap to Call · 24/7 Help</span>
-            <span className="mv-call-number">(830) 254-9274</span>
+          <a href={cfg.phoneHref} className="mv-call" aria-label="Tap to call our 24/7 help line">
+            <span className="mv-call-label">{cfg.phoneLabel}</span>
+            <span className="mv-call-number">{cfg.phoneNumber}</span>
           </a>
         </header>
 
@@ -891,7 +935,7 @@ const DirectoryPage = () => {
           </div>
           <h1 className="mv-hero-title">
             A website that can help<br />
-            <em>home service contractors</em> win more jobs.
+            <em>{cfg.heroTaglineRegion}</em> win more jobs.
           </h1>
           <p className="mv-hero-sub">
             We build websites for home service pros. You tell us about your
@@ -1057,7 +1101,7 @@ const DirectoryPage = () => {
       <div className="mv-sticky visible">
         <div className="mv-sticky-inner">
           <span className="mv-sticky-price">
-            {pricingPlan === 'monthly' ? '$20' : '$99'}
+            {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
           </span>
           <PricingToggle compact />

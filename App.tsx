@@ -10,16 +10,17 @@ import { FormData } from './types';
 
 const App: React.FC = () => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  if (pathname === '/1') {
+  if (pathname === '/1' || pathname === '/aus') {
+    const region = pathname === '/aus' ? 'aus' : 'us';
     const dirParams = new URLSearchParams(window.location.search);
     const dirStatus = dirParams.get('status');
     if (dirStatus === 'success') {
       return <DirectorySuccessPage />;
     }
     if (dirStatus === 'cancelled') {
-      window.history.replaceState({}, '', '/1');
+      window.history.replaceState({}, '', pathname);
     }
-    return <DirectoryPage />;
+    return <DirectoryPage region={region} />;
   }
 
   const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');

@@ -11,8 +11,9 @@ const DirectorySuccessPage: React.FC = () => {
     if (typeof window !== 'undefined' && (window as any).fbq) {
       const sessionId = new URLSearchParams(window.location.search).get('session_id');
       const eventID = sessionId ? `purchase_${sessionId}` : `purchase_${Date.now()}`;
+      const isAus = window.location.pathname === '/aus';
       (window as any).fbq('track', 'Purchase', {
-        currency: 'USD',
+        currency: isAus ? 'AUD' : 'USD',
         value: 20.00,
       }, { eventID });
     }

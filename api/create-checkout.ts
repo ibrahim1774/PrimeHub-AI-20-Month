@@ -12,7 +12,8 @@ export default async function handler(req: any, res: any) {
     try {
         const { pendingId, companyName, plan = 'monthly', source } = req.body;
 
-        const isDirectory = source === 'directory';
+        const isAus = source === 'australia';
+        const isDirectory = source === 'directory' || isAus;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
@@ -29,25 +30,29 @@ export default async function handler(req: any, res: any) {
             ? `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`
             : `PrimeHub - ${isYearly ? 'Annual' : 'Premium'} Subscription`;
 
+        const directoryPath = isAus ? '/aus' : '/1';
         const successUrl = isDirectory
-            ? `${origin}/1?status=success&session_id={CHECKOUT_SESSION_ID}`
+            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
-            ? `${origin}/1?status=cancelled`
+            ? `${origin}${directoryPath}?status=cancelled`
             : `${origin}/?status=cancelled`;
+
+        const currency = isAus ? 'aud' : 'usd';
+        const currencyLabel = isAus ? ' AUD' : '';
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
                 {
                     price_data: {
-                        currency: 'usd',
+                        currency,
                         product_data: {
                             name: productName,
                             description: isYearly
-                                ? 'PAY ONLY $99/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE'
-                                : 'PAY ONLY $20/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE',
+                                ? `PAY ONLY $99${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
+                                : `PAY ONLY $20${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`,
                         },
                         unit_amount: isYearly ? 9900 : 2000,
                         recurring: {
