@@ -907,10 +907,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-hero-video { max-width: 200px; margin: 10px auto 16px; }
           .mv-how { margin-bottom: 14px; }
           .mv-how-eyebrow { margin-bottom: 10px; font-size: 9px; letter-spacing: 0.35em; }
-          .mv-how-row { grid-template-columns: 1fr; gap: 10px; }
-          .mv-how-card { padding: 10px 12px; }
-          .mv-how-num { font-size: 22px; margin-bottom: 4px; }
-          .mv-how-title { font-size: 15px; }
+          .mv-how-row { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+          .mv-how-card { padding: 8px 6px; }
+          .mv-how-num { font-size: 18px; margin-bottom: 3px; }
+          .mv-how-title { font-size: 12px; line-height: 1.2; }
+          .mv-how-body { font-size: 9px; line-height: 1.35; }
           .mv-incl-list-row { flex-direction: column; gap: 5px; align-items: center; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
