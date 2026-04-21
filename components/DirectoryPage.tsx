@@ -912,7 +912,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-how-num { font-size: 18px; margin-bottom: 3px; }
           .mv-how-title { font-size: 12px; line-height: 1.2; }
           .mv-how-body { font-size: 9px; line-height: 1.35; }
-          .mv-incl-list-row { flex-direction: column; gap: 5px; align-items: center; }
+          .mv-incl-list-row { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; justify-content: center; }
+          .mv-incl-row { padding: 10px 0 2px; }
+          .mv-incl-label { font-size: 8px; letter-spacing: 0.35em; margin-bottom: 6px; }
+          .mv-incl-list-row .mv-incl-item { font-size: 10px; letter-spacing: 0.02em; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
           .mv-price-card { padding: 22px 18px 20px; }
