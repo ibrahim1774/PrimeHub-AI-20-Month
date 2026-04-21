@@ -103,7 +103,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : 'Get Started'}
+        {isLoading ? 'Loading…' : 'Try Free for 1 Day'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -829,7 +829,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           z-index: 100;
           background: #0a0a0a;
           border-top: 1px solid rgba(201,169,110,0.35);
-          padding: 7px 16px;
+          padding: 6px 16px 8px;
           transform: translateY(110%);
           transition: transform 0.35s ease;
         }
@@ -866,6 +866,37 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           font-weight: 500;
           margin-left: 8px;
           text-shadow: none;
+        }
+        .mv-sticky-price .mv-sticky-trial {
+          display: block;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 8px; color: #8a8072;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          margin-top: 2px;
+          font-style: normal;
+          font-weight: 500;
+          text-shadow: none;
+        }
+        @keyframes mvGuaranteeGlow {
+          0%, 100% { text-shadow: 0 0 0 rgba(212,175,55,0); opacity: 0.85; }
+          50% { text-shadow: 0 0 14px rgba(212,175,55,0.55); opacity: 1; }
+        }
+        .mv-guarantee {
+          max-width: 1100px;
+          margin: 6px auto 0;
+          padding: 4px 12px;
+          text-align: center;
+          font-family: 'Inter', sans-serif;
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #c9a96e;
+          animation: mvGuaranteeGlow 2.6s ease-in-out infinite;
+        }
+        .mv-guarantee strong {
+          color: #e8dcc4;
+          font-weight: 900;
+          letter-spacing: 0.14em;
         }
         .mv-sticky-price .mv-sticky-cur {
           font-family: 'JetBrains Mono', monospace;
@@ -924,7 +955,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-cta-inner { padding: 13px 28px; min-width: 200px; letter-spacing: 0.35em; font-size: 10px; }
           .mv-cta-lg .mv-cta-inner { padding: 14px 32px; min-width: 220px; }
           .mv-portfolio-title { font-size: 28px; }
-          .mv-sticky { padding: 6px 12px; }
+          .mv-sticky { padding: 6px 12px 8px; }
+          .mv-guarantee { font-size: 9px; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
+          .mv-guarantee strong { letter-spacing: 0.1em; }
+          .mv-sticky-price .mv-sticky-trial { font-size: 7px; letter-spacing: 0.14em; }
           .mv-sticky-inner {
             grid-template-columns: auto 1fr;
             grid-template-areas: "price toggle" "cta cta";
@@ -1144,9 +1178,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
+            <span className="mv-sticky-trial">After 1-day free trial</span>
           </span>
           <PricingToggle compact />
           <CtaButton large={false} />
+        </div>
+        <div className="mv-guarantee">
+          Backed by a <strong>14-day, 100% money-back guarantee</strong>
         </div>
       </div>
     </>
