@@ -278,15 +278,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         .mv-diamond { color: #c9a96e; }
 
-        /* Commission row: video + steps */
-        .mv-commission-row {
-          display: grid;
-          grid-template-columns: 1.15fr 1fr;
-          gap: 24px;
-          align-items: start;
-          max-width: 720px;
-          margin: 14px auto 0;
-        }
         .mv-frame {
           position: relative;
           padding: 8px;
@@ -320,36 +311,64 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           background: #c9a96e;
         }
 
-        .mv-steps { text-align: left; padding-top: 4px; }
-        .mv-step-eyebrow {
-          font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
-          color: #8a8072; margin-bottom: 14px;
+        /* Centered video + horizontal How It Works + horizontal What You Get */
+        .mv-hero-video {
+          max-width: 220px;
+          margin: 14px auto 22px;
         }
-        .mv-step {
+        .mv-how {
+          max-width: 720px;
+          margin: 0 auto 18px;
+          text-align: center;
+        }
+        .mv-how-eyebrow {
+          font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase;
+          color: #c9a96e; font-weight: 500;
+          margin-bottom: 14px;
+        }
+        .mv-how-row {
           display: grid;
-          grid-template-columns: 32px 1fr;
-          gap: 12px;
-          padding: 10px 0;
-          border-bottom: 1px solid rgba(201,169,110,0.12);
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
         }
-        .mv-step:last-child { border-bottom: none; }
-        .mv-step-num {
+        .mv-how-card {
+          position: relative;
+          padding: 14px 12px 12px;
+          border: 1px solid rgba(201,169,110,0.25);
+          background: rgba(201,169,110,0.03);
+          text-align: left;
+        }
+        .mv-how-num {
+          display: block;
           font-family: 'Cormorant Garamond', serif;
-          font-style: italic;
-          font-weight: 300;
-          font-size: 22px;
-          color: #c9a96e;
-          line-height: 1.2;
+          font-style: italic; font-weight: 300;
+          font-size: 26px; color: #c9a96e; line-height: 1;
+          margin-bottom: 6px;
         }
-        .mv-step-title {
+        .mv-how-title {
           font-family: 'Cormorant Garamond', serif;
           font-size: 17px; color: #e8dcc4;
           font-weight: 400; line-height: 1.2;
-          margin-bottom: 2px;
+          margin-bottom: 3px;
         }
-        .mv-step-body {
+        .mv-how-body {
           font-size: 11px; color: #8a8072; line-height: 1.5;
           font-family: 'Inter', sans-serif;
+        }
+        .mv-incl-row {
+          max-width: 720px; margin: 0 auto;
+          text-align: center;
+          border-top: 1px solid rgba(201,169,110,0.18);
+          padding: 14px 0 4px;
+        }
+        .mv-incl-list-row {
+          display: flex; flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px 18px;
+          list-style: none; padding: 0; margin: 0;
+        }
+        .mv-incl-list-row .mv-incl-item {
+          padding: 2px 0;
         }
 
         .mv-incl {
@@ -863,11 +882,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-walkthrough-title { font-size: 20px; }
           .mv-walkthrough-frame { padding: 7px; }
           .mv-hero-sub { font-size: 14px; }
-          .mv-commission-row {
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            max-width: 500px;
-          }
+          .mv-how-row { gap: 12px; }
+          .mv-how-card { padding: 12px 10px; }
+          .mv-how-title { font-size: 15px; }
           .mv-portfolio-title { font-size: 20px; }
           .mv-gallery-card { width: 300px; padding: 7px; }
           .mv-gallery-label { font-size: 15px; padding-top: 8px; }
@@ -887,12 +904,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-hero { padding: 16px 0 14px; }
           .mv-hero-title { font-size: 22px; }
           .mv-hero-sub { font-size: 13px; }
-          .mv-commission-row {
-            grid-template-columns: 1fr;
-            gap: 14px;
-            max-width: 320px;
-          }
-          .mv-commission-row > *:first-child { max-width: 220px; margin: 0 auto; }
+          .mv-hero-video { max-width: 200px; margin: 10px auto 16px; }
+          .mv-how { margin-bottom: 14px; }
+          .mv-how-eyebrow { margin-bottom: 10px; font-size: 9px; letter-spacing: 0.35em; }
+          .mv-how-row { grid-template-columns: 1fr; gap: 10px; }
+          .mv-how-card { padding: 10px 12px; }
+          .mv-how-num { font-size: 22px; margin-bottom: 4px; }
+          .mv-how-title { font-size: 15px; }
+          .mv-incl-list-row { flex-direction: column; gap: 5px; align-items: center; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
           .mv-price-card { padding: 22px 18px 20px; }
@@ -956,52 +975,54 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             business. We do the rest. Ready in 48 hours.
           </p>
 
-          {/* Commission row: video + steps */}
-          <div className="mv-commission-row">
-            <div>
-              <div className="mv-video-hint">Tap to Unmute</div>
-              <div className="mv-frame">
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                  <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
-                </div>
+          {/* Video — centered */}
+          <div className="mv-hero-video">
+            <div className="mv-video-hint">Tap to Unmute</div>
+            <div className="mv-frame">
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
               </div>
             </div>
-            <div className="mv-steps">
-              <div className="mv-step-eyebrow">◊ How It Works</div>
+          </div>
+
+          {/* How It Works — horizontal 3-up */}
+          <div className="mv-how">
+            <div className="mv-how-eyebrow">◊ How It Works ◊</div>
+            <div className="mv-how-row">
               {[
                 { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
                 { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
                 { title: 'We Build It', body: 'Your website is ready in 48 hours.' },
               ].map((item, i) => (
-                <div className="mv-step" key={i}>
-                  <span className="mv-step-num">{roman[i]}.</span>
-                  <div>
-                    <div className="mv-step-title">{item.title}</div>
-                    <div className="mv-step-body">{item.body}</div>
-                  </div>
+                <div className="mv-how-card" key={i}>
+                  <span className="mv-how-num">{roman[i]}.</span>
+                  <div className="mv-how-title">{item.title}</div>
+                  <div className="mv-how-body">{item.body}</div>
                 </div>
               ))}
-              <div className="mv-incl">
-                <div className="mv-incl-label">◊ What You Get</div>
-                <ul className="mv-incl-list">
-                  <li className="mv-incl-item is-key">
-                    <span className="mv-incl-dot" /> Full Account Access
-                  </li>
-                  <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> SEO ready (so people find you on Google)
-                  </li>
-                  <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> Multiple pages
-                  </li>
-                  <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> Custom photos
-                  </li>
-                  <li className="mv-incl-item">
-                    <span className="mv-incl-dot" /> Chat widget, lead form, and app
-                  </li>
-                </ul>
-              </div>
             </div>
+          </div>
+
+          {/* What You Get — horizontal */}
+          <div className="mv-incl mv-incl-row">
+            <div className="mv-incl-label">◊ What You Get</div>
+            <ul className="mv-incl-list mv-incl-list-row">
+              <li className="mv-incl-item is-key">
+                <span className="mv-incl-dot" /> Full Account Access
+              </li>
+              <li className="mv-incl-item">
+                <span className="mv-incl-dot" /> SEO ready
+              </li>
+              <li className="mv-incl-item">
+                <span className="mv-incl-dot" /> Multiple pages
+              </li>
+              <li className="mv-incl-item">
+                <span className="mv-incl-dot" /> Custom photos
+              </li>
+              <li className="mv-incl-item">
+                <span className="mv-incl-dot" /> Chat widget & lead form
+              </li>
+            </ul>
           </div>
 
         </section>
