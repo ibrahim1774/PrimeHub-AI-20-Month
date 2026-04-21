@@ -944,7 +944,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           padding: 4px 12px;
           text-align: center;
           font-family: 'Inter', sans-serif;
-          font-size: 11px;
+          font-size: 13px;
+          font-weight: 700;
           letter-spacing: 0.18em;
           text-transform: uppercase;
           color: #c9a96e;
@@ -1016,7 +1017,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-faq-q { font-size: 16px; padding: 12px 4px; }
           .mv-faq-a { font-size: 12px; padding: 0 4px 14px; }
           .mv-sticky { padding: 6px 12px 8px; }
-          .mv-guarantee { font-size: 9px; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
+          .mv-guarantee { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
           .mv-guarantee strong { letter-spacing: 0.1em; }
           .mv-sticky-price .mv-sticky-trial { font-size: 7px; letter-spacing: 0.14em; }
           .mv-sticky-inner {
