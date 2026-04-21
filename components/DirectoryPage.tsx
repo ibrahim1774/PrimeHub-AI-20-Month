@@ -915,7 +915,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-how-body { font-size: 9px; line-height: 1.35; }
           .mv-incl-list-row { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; justify-content: center; }
           .mv-incl-row { padding: 10px 0 2px; }
-          .mv-incl-label { font-size: 8px; letter-spacing: 0.35em; margin-bottom: 6px; }
+          .mv-incl-label { font-size: 11px; letter-spacing: 0.35em; margin-bottom: 8px; font-weight: 800; color: #c9a96e; }
           .mv-incl-list-row .mv-incl-item { font-size: 13px; letter-spacing: 0.02em; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
