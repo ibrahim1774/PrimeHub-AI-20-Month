@@ -625,6 +625,63 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           z-index: 3;
         }
 
+        /* FAQ */
+        .mv-faq { padding: 22px 0 26px; }
+        .mv-faq-title {
+          text-align: center;
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-style: italic;
+          font-size: 32px;
+          color: #e8dcc4;
+          line-height: 1.15;
+          margin: 0 0 18px;
+        }
+        .mv-faq-title em { color: #c9a96e; font-style: italic; }
+        .mv-faq-list {
+          max-width: 720px;
+          margin: 0 auto;
+          border-top: 1px solid rgba(201,169,110,0.18);
+        }
+        .mv-faq-item {
+          border-bottom: 1px solid rgba(201,169,110,0.18);
+        }
+        .mv-faq-item summary { list-style: none; }
+        .mv-faq-item summary::-webkit-details-marker { display: none; }
+        .mv-faq-q {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 14px 6px;
+          cursor: pointer;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 19px;
+          font-weight: 400;
+          color: #e8dcc4;
+          transition: color 0.2s ease;
+        }
+        .mv-faq-q:hover { color: #d4af37; }
+        .mv-faq-icon {
+          color: #c9a96e;
+          font-size: 14px;
+          line-height: 1;
+          transition: transform 0.35s ease;
+          flex-shrink: 0;
+        }
+        .mv-faq-item[open] .mv-faq-icon {
+          transform: rotate(45deg);
+          color: #d4af37;
+        }
+        .mv-faq-a {
+          padding: 0 6px 16px;
+          font-family: 'Inter', sans-serif;
+          font-size: 13px;
+          line-height: 1.65;
+          color: #c8bca2;
+          max-width: 640px;
+        }
+
         /* Portfolio */
         .mv-portfolio { padding: 14px 0 20px; }
         .mv-portfolio-title {
@@ -955,6 +1012,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-cta-inner { padding: 13px 28px; min-width: 200px; letter-spacing: 0.35em; font-size: 10px; }
           .mv-cta-lg .mv-cta-inner { padding: 14px 32px; min-width: 220px; }
           .mv-portfolio-title { font-size: 28px; }
+          .mv-faq-title { font-size: 24px; margin-bottom: 12px; }
+          .mv-faq-q { font-size: 16px; padding: 12px 4px; }
+          .mv-faq-a { font-size: 12px; padding: 0 4px 14px; }
           .mv-sticky { padding: 6px 12px 8px; }
           .mv-guarantee { font-size: 9px; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
           .mv-guarantee strong { letter-spacing: 0.1em; }
@@ -1150,6 +1210,50 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             ))}
           </div>
+          </div>
+        </section>
+
+        {/* Crest — FAQ */}
+        <div className="mv-shell">
+          <div className="mv-crest">
+            <span className="mv-crest-line" />
+            <span>◊ Step 4 ◊ Questions</span>
+            <span className="mv-crest-line" />
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <section className="mv-shell mv-faq">
+          <h2 className="mv-faq-title">
+            Frequently <em>asked</em>
+          </h2>
+          <div className="mv-faq-list">
+            {[
+              {
+                q: 'What do I get with the website?',
+                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+              },
+              {
+                q: `What is the $20/month for?`,
+                a: `The $20/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
+              },
+              {
+                q: 'What support do I get?',
+                a: 'You can contact us anytime by email or phone if you need help.',
+              },
+              {
+                q: 'How fast is the website delivered?',
+                a: 'Your website is usually ready in about 48 hours.',
+              },
+            ].map((item, i) => (
+              <details className="mv-faq-item" key={i} open={i === 0}>
+                <summary className="mv-faq-q">
+                  <span>{item.q}</span>
+                  <span className="mv-faq-icon" aria-hidden="true">◊</span>
+                </summary>
+                <div className="mv-faq-a">{item.a}</div>
+              </details>
+            ))}
           </div>
         </section>
 
