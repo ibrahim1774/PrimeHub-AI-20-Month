@@ -384,16 +384,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-incl-item {
           display: flex; align-items: center; gap: 10px;
           padding: 3px 0;
-          font-size: 11px; color: #c8bca2;
+          font-size: 14px; color: #c8bca2;
           letter-spacing: 0.04em;
           font-family: 'Inter', sans-serif;
+          font-weight: 700;
         }
         .mv-incl-item.is-key {
-          color: #e8dcc4; font-weight: 600;
+          color: #e8dcc4; font-weight: 800;
         }
         .mv-incl-item.is-key .mv-incl-dot { background: #d4af37; }
         .mv-incl-dot {
-          width: 4px; height: 4px;
+          width: 5px; height: 5px;
           background: #c9a96e; border-radius: 50%;
           flex-shrink: 0;
         }
@@ -915,7 +916,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-incl-list-row { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; justify-content: center; }
           .mv-incl-row { padding: 10px 0 2px; }
           .mv-incl-label { font-size: 8px; letter-spacing: 0.35em; margin-bottom: 6px; }
-          .mv-incl-list-row .mv-incl-item { font-size: 10px; letter-spacing: 0.02em; }
+          .mv-incl-list-row .mv-incl-item { font-size: 13px; letter-spacing: 0.02em; }
           .mv-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-crest { font-size: 9px; letter-spacing: 0.35em; }
           .mv-price-card { padding: 22px 18px 20px; }
