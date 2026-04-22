@@ -1119,9 +1119,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
         </header>
 
-        {/* Showcase first on /10 */}
-        {region === 'ten' && <PortfolioSection />}
-
         {/* Hero */}
         <section className="mv-shell mv-hero">
           <div className="mv-eyebrow">
@@ -1159,6 +1156,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </div>
           )}
+
+          {/* Showcase between hero title and How It Works on /10 */}
+          {region === 'ten' && <PortfolioSection />}
 
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
