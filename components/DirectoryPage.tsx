@@ -123,6 +123,42 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </button>
   );
 
+  const PortfolioSection = () => (
+    <section className="mv-shell mv-portfolio">
+      <h2 className="mv-portfolio-title">
+        Sample websites for <em>home service contractors</em>
+      </h2>
+      <div className="mv-portfolio-sub">A few of our favorites</div>
+      <div className="mv-gallery-wrap">
+        <div className="mv-gallery">
+          {galleryItems.map((item, i) => (
+            <div key={item.src} className="mv-gallery-card">
+              <div className="mv-gallery-thumb">
+                <img
+                  src={item.src}
+                  alt={`${item.label} sample website`}
+                  width={1200}
+                  height={900}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  {...({ fetchpriority: i === 0 ? 'high' : 'low' } as any)}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (!img.dataset.fallback) {
+                      img.dataset.fallback = '1';
+                      img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%23141210"/><rect x="0.4" y="1.1" width="3.2" height="0.15" fill="%23c9a96e" opacity="0.5"/><rect x="0.6" y="1.4" width="2.8" height="0.1" fill="%23c9a96e" opacity="0.3"/></svg>';
+                    }
+                  }}
+                />
+              </div>
+              <div className="mv-gallery-label">{item.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
   const PricingToggle = ({ compact = false }: { compact?: boolean }) => (
     <div className={`mv-toggle ${compact ? 'mv-toggle-compact' : ''}`}>
       <button
@@ -1083,6 +1119,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
         </header>
 
+        {/* Showcase first on /10 */}
+        {region === 'ten' && <PortfolioSection />}
+
         {/* Hero */}
         <section className="mv-shell mv-hero">
           <div className="mv-eyebrow">
@@ -1211,49 +1250,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </>
         )}
 
-        {/* Crest divider — Our Work */}
-        <div className="mv-shell">
-          <div className="mv-crest">
-            <span className="mv-crest-line" />
-            <span>◊ Step 3 ◊ Our Work</span>
-            <span className="mv-crest-line" />
-          </div>
-        </div>
-
-        {/* Portfolio */}
-        <section className="mv-shell mv-portfolio">
-          <h2 className="mv-portfolio-title">
-            Sample websites for <em>home service contractors</em>
-          </h2>
-          <div className="mv-portfolio-sub">A few of our favorites</div>
-          <div className="mv-gallery-wrap">
-          <div className="mv-gallery">
-            {galleryItems.map((item, i) => (
-              <div key={item.src} className="mv-gallery-card">
-                <div className="mv-gallery-thumb">
-                  <img
-                    src={item.src}
-                    alt={`${item.label} sample website`}
-                    width={1200}
-                    height={900}
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                    {...({ fetchpriority: i === 0 ? 'high' : 'low' } as any)}
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      if (!img.dataset.fallback) {
-                        img.dataset.fallback = '1';
-                        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%23141210"/><rect x="0.4" y="1.1" width="3.2" height="0.15" fill="%23c9a96e" opacity="0.5"/><rect x="0.6" y="1.4" width="2.8" height="0.1" fill="%23c9a96e" opacity="0.3"/></svg>';
-                      }
-                    }}
-                  />
-                </div>
-                <div className="mv-gallery-label">{item.label}</div>
+        {/* Crest + Portfolio — only on /1 and /aus (moved to top on /10) */}
+        {region !== 'ten' && (
+          <>
+            <div className="mv-shell">
+              <div className="mv-crest">
+                <span className="mv-crest-line" />
+                <span>◊ Step 3 ◊ Our Work</span>
+                <span className="mv-crest-line" />
               </div>
-            ))}
-          </div>
-          </div>
-        </section>
+            </div>
+            <PortfolioSection />
+          </>
+        )}
 
         {/* Crest — FAQ */}
         <div className="mv-shell">
