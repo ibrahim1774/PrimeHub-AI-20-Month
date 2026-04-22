@@ -1091,8 +1091,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span className="mv-eyebrow-bar" />
           </div>
           <h1 className="mv-hero-title">
-            A website that can help<br />
-            <em>{cfg.heroTaglineRegion}</em> win more jobs.
+            {region === 'ten' ? (
+              <>
+                Custom website for <em>home service contractors</em><br />
+                — {cfg.currencySymbol}{cfg.monthlyAmount} a month.
+              </>
+            ) : (
+              <>
+                A website that can help<br />
+                <em>{cfg.heroTaglineRegion}</em> win more jobs.
+              </>
+            )}
           </h1>
           <p className="mv-hero-sub">
             {region === 'ten'
