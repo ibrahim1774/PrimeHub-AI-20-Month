@@ -13,13 +13,15 @@ export default async function handler(req: any, res: any) {
         const { pendingId, companyName, plan = 'monthly', source } = req.body;
 
         const isAus = source === 'australia';
-        const isDirectory = source === 'directory' || isAus;
+        const isTen = source === 'ten';
+        const isDirectory = source === 'directory' || isAus || isTen;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
         }
 
-        const isYearly = plan === 'yearly';
+        // /10 is monthly-only at $10 — force plan to monthly no matter what
+        const isYearly = !isTen && plan === 'yearly';
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -30,7 +32,7 @@ export default async function handler(req: any, res: any) {
             ? `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`
             : `PrimeHub - ${isYearly ? 'Annual' : 'Premium'} Subscription`;
 
-        const directoryPath = isAus ? '/aus' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : '/1';
         const successUrl = isDirectory
             ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
@@ -42,6 +44,9 @@ export default async function handler(req: any, res: any) {
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';
 
+        const monthlyAmountCents = isTen ? 1000 : 2000;
+        const monthlyAmountDisplay = isTen ? '$10' : '$20';
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
@@ -52,9 +57,9 @@ export default async function handler(req: any, res: any) {
                             name: productName,
                             description: isYearly
                                 ? `PAY ONLY $99${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
-                                : `PAY ONLY $20${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`,
+                                : `PAY ONLY ${monthlyAmountDisplay}${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`,
                         },
-                        unit_amount: isYearly ? 9900 : 2000,
+                        unit_amount: isYearly ? 9900 : monthlyAmountCents,
                         recurring: {
                             interval: isYearly ? 'year' : 'month',
                         },

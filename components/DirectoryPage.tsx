@@ -10,7 +10,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus';
+type Region = 'us' | 'aus' | 'ten';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -53,6 +53,20 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'Australian home service contractors',
+  },
+  ten: {
+    source: 'ten',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 10,
+    yearlyAmount: 10,
+    yearlyWas: 10,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'home service contractor',
   },
 };
 
@@ -901,6 +915,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-sticky-inner > :first-child { justify-self: start; }
         .mv-sticky-inner > :last-child { justify-self: end; }
         .mv-sticky-inner > :nth-child(2) { justify-self: center; }
+        .mv-sticky-notoggle .mv-sticky-inner {
+          grid-template-columns: auto 1fr;
+        }
+        .mv-sticky-notoggle .mv-sticky-inner > :last-child { justify-self: end; }
         .mv-sticky-left {
           display: flex; align-items: center; gap: 14px;
           flex-wrap: wrap;
@@ -1028,6 +1046,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-sticky-inner > :nth-child(1) { grid-area: price; justify-self: start; }
           .mv-sticky-inner > :nth-child(2) { grid-area: toggle; justify-self: end; }
           .mv-sticky-inner > :nth-child(3) { grid-area: cta; justify-self: stretch; }
+          .mv-sticky-notoggle .mv-sticky-inner {
+            grid-template-columns: 1fr;
+            grid-template-areas: "price" "cta";
+          }
+          .mv-sticky-notoggle .mv-sticky-inner > :nth-child(1) { justify-self: center; }
+          .mv-sticky-notoggle .mv-sticky-inner > :nth-child(2) { grid-area: cta; justify-self: stretch; }
           .mv-sticky-price { font-size: 28px; }
           .mv-toggle-compact { max-width: 170px; width: auto; }
           .mv-sticky .mv-cta { width: 100%; }
@@ -1071,8 +1095,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <em>{cfg.heroTaglineRegion}</em> win more jobs.
           </h1>
           <p className="mv-hero-sub">
-            We build websites for home service pros. You tell us about your
-            business. We do the rest. Ready in 48 hours.
+            {region === 'ten'
+              ? 'A custom website for your home service business. Ready in 48 hours.'
+              : 'We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.'}
           </p>
 
           {/* Video — centered */}
@@ -1103,27 +1128,29 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           </div>
 
-          {/* What You Get — horizontal */}
-          <div className="mv-incl mv-incl-row">
-            <div className="mv-incl-label">◊ What You Get</div>
-            <ul className="mv-incl-list mv-incl-list-row">
-              <li className="mv-incl-item is-key">
-                <span className="mv-incl-dot" /> Full Account Access
-              </li>
-              <li className="mv-incl-item">
-                <span className="mv-incl-dot" /> SEO ready
-              </li>
-              <li className="mv-incl-item">
-                <span className="mv-incl-dot" /> Multiple pages
-              </li>
-              <li className="mv-incl-item">
-                <span className="mv-incl-dot" /> Custom photos
-              </li>
-              <li className="mv-incl-item">
-                <span className="mv-incl-dot" /> Chat widget & lead form
-              </li>
-            </ul>
-          </div>
+          {/* What You Get — horizontal (hidden on /10) */}
+          {region !== 'ten' && (
+            <div className="mv-incl mv-incl-row">
+              <div className="mv-incl-label">◊ What You Get</div>
+              <ul className="mv-incl-list mv-incl-list-row">
+                <li className="mv-incl-item is-key">
+                  <span className="mv-incl-dot" /> Full Account Access
+                </li>
+                <li className="mv-incl-item">
+                  <span className="mv-incl-dot" /> SEO ready
+                </li>
+                <li className="mv-incl-item">
+                  <span className="mv-incl-dot" /> Multiple pages
+                </li>
+                <li className="mv-incl-item">
+                  <span className="mv-incl-dot" /> Custom photos
+                </li>
+                <li className="mv-incl-item">
+                  <span className="mv-incl-dot" /> Chat widget & lead form
+                </li>
+              </ul>
+            </div>
+          )}
 
         </section>
 
@@ -1229,14 +1256,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             Frequently <em>asked</em>
           </h2>
           <div className="mv-faq-list">
-            {[
+            {(region === 'ten' ? [
               {
                 q: 'What do I get with the website?',
-                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+                a: 'A custom, professional website built for your home service business.',
               },
               {
-                q: `What is the $20/month for?`,
-                a: `The $20/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
+                q: 'What is the $10/month for?',
+                a: `The $10/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
               },
               {
                 q: 'What support do I get?',
@@ -1246,7 +1273,24 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 q: 'How fast is the website delivered?',
                 a: 'Your website is usually ready in about 48 hours.',
               },
-            ].map((item, i) => (
+            ] : [
+              {
+                q: 'What do I get with the website?',
+                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+              },
+              {
+                q: `What is the ${cfg.currencySymbol}${cfg.monthlyAmount}/month for?`,
+                a: `The ${cfg.currencySymbol}${cfg.monthlyAmount}/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
+              },
+              {
+                q: 'What support do I get?',
+                a: 'You can contact us anytime by email or phone if you need help.',
+              },
+              {
+                q: 'How fast is the website delivered?',
+                a: 'Your website is usually ready in about 48 hours.',
+              },
+            ]).map((item, i) => (
               <details className="mv-faq-item" key={i} open={i === 0}>
                 <summary className="mv-faq-q">
                   <span>{item.q}</span>
@@ -1277,7 +1321,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </div>
 
       {/* Sticky */}
-      <div className="mv-sticky visible">
+      <div className={`mv-sticky visible ${region === 'ten' ? 'mv-sticky-notoggle' : ''}`}>
         <div className="mv-sticky-inner">
           <span className="mv-sticky-price">
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
@@ -1285,7 +1329,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
             <span className="mv-sticky-trial">After 1-day free trial</span>
           </span>
-          <PricingToggle compact />
+          {region !== 'ten' && <PricingToggle compact />}
           <CtaButton large={false} />
         </div>
         <div className="mv-guarantee">
