@@ -117,7 +117,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : region === 'ten' ? 'Get Started' : 'Try Free for 1 Day'}
+        {isLoading ? 'Loading…' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -1350,7 +1350,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
-            {region !== 'ten' && <span className="mv-sticky-trial">After 1-day free trial</span>}
           </span>
           {region !== 'ten' && <PricingToggle compact />}
           <CtaButton large={false} />

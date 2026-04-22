@@ -68,10 +68,6 @@ export default async function handler(req: any, res: any) {
                 },
             ],
             mode: 'subscription',
-            ...(isTen
-                ? {}
-                : { subscription_data: { trial_period_days: 1 } }
-            ),
             metadata: {
                 pendingId: pendingId || '',
                 companyName: companyName || '',
