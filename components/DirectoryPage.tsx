@@ -1109,15 +1109,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               : 'We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.'}
           </p>
 
-          {/* Video — centered */}
-          <div className="mv-hero-video">
-            <div className="mv-video-hint">Tap to Unmute</div>
-            <div className="mv-frame">
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+          {/* Video — centered (hidden on /10) */}
+          {region !== 'ten' && (
+            <div className="mv-hero-video">
+              <div className="mv-video-hint">Tap to Unmute</div>
+              <div className="mv-frame">
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
@@ -1163,48 +1165,51 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
         </section>
 
-        {/* Crest divider — Walkthrough */}
-        <div className="mv-shell">
-          <div className="mv-crest">
-            <span className="mv-crest-line" />
-            <span>◊ Step 2 ◊ The Walkthrough</span>
-            <span className="mv-crest-line" />
-          </div>
-        </div>
-
-        {/* Walkthrough */}
-        <section className="mv-shell mv-walkthrough">
-          <h2 className="mv-walkthrough-title">
-            A quick tour of your <em>account</em>
-          </h2>
-          <div className="mv-walkthrough-sub">Everything you'll see after you sign up</div>
-          <div className="mv-walkthrough-frame">
-            <div className="mv-walkthrough-player">
-              <wistia-player
-                media-id="eq8u22i00x"
-                aspect="1.7391304347826086"
-                autoplay="true"
-                muted="true"
-                {...({
-                  loop: 'true',
-                  'playbar': 'false',
-                  'play-button': 'false',
-                  'small-play-button': 'false',
-                  'fullscreen-button': 'false',
-                  'volume-control': 'false',
-                  'settings-control': 'false',
-                  'playback-rate-control': 'false',
-                  'controls-visible-on-load': 'false',
-                  'big-play-button': 'false',
-                  'silent-auto-play': 'true',
-                  'end-video-behavior': 'loop',
-                  'resumable': 'false',
-                  'player-color': 'c9a96e',
-                } as any)}
-              ></wistia-player>
+        {/* Walkthrough — hidden on /10 */}
+        {region !== 'ten' && (
+          <>
+            <div className="mv-shell">
+              <div className="mv-crest">
+                <span className="mv-crest-line" />
+                <span>◊ Step 2 ◊ The Walkthrough</span>
+                <span className="mv-crest-line" />
+              </div>
             </div>
-          </div>
-        </section>
+
+            <section className="mv-shell mv-walkthrough">
+              <h2 className="mv-walkthrough-title">
+                A quick tour of your <em>account</em>
+              </h2>
+              <div className="mv-walkthrough-sub">Everything you'll see after you sign up</div>
+              <div className="mv-walkthrough-frame">
+                <div className="mv-walkthrough-player">
+                  <wistia-player
+                    media-id="eq8u22i00x"
+                    aspect="1.7391304347826086"
+                    autoplay="true"
+                    muted="true"
+                    {...({
+                      loop: 'true',
+                      'playbar': 'false',
+                      'play-button': 'false',
+                      'small-play-button': 'false',
+                      'fullscreen-button': 'false',
+                      'volume-control': 'false',
+                      'settings-control': 'false',
+                      'playback-rate-control': 'false',
+                      'controls-visible-on-load': 'false',
+                      'big-play-button': 'false',
+                      'silent-auto-play': 'true',
+                      'end-video-behavior': 'loop',
+                      'resumable': 'false',
+                      'player-color': 'c9a96e',
+                    } as any)}
+                  ></wistia-player>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
 
         {/* Crest divider — Our Work */}
         <div className="mv-shell">
