@@ -960,6 +960,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
         /* Embedded checkout modal */
         @keyframes mvFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes mvScrollBob {
+          0%, 100% { transform: translate(-50%, 0); opacity: 0.85; }
+          50% { transform: translate(-50%, 6px); opacity: 1; }
+        }
         .mv-checkout-backdrop {
           position: fixed; inset: 0;
           background: rgba(10,10,10,0.82);
@@ -967,35 +971,35 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           -webkit-backdrop-filter: blur(4px);
           z-index: 9999;
           display: flex; align-items: center; justify-content: center;
-          padding: 24px;
+          padding: 20px;
           animation: mvFadeIn 0.2s ease;
         }
         .mv-checkout-modal {
           position: relative;
           width: 100%;
-          max-width: 560px;
-          max-height: calc(100vh - 48px);
+          max-width: 440px;
+          max-height: calc(100vh - 40px);
           background: #141210;
           border: 1px solid rgba(201,169,110,0.45);
           box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 5px rgba(201,169,110,0.08);
-          padding: 10px;
+          padding: 8px;
           overflow: hidden;
           display: flex; flex-direction: column;
         }
         .mv-checkout-modal::after {
           content: '';
-          position: absolute; inset: 5px;
+          position: absolute; inset: 4px;
           border: 1px solid rgba(201,169,110,0.18);
           pointer-events: none;
         }
         .mv-checkout-close {
-          position: absolute; top: 10px; right: 10px;
-          width: 32px; height: 32px;
+          position: absolute; top: 8px; right: 8px;
+          width: 28px; height: 28px;
           background: rgba(255,255,255,0.04);
           border: 1px solid rgba(201,169,110,0.25);
           color: #c9a96e;
-          font-size: 14px;
-          cursor: pointer; z-index: 2;
+          font-size: 13px;
+          cursor: pointer; z-index: 3;
           transition: border-color 0.2s ease, color 0.2s ease;
         }
         .mv-checkout-close:hover { border-color: #c9a96e; color: #d4af37; }
@@ -1003,6 +1007,35 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           flex: 1; overflow-y: auto;
           position: relative;
         }
+        /* Bottom fade + pulsing scroll chevron hint */
+        .mv-checkout-modal::before {
+          content: '';
+          position: absolute;
+          left: 8px; right: 8px; bottom: 8px;
+          height: 56px;
+          background: linear-gradient(180deg, rgba(20,18,16,0) 0%, rgba(20,18,16,0.9) 70%, #141210 100%);
+          pointer-events: none;
+          z-index: 2;
+        }
+        .mv-checkout-hint {
+          position: absolute;
+          left: 50%; bottom: 10px;
+          transform: translateX(-50%);
+          display: inline-flex; align-items: center; gap: 6px;
+          padding: 4px 10px;
+          background: rgba(10,10,10,0.85);
+          border: 1px solid rgba(201,169,110,0.35);
+          color: #c9a96e;
+          font-family: 'Inter', sans-serif;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.28em;
+          text-transform: uppercase;
+          pointer-events: none;
+          z-index: 3;
+          animation: mvScrollBob 1.6s ease-in-out infinite;
+        }
+        .mv-checkout-hint svg { width: 10px; height: 10px; }
 
         /* Sticky bar */
         .mv-sticky {
@@ -1144,8 +1177,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-faq-title { font-size: 24px; margin-bottom: 12px; }
           .mv-faq-q { font-size: 16px; padding: 12px 4px; }
           .mv-faq-a { font-size: 12px; padding: 0 4px 14px; }
-          .mv-checkout-backdrop { padding: 12px; }
-          .mv-checkout-modal { padding: 6px; max-height: calc(100vh - 24px); }
+          .mv-checkout-backdrop { padding: 10px; }
+          .mv-checkout-modal { padding: 6px; max-height: calc(100vh - 20px); max-width: 360px; }
+          .mv-checkout-hint { font-size: 8px; letter-spacing: 0.22em; padding: 3px 8px; }
           .mv-sticky { padding: 6px 12px 8px; }
           .mv-guarantee { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
           .mv-guarantee strong { letter-spacing: 0.1em; }
@@ -1444,6 +1478,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
                 <EmbeddedCheckout />
               </EmbeddedCheckoutProvider>
+            </div>
+            <div className="mv-checkout-hint" aria-hidden="true">
+              Scroll
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
           </div>
         </div>
