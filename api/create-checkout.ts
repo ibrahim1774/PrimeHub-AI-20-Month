@@ -47,11 +47,7 @@ export default async function handler(req: any, res: any) {
         const monthlyAmountCents = isTen ? 1000 : 2000;
         const monthlyAmountDisplay = isTen ? '$10' : '$20';
 
-        const session = await stripe.checkout.sessions.create({
-            ...(embedded
-                ? { ui_mode: 'embedded', redirect_on_completion: 'always', return_url: successUrl }
-                : { success_url: successUrl, cancel_url: cancelUrl }
-            ),
+        const params: Stripe.Checkout.SessionCreateParams = {
             payment_method_types: ['card'],
             line_items: [
                 {
@@ -80,7 +76,18 @@ export default async function handler(req: any, res: any) {
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',
             },
-        });
+        };
+
+        if (embedded) {
+            params.ui_mode = 'embedded';
+            params.redirect_on_completion = 'always';
+            params.return_url = successUrl;
+        } else {
+            params.success_url = successUrl;
+            params.cancel_url = cancelUrl;
+        }
+
+        const session = await stripe.checkout.sessions.create(params);
 
         return res.status(200).json(
             embedded
