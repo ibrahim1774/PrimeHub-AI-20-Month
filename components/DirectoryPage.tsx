@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const galleryItems = [
   { src: '/gallery/home-services.jpg', label: 'Home Services' },
@@ -74,6 +78,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const cfg = REGIONS[region];
   const [pricingPlan, setPricingPlan] = useState<'monthly' | 'yearly'>('monthly');
   const [isLoading, setIsLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const closeCheckout = () => {
+    setModalOpen(false);
+    setClientSecret(null);
+  };
 
   useEffect(() => {
     const onPageShow = (e: PageTransitionEvent) => {
@@ -82,6 +93,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     window.addEventListener('pageshow', onPageShow);
     return () => window.removeEventListener('pageshow', onPageShow);
   }, []);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeCheckout(); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [modalOpen]);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -102,14 +125,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: true }),
       });
       const data = await res.json();
-      if (data.url) {
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+        setModalOpen(true);
+      } else if (data.url) {
+        // Fallback to hosted checkout if embedded unavailable
         window.location.href = data.url;
       }
     } catch (err) {
       console.error('Checkout error:', err);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -930,6 +958,52 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         .mv-footer-link:hover { color: #c9a96e; }
 
+        /* Embedded checkout modal */
+        @keyframes mvFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .mv-checkout-backdrop {
+          position: fixed; inset: 0;
+          background: rgba(10,10,10,0.82);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          z-index: 9999;
+          display: flex; align-items: center; justify-content: center;
+          padding: 24px;
+          animation: mvFadeIn 0.2s ease;
+        }
+        .mv-checkout-modal {
+          position: relative;
+          width: 100%;
+          max-width: 560px;
+          max-height: calc(100vh - 48px);
+          background: #141210;
+          border: 1px solid rgba(201,169,110,0.45);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 5px rgba(201,169,110,0.08);
+          padding: 10px;
+          overflow: hidden;
+          display: flex; flex-direction: column;
+        }
+        .mv-checkout-modal::after {
+          content: '';
+          position: absolute; inset: 5px;
+          border: 1px solid rgba(201,169,110,0.18);
+          pointer-events: none;
+        }
+        .mv-checkout-close {
+          position: absolute; top: 10px; right: 10px;
+          width: 32px; height: 32px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(201,169,110,0.25);
+          color: #c9a96e;
+          font-size: 14px;
+          cursor: pointer; z-index: 2;
+          transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .mv-checkout-close:hover { border-color: #c9a96e; color: #d4af37; }
+        .mv-checkout-frame-inner {
+          flex: 1; overflow-y: auto;
+          position: relative;
+        }
+
         /* Sticky bar */
         .mv-sticky {
           position: fixed; bottom: 0; left: 0; right: 0;
@@ -1070,6 +1144,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-faq-title { font-size: 24px; margin-bottom: 12px; }
           .mv-faq-q { font-size: 16px; padding: 12px 4px; }
           .mv-faq-a { font-size: 12px; padding: 0 4px 14px; }
+          .mv-checkout-backdrop { padding: 12px; }
+          .mv-checkout-modal { padding: 6px; max-height: calc(100vh - 24px); }
           .mv-sticky { padding: 6px 12px 8px; }
           .mv-guarantee { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 3px 10px; margin-top: 4px; }
           .mv-guarantee strong { letter-spacing: 0.1em; }
@@ -1358,6 +1434,20 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           Backed by a <strong>14-day, 100% money-back guarantee</strong>
         </div>
       </div>
+
+      {/* Embedded checkout modal */}
+      {modalOpen && clientSecret && (
+        <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+          <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+            <div className="mv-checkout-frame-inner">
+              <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

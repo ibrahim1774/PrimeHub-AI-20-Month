@@ -10,7 +10,7 @@ export default async function handler(req: any, res: any) {
     }
 
     try {
-        const { pendingId, companyName, plan = 'monthly', source } = req.body;
+        const { pendingId, companyName, plan = 'monthly', source, embedded } = req.body;
 
         const isAus = source === 'australia';
         const isTen = source === 'ten';
@@ -48,6 +48,10 @@ export default async function handler(req: any, res: any) {
         const monthlyAmountDisplay = isTen ? '$10' : '$20';
 
         const session = await stripe.checkout.sessions.create({
+            ...(embedded
+                ? { ui_mode: 'embedded', redirect_on_completion: 'always', return_url: successUrl }
+                : { success_url: successUrl, cancel_url: cancelUrl }
+            ),
             payment_method_types: ['card'],
             line_items: [
                 {
@@ -76,11 +80,13 @@ export default async function handler(req: any, res: any) {
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',
             },
-            success_url: successUrl,
-            cancel_url: cancelUrl,
         });
 
-        return res.status(200).json({ url: session.url });
+        return res.status(200).json(
+            embedded
+                ? { clientSecret: session.client_secret }
+                : { url: session.url }
+        );
     } catch (error: any) {
         console.error('Stripe Error:', error);
         return res.status(500).json({ error: error.message });
