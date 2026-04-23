@@ -47,7 +47,7 @@ export default async function handler(req: any, res: any) {
         const monthlyAmountCents = isTen ? 1000 : 2000;
         const monthlyAmountDisplay = isTen ? '$10' : '$20';
 
-        const params: Stripe.Checkout.SessionCreateParams = {
+        const params: Parameters<typeof stripe.checkout.sessions.create>[0] = {
             payment_method_types: ['card'],
             line_items: [
                 {
