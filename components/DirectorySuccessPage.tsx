@@ -11,10 +11,12 @@ const DirectorySuccessPage: React.FC = () => {
     if (typeof window !== 'undefined' && (window as any).fbq) {
       const sessionId = new URLSearchParams(window.location.search).get('session_id');
       const eventID = sessionId ? `purchase_${sessionId}` : `purchase_${Date.now()}`;
-      const isAus = window.location.pathname === '/aus';
+      const pathname = window.location.pathname;
+      const isAus = pathname === '/aus';
+      const value = pathname === '/10' ? 10.00 : pathname === '/5' ? 5.00 : 20.00;
       (window as any).fbq('track', 'Purchase', {
         currency: isAus ? 'AUD' : 'USD',
-        value: 20.00,
+        value,
       }, { eventID });
     }
 

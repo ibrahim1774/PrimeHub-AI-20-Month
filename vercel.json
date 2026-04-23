@@ -2,7 +2,8 @@
     "rewrites": [
         { "source": "/1", "destination": "/index.html" },
         { "source": "/aus", "destination": "/index.html" },
-        { "source": "/10", "destination": "/index.html" }
+        { "source": "/10", "destination": "/index.html" },
+        { "source": "/5", "destination": "/index.html" }
     ],
     "functions": {
         "api/webhook.ts": {

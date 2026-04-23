@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten';
+type Region = 'us' | 'aus' | 'ten' | 'five';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -71,6 +71,20 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractor',
+  },
+  five: {
+    source: 'five',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 5,
+    yearlyAmount: 49,
+    yearlyWas: 60,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'home service contractors',
   },
 };
 
