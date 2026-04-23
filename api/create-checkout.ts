@@ -47,7 +47,9 @@ export default async function handler(req: any, res: any) {
         const monthlyAmountCents = isTen ? 1000 : 2000;
         const monthlyAmountDisplay = isTen ? '$10' : '$20';
 
-        const params: Parameters<typeof stripe.checkout.sessions.create>[0] = {
+        // Typed as `any` because Stripe v22 narrows ui_mode per method overload,
+        // blocking conditional mutation between 'hosted' and 'embedded'.
+        const params: any = {
             payment_method_types: ['card'],
             line_items: [
                 {
