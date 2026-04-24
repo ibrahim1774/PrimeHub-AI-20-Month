@@ -159,7 +159,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : region === 'ten' ? 'Get Access to Your Website System' : 'Get Started'}
+        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -213,7 +213,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         className={`mv-toggle-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('yearly')}
       >
-        Yearly <span className="mv-save">{region === 'ten' || region === 'five' ? '40% Off' : 'Save 44%'}</span>
+        Yearly <span className="mv-save">{(region === 'ten' || region === 'five') ? '40% Off' : 'Save 44%'}</span>
       </button>
     </div>
   );
@@ -1325,8 +1325,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
-          <h1 className={`mv-hero-title ${region === 'ten' ? 'mv-hero-title-ten' : ''}`}>
-            {region === 'ten' ? (
+          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five') ? 'mv-hero-title-ten' : ''}`}>
+            {(region === 'ten' || region === 'five') ? (
               <>
                 A custom website for home service contractors that can help you <em>book more jobs</em>
               </>
@@ -1337,14 +1337,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             )}
           </h1>
-          {region !== 'ten' && (
+          {(region !== 'ten' && region !== 'five') && (
             <p className="mv-hero-sub">
               We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
             </p>
           )}
 
           {/* Video — centered (hidden on /10) */}
-          {region !== 'ten' && (
+          {(region !== 'ten' && region !== 'five') && (
             <div className="mv-hero-video">
               <div className="mv-video-hint">Tap to Unmute</div>
               <div className="mv-frame">
@@ -1356,7 +1356,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Video A (Templates) — /10 only, between hero subtitle and showcase */}
-          {region === 'ten' && (
+          {(region === 'ten' || region === 'five') && (
             <div className="mv-ten-video mv-ten-video-hero">
               <div className="mv-ten-video-eyebrow">◊ Templates ◊</div>
               <h2 className="mv-ten-video-title">
@@ -1392,13 +1392,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Showcase between hero title and How It Works on /10 */}
-          {region === 'ten' && <PortfolioSection />}
+          {(region === 'ten' || region === 'five') && <PortfolioSection />}
 
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
-            <div className={`mv-how-row ${region === 'ten' ? 'mv-how-row-two' : ''}`}>
-              {(region === 'ten'
+            <div className={`mv-how-row ${(region === 'ten' || region === 'five') ? 'mv-how-row-two' : ''}`}>
+              {((region === 'ten' || region === 'five')
                 ? [
                     { title: 'Sign Up', body: 'Takes under a minute.' },
                     { title: 'Get Access', body: 'Within 24 hours you get access to the website system for your custom business.' },
@@ -1419,7 +1419,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           {/* What You Get — horizontal (hidden on /10) */}
-          {region !== 'ten' && (
+          {(region !== 'ten' && region !== 'five') && (
             <div className="mv-incl mv-incl-row">
               <div className="mv-incl-label">◊ What You Get</div>
               <ul className="mv-incl-list mv-incl-list-row">
@@ -1445,7 +1445,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         </section>
 
         {/* Walkthrough — hidden on /10 */}
-        {region !== 'ten' && (
+        {(region !== 'ten' && region !== 'five') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1491,7 +1491,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Crest + Portfolio — only on /1 and /aus (moved to top on /10) */}
-        {region !== 'ten' && (
+        {(region !== 'ten' && region !== 'five') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1505,7 +1505,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Video B (Editing demo) — /10 only, between How It Works and FAQ */}
-        {region === 'ten' && (
+        {(region === 'ten' || region === 'five') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1563,7 +1563,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             Frequently <em>asked</em>
           </h2>
           <div className="mv-faq-list">
-            {(region === 'ten' ? [
+            {((region === 'ten' || region === 'five') ? [
               {
                 q: 'What do I get with the website?',
                 a: 'A custom, professional website built for your home service business.',
