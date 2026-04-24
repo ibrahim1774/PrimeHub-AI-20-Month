@@ -159,7 +159,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : 'Get Started'}
+        {isLoading ? 'Loading…' : region === 'ten' ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -646,6 +646,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           text-transform: uppercase; color: #8a8072;
           text-align: center;
           font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* /10 How It Works — 2 steps instead of 3 */
+        .mv-how-row-two { grid-template-columns: repeat(2, 1fr) !important; max-width: 560px; margin: 0 auto; }
+
+        /* /10 hero title — match portfolio title size */
+        .mv-hero-title-ten {
+          font-size: 22px !important;
+          font-style: italic;
+          line-height: 1.2 !important;
+          max-width: 620px !important;
+          margin: 0 auto 14px !important;
         }
 
         /* /10 video sections (Templates + Edit) */
@@ -1313,11 +1325,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
-          <h1 className="mv-hero-title">
+          <h1 className={`mv-hero-title ${region === 'ten' ? 'mv-hero-title-ten' : ''}`}>
             {region === 'ten' ? (
               <>
-                Custom website for <em>home service contractors</em><br />
-                — {cfg.currencySymbol}{cfg.monthlyAmount} a month.
+                A custom website for home service contractors that can help you <em>book more jobs</em>
               </>
             ) : (
               <>
@@ -1326,11 +1337,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             )}
           </h1>
-          <p className="mv-hero-sub">
-            {region === 'ten'
-              ? 'A custom website for your home service business. Ready in 48 hours.'
-              : 'We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.'}
-          </p>
+          {region !== 'ten' && (
+            <p className="mv-hero-sub">
+              We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
+            </p>
+          )}
 
           {/* Video — centered (hidden on /10) */}
           {region !== 'ten' && (
@@ -1349,7 +1360,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <div className="mv-ten-video mv-ten-video-hero">
               <div className="mv-ten-video-eyebrow">◊ Templates ◊</div>
               <h2 className="mv-ten-video-title">
-                Thousands of prebuilt templates — choose one that fits your <em>style</em>
+                1000+ prebuilt templates — choose one that fits your <em>style</em>
               </h2>
               <div className="mv-ten-video-frame">
                 <div className="mv-ten-video-player">
@@ -1386,12 +1397,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
-            <div className="mv-how-row">
-              {[
-                { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
-                { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
-                { title: 'We Build It', body: 'Your website is ready in 48 hours.' },
-              ].map((item, i) => (
+            <div className={`mv-how-row ${region === 'ten' ? 'mv-how-row-two' : ''}`}>
+              {(region === 'ten'
+                ? [
+                    { title: 'Sign Up', body: 'Takes under a minute.' },
+                    { title: 'Get Access', body: 'Within 24 hours you get access to the website system for your custom business.' },
+                  ]
+                : [
+                    { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
+                    { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
+                    { title: 'We Build It', body: 'Your website is ready in 48 hours.' },
+                  ]
+              ).map((item, i) => (
                 <div className="mv-how-card" key={i}>
                   <span className="mv-how-num">{roman[i]}.</span>
                   <div className="mv-how-title">{item.title}</div>
@@ -1560,8 +1577,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 a: 'You can contact us anytime by email or phone if you need help.',
               },
               {
-                q: 'How fast is the website delivered?',
-                a: 'Your website is usually ready in about 48 hours.',
+                q: 'How long does it take to get access to the website system?',
+                a: 'You get access to the website system within 24 hours.',
               },
             ] : [
               {
