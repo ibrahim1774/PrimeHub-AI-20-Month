@@ -648,6 +648,66 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           font-family: 'JetBrains Mono', monospace;
         }
 
+        /* /10 video sections (Templates + Edit) */
+        .mv-ten-video { padding: 6px 0 22px; text-align: center; }
+        .mv-ten-video-hero { padding: 4px 0 14px; }
+        .mv-ten-video-eyebrow {
+          font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase;
+          color: #c9a96e; font-weight: 500;
+          margin-bottom: 10px;
+        }
+        .mv-ten-video-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-style: italic;
+          font-size: 24px;
+          color: #e8dcc4;
+          line-height: 1.2;
+          margin: 0 auto 14px;
+          max-width: 640px;
+        }
+        .mv-ten-video-title em { color: #c9a96e; font-style: italic; }
+        .mv-ten-video-frame {
+          max-width: 640px;
+          margin: 0 auto;
+          padding: 8px;
+          position: relative;
+        }
+        .mv-ten-video-frame::before,
+        .mv-ten-video-frame::after {
+          content: '';
+          position: absolute;
+          pointer-events: none;
+        }
+        .mv-ten-video-frame::before {
+          inset: 0;
+          border: 1px solid rgba(201,169,110,0.45);
+        }
+        .mv-ten-video-frame::after {
+          inset: 4px;
+          border: 1px solid rgba(201,169,110,0.2);
+        }
+        .mv-ten-video-player {
+          position: relative;
+          z-index: 1;
+          overflow: hidden;
+          background: #0f0e0c;
+          box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        .mv-ten-video-player wistia-player {
+          display: block;
+          width: 100%;
+          filter: saturate(95%) contrast(97%);
+        }
+        .mv-ten-video-player::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at center, transparent 60%, rgba(10,10,10,0.4) 100%);
+          pointer-events: none;
+          z-index: 3;
+        }
+
         /* Walkthrough */
         .mv-walkthrough { padding: 4px 0 22px; text-align: center; }
         .mv-walkthrough-title {
@@ -1146,6 +1206,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-hero-title { font-size: 26px; }
           .mv-walkthrough-title { font-size: 20px; }
           .mv-walkthrough-frame { padding: 7px; }
+          .mv-ten-video-title { font-size: 18px; }
+          .mv-ten-video-frame { padding: 6px; }
+          .mv-ten-video-eyebrow { font-size: 9px; letter-spacing: 0.35em; }
           .mv-hero-sub { font-size: 14px; }
           .mv-how-row { gap: 12px; }
           .mv-how-card { padding: 12px 10px; }
@@ -1281,6 +1344,42 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           )}
 
+          {/* Video A (Templates) — /10 only, between hero subtitle and showcase */}
+          {region === 'ten' && (
+            <div className="mv-ten-video mv-ten-video-hero">
+              <div className="mv-ten-video-eyebrow">◊ Templates ◊</div>
+              <h2 className="mv-ten-video-title">
+                Thousands of prebuilt templates — choose one that fits your <em>style</em>
+              </h2>
+              <div className="mv-ten-video-frame">
+                <div className="mv-ten-video-player">
+                  <wistia-player
+                    media-id="7uh6rore8l"
+                    aspect="1.8045112781954886"
+                    autoplay="true"
+                    muted="true"
+                    {...({
+                      loop: 'true',
+                      'playbar': 'false',
+                      'play-button': 'false',
+                      'small-play-button': 'false',
+                      'fullscreen-button': 'false',
+                      'volume-control': 'false',
+                      'settings-control': 'false',
+                      'playback-rate-control': 'false',
+                      'controls-visible-on-load': 'false',
+                      'big-play-button': 'false',
+                      'silent-auto-play': 'true',
+                      'end-video-behavior': 'loop',
+                      'resumable': 'false',
+                      'player-color': 'c9a96e',
+                    } as any)}
+                  ></wistia-player>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Showcase between hero title and How It Works on /10 */}
           {region === 'ten' && <PortfolioSection />}
 
@@ -1385,6 +1484,50 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </div>
             <PortfolioSection />
+          </>
+        )}
+
+        {/* Video B (Editing demo) — /10 only, between How It Works and FAQ */}
+        {region === 'ten' && (
+          <>
+            <div className="mv-shell">
+              <div className="mv-crest">
+                <span className="mv-crest-line" />
+                <span>◊ Edit With Ease ◊</span>
+                <span className="mv-crest-line" />
+              </div>
+            </div>
+            <section className="mv-shell mv-ten-video">
+              <h2 className="mv-ten-video-title">
+                Edit — replace any image or text <em>super easy</em>, beginner-friendly
+              </h2>
+              <div className="mv-ten-video-frame">
+                <div className="mv-ten-video-player">
+                  <wistia-player
+                    media-id="tigopelval"
+                    aspect="1.8045112781954886"
+                    autoplay="true"
+                    muted="true"
+                    {...({
+                      loop: 'true',
+                      'playbar': 'false',
+                      'play-button': 'false',
+                      'small-play-button': 'false',
+                      'fullscreen-button': 'false',
+                      'volume-control': 'false',
+                      'settings-control': 'false',
+                      'playback-rate-control': 'false',
+                      'controls-visible-on-load': 'false',
+                      'big-play-button': 'false',
+                      'silent-auto-play': 'true',
+                      'end-video-behavior': 'loop',
+                      'resumable': 'false',
+                      'player-color': 'c9a96e',
+                    } as any)}
+                  ></wistia-player>
+                </div>
+              </div>
+            </section>
           </>
         )}
 
