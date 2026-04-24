@@ -63,8 +63,8 @@ const REGIONS: Record<Region, {
     currency: 'USD',
     currencySymbol: '$',
     monthlyAmount: 10,
-    yearlyAmount: 10,
-    yearlyWas: 10,
+    yearlyAmount: 49,
+    yearlyWas: 120,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -213,7 +213,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         className={`mv-toggle-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('yearly')}
       >
-        Yearly <span className="mv-save">Save 44%</span>
+        Yearly <span className="mv-save">{region === 'ten' || region === 'five' ? '40% Off' : 'Save 44%'}</span>
       </button>
     </div>
   );
@@ -1628,14 +1628,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </div>
 
       {/* Sticky */}
-      <div className={`mv-sticky visible ${region === 'ten' ? 'mv-sticky-notoggle' : ''}`}>
+      <div className="mv-sticky visible">
         <div className="mv-sticky-inner">
           <span className="mv-sticky-price">
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
             <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
           </span>
-          {region !== 'ten' && <PricingToggle compact />}
+          <PricingToggle compact />
           <CtaButton large={false} />
         </div>
         <div className="mv-guarantee">

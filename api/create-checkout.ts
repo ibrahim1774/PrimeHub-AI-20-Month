@@ -21,10 +21,9 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'Missing pendingId' });
         }
 
-        // /10 is monthly-only at $10 — force plan to monthly no matter what
-        const isYearly = !isTen && plan === 'yearly';
-        // /5 yearly price is $49 (see DirectoryPage 'five' region); /1/aus stay at $99
-        const yearlyAmountCents = isFive ? 4900 : 9900;
+        const isYearly = plan === 'yearly';
+        // /5 and /10 yearly price is $49; /1 and /aus stay at $99
+        const yearlyAmountCents = isFive || isTen ? 4900 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -37,7 +36,7 @@ export default async function handler(req: any, res: any) {
 
         const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : '/1';
         const successUrl = isDirectory
-            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}`
+            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
@@ -49,7 +48,7 @@ export default async function handler(req: any, res: any) {
 
         const monthlyAmountCents = isTen ? 1000 : isFive ? 500 : 2000;
         const monthlyAmountDisplay = isTen ? '$10' : isFive ? '$5' : '$20';
-        const yearlyAmountDisplay = isFive ? '$49' : '$99';
+        const yearlyAmountDisplay = isFive || isTen ? '$49' : '$99';
 
         // Typed as `any` because Stripe v22 narrows ui_mode per method overload,
         // blocking conditional mutation between 'hosted' and 'embedded'.

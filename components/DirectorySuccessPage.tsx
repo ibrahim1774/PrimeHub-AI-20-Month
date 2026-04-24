@@ -9,11 +9,16 @@ const DirectorySuccessPage: React.FC = () => {
   useEffect(() => {
     // Fire FB Pixel Purchase event with dedup eventID from Stripe session
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      const sessionId = new URLSearchParams(window.location.search).get('session_id');
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      const plan = params.get('plan') || 'monthly';
       const eventID = sessionId ? `purchase_${sessionId}` : `purchase_${Date.now()}`;
       const pathname = window.location.pathname;
       const isAus = pathname === '/aus';
-      const value = pathname === '/10' ? 10.00 : pathname === '/5' ? 5.00 : 20.00;
+      const isYearly = plan === 'yearly';
+      const monthly = pathname === '/10' ? 10.00 : pathname === '/5' ? 5.00 : 20.00;
+      const yearly = pathname === '/10' || pathname === '/5' ? 49.00 : 99.00;
+      const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {
         currency: isAus ? 'AUD' : 'USD',
         value,
