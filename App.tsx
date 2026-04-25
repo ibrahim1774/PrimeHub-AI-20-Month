@@ -10,11 +10,12 @@ import { FormData } from './types';
 
 const App: React.FC = () => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  if (pathname === '/1' || pathname === '/aus' || pathname === '/10' || pathname === '/5') {
+  if (pathname === '/1' || pathname === '/aus' || pathname === '/10' || pathname === '/5' || pathname === '/29') {
     const region =
       pathname === '/aus' ? 'aus' :
       pathname === '/10' ? 'ten' :
-      pathname === '/5' ? 'five' : 'us';
+      pathname === '/5' ? 'five' :
+      pathname === '/29' ? 'twentynine' : 'us';
     const dirParams = new URLSearchParams(window.location.search);
     const dirStatus = dirParams.get('status');
     if (dirStatus === 'success') {

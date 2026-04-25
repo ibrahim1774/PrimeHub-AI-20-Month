@@ -15,7 +15,8 @@ export default async function handler(req: any, res: any) {
         const isAus = source === 'australia';
         const isTen = source === 'ten';
         const isFive = source === 'five';
-        const isDirectory = source === 'directory' || isAus || isTen || isFive;
+        const isTwentyNine = source === 'twentynine';
+        const isDirectory = source === 'directory' || isAus || isTen || isFive || isTwentyNine;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
@@ -23,7 +24,7 @@ export default async function handler(req: any, res: any) {
 
         const isYearly = plan === 'yearly';
         // /5 and /10 yearly price is $49; /1 and /aus stay at $99
-        const yearlyAmountCents = isFive || isTen ? 4900 : 9900;
+        const yearlyAmountCents = isFive || isTen ? 4900 : isTwentyNine ? 19900 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -34,7 +35,7 @@ export default async function handler(req: any, res: any) {
             ? `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`
             : `PrimeHub - ${isYearly ? 'Annual' : 'Premium'} Subscription`;
 
-        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isTwentyNine ? '/29' : '/1';
         const successUrl = isDirectory
             ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
@@ -46,9 +47,9 @@ export default async function handler(req: any, res: any) {
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';
 
-        const monthlyAmountCents = isTen ? 1000 : isFive ? 500 : 2000;
-        const monthlyAmountDisplay = isTen ? '$10' : isFive ? '$5' : '$20';
-        const yearlyAmountDisplay = isFive || isTen ? '$49' : '$99';
+        const monthlyAmountCents = isTen ? 1000 : isFive ? 500 : isTwentyNine ? 2900 : 2000;
+        const monthlyAmountDisplay = isTen ? '$10' : isFive ? '$5' : isTwentyNine ? '$29' : '$20';
+        const yearlyAmountDisplay = isFive || isTen ? '$49' : isTwentyNine ? '$199' : '$99';
 
         // Typed as `any` because Stripe v22 narrows ui_mode per method overload,
         // blocking conditional mutation between 'hosted' and 'embedded'.

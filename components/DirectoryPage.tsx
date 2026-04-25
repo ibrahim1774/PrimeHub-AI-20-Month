@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'twentynine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -79,6 +79,20 @@ const REGIONS: Record<Region, {
     monthlyAmount: 5,
     yearlyAmount: 49,
     yearlyWas: 60,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'home service contractors',
+  },
+  twentynine: {
+    source: 'twentynine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 29,
+    yearlyAmount: 199,
+    yearlyWas: 348,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -1330,6 +1344,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <>
                 A custom website for home service contractors that can help you <em>book more jobs</em>
               </>
+            ) : region === 'twentynine' ? (
+              <>
+                <em>Custom website design</em> that helps home service contractors win more jobs.
+              </>
             ) : (
               <>
                 A website that can help<br />
@@ -1579,6 +1597,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               {
                 q: 'How long does it take to get access to the website system?',
                 a: 'You get access to the website system within 24 hours.',
+              },
+            ] : region === 'twentynine' ? [
+              {
+                q: 'What do I get with the website?',
+                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+              },
+              {
+                q: 'What support do I get?',
+                a: 'You can contact us anytime by email or phone if you need help.',
+              },
+              {
+                q: 'How fast is the website delivered?',
+                a: 'Your website is usually ready in about 48 hours.',
               },
             ] : [
               {

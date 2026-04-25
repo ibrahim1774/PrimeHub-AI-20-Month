@@ -16,8 +16,8 @@ const DirectorySuccessPage: React.FC = () => {
       const pathname = window.location.pathname;
       const isAus = pathname === '/aus';
       const isYearly = plan === 'yearly';
-      const monthly = pathname === '/10' ? 10.00 : pathname === '/5' ? 5.00 : 20.00;
-      const yearly = pathname === '/10' || pathname === '/5' ? 49.00 : 99.00;
+      const monthly = pathname === '/10' ? 10.00 : pathname === '/5' ? 5.00 : pathname === '/29' ? 29.00 : 20.00;
+      const yearly = (pathname === '/10' || pathname === '/5') ? 49.00 : pathname === '/29' ? 199.00 : 99.00;
       const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {
         currency: isAus ? 'AUD' : 'USD',
