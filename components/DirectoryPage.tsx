@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'twentynine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -86,13 +86,13 @@ const REGIONS: Record<Region, {
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractors',
   },
-  twentynine: {
-    source: 'twentynine',
+  nineteen: {
+    source: 'nineteen',
     currency: 'USD',
     currencySymbol: '$',
     monthlyAmount: 19,
-    yearlyAmount: 129,
-    yearlyWas: 228,
+    yearlyAmount: 19,
+    yearlyWas: 19,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -1344,7 +1344,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <>
                 A custom website for home service contractors that can help you <em>book more jobs</em>
               </>
-            ) : region === 'twentynine' ? (
+            ) : region === 'nineteen' ? (
               <>
                 <em>Custom website design</em> that helps home service contractors win more jobs.
               </>
@@ -1598,7 +1598,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 q: 'How long does it take to get access to the website system?',
                 a: 'You get access to the website system within 24 hours.',
               },
-            ] : region === 'twentynine' ? [
+            ] : region === 'nineteen' ? [
               {
                 q: 'What do I get with the website?',
                 a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
@@ -1659,14 +1659,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </div>
 
       {/* Sticky */}
-      <div className="mv-sticky visible">
+      <div className={`mv-sticky visible ${region === 'nineteen' ? 'mv-sticky-notoggle' : ''}`}>
         <div className="mv-sticky-inner">
           <span className="mv-sticky-price">
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
-            <span className="mv-sticky-per">/ {pricingPlan === 'monthly' ? 'mo' : 'yr'}</span>
+            <span className="mv-sticky-per">{region === 'nineteen' ? 'one-time' : `/ ${pricingPlan === 'monthly' ? 'mo' : 'yr'}`}</span>
           </span>
-          <PricingToggle compact />
+          {region !== 'nineteen' && <PricingToggle compact />}
           <CtaButton large={false} />
         </div>
         <div className="mv-guarantee">

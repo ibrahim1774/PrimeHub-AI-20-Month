@@ -15,16 +15,16 @@ export default async function handler(req: any, res: any) {
         const isAus = source === 'australia';
         const isTen = source === 'ten';
         const isFive = source === 'five';
-        const isTwentyNine = source === 'twentynine';
-        const isDirectory = source === 'directory' || isAus || isTen || isFive || isTwentyNine;
+        const isNineteen = source === 'nineteen';
+        const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
         }
 
-        const isYearly = plan === 'yearly';
-        // /5 and /10 yearly price is $49; /1 and /aus stay at $99
-        const yearlyAmountCents = isFive || isTen ? 4900 : isTwentyNine ? 12900 : 9900;
+        // /19 is a one-time payment, no subscription, no yearly variant
+        const isYearly = !isNineteen && plan === 'yearly';
+        const yearlyAmountCents = isFive || isTen ? 4900 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -32,10 +32,10 @@ export default async function handler(req: any, res: any) {
         const userAgent = req.headers['user-agent'];
 
         const productName = companyName
-            ? `${companyName} - ${isYearly ? 'Annual' : 'Premium'} Subscription`
-            : `PrimeHub - ${isYearly ? 'Annual' : 'Premium'} Subscription`;
+            ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
+            : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
 
-        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isTwentyNine ? '/29' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : '/1';
         const successUrl = isDirectory
             ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
@@ -47,9 +47,16 @@ export default async function handler(req: any, res: any) {
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';
 
-        const monthlyAmountCents = isTen ? 1000 : isFive ? 500 : isTwentyNine ? 1900 : 2000;
-        const monthlyAmountDisplay = isTen ? '$10' : isFive ? '$5' : isTwentyNine ? '$19' : '$20';
-        const yearlyAmountDisplay = isFive || isTen ? '$49' : isTwentyNine ? '$129' : '$99';
+        const monthlyAmountCents = isTen ? 1000 : isFive ? 500 : isNineteen ? 1900 : 2000;
+        const monthlyAmountDisplay = isTen ? '$10' : isFive ? '$5' : isNineteen ? '$19' : '$20';
+        const yearlyAmountDisplay = isFive || isTen ? '$49' : '$99';
+
+        // Description differs for one-time /19 vs subscription pages
+        const description = isNineteen
+            ? `One-time $19${currencyLabel} for a custom website design.`
+            : isYearly
+                ? `PAY ONLY ${yearlyAmountDisplay}${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
+                : `PAY ONLY ${monthlyAmountDisplay}${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`;
 
         // Typed as `any` because Stripe v22 narrows ui_mode per method overload,
         // blocking conditional mutation between 'hosted' and 'embedded'.
@@ -61,23 +68,20 @@ export default async function handler(req: any, res: any) {
                         currency,
                         product_data: {
                             name: productName,
-                            description: isYearly
-                                ? `PAY ONLY ${yearlyAmountDisplay}${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
-                                : `PAY ONLY ${monthlyAmountDisplay}${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`,
+                            description,
                         },
-                        unit_amount: isYearly ? yearlyAmountCents : monthlyAmountCents,
-                        recurring: {
-                            interval: isYearly ? 'year' : 'month',
-                        },
+                        unit_amount: isNineteen ? 1900 : isYearly ? yearlyAmountCents : monthlyAmountCents,
+                        // recurring only for subscription mode
+                        ...(isNineteen ? {} : { recurring: { interval: isYearly ? 'year' : 'month' } }),
                     },
                     quantity: 1,
                 },
             ],
-            mode: 'subscription',
+            mode: isNineteen ? 'payment' : 'subscription',
             metadata: {
                 pendingId: pendingId || '',
                 companyName: companyName || '',
-                plan,
+                plan: isNineteen ? 'one-time' : plan,
                 source: source || 'generator',
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',

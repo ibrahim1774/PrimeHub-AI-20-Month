@@ -4,7 +4,7 @@
         { "source": "/aus", "destination": "/index.html" },
         { "source": "/10", "destination": "/index.html" },
         { "source": "/5", "destination": "/index.html" },
-        { "source": "/29", "destination": "/index.html" }
+        { "source": "/19", "destination": "/index.html" }
     ],
     "functions": {
         "api/webhook.ts": {
