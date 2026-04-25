@@ -1448,9 +1448,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="mv-incl-dot" /> SEO ready
                 </li>
                 <li className="mv-incl-item">
-                  <span className="mv-incl-dot" /> Multiple pages
-                </li>
-                <li className="mv-incl-item">
                   <span className="mv-incl-dot" /> Custom photos
                 </li>
                 <li className="mv-incl-item">
