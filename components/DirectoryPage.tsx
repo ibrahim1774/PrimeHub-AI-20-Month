@@ -1324,12 +1324,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <div className="mv-wordmark">Amalvera</div>
             <span className="mv-wordmark-sub">We Build Websites</span>
           </div>
-          {region !== 'aus' && (
-            <a href={cfg.phoneHref} className="mv-call" aria-label="Tap to call our 24/7 help line">
-              <span className="mv-call-label">{cfg.phoneLabel}</span>
-              <span className="mv-call-number">{cfg.phoneNumber}</span>
-            </a>
-          )}
         </header>
 
         {/* Hero */}
