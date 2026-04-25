@@ -173,7 +173,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website Design' : 'Get Started'}
+        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -182,7 +182,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const PortfolioSection = () => (
     <section className="mv-shell mv-portfolio">
       <h2 className="mv-portfolio-title">
-        Sample website designs for <em>home service contractors</em>
+        Sample websites for <em>home service contractors</em>
       </h2>
       <div className="mv-portfolio-sub">A few of our favorites</div>
       <div className="mv-gallery-wrap">
@@ -415,37 +415,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           content: '';
           display: inline-block; width: 16px; height: 1px;
           background: #c9a96e;
-        }
-
-        /* Hero row — video (75%) + How It Works (25%) side-by-side, vertically centered */
-        .mv-hero-row {
-          display: grid;
-          grid-template-columns: 3fr 1fr;
-          gap: 28px;
-          align-items: center;
-          max-width: 960px;
-          margin: 18px auto 22px;
-        }
-        .mv-hero-row__video { min-width: 0; }
-        .mv-hero-row__video .mv-hero-video {
-          max-width: 100%;
-          margin: 0;
-        }
-        .mv-hero-row__how { min-width: 0; }
-        .mv-how-vertical { margin: 0; max-width: 100%; }
-        .mv-how-vertical .mv-how-row {
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-        .mv-how-vertical .mv-how-eyebrow { text-align: left; margin-bottom: 10px; }
-        @media (max-width: 768px) {
-          .mv-hero-row {
-            grid-template-columns: 1fr;
-            gap: 18px;
-            max-width: 480px;
-          }
-          .mv-hero-row__video .mv-hero-video { max-width: 240px; margin: 0 auto; }
-          .mv-how-vertical .mv-how-eyebrow { text-align: center; }
         }
 
         /* Centered video + horizontal How It Works + horizontal What You Get */
@@ -1353,7 +1322,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <header className="mv-header">
           <div>
             <div className="mv-wordmark">Amalvera</div>
-            <span className="mv-wordmark-sub">We Build Website Designs</span>
+            <span className="mv-wordmark-sub">We Build Websites</span>
           </div>
         </header>
 
@@ -1367,7 +1336,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five') ? 'mv-hero-title-ten' : ''}`}>
             {(region === 'ten' || region === 'five') ? (
               <>
-                A custom website design for home service contractors that can help you <em>book more jobs</em>
+                A custom website for home service contractors that can help you <em>book more jobs</em>
               </>
             ) : region === 'nineteen' ? (
               <>
@@ -1375,46 +1344,24 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             ) : (
               <>
-                A website design that can help<br />
+                A website that can help<br />
                 <em>{cfg.heroTaglineRegion}</em> win more jobs.
               </>
             )}
           </h1>
           {(region !== 'ten' && region !== 'five') && (
             <p className="mv-hero-sub">
-              We build website designs for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
+              We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
             </p>
           )}
 
-          {/* Video + How It Works — side-by-side on /1, /aus, /19 (75 / 25) */}
+          {/* Video — centered (hidden on /10) */}
           {(region !== 'ten' && region !== 'five') && (
-            <div className="mv-hero-row">
-              <div className="mv-hero-row__video">
-                <div className="mv-hero-video">
-                  <div className="mv-video-hint">Tap to Unmute</div>
-                  <div className="mv-frame">
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mv-hero-row__how">
-                <div className="mv-how mv-how-vertical">
-                  <div className="mv-how-eyebrow">◊ How It Works ◊</div>
-                  <div className="mv-how-row">
-                    {[
-                      { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
-                      { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
-                      { title: 'We Build It', body: 'Your website design is ready in 48 hours.' },
-                    ].map((item, i) => (
-                      <div className="mv-how-card" key={i}>
-                        <span className="mv-how-num">{roman[i]}.</span>
-                        <div className="mv-how-title">{item.title}</div>
-                        <div className="mv-how-body">{item.body}</div>
-                      </div>
-                    ))}
-                  </div>
+            <div className="mv-hero-video">
+              <div className="mv-video-hint">Tap to Unmute</div>
+              <div className="mv-frame">
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <wistia-player media-id="p4uzw25p63" aspect="0.5625" autoplay="true" muted="false"></wistia-player>
                 </div>
               </div>
             </div>
@@ -1459,15 +1406,21 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {/* Showcase between hero title and How It Works on /10 */}
           {(region === 'ten' || region === 'five') && <PortfolioSection />}
 
-          {/* How It Works — only for /10 and /5 (others use the side-by-side block above) */}
-          {(region === 'ten' || region === 'five') && (
+          {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
-            <div className="mv-how-row mv-how-row-two">
-              {[
-                { title: 'Sign Up', body: 'Takes under a minute.' },
-                { title: 'Get Access', body: 'Within 24 hours you get access to the website design system for your custom business.' },
-              ].map((item, i) => (
+            <div className={`mv-how-row ${(region === 'ten' || region === 'five') ? 'mv-how-row-two' : ''}`}>
+              {((region === 'ten' || region === 'five')
+                ? [
+                    { title: 'Sign Up', body: 'Takes under a minute.' },
+                    { title: 'Get Access', body: 'Within 24 hours you get access to the website system for your custom business.' },
+                  ]
+                : [
+                    { title: 'Sign Up', body: 'Pick monthly or yearly. Takes under a minute.' },
+                    { title: 'Tell Us About You', body: 'Share your job, your area, your style.' },
+                    { title: 'We Build It', body: 'Your website is ready in 48 hours.' },
+                  ]
+              ).map((item, i) => (
                 <div className="mv-how-card" key={i}>
                   <span className="mv-how-num">{roman[i]}.</span>
                   <div className="mv-how-title">{item.title}</div>
@@ -1476,7 +1429,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               ))}
             </div>
           </div>
-          )}
 
           {/* What You Get — horizontal (hidden on /10) */}
           {(region !== 'ten' && region !== 'five') && (
@@ -1622,50 +1574,50 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="mv-faq-list">
             {((region === 'ten' || region === 'five') ? [
               {
-                q: 'What do I get with the website design?',
-                a: 'A custom, professional website design built for your home service business.',
+                q: 'What do I get with the website?',
+                a: 'A custom, professional website built for your home service business.',
               },
               {
                 q: 'What is the $10/month for?',
-                a: `The $10/month covers website design hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website design.`,
+                a: `The $10/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
               },
               {
                 q: 'What support do I get?',
                 a: 'You can contact us anytime by email or phone if you need help.',
               },
               {
-                q: 'How long does it take to get access to the website design system?',
-                a: 'You get access to the website design system within 24 hours.',
+                q: 'How long does it take to get access to the website system?',
+                a: 'You get access to the website system within 24 hours.',
               },
             ] : region === 'nineteen' ? [
               {
-                q: 'What do I get with the website design?',
-                a: 'A modern, professional website design with SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+                q: 'What do I get with the website?',
+                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
               },
               {
                 q: 'What support do I get?',
                 a: 'You can contact us anytime by email or phone if you need help.',
               },
               {
-                q: 'How fast is the website design delivered?',
-                a: 'Your website design is usually ready in about 48 hours.',
+                q: 'How fast is the website delivered?',
+                a: 'Your website is usually ready in about 48 hours.',
               },
             ] : [
               {
-                q: 'What do I get with the website design?',
-                a: 'A modern, professional website design with SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
+                q: 'What do I get with the website?',
+                a: 'A modern, professional website with multiple pages, SEO, a lead form, a chat widget, and a system to help manage leads and customers.',
               },
               {
                 q: `What is the ${cfg.currencySymbol}${cfg.monthlyAmount}/month for?`,
-                a: `The ${cfg.currencySymbol}${cfg.monthlyAmount}/month covers website design hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website design.`,
+                a: `The ${cfg.currencySymbol}${cfg.monthlyAmount}/month covers website hosting so your site stays live online. We don't charge for the design. You can edit the images and text — you get full login access to your website.`,
               },
               {
                 q: 'What support do I get?',
                 a: 'You can contact us anytime by email or phone if you need help.',
               },
               {
-                q: 'How fast is the website design delivered?',
-                a: 'Your website design is usually ready in about 48 hours.',
+                q: 'How fast is the website delivered?',
+                a: 'Your website is usually ready in about 48 hours.',
               },
             ]).map((item, i) => (
               <details className="mv-faq-item" key={i} open={i === 0}>
