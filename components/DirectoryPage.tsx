@@ -201,7 +201,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five' || region === 'barber') ? 'Get Access to Your Website System' : 'Get Started'}
+        {isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
