@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -29,6 +29,8 @@ const REGIONS: Record<Region, {
   phoneLabel: string;
   phoneNumber: string;
   heroTaglineRegion: string;
+  businessNoun: string;
+  bookMoreNoun: string;
 }> = {
   us: {
     source: 'directory',
@@ -43,6 +45,8 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractors',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
   },
   aus: {
     source: 'australia',
@@ -57,6 +61,8 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'Australian home service contractors',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
   },
   ten: {
     source: 'ten',
@@ -71,6 +77,8 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractor',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
   },
   five: {
     source: 'five',
@@ -85,6 +93,8 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractors',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
   },
   nineteen: {
     source: 'nineteen',
@@ -99,6 +109,24 @@ const REGIONS: Record<Region, {
     phoneLabel: 'Tap to Call · 24/7 Help',
     phoneNumber: '(830) 254-9274',
     heroTaglineRegion: 'home service contractors',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
+  },
+  barber: {
+    source: 'barber',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 10,
+    yearlyAmount: 49,
+    yearlyWas: 120,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
   },
 };
 
@@ -173,7 +201,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
+        {isLoading ? 'Loading…' : (region === 'ten' || region === 'five' || region === 'barber') ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -182,7 +210,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const PortfolioSection = () => (
     <section className="mv-shell mv-portfolio">
       <h2 className="mv-portfolio-title">
-        Sample websites for <em>home service contractors</em>
+        Sample websites for <em>{region === 'barber' ? 'barbers' : 'home service contractors'}</em>
       </h2>
       <div className="mv-portfolio-sub">A few of our favorites</div>
       <div className="mv-gallery-wrap">
@@ -227,7 +255,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         className={`mv-toggle-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('yearly')}
       >
-        Yearly <span className="mv-save">{(region === 'ten' || region === 'five') ? '40% Off' : 'Save 44%'}</span>
+        Yearly <span className="mv-save">{(region === 'ten' || region === 'five' || region === 'barber') ? '40% Off' : 'Save 44%'}</span>
       </button>
     </div>
   );
@@ -1333,10 +1361,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
-          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five') ? 'mv-hero-title-ten' : ''}`}>
-            {(region === 'ten' || region === 'five') ? (
+          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber') ? 'mv-hero-title-ten' : ''}`}>
+            {(region === 'ten' || region === 'five' || region === 'barber') ? (
               <>
-                A custom website for home service contractors that can help you <em>book more jobs</em>
+                A custom website for {cfg.heroTaglineRegion} that can help you <em>book more {cfg.bookMoreNoun}</em>
               </>
             ) : region === 'nineteen' ? (
               <>
@@ -1349,14 +1377,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             )}
           </h1>
-          {(region !== 'ten' && region !== 'five') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
             <p className="mv-hero-sub">
               We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
             </p>
           )}
 
           {/* Video — centered (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
             <div className="mv-hero-video">
               <div className="mv-video-hint">Tap to Unmute</div>
               <div className="mv-frame">
@@ -1368,7 +1396,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Video A (Templates) — /10 only, between hero subtitle and showcase */}
-          {(region === 'ten' || region === 'five') && (
+          {(region === 'ten' || region === 'five' || region === 'barber') && (
             <div className="mv-ten-video mv-ten-video-hero">
               <div className="mv-ten-video-eyebrow">◊ Templates ◊</div>
               <h2 className="mv-ten-video-title">
@@ -1404,13 +1432,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Showcase between hero title and How It Works on /10 */}
-          {(region === 'ten' || region === 'five') && <PortfolioSection />}
+          {(region === 'ten' || region === 'five' || region === 'barber') && <PortfolioSection />}
 
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
-            <div className={`mv-how-row ${(region === 'ten' || region === 'five') ? 'mv-how-row-two' : ''}`}>
-              {((region === 'ten' || region === 'five')
+            <div className={`mv-how-row ${(region === 'ten' || region === 'five' || region === 'barber') ? 'mv-how-row-two' : ''}`}>
+              {((region === 'ten' || region === 'five' || region === 'barber')
                 ? [
                     { title: 'Sign Up', body: 'Takes under a minute.' },
                     { title: 'Get Access', body: 'Within 24 hours you get access to the website system for your custom business.' },
@@ -1431,7 +1459,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           {/* What You Get — horizontal (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
             <div className="mv-incl mv-incl-row">
               <div className="mv-incl-label">◊ What You Get</div>
               <ul className="mv-incl-list mv-incl-list-row">
@@ -1454,7 +1482,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         </section>
 
         {/* Walkthrough — hidden on /10 */}
-        {(region !== 'ten' && region !== 'five') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1500,7 +1528,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Crest + Portfolio — only on /1 and /aus (moved to top on /10) */}
-        {(region !== 'ten' && region !== 'five') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1514,7 +1542,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Video B (Editing demo) — /10 only, between How It Works and FAQ */}
-        {(region === 'ten' || region === 'five') && (
+        {(region === 'ten' || region === 'five' || region === 'barber') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1572,10 +1600,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             Frequently <em>asked</em>
           </h2>
           <div className="mv-faq-list">
-            {((region === 'ten' || region === 'five') ? [
+            {((region === 'ten' || region === 'five' || region === 'barber') ? [
               {
                 q: 'What do I get with the website?',
-                a: 'A custom, professional website built for your home service business.',
+                a: `A custom, professional website built for your ${cfg.businessNoun}.`,
               },
               {
                 q: 'What is the $10/month for?',
@@ -1655,7 +1683,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <span className="mv-sticky-price">
             {cfg.currencySymbol}{pricingPlan === 'monthly' ? cfg.monthlyAmount : cfg.yearlyAmount}
             {region === 'aus' && <span className="mv-sticky-cur"> AUD</span>}
-            <span className="mv-sticky-per">{region === 'nineteen' ? 'one-time' : `/ ${pricingPlan === 'monthly' ? 'mo' : 'yr'}`}</span>
+            {region !== 'nineteen' && <span className="mv-sticky-per">{`/ ${pricingPlan === 'monthly' ? 'mo' : 'yr'}`}</span>}
           </span>
           {region !== 'nineteen' && <PricingToggle compact />}
           <CtaButton large={false} />
