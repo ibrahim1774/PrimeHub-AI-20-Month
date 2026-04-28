@@ -1034,11 +1034,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         /* /barber compact gallery — 3 equal columns: video, video, image-stack */
         .mv-portfolio-barber { padding: 10px 0 14px; }
-        .mv-portfolio-title-barber { font-size: 26px; margin: 0 0 12px; }
+        .mv-portfolio-title-barber { font-size: 22px; margin: 0 0 10px; }
         .mv-barber-row {
           display: flex; justify-content: center; align-items: stretch;
-          gap: 12px;
-          max-width: 770px;
+          gap: 10px;
+          max-width: 640px;
           margin: 0 auto;
           padding: 0 12px;
         }
