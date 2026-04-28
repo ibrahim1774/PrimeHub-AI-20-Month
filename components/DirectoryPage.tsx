@@ -220,79 +220,95 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   const PortfolioSection = () => {
     const isBarber = region === 'barber';
+    if (isBarber) {
+      const videos = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'video' }> => x.kind === 'video');
+      const images = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'image' }> => x.kind === 'image');
+      return (
+        <section className="mv-shell mv-portfolio mv-portfolio-barber">
+          <h2 className="mv-portfolio-title mv-portfolio-title-barber">
+            Websites for <em>Barbers</em>
+          </h2>
+          <div className="mv-barber-videos">
+            {videos.map((item, i) => (
+              <div key={i} className="mv-gallery-card mv-gallery-card-video">
+                <div className="mv-gallery-thumb mv-gallery-thumb-portrait">
+                  <wistia-player
+                    media-id={item.mediaId}
+                    aspect={item.aspect}
+                    autoplay="true"
+                    muted="true"
+                    {...({
+                      loop: 'true',
+                      'playbar': 'false',
+                      'play-button': 'false',
+                      'small-play-button': 'false',
+                      'fullscreen-button': 'false',
+                      'volume-control': 'false',
+                      'settings-control': 'false',
+                      'playback-rate-control': 'false',
+                      'controls-visible-on-load': 'false',
+                      'big-play-button': 'false',
+                      'silent-auto-play': 'true',
+                      'end-video-behavior': 'loop',
+                      'resumable': 'false',
+                      'player-color': 'c9a96e',
+                    } as any)}
+                  ></wistia-player>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mv-barber-images">
+            {images.map((item, i) => (
+              <div key={i} className="mv-gallery-card mv-gallery-card-stack">
+                <div className="mv-gallery-thumb">
+                  <img
+                    src={item.src}
+                    alt={`${item.label} sample website`}
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                    {...({ fetchpriority: 'low' } as any)}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
     return (
       <section className="mv-shell mv-portfolio">
         <h2 className="mv-portfolio-title">
-          Sample websites for <em>{isBarber ? 'barbers' : 'home service contractors'}</em>
+          Sample websites for <em>home service contractors</em>
         </h2>
         <div className="mv-portfolio-sub">A few of our favorites</div>
         <div className="mv-gallery-wrap">
           <div className="mv-gallery">
-            {isBarber
-              ? barberGallery.map((item, i) => (
-                  <div key={i} className={`mv-gallery-card ${item.kind === 'video' ? 'mv-gallery-card-video' : ''}`}>
-                    <div className={`mv-gallery-thumb ${item.kind === 'video' ? 'mv-gallery-thumb-portrait' : ''}`}>
-                      {item.kind === 'video' ? (
-                        <wistia-player
-                          media-id={item.mediaId}
-                          aspect={item.aspect}
-                          autoplay="true"
-                          muted="true"
-                          {...({
-                            loop: 'true',
-                            'playbar': 'false',
-                            'play-button': 'false',
-                            'small-play-button': 'false',
-                            'fullscreen-button': 'false',
-                            'volume-control': 'false',
-                            'settings-control': 'false',
-                            'playback-rate-control': 'false',
-                            'controls-visible-on-load': 'false',
-                            'big-play-button': 'false',
-                            'silent-auto-play': 'true',
-                            'end-video-behavior': 'loop',
-                            'resumable': 'false',
-                            'player-color': 'c9a96e',
-                          } as any)}
-                        ></wistia-player>
-                      ) : (
-                        <img
-                          src={item.src}
-                          alt={`${item.label} sample website`}
-                          width={1200}
-                          height={900}
-                          loading="lazy"
-                          decoding="async"
-                          {...({ fetchpriority: 'low' } as any)}
-                        />
-                      )}
-                    </div>
-                    <div className="mv-gallery-label">{item.label}</div>
-                  </div>
-                ))
-              : galleryItems.map((item, i) => (
-                  <div key={item.src} className="mv-gallery-card">
-                    <div className="mv-gallery-thumb">
-                      <img
-                        src={item.src}
-                        alt={`${item.label} sample website`}
-                        width={1200}
-                        height={900}
-                        loading={i === 0 ? 'eager' : 'lazy'}
-                        decoding="async"
-                        {...({ fetchpriority: i === 0 ? 'high' : 'low' } as any)}
-                        onError={(e) => {
-                          const img = e.currentTarget;
-                          if (!img.dataset.fallback) {
-                            img.dataset.fallback = '1';
-                            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%23141210"/><rect x="0.4" y="1.1" width="3.2" height="0.15" fill="%23c9a96e" opacity="0.5"/><rect x="0.6" y="1.4" width="2.8" height="0.1" fill="%23c9a96e" opacity="0.3"/></svg>';
-                          }
-                        }}
-                      />
-                    </div>
-                    <div className="mv-gallery-label">{item.label}</div>
-                  </div>
-                ))}
+            {galleryItems.map((item, i) => (
+              <div key={item.src} className="mv-gallery-card">
+                <div className="mv-gallery-thumb">
+                  <img
+                    src={item.src}
+                    alt={`${item.label} sample website`}
+                    width={1200}
+                    height={900}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    {...({ fetchpriority: i === 0 ? 'high' : 'low' } as any)}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (!img.dataset.fallback) {
+                        img.dataset.fallback = '1';
+                        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%23141210"/><rect x="0.4" y="1.1" width="3.2" height="0.15" fill="%23c9a96e" opacity="0.5"/><rect x="0.6" y="1.4" width="2.8" height="0.1" fill="%23c9a96e" opacity="0.3"/></svg>';
+                      }
+                    }}
+                  />
+                </div>
+                <div className="mv-gallery-label">{item.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1018,6 +1034,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-gallery-thumb-portrait wistia-player {
           display: block; width: 100%; height: 100%;
         }
+        /* /barber compact gallery */
+        .mv-portfolio-barber { padding: 10px 0 14px; }
+        .mv-portfolio-title-barber { font-size: 22px; margin: 0 0 10px; }
+        .mv-barber-videos {
+          display: flex; justify-content: center; gap: 12px;
+          margin-bottom: 12px;
+        }
+        .mv-barber-videos .mv-gallery-card { width: 200px; padding: 6px; }
+        .mv-barber-images {
+          display: flex; flex-direction: column; align-items: center;
+          gap: 10px; max-width: 360px; margin: 0 auto;
+        }
+        .mv-gallery-card-stack { width: 100%; padding: 6px; }
         .mv-gallery-thumb img {
           width: 100%; height: 100%;
           object-fit: cover; object-position: center top;
@@ -1667,7 +1696,24 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             Frequently <em>asked</em>
           </h2>
           <div className="mv-faq-list">
-            {((region === 'ten' || region === 'five' || region === 'barber') ? [
+            {(region === 'barber' ? [
+              {
+                q: 'What do I get with the website?',
+                a: `A custom, professional website built for your ${cfg.businessNoun}.`,
+              },
+              {
+                q: 'What is the $10/month for?',
+                a: `The $10/month covers website hosting so your site stays live online. We don't charge for the design. If you need any kind of edits on the website, just let us know and we can make the changes to your site.`,
+              },
+              {
+                q: 'What support do I get?',
+                a: 'You can contact us by email or SMS if you need help.',
+              },
+              {
+                q: 'How long does it take to get access to the website?',
+                a: 'You get access to the website in about 48 hours.',
+              },
+            ] : (region === 'ten' || region === 'five') ? [
               {
                 q: 'What do I get with the website?',
                 a: `A custom, professional website built for your ${cfg.businessNoun}.`,
