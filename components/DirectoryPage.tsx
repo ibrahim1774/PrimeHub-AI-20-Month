@@ -229,9 +229,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             Websites for <em>Barbers</em>
           </h2>
           <div className="mv-barber-row">
-            <div className="mv-barber-videos">
             {videos.map((item, i) => (
-              <div key={i} className="mv-gallery-card mv-gallery-card-video">
+              <div key={`v-${i}`} className="mv-gallery-card mv-barber-col mv-barber-col-video">
                 <div className="mv-gallery-thumb mv-gallery-thumb-portrait">
                   <wistia-player
                     media-id={item.mediaId}
@@ -258,21 +257,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </div>
               </div>
             ))}
-            </div>
-            <div className="mv-barber-images">
+            <div className="mv-barber-col mv-barber-col-images">
               {images.map((item, i) => (
-                <div key={i} className="mv-gallery-card mv-gallery-card-stack">
-                  <div className="mv-gallery-thumb">
-                    <img
-                      src={item.src}
-                      alt={`${item.label} sample website`}
-                      width={1200}
-                      height={900}
-                      loading="lazy"
-                      decoding="async"
-                      {...({ fetchpriority: 'low' } as any)}
-                    />
-                  </div>
+                <div key={`i-${i}`} className="mv-barber-img-card">
+                  <img
+                    src={item.src}
+                    alt={`${item.label} sample website`}
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                    {...({ fetchpriority: 'low' } as any)}
+                  />
                 </div>
               ))}
             </div>
@@ -1036,26 +1032,49 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-gallery-thumb-portrait wistia-player {
           display: block; width: 100%; height: 100%;
         }
-        /* /barber compact gallery */
+        /* /barber compact gallery — 3 equal columns: video, video, image-stack */
         .mv-portfolio-barber { padding: 10px 0 14px; }
         .mv-portfolio-title-barber { font-size: 22px; margin: 0 0 10px; }
         .mv-barber-row {
           display: flex; justify-content: center; align-items: stretch;
-          gap: 12px;
+          gap: 10px;
+          max-width: 640px;
+          margin: 0 auto;
+          padding: 0 12px;
         }
-        .mv-barber-videos { display: flex; gap: 12px; }
-        .mv-barber-videos .mv-gallery-card { width: 200px; padding: 6px; }
-        .mv-barber-images {
+        .mv-barber-col {
+          flex: 1 1 0;
+          min-width: 0;
+          padding: 6px;
+        }
+        .mv-barber-col-video { aspect-ratio: 9/16; }
+        .mv-barber-col-video .mv-gallery-thumb-portrait {
+          width: 100%; height: 100%;
+        }
+        .mv-barber-col-images {
           display: flex; flex-direction: column;
-          gap: 8px;
-          width: 160px;
+          gap: 6px;
+          aspect-ratio: 9/16;
         }
-        .mv-gallery-card-stack { width: 100%; padding: 4px; flex: 1; min-height: 0; }
-        .mv-gallery-card-stack .mv-gallery-thumb { aspect-ratio: auto; height: 100%; }
-        @media (max-width: 640px) {
-          .mv-barber-row { flex-direction: column; align-items: center; }
-          .mv-barber-images { width: 200px; }
-          .mv-gallery-card-stack .mv-gallery-thumb { aspect-ratio: 4/3; height: auto; }
+        .mv-barber-img-card {
+          flex: 1 1 0;
+          min-height: 0;
+          overflow: hidden;
+          background: #0f0e0c;
+          position: relative;
+          border: 1px solid rgba(201,169,110,0.45);
+        }
+        .mv-barber-img-card::after {
+          content: '';
+          position: absolute; inset: 3px;
+          border: 1px solid rgba(201,169,110,0.2);
+          pointer-events: none;
+        }
+        .mv-barber-img-card img {
+          width: 100%; height: 100%;
+          object-fit: cover; object-position: center top;
+          display: block;
+          filter: sepia(10%) saturate(92%) contrast(96%);
         }
         .mv-gallery-thumb img {
           width: 100%; height: 100%;
