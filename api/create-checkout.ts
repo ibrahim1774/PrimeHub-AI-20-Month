@@ -54,7 +54,7 @@ export default async function handler(req: any, res: any) {
 
         // Description differs for one-time /19 vs subscription pages
         const description = isNineteen
-            ? `One-time $19${currencyLabel} for a custom website design.`
+            ? `$19${currencyLabel} for a custom website design.`
             : isYearly
                 ? `PAY ONLY ${yearlyAmountDisplay}${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
                 : `PAY ONLY ${monthlyAmountDisplay}${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`;

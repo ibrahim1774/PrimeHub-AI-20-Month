@@ -1496,7 +1496,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             ) : region === 'nineteen' ? (
               <>
-                <em>Custom website design</em> that helps home service contractors win more jobs.
+                <em>Custom website design</em> that helps local businesses win more jobs.
               </>
             ) : (
               <>
