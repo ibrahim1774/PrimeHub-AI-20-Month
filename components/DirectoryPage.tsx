@@ -1034,18 +1034,26 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         /* /barber compact gallery — 3 equal columns: video, video, image-stack */
         .mv-portfolio-barber { padding: 10px 0 14px; }
-        .mv-portfolio-title-barber { font-size: 26px; margin: 0 0 12px; }
+        .mv-portfolio-title-barber { font-size: 32px; margin: 0 0 16px; }
         .mv-barber-row {
           display: flex; justify-content: center; align-items: stretch;
-          gap: 12px;
-          max-width: 770px;
+          gap: 16px;
+          max-width: 1080px;
           margin: 0 auto;
-          padding: 0 12px;
+          padding: 0 18px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
         }
+        .mv-barber-row::-webkit-scrollbar { height: 6px; }
+        .mv-barber-row::-webkit-scrollbar-track { background: rgba(201,169,110,0.06); }
+        .mv-barber-row::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.35); }
         .mv-barber-col {
           flex: 1 1 0;
-          min-width: 0;
+          min-width: 280px;
+          flex-shrink: 0;
           padding: 6px;
+          scroll-snap-align: center;
         }
         .mv-barber-col-video { aspect-ratio: 9/16; }
         .mv-barber-col-video .mv-gallery-thumb-portrait {
