@@ -97,9 +97,18 @@ export default async function handler(req: any, res: any) {
         if (FB_ACCESS_TOKEN) {
             const source = session.metadata?.source;
             const isAus = source === 'australia';
-            const isDirectory = source === 'directory' || isAus;
+            const isTen = source === 'ten';
+            const isFive = source === 'five';
+            const isNineteen = source === 'nineteen';
+            const isBarber = source === 'barber';
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
-            const directoryPath = isAus ? '/aus' : '/1';
+            const directoryPath = isAus ? '/aus'
+                : isTen ? '/10'
+                : isFive ? '/5'
+                : isNineteen ? '/19'
+                : isBarber ? '/barber'
+                : '/1';
             const eventSourceUrl = isDirectory
                 ? `${origin}${directoryPath}?status=success&session_id=${session.id}`
                 : `${origin}/?status=success&pendingId=${pendingId}&session_id=${session.id}`;

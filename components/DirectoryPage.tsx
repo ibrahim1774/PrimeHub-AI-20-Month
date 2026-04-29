@@ -1080,7 +1080,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         .mv-barber-img-card img {
           width: 100%; height: 100%;
-          object-fit: contain; object-position: center;
+          object-fit: cover; object-position: center;
           background: #0f0e0c;
           display: block;
           filter: sepia(10%) saturate(92%) contrast(96%);
