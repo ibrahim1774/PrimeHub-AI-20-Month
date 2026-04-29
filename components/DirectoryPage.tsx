@@ -213,6 +213,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   > = [
     { kind: 'video', mediaId: 'dp2jzg06lf', aspect: '0.509915014164306', label: 'Sample Site' },
     { kind: 'video', mediaId: 'va1232reyg', aspect: '0.5373134328358209', label: 'Sample Site' },
+    { kind: 'video', mediaId: 'ra875to7uc', aspect: '0.5397301349325337', label: 'Sample Site' },
     { kind: 'image', src: '/gallery/barbershop.jpg', label: 'Barbershop' },
     { kind: 'image', src: '/gallery/barber-1.jpg', label: 'Barbershop' },
     { kind: 'image', src: '/gallery/barber-2.jpg', label: 'Barbershop' },
