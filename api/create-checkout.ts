@@ -32,9 +32,11 @@ export default async function handler(req: any, res: any) {
         const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         const userAgent = req.headers['user-agent'];
 
-        const productName = companyName
-            ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
-            : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
+        const productName = isBarber
+            ? 'Amalvera - Barbershop Website Build'
+            : companyName
+                ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
+                : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
 
         const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : isBarber ? '/barber' : '/1';
         const successUrl = isDirectory
