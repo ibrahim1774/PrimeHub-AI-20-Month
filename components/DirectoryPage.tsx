@@ -178,6 +178,43 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     };
   }, [modalOpen]);
 
+  const fallbackToHosted = async () => {
+    try {
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Fallback hosted URL missing:', data);
+        setIsLoading(false);
+        setModalOpen(false);
+        setClientSecret(null);
+      }
+    } catch (err) {
+      console.error('Hosted fallback fetch failed:', err);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!modalOpen || !clientSecret) return;
+    const STRIPE_IFRAME_SELECTOR =
+      'iframe[name^="embedded-checkout"], iframe[src*="checkout.stripe.com"], iframe[src*="js.stripe.com"]';
+    const timer = window.setTimeout(() => {
+      const stripeIframe = document.querySelector(STRIPE_IFRAME_SELECTOR) as HTMLIFrameElement | null;
+      const failed = !stripeIframe || stripeIframe.getBoundingClientRect().height < 40;
+      if (failed) {
+        console.warn('Embedded Stripe checkout did not render in 8s; falling back to hosted checkout');
+        fallbackToHosted();
+      }
+    }, 8000);
+    return () => window.clearTimeout(timer);
+  }, [modalOpen, clientSecret]);
+
   const handleCheckout = async () => {
     setIsLoading(true);
 
@@ -1278,6 +1315,22 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           transition: border-color 0.2s ease, color 0.2s ease;
         }
         .mv-checkout-close:hover { border-color: #c9a96e; color: #d4af37; }
+        .mv-checkout-fallback-link {
+          display: block;
+          margin: 8px auto 4px;
+          padding: 6px 10px;
+          background: transparent;
+          border: 0;
+          cursor: pointer;
+          font-family: 'Inter', sans-serif;
+          font-size: 11px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #8a8072;
+          text-align: center;
+          transition: color 0.2s ease;
+        }
+        .mv-checkout-fallback-link:hover { color: #c9a96e; }
         .mv-checkout-frame-inner {
           flex: 1; overflow-y: auto;
           position: relative;
@@ -1906,6 +1959,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               Scroll
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
+            <button
+              type="button"
+              className="mv-checkout-fallback-link"
+              onClick={fallbackToHosted}
+            >
+              Having trouble? Open checkout directly →
+            </button>
           </div>
         </div>
       )}
