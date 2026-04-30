@@ -17,7 +17,8 @@ export default async function handler(req: any, res: any) {
         const isFive = source === 'five';
         const isNineteen = source === 'nineteen';
         const isBarber = source === 'barber';
-        const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber;
+        const isLocalBusiness = source === 'localbusiness';
+        const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber || isLocalBusiness;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
@@ -25,7 +26,7 @@ export default async function handler(req: any, res: any) {
 
         // /19 is a one-time payment, no subscription, no yearly variant
         const isYearly = !isNineteen && plan === 'yearly';
-        const yearlyAmountCents = isFive || isTen || isBarber ? 4900 : 9900;
+        const yearlyAmountCents = isFive || isTen || isBarber ? 4900 : isLocalBusiness ? 13500 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -34,11 +35,13 @@ export default async function handler(req: any, res: any) {
 
         const productName = isBarber
             ? 'Amalvera - Barbershop Website Build'
-            : companyName
+            : isLocalBusiness
+                ? 'Amalvera - Local Business Website Build'
+                : companyName
                 ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
                 : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
 
-        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : isBarber ? '/barber' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : '/1';
         const successUrl = isDirectory
             ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}`
             : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
@@ -52,7 +55,7 @@ export default async function handler(req: any, res: any) {
 
         const monthlyAmountCents = isTen || isBarber ? 1000 : isFive ? 500 : isNineteen ? 1900 : 2000;
         const monthlyAmountDisplay = isTen || isBarber ? '$10' : isFive ? '$5' : isNineteen ? '$19' : '$20';
-        const yearlyAmountDisplay = isFive || isTen || isBarber ? '$49' : '$99';
+        const yearlyAmountDisplay = isFive || isTen || isBarber ? '$49' : isLocalBusiness ? '$135' : '$99';
 
         // Description differs for one-time /19 vs subscription pages
         const description = isNineteen

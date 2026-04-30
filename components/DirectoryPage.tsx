@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -128,6 +128,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  localbusiness: {
+    source: 'localbusiness',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 20,
+    yearlyAmount: 135,
+    yearlyWas: 240,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'local businesses',
+    businessNoun: 'local business',
+    bookMoreNoun: 'clients',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -181,7 +197,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: region !== 'barber' }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: region !== 'barber' && region !== 'localbusiness' }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -201,7 +217,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button className={`mv-cta ${large ? 'mv-cta-lg' : ''}`} onClick={handleCheckout} disabled={isLoading}>
       <span className="mv-cta-inner">
-        {isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
+        {isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : region === 'localbusiness' ? 'Get Your Local Business Website Built' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
         {!isLoading && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -219,20 +235,36 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     { kind: 'image', src: '/gallery/barber-2.jpg', label: 'Barbershop' },
   ];
 
+  type CompactItem =
+    | { kind: 'video'; mediaId: string; aspect: string; portrait?: boolean; label: string }
+    | { kind: 'image'; src: string; label: string };
+
+  const localBusinessGallery: CompactItem[] = [
+    { kind: 'video', mediaId: 'p4uzw25p63', aspect: '0.5625',                portrait: true,  label: 'Walkthrough' },
+    { kind: 'video', mediaId: 'eq8u22i00x', aspect: '1.7391304347826086',    portrait: false, label: 'Tour' },
+    { kind: 'image', src: '/gallery/home-services.jpg', label: 'Home Services' },
+    { kind: 'image', src: '/gallery/landscaping.jpg',   label: 'Landscaping' },
+    { kind: 'image', src: '/gallery/roofing.jpg',       label: 'Roofing' },
+    { kind: 'image', src: '/gallery/cleaning.jpg',      label: 'Cleaning' },
+    { kind: 'image', src: '/gallery/barbershop.jpg',    label: 'Barbershop' },
+  ];
+
   const PortfolioSection = () => {
-    const isBarber = region === 'barber';
-    if (isBarber) {
-      const videos = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'video' }> => x.kind === 'video');
-      const images = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'image' }> => x.kind === 'image');
+    const isCompact = region === 'barber' || region === 'localbusiness';
+    if (isCompact) {
+      const data: CompactItem[] = region === 'barber' ? (barberGallery as CompactItem[]) : localBusinessGallery;
+      const videos = data.filter((x): x is Extract<CompactItem, { kind: 'video' }> => x.kind === 'video');
+      const images = data.filter((x): x is Extract<CompactItem, { kind: 'image' }> => x.kind === 'image');
+      const titleEm = region === 'barber' ? 'Barbers' : 'Local Businesses';
       return (
         <section className="mv-shell mv-portfolio mv-portfolio-barber">
           <h2 className="mv-portfolio-title mv-portfolio-title-barber">
-            Websites for <em>Barbers</em>
+            Websites for <em>{titleEm}</em>
           </h2>
           <div className="mv-barber-row">
             {videos.map((item, i) => (
               <div key={`v-${i}`} className="mv-gallery-card mv-barber-col mv-barber-col-video">
-                <div className="mv-gallery-thumb mv-gallery-thumb-portrait">
+                <div className={`mv-gallery-thumb mv-gallery-thumb-portrait ${item.portrait === false ? 'is-landscape' : ''}`}>
                   <wistia-player
                     media-id={item.mediaId}
                     aspect={item.aspect}
@@ -1033,6 +1065,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-gallery-thumb-portrait wistia-player {
           display: block; width: 100%; height: 100%;
         }
+        .mv-gallery-thumb-portrait.is-landscape {
+          display: flex; align-items: center; justify-content: center;
+          background: #0f0e0c;
+        }
+        .mv-gallery-thumb-portrait.is-landscape wistia-player {
+          width: 100%; height: auto;
+        }
         /* /barber compact gallery — 3 equal columns: video, video, image-stack */
         .mv-portfolio-barber { padding: 10px 0 14px; }
         .mv-portfolio-title-barber { font-size: 29px; margin: 0 0 14px; }
@@ -1490,8 +1529,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
-          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber') ? 'mv-hero-title-ten' : ''}`}>
-            {(region === 'ten' || region === 'five' || region === 'barber') ? (
+          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness') ? 'mv-hero-title-ten' : ''}`}>
+            {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness') ? (
               <>
                 A custom website for {cfg.heroTaglineRegion} that can help you <em>book more {cfg.bookMoreNoun}</em>
               </>
@@ -1506,14 +1545,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             )}
           </h1>
-          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
             <p className="mv-hero-sub">
               We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
             </p>
           )}
 
           {/* Video — centered (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
             <div className="mv-hero-video">
               <div className="mv-video-hint">Tap to Unmute</div>
               <div className="mv-frame">
@@ -1561,7 +1600,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Showcase between hero title and How It Works on /10 */}
-          {(region === 'ten' || region === 'five' || region === 'barber') && <PortfolioSection />}
+          {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness') && <PortfolioSection />}
 
           {/* How It Works — horizontal 3-up */}
           <div className="mv-how">
@@ -1571,6 +1610,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 ? [
                     { title: 'Sign Up', body: 'Sign up for the hosting plan — the custom design is on us.' },
                     { title: 'Tell Us About Your Shop', body: 'Share a bit about your barbershop, your style, and any photos you want featured.' },
+                    { title: 'We Deliver', body: 'Your site is ready in about 48 hours.' },
+                  ]
+                : region === 'localbusiness'
+                ? [
+                    { title: 'Sign Up', body: 'Sign up for the hosting plan — the custom design is on us.' },
+                    { title: 'Tell Us About Your Business', body: 'Share what you do, your style, and any photos you want featured.' },
                     { title: 'We Deliver', body: 'Your site is ready in about 48 hours.' },
                   ]
                 : (region === 'ten' || region === 'five')
@@ -1594,7 +1639,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           {/* What You Get — horizontal (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
             <div className="mv-incl mv-incl-row">
               <div className="mv-incl-label">◊ What You Get</div>
               <ul className="mv-incl-list mv-incl-list-row">
@@ -1617,7 +1662,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         </section>
 
         {/* Walkthrough — hidden on /10 */}
-        {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1663,7 +1708,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Crest + Portfolio — only on /1 and /aus (moved to top on /10) */}
-        {(region !== 'ten' && region !== 'five' && region !== 'barber') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1743,6 +1788,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               {
                 q: 'What is the $10/month for?',
                 a: `The $10/month covers website hosting so your site stays live online. We don't charge for the design. If you need any kind of edits on the website, just let us know and we can make the changes to your site.`,
+              },
+              {
+                q: 'What support do I get?',
+                a: 'You can contact us by email or SMS if you need help.',
+              },
+              {
+                q: 'How long does it take to get access to the website?',
+                a: 'You get access to the website in about 48 hours.',
+              },
+            ] : region === 'localbusiness' ? [
+              {
+                q: 'What do I get with the website?',
+                a: `A custom, professional website built for your ${cfg.businessNoun}.`,
+              },
+              {
+                q: 'What is the $20/month for?',
+                a: `The $20/month covers website hosting so your site stays live online. We don't charge for the design. If you need any kind of edits on the website, just let us know and we can make the changes to your site.`,
               },
               {
                 q: 'What support do I get?',

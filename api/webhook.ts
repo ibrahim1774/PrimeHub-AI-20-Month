@@ -101,13 +101,15 @@ export default async function handler(req: any, res: any) {
             const isFive = source === 'five';
             const isNineteen = source === 'nineteen';
             const isBarber = source === 'barber';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber;
+            const isLocalBusiness = source === 'localbusiness';
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber || isLocalBusiness;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
                 : isFive ? '/5'
                 : isNineteen ? '/19'
                 : isBarber ? '/barber'
+                : isLocalBusiness ? '/local-business'
                 : '/1';
             const eventSourceUrl = isDirectory
                 ? `${origin}${directoryPath}?status=success&session_id=${session.id}`
