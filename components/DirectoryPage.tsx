@@ -235,36 +235,20 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     { kind: 'image', src: '/gallery/barber-2.jpg', label: 'Barbershop' },
   ];
 
-  type CompactItem =
-    | { kind: 'video'; mediaId: string; aspect: string; portrait?: boolean; label: string }
-    | { kind: 'image'; src: string; label: string };
-
-  const localBusinessGallery: CompactItem[] = [
-    { kind: 'video', mediaId: 'p4uzw25p63', aspect: '0.5625',                portrait: true,  label: 'Walkthrough' },
-    { kind: 'video', mediaId: 'eq8u22i00x', aspect: '1.7391304347826086',    portrait: false, label: 'Tour' },
-    { kind: 'image', src: '/gallery/home-services.jpg', label: 'Home Services' },
-    { kind: 'image', src: '/gallery/landscaping.jpg',   label: 'Landscaping' },
-    { kind: 'image', src: '/gallery/roofing.jpg',       label: 'Roofing' },
-    { kind: 'image', src: '/gallery/cleaning.jpg',      label: 'Cleaning' },
-    { kind: 'image', src: '/gallery/barbershop.jpg',    label: 'Barbershop' },
-  ];
-
   const PortfolioSection = () => {
-    const isCompact = region === 'barber' || region === 'localbusiness';
+    const isCompact = region === 'barber';
     if (isCompact) {
-      const data: CompactItem[] = region === 'barber' ? (barberGallery as CompactItem[]) : localBusinessGallery;
-      const videos = data.filter((x): x is Extract<CompactItem, { kind: 'video' }> => x.kind === 'video');
-      const images = data.filter((x): x is Extract<CompactItem, { kind: 'image' }> => x.kind === 'image');
-      const titleEm = region === 'barber' ? 'Barbers' : 'Local Businesses';
+      const videos = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'video' }> => x.kind === 'video');
+      const images = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'image' }> => x.kind === 'image');
       return (
         <section className="mv-shell mv-portfolio mv-portfolio-barber">
           <h2 className="mv-portfolio-title mv-portfolio-title-barber">
-            Websites for <em>{titleEm}</em>
+            Websites for <em>Barbers</em>
           </h2>
           <div className="mv-barber-row">
             {videos.map((item, i) => (
               <div key={`v-${i}`} className="mv-gallery-card mv-barber-col mv-barber-col-video">
-                <div className={`mv-gallery-thumb mv-gallery-thumb-portrait ${item.portrait === false ? 'is-landscape' : ''}`}>
+                <div className="mv-gallery-thumb mv-gallery-thumb-portrait">
                   <wistia-player
                     media-id={item.mediaId}
                     aspect={item.aspect}
@@ -312,7 +296,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     return (
       <section className="mv-shell mv-portfolio">
         <h2 className="mv-portfolio-title">
-          Sample websites for <em>home service contractors</em>
+          Sample websites for <em>{region === 'localbusiness' ? 'local businesses' : 'home service contractors'}</em>
         </h2>
         <div className="mv-portfolio-sub">A few of our favorites</div>
         <div className="mv-gallery-wrap">
@@ -1064,13 +1048,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         .mv-gallery-thumb-portrait { aspect-ratio: 9/16; }
         .mv-gallery-thumb-portrait wistia-player {
           display: block; width: 100%; height: 100%;
-        }
-        .mv-gallery-thumb-portrait.is-landscape {
-          display: flex; align-items: center; justify-content: center;
-          background: #0f0e0c;
-        }
-        .mv-gallery-thumb-portrait.is-landscape wistia-player {
-          width: 100%; height: auto;
         }
         /* /barber compact gallery — 3 equal columns: video, video, image-stack */
         .mv-portfolio-barber { padding: 10px 0 14px; }
