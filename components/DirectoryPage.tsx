@@ -197,7 +197,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: region === 'nineteen' }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: true }),
       });
       const data = await res.json();
       if (data.clientSecret) {
