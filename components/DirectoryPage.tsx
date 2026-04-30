@@ -522,6 +522,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           max-width: 500px;
           margin: 0 auto;
         }
+        .mv-hero-sub-barber {
+          font-family: 'Inter', sans-serif;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 13px;
+          letter-spacing: 0.04em;
+          color: #c8bca2;
+          max-width: 540px;
+          margin: 8px auto 14px;
+          text-align: center;
+        }
+        .mv-hero-sub-barber strong { color: #c9a96e; font-weight: 700; }
 
         /* Crest divider */
         .mv-crest {
@@ -1580,6 +1592,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness') && (
             <p className="mv-hero-sub">
               We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
+            </p>
+          )}
+          {region === 'barber' && (
+            <p className="mv-hero-sub mv-hero-sub-barber">
+              <strong>$0 design fee</strong> — $10/mo only covers hosting. No catch — we're earning your trust.
             </p>
           )}
 
