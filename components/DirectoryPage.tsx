@@ -606,8 +606,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         }
         /* /freewebsite — inline LeadConnector form */
         .mv-fw-form-wrap {
-          max-width: 560px;
-          margin: 18px auto 22px;
+          max-width: 380px;
+          margin: 14px auto 18px;
           text-align: center;
         }
         .mv-fw-form-eyebrow {
@@ -1713,7 +1713,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-frame mv-fw-form-frame">
                 <iframe
                   src="https://api.leadconnectorhq.com/widget/form/LRbgZwbTGaM6WyesqAjV"
-                  style={{ width: '100%', height: 473, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
+                  style={{ width: '100%', height: 360, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
                   id="inline-LRbgZwbTGaM6WyesqAjV"
                   data-layout='{"id":"INLINE"}'
                   data-trigger-type="alwaysShow"
@@ -1723,7 +1723,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   data-deactivation-type="neverDeactivate"
                   data-deactivation-value=""
                   data-form-name="Contractors"
-                  data-height="473"
+                  data-height="360"
                   data-layout-iframe-id="inline-LRbgZwbTGaM6WyesqAjV"
                   data-form-id="LRbgZwbTGaM6WyesqAjV"
                   title="Contractors"
