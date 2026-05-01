@@ -604,6 +604,34 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           inset: 5px;
           border: 1px solid rgba(201,169,110,0.18);
         }
+        /* /freewebsite — highlighted pay-later callout */
+        @keyframes mvFwHighlightGlow {
+          0%, 100% { box-shadow: 0 0 0 1px rgba(201,169,110,0.55), 0 0 0 rgba(212,175,55,0); }
+          50% { box-shadow: 0 0 0 1px rgba(212,175,55,0.85), 0 0 22px rgba(212,175,55,0.45); }
+        }
+        .mv-fw-highlight {
+          display: inline-block;
+          margin: 14px auto 4px;
+          padding: 10px 18px;
+          background: linear-gradient(180deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.08) 100%);
+          border: 1px solid rgba(201,169,110,0.55);
+          border-radius: 4px;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: #f5e7c4;
+          animation: mvFwHighlightGlow 2.6s ease-in-out infinite;
+        }
+        .mv-fw-highlight strong {
+          color: #d4af37;
+          font-weight: 800;
+          text-shadow: 0 0 10px rgba(212,175,55,0.45);
+        }
+        @media (max-width: 640px) {
+          .mv-fw-highlight { font-size: 12px; padding: 9px 14px; letter-spacing: 0.04em; }
+        }
+
         /* /freewebsite — inline LeadConnector form */
         .mv-fw-form-wrap {
           max-width: 380px;
@@ -1685,9 +1713,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </p>
           )}
           {region === 'freewebsite' && (
-            <p className="mv-hero-sub mv-hero-sub-barber">
-              <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>$20/month</strong>. If not, you owe nothing.
-            </p>
+            <>
+              <p className="mv-hero-sub mv-hero-sub-barber">
+                <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>$20/month</strong>. If not, you owe nothing.
+              </p>
+              <div className="mv-fw-highlight">
+                <strong>Pay $20/month — only after we design it for you</strong>
+              </div>
+            </>
           )}
 
           {/* Video — centered (hidden on /10) */}
