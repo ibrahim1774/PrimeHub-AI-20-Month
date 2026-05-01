@@ -1773,7 +1773,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {/* Showcase between hero title and How It Works on /10 */}
           {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'freewebsite') && <PortfolioSection />}
 
-          {/* How It Works — horizontal 3-up */}
+          {/* How It Works — horizontal 3-up (hidden on /freewebsite) */}
+          {region !== 'freewebsite' && (
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
             <div className={`mv-how-row ${(region === 'ten' || region === 'five') ? 'mv-how-row-two' : ''}`}>
@@ -1814,6 +1815,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               ))}
             </div>
           </div>
+          )}
 
           {/* What You Get — horizontal (hidden on /10) */}
           {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
@@ -1946,7 +1948,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </>
         )}
 
-        {/* Crest — FAQ */}
+        {/* Crest — FAQ (hidden on /freewebsite) */}
+        {region !== 'freewebsite' && (
         <div className="mv-shell">
           <div className="mv-crest">
             <span className="mv-crest-line" />
@@ -1954,8 +1957,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span className="mv-crest-line" />
           </div>
         </div>
+        )}
 
-        {/* FAQ */}
+        {/* FAQ (hidden on /freewebsite) */}
+        {region !== 'freewebsite' && (
         <section className="mv-shell mv-faq">
           <h2 className="mv-faq-title">
             Frequently <em>asked</em>
@@ -2074,6 +2079,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             ))}
           </div>
         </section>
+        )}
 
         {/* Crest closing */}
         <div className="mv-shell">
