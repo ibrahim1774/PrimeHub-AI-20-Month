@@ -2135,10 +2135,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       {/* Sticky */}
       {region === 'freewebsite' ? (
         <div className="mv-sticky visible mv-sticky-notoggle mv-sticky-free">
-          <div className="mv-sticky-inner">
-            <span className="mv-sticky-price mv-sticky-price-free">FREE</span>
-            <CtaButton large={false} />
-          </div>
           <div className="mv-guarantee">
             <strong>$0 upfront</strong> — pay $20/mo only if you love it
           </div>
