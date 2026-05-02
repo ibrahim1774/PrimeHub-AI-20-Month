@@ -823,6 +823,68 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             letter-spacing: -0.01em;
           }
           .mv-h-sticky .mv-h-pill { padding: 12px 22px; font-size: 14px; align-self: auto; }
+
+          /* Embedded Stripe modal — same as other pages */
+          @keyframes mvFadeIn { from { opacity: 0; } to { opacity: 1; } }
+          .mv-checkout-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(10,10,10,0.82);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            animation: mvFadeIn 0.2s ease;
+          }
+          .mv-checkout-modal {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            max-height: calc(100vh - 40px);
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+            padding: 8px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+          }
+          .mv-checkout-close {
+            position: absolute; top: 8px; right: 8px;
+            width: 30px; height: 30px;
+            border-radius: 999px;
+            background: #0d0d0d;
+            border: 0;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer; z-index: 3;
+            transition: background 0.2s ease;
+          }
+          .mv-checkout-close:hover { background: #1f63ff; }
+          .mv-checkout-fallback-link {
+            display: block;
+            margin: 8px auto 4px;
+            padding: 8px 10px;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #777;
+            font-weight: 600;
+            text-align: center;
+            transition: color 0.2s ease;
+          }
+          .mv-checkout-fallback-link:hover { color: #0d0d0d; }
+          .mv-checkout-frame-inner {
+            flex: 1; overflow-y: auto;
+            border-radius: 12px;
+          }
+          @media (max-width: 640px) {
+            .mv-checkout-backdrop { padding: 10px; }
+            .mv-checkout-modal { padding: 6px; max-height: calc(100vh - 20px); max-width: 360px; }
+          }
           /* Desktop tweaks */
           @media (min-width: 900px) {
             .mv-h-page { padding: 22px 22px 110px; }
