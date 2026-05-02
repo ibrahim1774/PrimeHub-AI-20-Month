@@ -630,6 +630,34 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-clock svg { width: 100%; height: 100%; }
           /* Gallery card */
           .mv-h-gallery .mv-h-visual { padding-top: 24px; }
+          .mv-h-gallery-wrap {
+            position: relative;
+            width: 100%;
+          }
+          .mv-h-gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+            width: 44px; height: 44px;
+            border-radius: 999px;
+            background: #0d0d0d;
+            color: #fff;
+            border: 0;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+            transition: background 0.2s ease, transform 0.2s ease;
+          }
+          .mv-h-gallery-arrow svg { width: 18px; height: 18px; }
+          .mv-h-gallery-arrow:hover { background: #1f63ff; }
+          .mv-h-gallery-arrow:active { transform: translateY(-50%) scale(0.94); }
+          .mv-h-gallery-arrow-prev { left: -8px; }
+          .mv-h-gallery-arrow-next { right: -8px; }
+          @media (min-width: 900px) {
+            .mv-h-gallery-arrow-prev { left: -22px; }
+            .mv-h-gallery-arrow-next { right: -22px; }
+          }
           .mv-h-gallery-row {
             display: flex; gap: 12px;
             overflow-x: auto;
@@ -838,22 +866,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section className="mv-h-card mv-h-hero mv-h-anim">
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">Custom websites · 48 hours</div>
-                <h1 className="mv-h-title">Custom websites for <em>home service pros.</em></h1>
+                <h1 className="mv-h-title">Custom websites for <em>local businesses.</em></h1>
                 <p className="mv-h-sub">Designed and built in about 48 hours. <strong>$0 upfront.</strong> $20/month covers hosting.</p>
                 <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
                   {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
-              </div>
-              <div className="mv-h-visual">
-                <div className="mv-h-mockup" aria-hidden="true">
-                  <div className="mv-h-mockup-bar"><span/><span/><span/></div>
-                  <div className="mv-h-mockup-body">
-                    <div className="mv-h-mockup-h">Cooper & Sons Roofing</div>
-                    <div className="mv-h-mockup-p">Family-owned roof repair, replacement, and storm damage in greater Austin. Free estimates within 48 hours.</div>
-                    <span className="mv-h-mockup-cta">Get a free estimate →</span>
-                  </div>
-                </div>
               </div>
             </section>
 
@@ -865,6 +883,29 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
               </div>
               <div className="mv-h-visual">
+                <div className="mv-h-gallery-wrap">
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-prev"
+                    aria-label="Previous"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      row?.scrollBy({ left: -220, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-next"
+                    aria-label="Next"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      row?.scrollBy({ left: 220, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                  </button>
                 <div className="mv-h-gallery-row">
                   {homeVideos.map((item, i) => (
                     <div key={i} className="mv-h-gallery-card">
@@ -894,6 +935,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                       ></wistia-player>
                     </div>
                   ))}
+                </div>
                 </div>
               </div>
             </section>
