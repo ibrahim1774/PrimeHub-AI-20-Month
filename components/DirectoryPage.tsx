@@ -584,10 +584,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-pill svg { width: 14px; height: 14px; }
           /* Section colors */
           .mv-h-hero { background: #f5efe4; min-height: 560px; }
-          .mv-h-trust { background: #f5e8d4; }
-          .mv-h-speed { background: #d4ebe0; }
           .mv-h-gallery { background: #dde7d4; }
-          .mv-h-seo { background: #d9e6f0; }
+          .mv-h-pillars { background: #f0e8db; }
           .mv-h-pricing { background: #f0e4b8; }
           .mv-h-how { background: #e6dff0; }
           .mv-h-faq { background: #fdf8f0; }
@@ -656,15 +654,41 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
           .mv-h-gallery-card:hover { transform: translateY(-4px); }
           .mv-h-gallery-card wistia-player { width: 100%; height: 100%; display: block; }
-          /* SEO card visual: network nodes */
-          .mv-h-network {
-            width: 280px; height: 200px;
-            position: relative;
+          /* Pillar grid (combined Trust / Speed / SEO) */
+          .mv-h-pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 12px;
+            width: 100%;
           }
-          .mv-h-network svg { width: 100%; height: 100%; }
-          .mv-h-network circle { fill: #0d0d0d; }
-          .mv-h-network .mv-node-c { fill: #1f63ff; }
-          .mv-h-network line { stroke: #0d0d0d; stroke-width: 1.5; opacity: 0.6; }
+          .mv-h-pillar {
+            background: rgba(255,255,255,0.7);
+            border-radius: 18px;
+            padding: 26px 22px;
+            transition: transform 0.3s ease, background 0.3s ease;
+          }
+          .mv-h-pillar:hover {
+            background: rgba(255,255,255,0.95);
+            transform: translateY(-3px);
+          }
+          .mv-h-pillar-icon {
+            width: 36px; height: 36px;
+            display: block;
+            margin-bottom: 14px;
+          }
+          .mv-h-pillar-h {
+            font-weight: 800; font-size: 17px;
+            color: #0d0d0d; margin-bottom: 6px;
+            letter-spacing: -0.01em;
+          }
+          .mv-h-pillar-b {
+            font-size: 14px; color: #3a3a3a; line-height: 1.55;
+          }
+          @media (max-width: 720px) {
+            .mv-h-pillar-grid { grid-template-columns: 1fr; gap: 12px; }
+            .mv-h-pillar { padding: 22px 20px; }
+          }
           /* Pricing card visual: receipt */
           .mv-h-receipt {
             background: #fff;
@@ -815,7 +839,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">Custom websites · 48 hours</div>
                 <h1 className="mv-h-title">Custom websites for <em>home service pros.</em></h1>
-                <p className="mv-h-sub">Designed, built, and live in 48 hours. <strong>$0 upfront.</strong> $20/month covers hosting and edits.</p>
+                <p className="mv-h-sub">Designed and built in about 48 hours. <strong>$0 upfront.</strong> $20/month covers hosting.</p>
                 <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
                   {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -833,46 +857,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
-            {/* Trust */}
-            <section className="mv-h-card mv-h-trust mv-h-anim">
-              <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Built to be trusted</div>
-                <h2 className="mv-h-title">Real trust starts with a <em>real site.</em></h2>
-                <p className="mv-h-sub">Customers size you up in seconds. A polished, professional website tells them you're the real thing — before they even pick up the phone.</p>
-              </div>
-              <div className="mv-h-visual">
-                <svg viewBox="0 0 240 240" width="220" height="220" fill="none" stroke="#0d0d0d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <circle cx="120" cy="120" r="92" fill="#fff" stroke="#0d0d0d" strokeWidth="2"/>
-                  <path d="M82 120l28 26 50-58" stroke="#d4914a" strokeWidth="9"/>
-                </svg>
-              </div>
-            </section>
-
-            {/* Speed */}
-            <section className="mv-h-card mv-h-speed mv-h-anim">
-              <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Speed</div>
-                <h2 className="mv-h-title">Live in <em>48 hours,</em> not 6 weeks.</h2>
-                <p className="mv-h-sub">Tell us what you do, where you serve, and a few photos. We'll have your site online in two business days. No agency timelines, no calls about scope.</p>
-              </div>
-              <div className="mv-h-visual">
-                <div className="mv-h-clock" aria-hidden="true">
-                  <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="46" fill="#fff" stroke="#0d0d0d" strokeWidth="2"/>
-                    <circle cx="50" cy="50" r="46" fill="none" stroke="#0d8060" strokeWidth="6" strokeLinecap="round" strokeDasharray="289" strokeDashoffset="22" transform="rotate(-90 50 50)"/>
-                    <text x="50" y="46" textAnchor="middle" fontFamily="Inter" fontWeight="900" fontSize="22" fill="#0d0d0d">48</text>
-                    <text x="50" y="64" textAnchor="middle" fontFamily="Inter" fontWeight="600" fontSize="9" fill="#0d0d0d" letterSpacing="2">HOURS</text>
-                  </svg>
-                </div>
-              </div>
-            </section>
-
             {/* Gallery */}
             <section className="mv-h-card mv-h-gallery mv-h-anim">
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">Gallery</div>
                 <h2 className="mv-h-title">Real builds. <em>Real contractors.</em></h2>
-                <p className="mv-h-sub">Each one custom — designed and shipped by us. Tap a preview to watch the walkthrough.</p>
+                <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
               </div>
               <div className="mv-h-visual">
                 <div className="mv-h-gallery-row">
@@ -908,30 +898,43 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
-            {/* SEO */}
-            <section className="mv-h-card mv-h-seo mv-h-anim">
-              <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Found on Google</div>
-                <h2 className="mv-h-title">Engineered to <em>rank.</em></h2>
-                <p className="mv-h-sub">Clean code, schema markup, fast load times. Want to rank for more services or service areas? We'll add and interlink the pages — Google rewards authority.</p>
-              </div>
-              <div className="mv-h-visual">
-                <div className="mv-h-network" aria-hidden="true">
-                  <svg viewBox="0 0 360 240">
-                    <line x1="180" y1="120" x2="60" y2="60"/>
-                    <line x1="180" y1="120" x2="300" y2="60"/>
-                    <line x1="180" y1="120" x2="60" y2="180"/>
-                    <line x1="180" y1="120" x2="300" y2="180"/>
-                    <line x1="180" y1="120" x2="180" y2="30"/>
-                    <line x1="180" y1="120" x2="180" y2="210"/>
-                    <circle cx="180" cy="120" r="22" className="mv-node-c"/>
-                    <circle cx="60" cy="60" r="11"/>
-                    <circle cx="300" cy="60" r="11"/>
-                    <circle cx="60" cy="180" r="11"/>
-                    <circle cx="300" cy="180" r="11"/>
-                    <circle cx="180" cy="30" r="11"/>
-                    <circle cx="180" cy="210" r="11"/>
-                  </svg>
+            {/* Trust + Speed + SEO combined */}
+            <section className="mv-h-card mv-h-pillars mv-h-anim">
+              <div className="mv-h-card-text" style={{ width: '100%' }}>
+                <div className="mv-h-eyebrow">What you get</div>
+                <h2 className="mv-h-title">Built to <em>help your business</em> grow.</h2>
+                <div className="mv-h-pillar-grid">
+                  <div className="mv-h-pillar">
+                    <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="24" cy="24" r="20" stroke="#0d0d0d" strokeWidth="2"/>
+                      <path d="M14 24l7 7 14-15" stroke="#d4914a" strokeWidth="3.5"/>
+                    </svg>
+                    <div className="mv-h-pillar-h">Trustworthy design</div>
+                    <div className="mv-h-pillar-b">A polished site can help customers take you seriously before the first call.</div>
+                  </div>
+                  <div className="mv-h-pillar">
+                    <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="24" cy="24" r="20" stroke="#0d0d0d" strokeWidth="2"/>
+                      <path d="M24 13v11l8 5" stroke="#0d8060" strokeWidth="3"/>
+                    </svg>
+                    <div className="mv-h-pillar-h">Live in ~48 hours</div>
+                    <div className="mv-h-pillar-b">Share a bit about your business and we can have it online in about two days.</div>
+                  </div>
+                  <div className="mv-h-pillar">
+                    <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="24" cy="24" r="6" fill="#1f63ff" stroke="none"/>
+                      <circle cx="8" cy="10" r="3" fill="#0d0d0d" stroke="none"/>
+                      <circle cx="40" cy="10" r="3" fill="#0d0d0d" stroke="none"/>
+                      <circle cx="8" cy="38" r="3" fill="#0d0d0d" stroke="none"/>
+                      <circle cx="40" cy="38" r="3" fill="#0d0d0d" stroke="none"/>
+                      <line x1="24" y1="24" x2="8" y2="10" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
+                      <line x1="24" y1="24" x2="40" y2="10" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
+                      <line x1="24" y1="24" x2="8" y2="38" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
+                      <line x1="24" y1="24" x2="40" y2="38" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
+                    </svg>
+                    <div className="mv-h-pillar-h">SEO optimized</div>
+                    <div className="mv-h-pillar-b">Clean code, schema markup, fast loading — could help your site show up on Google.</div>
+                  </div>
                 </div>
               </div>
             </section>
@@ -941,7 +944,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">Pricing</div>
                 <h2 className="mv-h-title">$0 design fee. <em>$20/mo.</em> That's it.</h2>
-                <p className="mv-h-sub">We don't charge for the design. The $20/month covers hosting and edits — keeping your site live online.</p>
+                <p className="mv-h-sub">No design fee. $20/month covers hosting and any edits along the way.</p>
                 <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
                   {isLoading ? 'Loading…' : 'Start now'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -950,7 +953,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-h-visual">
                 <div className="mv-h-receipt" aria-hidden="true">
                   <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Custom website design</span><span className="mv-h-receipt-val"><span className="mv-h-receipt-strike">$2,400</span>FREE</span></div>
-                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Delivery in 48 hours</span><span className="mv-h-receipt-val">included</span></div>
+                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Delivery in ~48 hours</span><span className="mv-h-receipt-val">included</span></div>
                   <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Edits & ongoing support</span><span className="mv-h-receipt-val">included</span></div>
                   <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Hosting</span><span className="mv-h-receipt-val">$20/mo</span></div>
                 </div>
@@ -962,13 +965,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">How it works</div>
                 <h2 className="mv-h-title">Three steps to <em>live.</em></h2>
-                <p className="mv-h-sub">Sign up. Tell us a bit. Watch your site go live in 48 hours. That's the whole flow.</p>
+                <p className="mv-h-sub">Sign up. Tell us a bit about your business. Your site can be live in about 48 hours.</p>
               </div>
               <div className="mv-h-visual">
                 <div className="mv-h-steps">
                   <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">Sign up</div><div className="mv-h-step-b">Quick form. Takes about 60 seconds. The custom design is on us.</div></div>
                   <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">Tell us about your work</div><div className="mv-h-step-b">Your business, service area, photos you want featured.</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">We deliver</div><div className="mv-h-step-b">Your site is live in about 48 hours.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">We deliver</div><div className="mv-h-step-b">Your site can be live in about 48 hours.</div></div>
                 </div>
               </div>
             </section>
@@ -981,7 +984,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="mv-h-faq-list">
                   <details className="mv-h-faq-item" open>
                     <summary className="mv-h-faq-summary">What do I get with the website?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">A custom, professional website built for your business — pages, contact forms, mobile-responsive design, and the whole thing engineered to rank on Google.</div>
+                    <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and SEO optimized so it could help you show up on Google.</div>
                   </details>
                   <details className="mv-h-faq-item">
                     <summary className="mv-h-faq-summary">What is the $20/month for?<span className="mv-h-faq-icon">+</span></summary>
@@ -993,7 +996,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   </details>
                   <details className="mv-h-faq-item">
                     <summary className="mv-h-faq-summary">How fast is the website delivered?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">About 48 hours from sign-up to live URL.</div>
+                    <div className="mv-h-faq-a">Usually about 48 hours from sign-up to live URL.</div>
                   </details>
                 </div>
               </div>
@@ -1002,8 +1005,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {/* Final CTA */}
             <section className="mv-h-card mv-h-final mv-h-anim">
               <div className="mv-h-eyebrow">Ready when you are</div>
-              <h2 className="mv-h-title">Your custom site, live in <em>two days.</em></h2>
-              <p className="mv-h-sub">No design fees, no surprises. $0 upfront, $20/month for hosting and edits.</p>
+              <h2 className="mv-h-title">Your custom site, live in <em>about 48 hours.</em></h2>
+              <p className="mv-h-sub">$0 upfront. $20/month for hosting.</p>
               <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
                 {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
