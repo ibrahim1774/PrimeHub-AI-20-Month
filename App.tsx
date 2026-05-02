@@ -8,29 +8,22 @@ import DirectorySuccessPage from './components/DirectorySuccessPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-const App: React.FC = () => {
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  if (pathname === '/1' || pathname === '/aus' || pathname === '/10' || pathname === '/5' || pathname === '/19' || pathname === '/barber' || pathname === '/local-business' || pathname === '/freewebsite' || pathname === '/freewebsite49') {
-    const region =
-      pathname === '/aus' ? 'aus' :
-      pathname === '/10' ? 'ten' :
-      pathname === '/5' ? 'five' :
-      pathname === '/19' ? 'nineteen' :
-      pathname === '/barber' ? 'barber' :
-      pathname === '/local-business' ? 'localbusiness' :
-      pathname === '/freewebsite' ? 'freewebsite' :
-      pathname === '/freewebsite49' ? 'freewebsite49' : 'us';
-    const dirParams = new URLSearchParams(window.location.search);
-    const dirStatus = dirParams.get('status');
-    if (dirStatus === 'success') {
-      return <DirectorySuccessPage />;
-    }
-    if (dirStatus === 'cancelled') {
-      window.history.replaceState({}, '', pathname);
-    }
-    return <DirectoryPage region={region} />;
-  }
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home';
 
+const dirPaths: Record<string, Region> = {
+  '/': 'home',
+  '/1': 'us',
+  '/aus': 'aus',
+  '/10': 'ten',
+  '/5': 'five',
+  '/19': 'nineteen',
+  '/barber': 'barber',
+  '/local-business': 'localbusiness',
+  '/freewebsite': 'freewebsite',
+  '/freewebsite49': 'freewebsite49',
+};
+
+const LandingFlow: React.FC = () => {
   const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const statusParam = urlParams.get('status');
   const pendingIdParam = urlParams.get('pendingId');
@@ -49,31 +42,26 @@ const App: React.FC = () => {
 
   const [lastUsedName, setLastUsedName] = useState('');
 
-  // Handle success state from Stripe redirect
   if (statusParam === 'success' && pendingIdParam && companyNameParam) {
     return <SuccessPage pendingId={pendingIdParam} companyName={companyNameParam} />;
   }
 
-  // Handle cancelled Stripe checkout — clean URL and restore preview from sessionStorage
   if (statusParam === 'cancelled') {
-    window.history.replaceState({}, '', '/');
+    window.history.replaceState({}, '', '/generator');
   }
 
   const handleGenerate = (data: FormData) => {
     setLastUsedName(data.companyName);
-    // Fire-and-forget: send lead data to Make webhook
     import('./services/leadService').then(({ captureLead }) => {
       captureLead(data).catch(err => console.error('Lead capture failed:', err));
     }).catch(err => console.error('Lead service import failed:', err));
     generateWebsite(data);
   };
 
-  // If currently generating, show loading screen
   if (isGenerating) {
     return <LoadingScreen progress={progress} statusMessage={statusMessage} companyName={lastUsedName} />;
   }
 
-  // If generation complete and data exists, show preview
   if (generatedData && generatedImages) {
     return (
       <PreviewSite
@@ -84,7 +72,6 @@ const App: React.FC = () => {
     );
   }
 
-  // Otherwise show the landing form
   return (
     <div className="relative">
       <LandingForm onGenerate={handleGenerate} />
@@ -96,6 +83,39 @@ const App: React.FC = () => {
       )}
     </div>
   );
+};
+
+const App: React.FC = () => {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+  const status = params.get('status');
+  const pendingId = params.get('pendingId');
+  const companyName = params.get('companyName');
+
+  // Legacy generator success on '/' (kept for any in-flight Stripe sessions created before the move)
+  if (status === 'success' && pendingId && companyName) {
+    return <SuccessPage pendingId={pendingId} companyName={companyName} />;
+  }
+
+  // /generator — landing form / website generator flow
+  if (pathname === '/generator') {
+    return <LandingFlow />;
+  }
+
+  // Directory pages incl. new luxurious home '/'
+  if (pathname in dirPaths) {
+    const region = dirPaths[pathname];
+    if (status === 'success') {
+      return <DirectorySuccessPage />;
+    }
+    if (status === 'cancelled') {
+      window.history.replaceState({}, '', pathname);
+    }
+    return <DirectoryPage region={region} />;
+  }
+
+  // 404 fallback → home
+  return <DirectoryPage region="home" />;
 };
 
 export default App;

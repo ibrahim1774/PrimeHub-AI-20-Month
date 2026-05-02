@@ -18,6 +18,7 @@ const DirectorySuccessPage: React.FC = () => {
       const isYearly = plan === 'yearly';
       const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? 5.00 : pathname === '/19' ? 19.00 : 20.00;
       const yearly = (pathname === '/10' || pathname === '/5' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
+      // pathname '/' (new home), '/1', '/aus' all default to $20/mo or $99/yr
       const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {
         currency: isAus ? 'AUD' : 'USD',

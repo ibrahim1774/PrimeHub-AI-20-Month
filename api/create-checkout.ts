@@ -18,7 +18,8 @@ export default async function handler(req: any, res: any) {
         const isNineteen = source === 'nineteen';
         const isBarber = source === 'barber';
         const isLocalBusiness = source === 'localbusiness';
-        const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber || isLocalBusiness;
+        const isHome = source === 'home';
+        const isDirectory = source === 'directory' || isAus || isTen || isFive || isNineteen || isBarber || isLocalBusiness || isHome;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
@@ -41,14 +42,14 @@ export default async function handler(req: any, res: any) {
                 ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
                 : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
 
-        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : isHome ? '/' : '/1';
         const successUrl = isDirectory
             ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}`
-            : `${origin}/?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
+            : `${origin}/generator?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
             ? `${origin}${directoryPath}?status=cancelled`
-            : `${origin}/?status=cancelled`;
+            : `${origin}/generator?status=cancelled`;
 
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';

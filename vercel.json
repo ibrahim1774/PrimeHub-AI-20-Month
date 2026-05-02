@@ -8,7 +8,8 @@
         { "source": "/barber", "destination": "/index.html" },
         { "source": "/local-business", "destination": "/index.html" },
         { "source": "/freewebsite", "destination": "/index.html" },
-        { "source": "/freewebsite49", "destination": "/index.html" }
+        { "source": "/freewebsite49", "destination": "/index.html" },
+        { "source": "/generator", "destination": "/index.html" }
     ],
     "functions": {
         "api/webhook.ts": {
