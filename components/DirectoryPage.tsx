@@ -332,12 +332,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   ];
 
   const PortfolioSection = () => {
-    const isCompact = region === 'barber' || region === 'freewebsite49';
+    const isCompact = region === 'barber' || region === 'freewebsite49' || region === 'freewebsite';
     if (isCompact) {
-      const data = region === 'freewebsite49' ? freewebsite49Gallery : barberGallery;
+      const useFreeGallery = region === 'freewebsite49' || region === 'freewebsite';
+      const data = useFreeGallery ? freewebsite49Gallery : barberGallery;
       const videos = data.filter((x): x is { kind: 'video'; mediaId: string; aspect: string; label: string } => x.kind === 'video');
-      const images = (region === 'freewebsite49' ? [] : barberGallery).filter((x): x is { kind: 'image'; src: string; label: string } => x.kind === 'image');
-      const titleEm = region === 'freewebsite49' ? 'Local Businesses' : 'Barbers';
+      const images = (useFreeGallery ? [] : barberGallery).filter((x): x is { kind: 'image'; src: string; label: string } => x.kind === 'image');
+      const titleEm = useFreeGallery ? 'Local Businesses' : 'Barbers';
       return (
         <section className="mv-shell mv-portfolio mv-portfolio-barber">
           <h2 className="mv-portfolio-title mv-portfolio-title-barber">
@@ -597,6 +598,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           text-align: center;
         }
         .mv-hero-sub-barber strong { color: #c9a96e; font-weight: 700; }
+        .mv-fw-seo-note { margin-top: -4px; font-size: 12px; color: #a89e8a; }
 
         /* Crest divider */
         .mv-crest {
@@ -1744,6 +1746,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <>
               <p className="mv-hero-sub mv-hero-sub-barber">
                 <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>{cfg.currencySymbol}{cfg.monthlyAmount}/month</strong>. If not, you owe nothing.
+              </p>
+              <p className="mv-hero-sub mv-hero-sub-barber mv-fw-seo-note">
+                <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for every service and area you cover.
               </p>
               <div className="mv-fw-highlight">
                 <strong>Pay {cfg.currencySymbol}{cfg.monthlyAmount}/month — only after we design it for you</strong>
