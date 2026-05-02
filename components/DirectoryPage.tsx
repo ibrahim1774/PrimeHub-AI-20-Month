@@ -14,7 +14,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -160,6 +160,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'home service business',
     bookMoreNoun: 'jobs',
   },
+  freewebsite49: {
+    source: 'freewebsite49',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 49,
+    yearlyAmount: 99,
+    yearlyWas: 588,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'home service contractors',
+    businessNoun: 'home service business',
+    bookMoreNoun: 'jobs',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -232,7 +248,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [modalOpen, clientSecret]);
 
   useEffect(() => {
-    if (region !== 'freewebsite') return;
+    if ((region !== 'freewebsite' && region !== 'freewebsite49')) return;
     const SRC = 'https://link.msgsndr.com/js/form_embed.js';
     if (document.querySelector(`script[src="${SRC}"]`)) return;
     const s = document.createElement('script');
@@ -285,12 +301,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button
       className={`mv-cta ${large ? 'mv-cta-lg' : ''}`}
-      onClick={region === 'freewebsite' ? scrollToFreeWebsiteForm : handleCheckout}
-      disabled={region !== 'freewebsite' && isLoading}
+      onClick={(region === 'freewebsite' || region === 'freewebsite49') ? scrollToFreeWebsiteForm : handleCheckout}
+      disabled={(region !== 'freewebsite' && region !== 'freewebsite49') && isLoading}
     >
       <span className="mv-cta-inner">
-        {region === 'freewebsite' ? 'Get My Free Website' : isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : region === 'localbusiness' ? 'Get Your Local Business Website Built' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
-        {(region === 'freewebsite' || !isLoading) && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
+        {(region === 'freewebsite' || region === 'freewebsite49') ? 'Get My Free Website' : isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : region === 'localbusiness' ? 'Get Your Local Business Website Built' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
+        {((region === 'freewebsite' || region === 'freewebsite49') || !isLoading) && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
   );
@@ -307,15 +323,25 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     { kind: 'image', src: '/gallery/barber-2.jpg', label: 'Barbershop' },
   ];
 
+  const freewebsite49Gallery: Array<{ kind: 'video'; mediaId: string; aspect: string; label: string }> = [
+    { kind: 'video', mediaId: 'ra875to7uc', aspect: '0.5397301349325337', label: 'Sample Site' },
+    { kind: 'video', mediaId: '798tf6y60c', aspect: '0.547112462006079',  label: 'Sample Site' },
+    { kind: 'video', mediaId: '8t4kzvzuno', aspect: '0.5429864253393665', label: 'Sample Site' },
+    { kind: 'video', mediaId: 'qi2zmppcou', aspect: '0.5263157894736842', label: 'Sample Site' },
+    { kind: 'video', mediaId: 'ogc6ertxsl', aspect: '0.569620253164557',  label: 'Sample Site' },
+  ];
+
   const PortfolioSection = () => {
-    const isCompact = region === 'barber';
+    const isCompact = region === 'barber' || region === 'freewebsite49';
     if (isCompact) {
-      const videos = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'video' }> => x.kind === 'video');
-      const images = barberGallery.filter((x): x is Extract<typeof barberGallery[number], { kind: 'image' }> => x.kind === 'image');
+      const data = region === 'freewebsite49' ? freewebsite49Gallery : barberGallery;
+      const videos = data.filter((x): x is { kind: 'video'; mediaId: string; aspect: string; label: string } => x.kind === 'video');
+      const images = (region === 'freewebsite49' ? [] : barberGallery).filter((x): x is { kind: 'image'; src: string; label: string } => x.kind === 'image');
+      const titleEm = region === 'freewebsite49' ? 'Local Businesses' : 'Barbers';
       return (
         <section className="mv-shell mv-portfolio mv-portfolio-barber">
           <h2 className="mv-portfolio-title mv-portfolio-title-barber">
-            Websites for <em>Barbers</em>
+            Websites for <em>{titleEm}</em>
           </h2>
           <div className="mv-barber-row">
             {videos.map((item, i) => (
@@ -348,21 +374,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </div>
               </div>
             ))}
-            <div className="mv-barber-col mv-barber-col-images">
-              {images.map((item, i) => (
-                <div key={`i-${i}`} className="mv-barber-img-card">
-                  <img
-                    src={item.src}
-                    alt={`${item.label} sample website`}
-                    width={1200}
-                    height={900}
-                    loading="lazy"
-                    decoding="async"
-                    {...({ fetchpriority: 'low' } as any)}
-                  />
-                </div>
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className="mv-barber-col mv-barber-col-images">
+                {images.map((item, i) => (
+                  <div key={`i-${i}`} className="mv-barber-img-card">
+                    <img
+                      src={item.src}
+                      alt={`${item.label} sample website`}
+                      width={1200}
+                      height={900}
+                      loading="lazy"
+                      decoding="async"
+                      {...({ fetchpriority: 'low' } as any)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       );
@@ -416,7 +444,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         className={`mv-toggle-tab ${pricingPlan === 'yearly' ? 'active' : ''}`}
         onClick={() => setPricingPlan('yearly')}
       >
-        Yearly <span className="mv-save">{(region === 'ten' || region === 'five' || region === 'barber' || region === 'freewebsite') ? '40% Off' : 'Save 44%'}</span>
+        Yearly <span className="mv-save">{(region === 'ten' || region === 'five' || region === 'barber' || (region === 'freewebsite' || region === 'freewebsite49')) ? '40% Off' : 'Save 44%'}</span>
       </button>
     </div>
   );
@@ -1682,8 +1710,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span>◊ Step 1 ◊ Hello</span>
             <span className="mv-eyebrow-bar" />
           </div>
-          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'freewebsite') ? 'mv-hero-title-ten' : ''}`}>
-            {region === 'freewebsite' ? (
+          <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || (region === 'freewebsite' || region === 'freewebsite49')) ? 'mv-hero-title-ten' : ''}`}>
+            {(region === 'freewebsite' || region === 'freewebsite49') ? (
               <>
                 A <em>free custom website</em> for your business — you only pay if you love it
               </>
@@ -1702,7 +1730,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </>
             )}
           </h1>
-          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && (region !== 'freewebsite' && region !== 'freewebsite49')) && (
             <p className="mv-hero-sub">
               We build websites for home service pros. You tell us about your business. We do the rest. Ready in 48 hours.
             </p>
@@ -1712,19 +1740,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <strong>$0 design fee</strong> — $10/mo only covers hosting. No catch — we're earning your trust.
             </p>
           )}
-          {region === 'freewebsite' && (
+          {(region === 'freewebsite' || region === 'freewebsite49') && (
             <>
               <p className="mv-hero-sub mv-hero-sub-barber">
-                <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>$20/month</strong>. If not, you owe nothing.
+                <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>{cfg.currencySymbol}{cfg.monthlyAmount}/month</strong>. If not, you owe nothing.
               </p>
               <div className="mv-fw-highlight">
-                <strong>Pay $20/month — only after we design it for you</strong>
+                <strong>Pay {cfg.currencySymbol}{cfg.monthlyAmount}/month — only after we design it for you</strong>
               </div>
             </>
           )}
 
           {/* Video — centered (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && (region !== 'freewebsite' && region !== 'freewebsite49')) && (
             <div className="mv-hero-video">
               <div className="mv-video-hint">Tap to Unmute</div>
               <div className="mv-frame">
@@ -1736,12 +1764,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* LeadConnector form — /freewebsite only */}
-          {region === 'freewebsite' && (
+          {(region === 'freewebsite' || region === 'freewebsite49') && (
             <div id="fw-form" className="mv-fw-form-wrap">
               <div className="mv-fw-form-eyebrow">◊ Get Started — Free ◊</div>
               <h2 className="mv-fw-form-title">Tell us about your business</h2>
               <p className="mv-fw-form-sub">
-                We'll design + build your site for free. Pay $20/mo only if you love it.
+                We'll design + build your site for free. Pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it.
               </p>
               <div className="mv-frame mv-fw-form-frame">
                 <iframe
@@ -1804,10 +1832,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* Showcase between hero title and How It Works on /10 */}
-          {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'freewebsite') && <PortfolioSection />}
+          {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || (region === 'freewebsite' || region === 'freewebsite49')) && <PortfolioSection />}
 
           {/* How It Works — horizontal 3-up (hidden on /freewebsite) */}
-          {region !== 'freewebsite' && (
+          {(region !== 'freewebsite' && region !== 'freewebsite49') && (
           <div className="mv-how">
             <div className="mv-how-eyebrow">◊ How It Works ◊</div>
             <div className={`mv-how-row ${(region === 'ten' || region === 'five') ? 'mv-how-row-two' : ''}`}>
@@ -1823,11 +1851,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     { title: 'Tell Us About Your Business', body: 'Share what you do, your style, and any photos you want featured.' },
                     { title: 'We Deliver', body: 'Your site is ready in about 48 hours.' },
                   ]
-                : region === 'freewebsite'
+                : (region === 'freewebsite' || region === 'freewebsite49')
                 ? [
                     { title: 'Tell Us About Your Business', body: 'Share what you do, your style, and any photos you want featured.' },
                     { title: 'We Design + Build It Free', body: 'Your custom site is ready in about 48 hours — at no upfront cost.' },
-                    { title: 'Pay Only If You Love It', body: '$20/month after delivery. If you don’t love it, you owe nothing.' },
+                    { title: 'Pay Only If You Love It', body: `${cfg.currencySymbol}${cfg.monthlyAmount}/month after delivery. If you don’t love it, you owe nothing.` },
                   ]
                 : (region === 'ten' || region === 'five')
                 ? [
@@ -1851,7 +1879,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
 
           {/* What You Get — horizontal (hidden on /10) */}
-          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
+          {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && (region !== 'freewebsite' && region !== 'freewebsite49')) && (
             <div className="mv-incl mv-incl-row">
               <div className="mv-incl-label">◊ What You Get</div>
               <ul className="mv-incl-list mv-incl-list-row">
@@ -1874,7 +1902,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         </section>
 
         {/* Walkthrough — hidden on /10 */}
-        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && (region !== 'freewebsite' && region !== 'freewebsite49')) && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1922,7 +1950,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Crest + Portfolio — only on /1 and /aus (moved to top on /10) */}
-        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && region !== 'freewebsite') && (
+        {(region !== 'ten' && region !== 'five' && region !== 'barber' && region !== 'localbusiness' && (region !== 'freewebsite' && region !== 'freewebsite49')) && (
           <>
             <div className="mv-shell">
               <div className="mv-crest">
@@ -1982,7 +2010,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* Crest — FAQ (hidden on /freewebsite) */}
-        {region !== 'freewebsite' && (
+        {(region !== 'freewebsite' && region !== 'freewebsite49') && (
         <div className="mv-shell">
           <div className="mv-crest">
             <span className="mv-crest-line" />
@@ -1993,7 +2021,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         )}
 
         {/* FAQ (hidden on /freewebsite) */}
-        {region !== 'freewebsite' && (
+        {(region !== 'freewebsite' && region !== 'freewebsite49') && (
         <section className="mv-shell mv-faq">
           <h2 className="mv-faq-title">
             Frequently <em>asked</em>
@@ -2033,14 +2061,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 q: 'How long does it take to get access to the website?',
                 a: 'You get access to the website in about 48 hours.',
               },
-            ] : region === 'freewebsite' ? [
+            ] : (region === 'freewebsite' || region === 'freewebsite49') ? [
               {
                 q: "What's the catch?",
                 a: "There isn't one. We design and build your custom website for free. You only pay if you love it — no upfront cost, no obligation.",
               },
               {
                 q: 'When do I pay?',
-                a: 'Only after we deliver your site, and only if you decide to keep it. The $20/month covers hosting and ongoing edits.',
+                a: `Only after we deliver your site, and only if you decide to keep it. The ${cfg.currencySymbol}${cfg.monthlyAmount}/month covers hosting and ongoing edits.`,
               },
               {
                 q: "What if I don't like it?",
@@ -2133,10 +2161,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </div>
 
       {/* Sticky */}
-      {region === 'freewebsite' ? (
+      {(region === 'freewebsite' || region === 'freewebsite49') ? (
         <div className="mv-sticky visible mv-sticky-notoggle mv-sticky-free">
           <div className="mv-guarantee">
-            <strong>$0 upfront</strong> — pay $20/mo only if you love it
+            <strong>$0 upfront</strong> — pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it
           </div>
         </div>
       ) : (
@@ -2157,7 +2185,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       )}
 
       {/* Embedded checkout modal */}
-      {region !== 'freewebsite' && modalOpen && clientSecret && (
+      {(region !== 'freewebsite' && region !== 'freewebsite49') && modalOpen && clientSecret && (
         <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
           <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
             <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>

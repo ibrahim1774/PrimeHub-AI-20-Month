@@ -10,7 +10,7 @@ import { FormData } from './types';
 
 const App: React.FC = () => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  if (pathname === '/1' || pathname === '/aus' || pathname === '/10' || pathname === '/5' || pathname === '/19' || pathname === '/barber' || pathname === '/local-business' || pathname === '/freewebsite') {
+  if (pathname === '/1' || pathname === '/aus' || pathname === '/10' || pathname === '/5' || pathname === '/19' || pathname === '/barber' || pathname === '/local-business' || pathname === '/freewebsite' || pathname === '/freewebsite49') {
     const region =
       pathname === '/aus' ? 'aus' :
       pathname === '/10' ? 'ten' :
@@ -18,7 +18,8 @@ const App: React.FC = () => {
       pathname === '/19' ? 'nineteen' :
       pathname === '/barber' ? 'barber' :
       pathname === '/local-business' ? 'localbusiness' :
-      pathname === '/freewebsite' ? 'freewebsite' : 'us';
+      pathname === '/freewebsite' ? 'freewebsite' :
+      pathname === '/freewebsite49' ? 'freewebsite49' : 'us';
     const dirParams = new URLSearchParams(window.location.search);
     const dirStatus = dirParams.get('status');
     if (dirStatus === 'success') {
