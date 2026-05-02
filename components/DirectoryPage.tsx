@@ -275,7 +275,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   useEffect(() => {
     if (region !== 'home') return;
-    const elements = document.querySelectorAll('.mv-anim-fade');
+    const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -284,9 +284,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     elements.forEach((el, i) => {
-      (el as HTMLElement).style.transitionDelay = `${(i % 4) * 80}ms`;
+      (el as HTMLElement).style.transitionDelay = `${(i % 4) * 60}ms`;
       observer.observe(el);
     });
     return () => observer.disconnect();
@@ -484,6 +484,564 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </button>
     </div>
   );
+
+  if (region === 'home') {
+    const homeVideos = freewebsite49Gallery;
+    return (
+      <>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          .mv-h-page {
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            color: #0d0d0d;
+            -webkit-font-smoothing: antialiased;
+            padding: 16px 14px 100px;
+          }
+          .mv-h-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1280px; margin: 0 auto 16px;
+            padding: 14px 8px;
+          }
+          .mv-h-logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: -0.02em;
+            color: #0d0d0d;
+          }
+          .mv-h-nav-cta {
+            background: #0d0d0d; color: #fff;
+            border: 0; cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; font-size: 14px;
+            transition: background 0.2s ease, transform 0.2s ease;
+          }
+          .mv-h-nav-cta:hover { background: #1f63ff; transform: translateY(-1px); }
+          .mv-h-stack {
+            display: flex; flex-direction: column;
+            gap: 14px;
+            max-width: 1280px;
+            margin: 0 auto;
+          }
+          .mv-h-card {
+            position: relative;
+            border-radius: 28px;
+            padding: 56px 40px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            min-height: 480px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .mv-h-card.is-visible { opacity: 1; transform: translateY(0); }
+          .mv-h-eyebrow {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #0d0d0d; opacity: 0.55;
+            margin-bottom: 18px;
+          }
+          .mv-h-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 44px;
+            line-height: 1.05;
+            letter-spacing: -0.025em;
+            color: #0d0d0d;
+            margin: 0 0 18px;
+            max-width: 720px;
+          }
+          .mv-h-title em {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+          }
+          .mv-h-sub {
+            font-size: 17px; line-height: 1.5;
+            color: #2a2a2a;
+            max-width: 540px;
+            margin: 0 0 28px;
+            font-weight: 400;
+          }
+          .mv-h-pill {
+            align-self: flex-start;
+            background: #0d0d0d; color: #fff;
+            border: 0; cursor: pointer;
+            padding: 18px 32px;
+            border-radius: 999px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; font-size: 16px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            display: inline-flex; align-items: center; gap: 8px;
+          }
+          .mv-h-pill:hover:not(:disabled) { background: #1f63ff; transform: translateY(-2px); }
+          .mv-h-pill:disabled { opacity: 0.6; cursor: wait; }
+          .mv-h-pill svg { width: 14px; height: 14px; }
+          /* Section colors */
+          .mv-h-hero { background: #f5efe4; min-height: 560px; }
+          .mv-h-trust { background: #f5e8d4; }
+          .mv-h-speed { background: #d4ebe0; }
+          .mv-h-gallery { background: #dde7d4; }
+          .mv-h-seo { background: #d9e6f0; }
+          .mv-h-pricing { background: #f0e4b8; }
+          .mv-h-how { background: #e6dff0; }
+          .mv-h-faq { background: #fdf8f0; }
+          .mv-h-final { background: #fbdfd0; min-height: 380px; align-items: center; justify-content: center; text-align: center; }
+          .mv-h-final .mv-h-title, .mv-h-final .mv-h-sub { margin-left: auto; margin-right: auto; max-width: 600px; }
+          .mv-h-final .mv-h-pill { align-self: center; }
+          /* Visual area */
+          .mv-h-visual {
+            margin-top: auto;
+            position: relative;
+            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            padding-top: 32px;
+          }
+          /* Trust card visual: stylized browser mockup */
+          .mv-h-mockup {
+            width: 100%; max-width: 460px;
+            background: #fff; border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.05);
+            transition: transform 0.5s ease;
+          }
+          .mv-h-card:hover .mv-h-mockup { transform: translateY(-4px) rotate(-0.5deg); }
+          .mv-h-mockup-bar {
+            height: 30px; background: #f5f5f5;
+            display: flex; align-items: center; gap: 6px;
+            padding: 0 12px;
+          }
+          .mv-h-mockup-bar span { width: 9px; height: 9px; border-radius: 50%; }
+          .mv-h-mockup-bar span:nth-child(1) { background: #fb6261; }
+          .mv-h-mockup-bar span:nth-child(2) { background: #fdbc40; }
+          .mv-h-mockup-bar span:nth-child(3) { background: #34c84a; }
+          .mv-h-mockup-body { padding: 28px 24px 36px; }
+          .mv-h-mockup-h { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; color: #0d0d0d; }
+          .mv-h-mockup-p { font-size: 12px; color: #6b6b6b; margin-bottom: 16px; line-height: 1.5; }
+          .mv-h-mockup-cta { display: inline-block; background: #d4914a; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+          /* Speed card visual: clock-style ring */
+          .mv-h-clock {
+            width: 220px; height: 220px;
+            position: relative;
+          }
+          .mv-h-clock svg { width: 100%; height: 100%; }
+          /* Gallery card */
+          .mv-h-gallery .mv-h-visual { padding-top: 24px; }
+          .mv-h-gallery-row {
+            display: flex; gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px 4px 12px;
+            margin: 0 -4px;
+            width: 100%;
+          }
+          .mv-h-gallery-row::-webkit-scrollbar { height: 5px; }
+          .mv-h-gallery-row::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+          .mv-h-gallery-card {
+            flex: 0 0 auto;
+            width: 200px;
+            scroll-snap-align: center;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #0d0d0d;
+            aspect-ratio: 9/16;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+            transition: transform 0.3s ease;
+          }
+          .mv-h-gallery-card:hover { transform: translateY(-4px); }
+          .mv-h-gallery-card wistia-player { width: 100%; height: 100%; display: block; }
+          /* SEO card visual: network nodes */
+          .mv-h-network {
+            width: 280px; height: 200px;
+            position: relative;
+          }
+          .mv-h-network svg { width: 100%; height: 100%; }
+          .mv-h-network circle { fill: #0d0d0d; }
+          .mv-h-network .mv-node-c { fill: #1f63ff; }
+          .mv-h-network line { stroke: #0d0d0d; stroke-width: 1.5; opacity: 0.6; }
+          /* Pricing card visual: receipt */
+          .mv-h-receipt {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            max-width: 360px;
+            width: 100%;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+            font-family: 'Inter', sans-serif;
+          }
+          .mv-h-receipt-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.12);
+            font-size: 14px;
+          }
+          .mv-h-receipt-row:last-of-type { border-bottom: 0; padding-top: 14px; font-weight: 800; font-size: 16px; }
+          .mv-h-receipt-label { color: #2a2a2a; }
+          .mv-h-receipt-val { color: #0d0d0d; font-weight: 600; }
+          .mv-h-receipt-strike { text-decoration: line-through; color: #999; margin-right: 6px; font-weight: 400; }
+          /* How It Works steps */
+          .mv-h-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            margin-top: auto;
+          }
+          .mv-h-step {
+            background: rgba(255,255,255,0.65);
+            border-radius: 16px;
+            padding: 22px 20px;
+          }
+          .mv-h-step-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 28px;
+            color: #4a3a6a;
+            line-height: 1;
+            margin-bottom: 8px;
+            display: block;
+          }
+          .mv-h-step-h {
+            font-weight: 800; font-size: 16px;
+            color: #0d0d0d; margin-bottom: 4px;
+            letter-spacing: -0.01em;
+          }
+          .mv-h-step-b {
+            font-size: 13px; color: #4a3a6a; line-height: 1.5;
+          }
+          /* FAQ accordion */
+          .mv-h-faq-list { width: 100%; max-width: 720px; margin: 0 auto; }
+          .mv-h-faq-item {
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+          }
+          .mv-h-faq-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+          .mv-h-faq-summary {
+            list-style: none; cursor: pointer;
+            padding: 18px 22px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; font-size: 16px; color: #0d0d0d;
+            letter-spacing: -0.01em;
+          }
+          .mv-h-faq-summary::-webkit-details-marker { display: none; }
+          .mv-h-faq-icon {
+            font-size: 22px; line-height: 1; color: #0d0d0d;
+            transition: transform 0.25s ease;
+          }
+          .mv-h-faq-item[open] .mv-h-faq-icon { transform: rotate(45deg); }
+          .mv-h-faq-a {
+            padding: 0 22px 18px;
+            font-size: 14px; color: #4a4a4a; line-height: 1.6;
+          }
+          /* Footer */
+          .mv-h-footer {
+            text-align: center;
+            font-size: 12px; color: #999;
+            margin-top: 24px;
+            padding: 12px;
+          }
+          .mv-h-footer a { color: #999; text-decoration: underline; }
+          /* Sticky bottom CTA bar */
+          .mv-h-sticky {
+            position: fixed; left: 12px; right: 12px; bottom: 12px;
+            z-index: 90;
+            background: rgba(13,13,13,0.96);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 10px 10px 22px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px;
+            max-width: 1100px; margin: 0 auto;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.20);
+          }
+          .mv-h-sticky-text {
+            font-size: 14px; font-weight: 600;
+            letter-spacing: -0.01em;
+          }
+          .mv-h-sticky .mv-h-pill { padding: 12px 22px; font-size: 14px; align-self: auto; }
+          /* Desktop tweaks */
+          @media (min-width: 900px) {
+            .mv-h-page { padding: 22px 22px 110px; }
+            .mv-h-card {
+              padding: 80px 72px;
+              flex-direction: row;
+              align-items: center;
+              gap: 48px;
+              min-height: 540px;
+            }
+            .mv-h-card-text { flex: 1; }
+            .mv-h-visual { flex: 1; margin-top: 0; padding-top: 0; max-width: 540px; }
+            .mv-h-title { font-size: 64px; }
+            .mv-h-final { flex-direction: column; }
+            .mv-h-hero .mv-h-title { font-size: 72px; max-width: 800px; }
+            .mv-h-steps { gap: 22px; }
+            .mv-h-network { width: 360px; height: 240px; }
+            .mv-h-clock { width: 280px; height: 280px; }
+          }
+          @media (max-width: 480px) {
+            .mv-h-card { padding: 44px 26px; min-height: 0; }
+            .mv-h-hero { min-height: 460px; }
+            .mv-h-title { font-size: 36px; }
+            .mv-h-hero .mv-h-title { font-size: 44px; }
+            .mv-h-sub { font-size: 15px; }
+            .mv-h-pill { padding: 16px 24px; font-size: 14px; }
+            .mv-h-steps { grid-template-columns: 1fr; }
+            .mv-h-gallery-card { width: 160px; }
+          }
+        `}</style>
+        <div className="mv-h-page">
+          <nav className="mv-h-nav">
+            <span className="mv-h-logo">amalvera</span>
+            <button className="mv-h-nav-cta" onClick={handleCheckout} disabled={isLoading}>
+              {isLoading ? 'Loading…' : 'Get Started'}
+            </button>
+          </nav>
+
+          <div className="mv-h-stack">
+            {/* Hero */}
+            <section className="mv-h-card mv-h-hero mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Custom websites · 48 hours</div>
+                <h1 className="mv-h-title">Custom websites for <em>home service pros.</em></h1>
+                <p className="mv-h-sub">Designed, built, and live in 48 hours. <strong>$0 upfront.</strong> $20/month covers hosting and edits.</p>
+                <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
+                  {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-mockup" aria-hidden="true">
+                  <div className="mv-h-mockup-bar"><span/><span/><span/></div>
+                  <div className="mv-h-mockup-body">
+                    <div className="mv-h-mockup-h">Cooper & Sons Roofing</div>
+                    <div className="mv-h-mockup-p">Family-owned roof repair, replacement, and storm damage in greater Austin. Free estimates within 48 hours.</div>
+                    <span className="mv-h-mockup-cta">Get a free estimate →</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Trust */}
+            <section className="mv-h-card mv-h-trust mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Built to be trusted</div>
+                <h2 className="mv-h-title">Real trust starts with a <em>real site.</em></h2>
+                <p className="mv-h-sub">Customers size you up in seconds. A polished, professional website tells them you're the real thing — before they even pick up the phone.</p>
+              </div>
+              <div className="mv-h-visual">
+                <svg viewBox="0 0 240 240" width="220" height="220" fill="none" stroke="#0d0d0d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="120" cy="120" r="92" fill="#fff" stroke="#0d0d0d" strokeWidth="2"/>
+                  <path d="M82 120l28 26 50-58" stroke="#d4914a" strokeWidth="9"/>
+                </svg>
+              </div>
+            </section>
+
+            {/* Speed */}
+            <section className="mv-h-card mv-h-speed mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Speed</div>
+                <h2 className="mv-h-title">Live in <em>48 hours,</em> not 6 weeks.</h2>
+                <p className="mv-h-sub">Tell us what you do, where you serve, and a few photos. We'll have your site online in two business days. No agency timelines, no calls about scope.</p>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-clock" aria-hidden="true">
+                  <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="46" fill="#fff" stroke="#0d0d0d" strokeWidth="2"/>
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="#0d8060" strokeWidth="6" strokeLinecap="round" strokeDasharray="289" strokeDashoffset="22" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="46" textAnchor="middle" fontFamily="Inter" fontWeight="900" fontSize="22" fill="#0d0d0d">48</text>
+                    <text x="50" y="64" textAnchor="middle" fontFamily="Inter" fontWeight="600" fontSize="9" fill="#0d0d0d" letterSpacing="2">HOURS</text>
+                  </svg>
+                </div>
+              </div>
+            </section>
+
+            {/* Gallery */}
+            <section className="mv-h-card mv-h-gallery mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Gallery</div>
+                <h2 className="mv-h-title">Real builds. <em>Real contractors.</em></h2>
+                <p className="mv-h-sub">Each one custom — designed and shipped by us. Tap a preview to watch the walkthrough.</p>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-gallery-row">
+                  {homeVideos.map((item, i) => (
+                    <div key={i} className="mv-h-gallery-card">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'true',
+                          'big-play-button': 'true',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': '0d0d0d',
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* SEO */}
+            <section className="mv-h-card mv-h-seo mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Found on Google</div>
+                <h2 className="mv-h-title">Engineered to <em>rank.</em></h2>
+                <p className="mv-h-sub">Clean code, schema markup, fast load times. Want to rank for more services or service areas? We'll add and interlink the pages — Google rewards authority.</p>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-network" aria-hidden="true">
+                  <svg viewBox="0 0 360 240">
+                    <line x1="180" y1="120" x2="60" y2="60"/>
+                    <line x1="180" y1="120" x2="300" y2="60"/>
+                    <line x1="180" y1="120" x2="60" y2="180"/>
+                    <line x1="180" y1="120" x2="300" y2="180"/>
+                    <line x1="180" y1="120" x2="180" y2="30"/>
+                    <line x1="180" y1="120" x2="180" y2="210"/>
+                    <circle cx="180" cy="120" r="22" className="mv-node-c"/>
+                    <circle cx="60" cy="60" r="11"/>
+                    <circle cx="300" cy="60" r="11"/>
+                    <circle cx="60" cy="180" r="11"/>
+                    <circle cx="300" cy="180" r="11"/>
+                    <circle cx="180" cy="30" r="11"/>
+                    <circle cx="180" cy="210" r="11"/>
+                  </svg>
+                </div>
+              </div>
+            </section>
+
+            {/* Pricing */}
+            <section className="mv-h-card mv-h-pricing mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Pricing</div>
+                <h2 className="mv-h-title">$0 design fee. <em>$20/mo.</em> That's it.</h2>
+                <p className="mv-h-sub">We don't charge for the design. The $20/month covers hosting and edits — keeping your site live online.</p>
+                <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
+                  {isLoading ? 'Loading…' : 'Start now'}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-receipt" aria-hidden="true">
+                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Custom website design</span><span className="mv-h-receipt-val"><span className="mv-h-receipt-strike">$2,400</span>FREE</span></div>
+                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Delivery in 48 hours</span><span className="mv-h-receipt-val">included</span></div>
+                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Edits & ongoing support</span><span className="mv-h-receipt-val">included</span></div>
+                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Hosting</span><span className="mv-h-receipt-val">$20/mo</span></div>
+                </div>
+              </div>
+            </section>
+
+            {/* How It Works */}
+            <section className="mv-h-card mv-h-how mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">How it works</div>
+                <h2 className="mv-h-title">Three steps to <em>live.</em></h2>
+                <p className="mv-h-sub">Sign up. Tell us a bit. Watch your site go live in 48 hours. That's the whole flow.</p>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-steps">
+                  <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">Sign up</div><div className="mv-h-step-b">Quick form. Takes about 60 seconds. The custom design is on us.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">Tell us about your work</div><div className="mv-h-step-b">Your business, service area, photos you want featured.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">We deliver</div><div className="mv-h-step-b">Your site is live in about 48 hours.</div></div>
+                </div>
+              </div>
+            </section>
+
+            {/* FAQ */}
+            <section className="mv-h-card mv-h-faq mv-h-anim">
+              <div className="mv-h-card-text" style={{ width: '100%' }}>
+                <div className="mv-h-eyebrow">Questions</div>
+                <h2 className="mv-h-title">Common <em>questions.</em></h2>
+                <div className="mv-h-faq-list">
+                  <details className="mv-h-faq-item" open>
+                    <summary className="mv-h-faq-summary">What do I get with the website?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">A custom, professional website built for your business — pages, contact forms, mobile-responsive design, and the whole thing engineered to rank on Google.</div>
+                  </details>
+                  <details className="mv-h-faq-item">
+                    <summary className="mv-h-faq-summary">What is the $20/month for?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">Hosting — keeping your site live online — plus any edits you need along the way. The design itself is on us.</div>
+                  </details>
+                  <details className="mv-h-faq-item">
+                    <summary className="mv-h-faq-summary">What support do I get?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">Email or SMS, anytime. Real humans on the other end.</div>
+                  </details>
+                  <details className="mv-h-faq-item">
+                    <summary className="mv-h-faq-summary">How fast is the website delivered?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">About 48 hours from sign-up to live URL.</div>
+                  </details>
+                </div>
+              </div>
+            </section>
+
+            {/* Final CTA */}
+            <section className="mv-h-card mv-h-final mv-h-anim">
+              <div className="mv-h-eyebrow">Ready when you are</div>
+              <h2 className="mv-h-title">Your custom site, live in <em>two days.</em></h2>
+              <p className="mv-h-sub">No design fees, no surprises. $0 upfront, $20/month for hosting and edits.</p>
+              <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
+                {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </section>
+          </div>
+
+          <div className="mv-h-footer">
+            © {new Date().getFullYear()} Amalvera · Austin, TX
+          </div>
+
+          <div className="mv-h-sticky">
+            <span className="mv-h-sticky-text">$0 upfront · $20/mo hosting</span>
+            <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
+              {isLoading ? 'Loading…' : 'Start'}
+            </button>
+          </div>
+        </div>
+
+        {/* Embedded checkout modal — same as other regions */}
+        {modalOpen && clientSecret && (
+          <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+            <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+              <div className="mv-checkout-frame-inner">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+              <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
+                Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   return (
     <>
