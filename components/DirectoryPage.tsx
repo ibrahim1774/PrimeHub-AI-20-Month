@@ -273,6 +273,25 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     document.body.appendChild(s);
   }, [region]);
 
+  useEffect(() => {
+    if (region !== 'home') return;
+    const elements = document.querySelectorAll('.mv-anim-fade');
+    if (!elements.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    elements.forEach((el, i) => {
+      (el as HTMLElement).style.transitionDelay = `${(i % 4) * 80}ms`;
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [region]);
+
   const handleCheckout = async () => {
     setIsLoading(true);
 
@@ -1124,6 +1143,140 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           z-index: 3;
         }
 
+        /* /home — feature sections (Why / Grows / Rank) */
+        .mv-feature {
+          padding: 36px 0 30px;
+          text-align: center;
+          position: relative;
+        }
+        .mv-feature::before {
+          content: '';
+          position: absolute; top: 0; left: 50%;
+          transform: translateX(-50%);
+          width: 80px; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(201,169,110,0.6), transparent);
+        }
+        .mv-feature-eyebrow {
+          font-family: 'Inter', sans-serif;
+          font-size: 10px;
+          letter-spacing: 0.45em;
+          text-transform: uppercase;
+          color: #c9a96e;
+          font-weight: 500;
+          margin-bottom: 14px;
+        }
+        .mv-feature-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 300;
+          font-size: 34px;
+          color: #e8dcc4;
+          line-height: 1.18;
+          margin: 0 auto 12px;
+          max-width: 760px;
+        }
+        .mv-feature-title em { color: #c9a96e; font-style: italic; }
+        .mv-feature-sub {
+          font-family: 'Inter', sans-serif;
+          font-size: 13px;
+          line-height: 1.6;
+          color: #a89e8a;
+          max-width: 620px;
+          margin: 0 auto 28px;
+          padding: 0 16px;
+        }
+        .mv-feature-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 18px;
+        }
+        .mv-feature-card {
+          position: relative;
+          padding: 22px 18px 20px;
+          border: 1px solid rgba(201,169,110,0.22);
+          background: linear-gradient(180deg, rgba(201,169,110,0.04) 0%, rgba(201,169,110,0.01) 100%);
+          text-align: left;
+          transition: border-color 0.4s ease, transform 0.4s ease, background 0.4s ease;
+        }
+        .mv-feature-card::after {
+          content: '';
+          position: absolute; inset: 4px;
+          border: 1px solid rgba(201,169,110,0.12);
+          pointer-events: none;
+          transition: border-color 0.4s ease;
+        }
+        .mv-feature-card:hover {
+          border-color: rgba(201,169,110,0.55);
+          transform: translateY(-2px);
+          background: linear-gradient(180deg, rgba(201,169,110,0.07) 0%, rgba(201,169,110,0.02) 100%);
+        }
+        .mv-feature-card:hover::after {
+          border-color: rgba(201,169,110,0.3);
+        }
+        .mv-feature-num {
+          display: block;
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 300;
+          font-size: 28px;
+          color: #c9a96e;
+          line-height: 1;
+          margin-bottom: 8px;
+        }
+        .mv-feature-stat-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 300;
+          font-size: 38px;
+          color: #d4af37;
+          line-height: 1;
+          margin-bottom: 10px;
+          letter-spacing: -0.01em;
+        }
+        .mv-feature-h {
+          font-family: 'Cormorant Garamond', serif;
+          font-weight: 400;
+          font-size: 18px;
+          color: #e8dcc4;
+          line-height: 1.25;
+          margin-bottom: 6px;
+        }
+        .mv-feature-b {
+          font-family: 'Inter', sans-serif;
+          font-size: 12px;
+          line-height: 1.6;
+          color: #8a8072;
+        }
+        .mv-feature-glyph {
+          width: 36px; height: 36px;
+          color: #c9a96e;
+          display: block;
+          margin-bottom: 10px;
+          transition: color 0.4s ease, transform 0.4s ease;
+        }
+        .mv-feature-card:hover .mv-feature-glyph {
+          color: #d4af37;
+          transform: scale(1.06) rotate(-2deg);
+        }
+        /* fade-in on scroll for /home */
+        .mv-anim-fade {
+          opacity: 0;
+          transform: translateY(18px);
+          transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .mv-anim-fade.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @media (max-width: 768px) {
+          .mv-feature-grid { grid-template-columns: 1fr; gap: 12px; max-width: 480px; }
+          .mv-feature-title { font-size: 26px; padding: 0 18px; }
+          .mv-feature-sub { font-size: 12px; }
+          .mv-feature { padding: 26px 0 20px; }
+          .mv-feature-stat-num { font-size: 32px; }
+        }
         /* FAQ */
         .mv-faq { padding: 22px 0 26px; }
         .mv-faq-title {
@@ -1860,6 +2013,36 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {/* Showcase between hero title and How It Works on /10 */}
           {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'home' || (region === 'freewebsite' || region === 'freewebsite49')) && <PortfolioSection />}
 
+          {/* /home — Why a Website */}
+          {region === 'home' && (
+            <section className="mv-shell mv-feature mv-feature-why">
+              <div className="mv-feature-eyebrow mv-anim-fade">◊ Why a Website ◊</div>
+              <h2 className="mv-feature-title mv-anim-fade">
+                Every business needs <em>a presence online.</em>
+              </h2>
+              <p className="mv-feature-sub mv-anim-fade">
+                Without one, you're invisible to most customers. With one, you're trusted, discoverable, and open 24 hours a day.
+              </p>
+              <div className="mv-feature-grid">
+                <div className="mv-feature-card mv-anim-fade">
+                  <span className="mv-feature-num">I.</span>
+                  <div className="mv-feature-h">Trust you instantly</div>
+                  <div className="mv-feature-b">A polished website tells every prospect you're a real, professional business — before they even contact you.</div>
+                </div>
+                <div className="mv-feature-card mv-anim-fade">
+                  <span className="mv-feature-num">II.</span>
+                  <div className="mv-feature-h">Open 24 hours a day</div>
+                  <div className="mv-feature-b">Customers find you, learn about you, and book you at 2am. Your storefront stays live while you sleep.</div>
+                </div>
+                <div className="mv-feature-card mv-anim-fade">
+                  <span className="mv-feature-num">III.</span>
+                  <div className="mv-feature-h">Convert visitors</div>
+                  <div className="mv-feature-b">Built-in lead forms and chat widgets turn passive visitors into paying customers — every visit becomes an opportunity.</div>
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* How It Works — horizontal 3-up (hidden on /freewebsite) */}
           {(region !== 'freewebsite' && region !== 'freewebsite49') && (
           <div className="mv-how">
@@ -2039,6 +2222,78 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
           </>
+        )}
+
+        {/* /home — Grows Your Business */}
+        {region === 'home' && (
+          <section className="mv-shell mv-feature mv-feature-grow">
+            <div className="mv-feature-eyebrow mv-anim-fade">◊ Grows Your Business ◊</div>
+            <h2 className="mv-feature-title mv-anim-fade">
+              More <em>leads.</em> Better <em>margins.</em>
+            </h2>
+            <p className="mv-feature-sub mv-anim-fade">
+              Businesses with a polished, well-built website book more appointments, charge more for their services, and capture leads while they're off the clock.
+            </p>
+            <div className="mv-feature-grid">
+              <div className="mv-feature-card mv-anim-fade mv-feature-stat">
+                <div className="mv-feature-stat-num">+185%</div>
+                <div className="mv-feature-h">More inbound leads</div>
+                <div className="mv-feature-b">when your site ranks on Google's first page versus relying on word-of-mouth alone.</div>
+              </div>
+              <div className="mv-feature-card mv-anim-fade mv-feature-stat">
+                <div className="mv-feature-stat-num">3.2×</div>
+                <div className="mv-feature-h">Higher pricing power</div>
+                <div className="mv-feature-b">customers pay more to a business with a polished, modern online presence.</div>
+              </div>
+              <div className="mv-feature-card mv-anim-fade mv-feature-stat">
+                <div className="mv-feature-stat-num">24/7</div>
+                <div className="mv-feature-h">Bookings while you sleep</div>
+                <div className="mv-feature-b">every form submission lands in your inbox and your phone — found waiting for you the next morning.</div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* /home — Built to Rank on Google */}
+        {region === 'home' && (
+          <section className="mv-shell mv-feature mv-feature-rank">
+            <div className="mv-feature-eyebrow mv-anim-fade">◊ Built to Rank ◊</div>
+            <h2 className="mv-feature-title mv-anim-fade">
+              How we get you <em>found on Google.</em>
+            </h2>
+            <p className="mv-feature-sub mv-anim-fade">
+              Every site we ship is engineered to rank — fast, semantic, schema-marked, and structured so Google understands exactly what you do and where you serve.
+            </p>
+            <div className="mv-feature-grid">
+              <div className="mv-feature-card mv-anim-fade">
+                <svg className="mv-feature-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="24" cy="24" r="18"/>
+                  <path d="M6 24h36M24 6c5 6 5 30 0 36M24 6c-5 6-5 30 0 36"/>
+                </svg>
+                <div className="mv-feature-h">SEO foundation</div>
+                <div className="mv-feature-b">Clean semantic HTML, perfect Lighthouse scores, fast loading. Google's algorithm rewards every one of these.</div>
+              </div>
+              <div className="mv-feature-card mv-anim-fade">
+                <svg className="mv-feature-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="10" cy="10" r="3"/>
+                  <circle cx="38" cy="10" r="3"/>
+                  <circle cx="24" cy="38" r="3"/>
+                  <circle cx="24" cy="24" r="3"/>
+                  <path d="M10 10L24 24M38 10L24 24M24 38L24 24"/>
+                </svg>
+                <div className="mv-feature-h">Interlinked pages</div>
+                <div className="mv-feature-b">Add service pages or area pages — we interlink them so Google sees authority and ranks you for more searches.</div>
+              </div>
+              <div className="mv-feature-card mv-anim-fade">
+                <svg className="mv-feature-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M24 4c-7 0-13 6-13 13 0 9 13 27 13 27s13-18 13-27c0-7-6-13-13-13z"/>
+                  <circle cx="24" cy="17" r="5"/>
+                </svg>
+                <div className="mv-feature-h">Local schema</div>
+                <div className="mv-feature-b">JSON-LD markup tells Google your business name, hours, services, areas. You appear in Maps and local "near me" results.</div>
+              </div>
+            </div>
+          </section>
         )}
 
         {/* Crest — FAQ (hidden on /freewebsite) */}
