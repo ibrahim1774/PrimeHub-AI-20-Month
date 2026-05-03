@@ -2583,9 +2583,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
           {(region === 'freewebsite' || region === 'freewebsite49') && (
             <>
-              <p className="mv-hero-sub mv-hero-sub-barber">
-                <strong>$0 upfront.</strong> We design and build your website for free. If you love it, keep it for <strong>{cfg.currencySymbol}{cfg.monthlyAmount}/month</strong>. If not, you owe nothing.
-              </p>
               <p className="mv-hero-sub mv-hero-sub-barber mv-fw-seo-note">
                 <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for every service and area you cover.
               </p>
