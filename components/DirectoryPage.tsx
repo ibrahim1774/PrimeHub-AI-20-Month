@@ -273,6 +273,40 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     document.body.appendChild(s);
   }, [region]);
 
+  // Fire Meta Pixel "Lead" event when the LeadConnector iframe form is submitted
+  useEffect(() => {
+    if (region !== 'freewebsite' && region !== 'freewebsite49') return;
+    let fired = false;
+    const onMessage = (event: MessageEvent) => {
+      if (fired) return;
+      const origin = event.origin || '';
+      const fromGHL =
+        origin.includes('msgsndr.com') ||
+        origin.includes('leadconnectorhq.com') ||
+        origin.includes('gohighlevel.com');
+      if (!fromGHL) return;
+      const data = event.data;
+      const dataStr = typeof data === 'string' ? data : (() => {
+        try { return JSON.stringify(data); } catch { return ''; }
+      })();
+      const looksLikeSubmit = /form[_-]?submit|formSubmissionId|formSubmitted|lead[_-]?captur/i.test(dataStr || '');
+      if (!looksLikeSubmit) return;
+      fired = true;
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        const eventID = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        (window as any).fbq('track', 'Lead', {
+          content_name: region === 'freewebsite49' ? 'FreeWebsite49 Form' : 'FreeWebsite Form',
+          content_category: 'lead_capture',
+          value: cfg.monthlyAmount,
+          currency: cfg.currency,
+        }, { eventID });
+        console.log('[Pixel] Lead fired for', region, 'eventID:', eventID);
+      }
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [region, cfg.monthlyAmount, cfg.currency]);
+
   useEffect(() => {
     if (region !== 'home') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
