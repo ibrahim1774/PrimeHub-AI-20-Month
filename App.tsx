@@ -8,7 +8,7 @@ import DirectorySuccessPage from './components/DirectorySuccessPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads';
 
 const dirPaths: Record<string, Region> = {
   '/': 'home',
@@ -21,6 +21,7 @@ const dirPaths: Record<string, Region> = {
   '/local-business': 'localbusiness',
   '/freewebsite': 'freewebsite',
   '/freewebsite49': 'freewebsite49',
+  '/barberleads': 'barberleads',
 };
 
 const LandingFlow: React.FC = () => {
