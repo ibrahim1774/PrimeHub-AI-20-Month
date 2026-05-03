@@ -2597,7 +2597,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <span className="mv-eyebrow-bar" />
           </div>
           <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'home' || (region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads')) ? 'mv-hero-title-ten' : ''}`}>
-            {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? (
+            {region === 'barberleads' ? (
+              <>
+                A <em>free custom website</em> for your barbershop — you only pay if you love it
+              </>
+            ) : (region === 'freewebsite' || region === 'freewebsite49') ? (
               <>
                 A <em>free custom website</em> for your business — you only pay if you love it
               </>
@@ -2634,7 +2638,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') && (
             <>
               <p className="mv-hero-sub mv-hero-sub-barber mv-fw-seo-note">
-                <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for every service and area you cover.
+                <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for {region === 'barberleads' ? 'every cut, fade, and neighborhood you serve' : 'every service and area you cover'}.
               </p>
               <div className="mv-fw-highlight">
                 <strong>Pay {cfg.currencySymbol}{cfg.monthlyAmount}/month — only after we design it for you</strong>
@@ -2658,9 +2662,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') && (
             <div id="fw-form" className="mv-fw-form-wrap">
               <div className="mv-fw-form-eyebrow">◊ Get Started — Free ◊</div>
-              <h2 className="mv-fw-form-title">Tell us about your business</h2>
+              <h2 className="mv-fw-form-title">{region === 'barberleads' ? 'Tell us about your barbershop' : 'Tell us about your business'}</h2>
               <p className="mv-fw-form-sub">
-                We'll design + build your site for free. Pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it.
+                We'll design + build your {region === 'barberleads' ? 'barbershop' : ''} site for free. Pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it.
               </p>
               <div className="mv-frame mv-fw-form-frame">
                 {region === 'freewebsite49' ? (
