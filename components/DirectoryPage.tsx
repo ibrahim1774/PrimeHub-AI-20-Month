@@ -1414,8 +1414,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
         /* /freewebsite — inline LeadConnector form */
         .mv-fw-form-wrap {
-          max-width: 380px;
-          margin: 14px auto 18px;
+          max-width: 340px;
+          margin: 12px auto 14px;
           text-align: center;
         }
         .mv-fw-form-eyebrow {
@@ -2599,11 +2599,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <h1 className={`mv-hero-title ${(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'home' || (region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads')) ? 'mv-hero-title-ten' : ''}`}>
             {region === 'barberleads' ? (
               <>
-                A <em>free custom website</em> for your barbershop — you only pay if you love it
+                A <em>free custom website design</em> for your barbershop — you only pay if you love it
               </>
             ) : (region === 'freewebsite' || region === 'freewebsite49') ? (
               <>
-                A <em>free custom website</em> for your business — you only pay if you love it
+                A <em>free custom website design</em> for your business — you only pay if you love it
               </>
             ) : (region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'home') ? (
               <>
@@ -2641,7 +2641,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for {region === 'barberleads' ? 'every cut, fade, and neighborhood you serve' : 'every service and area you cover'}.
               </p>
               <div className="mv-fw-highlight">
-                <strong>Pay {cfg.currencySymbol}{cfg.monthlyAmount}/month — only after we design it for you</strong>
+                <strong>We design your site first — if you love it, you just cover {cfg.currencySymbol}{cfg.monthlyAmount}/mo hosting</strong>
               </div>
             </>
           )}
@@ -2687,9 +2687,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   />
                 ) : region === 'barberleads' ? (
                   <iframe
-                    src="https://api.leadconnectorhq.com/widget/form/9UAJWpKVPWUIsM7NF5jO"
-                    style={{ width: '100%', height: 587, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
-                    id="inline-9UAJWpKVPWUIsM7NF5jO"
+                    src="https://api.leadconnectorhq.com/widget/form/eWkkKWwoxGJK2CvpWUxX"
+                    style={{ width: '100%', height: 420, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
+                    id="inline-eWkkKWwoxGJK2CvpWUxX"
                     data-layout='{"id":"INLINE"}'
                     data-trigger-type="alwaysShow"
                     data-trigger-value=""
@@ -2697,11 +2697,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     data-activation-value=""
                     data-deactivation-type="neverDeactivate"
                     data-deactivation-value=""
-                    data-form-name="Barber"
-                    data-height="587"
-                    data-layout-iframe-id="inline-9UAJWpKVPWUIsM7NF5jO"
-                    data-form-id="9UAJWpKVPWUIsM7NF5jO"
-                    title="Barber"
+                    data-form-name="Barber - $20"
+                    data-height="420"
+                    data-layout-iframe-id="inline-eWkkKWwoxGJK2CvpWUxX"
+                    data-form-id="eWkkKWwoxGJK2CvpWUxX"
+                    title="Barber - $20"
                   />
                 ) : (
                   <iframe
@@ -3219,13 +3219,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </div>
 
       {/* Sticky */}
-      {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? (
-        <div className="mv-sticky visible mv-sticky-notoggle mv-sticky-free">
-          <div className="mv-guarantee">
-            <strong>$0 upfront</strong> — pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it
-          </div>
-        </div>
-      ) : (
+      {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? null : (
         <div className={`mv-sticky visible ${region === 'nineteen' ? 'mv-sticky-notoggle' : ''}`}>
           <div className="mv-sticky-inner">
             <span className="mv-sticky-price">
