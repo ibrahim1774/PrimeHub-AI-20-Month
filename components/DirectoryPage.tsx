@@ -2637,7 +2637,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           )}
           {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') && (
             <div className="mv-fw-highlight">
-              <strong>We design your site first — you only pay if you love it</strong>
+              <strong>We design your site first — if you love it, you just cover a small monthly hosting fee. That's it.</strong>
             </div>
           )}
 
