@@ -2641,7 +2641,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for {region === 'barberleads' ? 'every cut, fade, and neighborhood you serve' : 'every service and area you cover'}.
               </p>
               <div className="mv-fw-highlight">
-                <strong>We design your site first — if you love it, you just cover {cfg.currencySymbol}{cfg.monthlyAmount}/mo hosting</strong>
+                <strong>We design your site first — you only pay if you love it</strong>
               </div>
             </>
           )}
@@ -2664,7 +2664,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-fw-form-eyebrow">◊ Get Started — Free ◊</div>
               <h2 className="mv-fw-form-title">{region === 'barberleads' ? 'Tell us about your barbershop' : 'Tell us about your business'}</h2>
               <p className="mv-fw-form-sub">
-                We'll design + build your {region === 'barberleads' ? 'barbershop' : ''} site for free. Pay {cfg.currencySymbol}{cfg.monthlyAmount}/mo only if you love it.
+                We'll design + build your {region === 'barberleads' ? 'barbershop' : ''} site for free. Only pay if you love it.
               </p>
               <div className="mv-frame mv-fw-form-frame">
                 {region === 'freewebsite49' ? (
