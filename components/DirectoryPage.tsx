@@ -2636,14 +2636,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </p>
           )}
           {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') && (
-            <>
-              <p className="mv-hero-sub mv-hero-sub-barber mv-fw-seo-note">
-                <strong>Optional:</strong> we can build out a <strong>10+ page</strong> site — SEO-optimized for {region === 'barberleads' ? 'every cut, fade, and neighborhood you serve' : 'every service and area you cover'}.
-              </p>
-              <div className="mv-fw-highlight">
-                <strong>We design your site first — you only pay if you love it</strong>
-              </div>
-            </>
+            <div className="mv-fw-highlight">
+              <strong>We design your site first — you only pay if you love it</strong>
+            </div>
           )}
 
           {/* Video — centered (hidden on /10) */}
