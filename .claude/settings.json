@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Read(//Users/ibrahim/.claude/plans/**)",
+      "Bash(npx tsc:*)",
+      "mcp__claude_ai_Vercel__list_teams",
+      "mcp__claude_ai_Vercel__list_projects",
+      "Bash(curl -s https://data.jsdelivr.com/v1/packages/npm/payment-icons@1.0.0/flat)",
+      "Bash(curl -s https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/)",
+      "Bash(curl -sI \"https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/apple-pay.svg\")",
+      "Bash(curl -sI \"https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/google-pay.svg\")",
+      "Bash(curl -sI \"https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/applepay.svg\")",
+      "Bash(curl -sI \"https://cdn.jsdelivr.net/npm/payment-icons@1.0.0/min/flat/googlepay.svg\")",
+      "Bash(curl -s https://data.jsdelivr.com/v1/packages/npm/payment-icons@1.0.0?structure=flat)",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f[''''name'''']\\) for f in data.get\\(''''files'''',[]\\)]\")",
+      "Bash(curl -sI \"https://cdn.simpleicons.org/applepay/white\")",
+      "Bash(curl -sI \"https://cdn.simpleicons.org/applepay\")",
+      "Bash(curl -sI \"https://app.gohighlevel.com/v2/preview/rR8XB0oK4DpjYYrcD5N3\")",
+      "Bash(curl -sIL \"https://app.gohighlevel.com/v2/preview/rR8XB0oK4DpjYYrcD5N3\")",
+      "Bash(./node_modules/.bin/tsc --noEmit)"
+    ]
+  }
+}

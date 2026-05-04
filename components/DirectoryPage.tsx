@@ -180,7 +180,7 @@ const REGIONS: Record<Region, {
     source: 'home',
     currency: 'USD',
     currencySymbol: '$',
-    monthlyAmount: 20,
+    monthlyAmount: 30,
     yearlyAmount: 99,
     yearlyWas: 240,
     ribbonEstYear: 'Since 2026',
@@ -216,6 +216,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [activeHomeTier, setActiveHomeTier] = useState<'single' | 'multi'>('multi');
 
   const closeCheckout = () => {
     setModalOpen(false);
@@ -247,7 +248,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...(region === 'home' ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -342,17 +343,22 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     return () => observer.disconnect();
   }, [region]);
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (homeTier?: 'single' | 'multi') => {
     setIsLoading(true);
+
+    const isHomeRegion = region === 'home';
+    const effectiveTier: 'single' | 'multi' = homeTier ?? activeHomeTier;
+    if (isHomeRegion) setActiveHomeTier(effectiveTier);
+    const homeMonthly = effectiveTier === 'single' ? 30 : 50;
 
     // Fire Meta Pixel InitiateCheckout event when user starts checkout
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      const value = pricingPlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount;
-      const eventID = `ic_${pricingPlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      const value = isHomeRegion ? homeMonthly : (pricingPlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+      const eventID = `ic_${isHomeRegion ? effectiveTier : pricingPlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       (window as any).fbq('track', 'InitiateCheckout', {
         value,
         currency: cfg.currency,
-        content_name: pricingPlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan',
+        content_name: isHomeRegion ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Service Website') : (pricingPlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan'),
         content_category: 'subscription',
       }, { eventID });
     }
@@ -361,7 +367,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: true }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: true, ...(isHomeRegion ? { tier: effectiveTier } : {}) }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -787,6 +793,75 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-receipt-label { color: #2a2a2a; }
           .mv-h-receipt-val { color: #0d0d0d; font-weight: 600; }
           .mv-h-receipt-strike { text-decoration: line-through; color: #999; margin-right: 6px; font-weight: 400; }
+          /* Two-tier pricing */
+          .mv-h-pricing-section { flex-direction: column !important; align-items: stretch !important; }
+          .mv-h-pricing-head { text-align: center; max-width: 720px; margin: 0 auto 28px; }
+          .mv-h-pricing-head .mv-h-title, .mv-h-pricing-head .mv-h-sub { margin-left: auto; margin-right: auto; }
+          .mv-h-tier-row {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+          }
+          .mv-h-tier {
+            background: #fff;
+            border-radius: 22px;
+            padding: 28px 26px 30px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+            display: flex; flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex: 1;
+          }
+          .mv-h-tier:hover { transform: translateY(-3px); box-shadow: 0 22px 48px rgba(0,0,0,0.10); }
+          .mv-h-tier-feat { background: #0d0d0d; color: #fff; }
+          .mv-h-tier-feat .mv-h-tier-eyebrow { color: rgba(255,255,255,0.7); }
+          .mv-h-tier-feat .mv-h-tier-price { color: #fff; }
+          .mv-h-tier-feat .mv-h-tier-list { color: rgba(255,255,255,0.85); }
+          .mv-h-tier-feat .mv-h-pill { background: #fff; color: #0d0d0d; }
+          .mv-h-tier-feat .mv-h-pill:hover:not(:disabled) { background: #1f63ff; color: #fff; }
+          .mv-h-tier-eyebrow {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: #6a6a6a;
+            margin-bottom: 12px;
+          }
+          .mv-h-tier-price {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 52px;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            color: #0d0d0d;
+            margin-bottom: 18px;
+          }
+          .mv-h-tier-price span {
+            font-size: 16px; font-weight: 600;
+            letter-spacing: 0; opacity: 0.55;
+            margin-left: 4px;
+          }
+          .mv-h-tier-list {
+            list-style: none; padding: 0; margin: 0 0 22px;
+            font-size: 14px; line-height: 1.6; color: #2a2a2a;
+          }
+          .mv-h-tier-list li { padding: 4px 0; }
+          .mv-h-tier-list li::before { content: '— '; color: #d4914a; font-weight: 700; }
+          .mv-h-tier .mv-h-pill { align-self: stretch; justify-content: center; }
+          .mv-h-or {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 22px;
+            color: #6a6a6a;
+            padding: 4px 0;
+          }
+          @media (min-width: 760px) {
+            .mv-h-tier-row { flex-direction: row; align-items: stretch; gap: 18px; }
+            .mv-h-or { padding: 0; align-self: center; }
+          }
           /* How It Works steps */
           .mv-h-steps {
             display: grid;
@@ -968,8 +1043,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <div className="mv-h-page">
           <nav className="mv-h-nav">
             <span className="mv-h-logo">amalvera</span>
-            <button className="mv-h-nav-cta" onClick={handleCheckout} disabled={isLoading}>
-              {isLoading ? 'Loading…' : 'Get Started'}
+            <button className="mv-h-nav-cta" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+              Get Started
             </button>
           </nav>
 
@@ -977,11 +1052,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {/* Hero */}
             <section className="mv-h-card mv-h-hero mv-h-anim">
               <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Custom websites · 48 hours</div>
+                <div className="mv-h-eyebrow">Local business websites · 48 hours</div>
                 <h1 className="mv-h-title">Custom websites for <em>local businesses.</em></h1>
-                <p className="mv-h-sub">Designed and built in about 48 hours. <strong>$0 upfront.</strong> $20/month covers hosting.</p>
-                <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
-                  {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
+                <p className="mv-h-sub">Designed and built in about 48 hours. <strong>From $30/month</strong> — covers hosting and ongoing edits.</p>
+                <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                  See pricing
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
               </div>
@@ -991,7 +1066,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section className="mv-h-card mv-h-gallery mv-h-anim">
               <div className="mv-h-card-text">
                 <div className="mv-h-eyebrow">Gallery</div>
-                <h2 className="mv-h-title">Real builds. <em>Real contractors.</em></h2>
+                <h2 className="mv-h-title">Real builds. <em>Real local businesses.</em></h2>
                 <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
               </div>
               <div className="mv-h-visual">
@@ -1056,7 +1131,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section className="mv-h-card mv-h-pillars mv-h-anim">
               <div className="mv-h-card-text" style={{ width: '100%' }}>
                 <div className="mv-h-eyebrow">What you get</div>
-                <h2 className="mv-h-title">Built to <em>help your business</em> grow.</h2>
+                <h2 className="mv-h-title">Built to <em>help local businesses</em> grow.</h2>
                 <div className="mv-h-pillar-grid">
                   <div className="mv-h-pillar">
                     <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -1064,7 +1139,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                       <path d="M14 24l7 7 14-15" stroke="#d4914a" strokeWidth="3.5"/>
                     </svg>
                     <div className="mv-h-pillar-h">Trustworthy design</div>
-                    <div className="mv-h-pillar-b">A polished site can help customers take you seriously before the first call.</div>
+                    <div className="mv-h-pillar-b">A polished site can help customers take your local business seriously before the first call.</div>
                   </div>
                   <div className="mv-h-pillar">
                     <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -1094,22 +1169,41 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </section>
 
             {/* Pricing */}
-            <section className="mv-h-card mv-h-pricing mv-h-anim">
-              <div className="mv-h-card-text">
+            <section id="mv-h-pricing" className="mv-h-card mv-h-pricing mv-h-anim mv-h-pricing-section">
+              <div className="mv-h-pricing-head">
                 <div className="mv-h-eyebrow">Pricing</div>
-                <h2 className="mv-h-title">$0 design fee. <em>$20/mo.</em> That's it.</h2>
-                <p className="mv-h-sub">No design fee. $20/month covers hosting and any edits along the way.</p>
-                <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
-                  {isLoading ? 'Loading…' : 'Start now'}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </button>
+                <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
+                <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
               </div>
-              <div className="mv-h-visual">
-                <div className="mv-h-receipt" aria-hidden="true">
-                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Custom website design</span><span className="mv-h-receipt-val"><span className="mv-h-receipt-strike">$2,400</span>FREE</span></div>
-                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Delivery in ~48 hours</span><span className="mv-h-receipt-val">included</span></div>
-                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Edits & ongoing support</span><span className="mv-h-receipt-val">included</span></div>
-                  <div className="mv-h-receipt-row"><span className="mv-h-receipt-label">Hosting</span><span className="mv-h-receipt-val">$20/mo</span></div>
+              <div className="mv-h-tier-row">
+                <div className="mv-h-tier">
+                  <div className="mv-h-tier-eyebrow">Single page</div>
+                  <div className="mv-h-tier-price">$30<span>/mo</span></div>
+                  <ul className="mv-h-tier-list">
+                    <li>One-page custom site</li>
+                    <li>Mobile-responsive · SEO basics</li>
+                    <li>Live in ~48 hours</li>
+                    <li>Hosting + edits included</li>
+                  </ul>
+                  <button className="mv-h-pill" onClick={() => handleCheckout('single')} disabled={isLoading}>
+                    {isLoading && activeHomeTier === 'single' ? 'Loading…' : 'Start — $30/mo'}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
+                </div>
+                <div className="mv-h-or">or</div>
+                <div className="mv-h-tier mv-h-tier-feat">
+                  <div className="mv-h-tier-eyebrow">Multi-service</div>
+                  <div className="mv-h-tier-price">$50<span>/mo</span></div>
+                  <ul className="mv-h-tier-list">
+                    <li>Multiple service pages</li>
+                    <li>Service-area + city pages</li>
+                    <li>Deeper SEO setup</li>
+                    <li>Hosting + edits included</li>
+                  </ul>
+                  <button className="mv-h-pill" onClick={() => handleCheckout('multi')} disabled={isLoading}>
+                    {isLoading && activeHomeTier === 'multi' ? 'Loading…' : 'Start — $50/mo'}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
                 </div>
               </div>
             </section>
@@ -1141,7 +1235,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and SEO optimized so it could help you show up on Google.</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">What is the $20/month for?<span className="mv-h-faq-icon">+</span></summary>
+                    <summary className="mv-h-faq-summary">What's the difference between $30 and $50?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">$30/mo gets you a single-page custom site — perfect for a focused business with one main offer. $50/mo gets you a multi-service site with separate pages for each service and service area, plus deeper SEO setup.</div>
+                  </details>
+                  <details className="mv-h-faq-item">
+                    <summary className="mv-h-faq-summary">What is the monthly fee for?<span className="mv-h-faq-icon">+</span></summary>
                     <div className="mv-h-faq-a">Hosting — keeping your site live online — plus any edits you need along the way. The design itself is on us.</div>
                   </details>
                   <details className="mv-h-faq-item">
@@ -1159,10 +1257,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {/* Final CTA */}
             <section className="mv-h-card mv-h-final mv-h-anim">
               <div className="mv-h-eyebrow">Ready when you are</div>
-              <h2 className="mv-h-title">Your custom site, live in <em>about 48 hours.</em></h2>
-              <p className="mv-h-sub">$0 upfront. $20/month for hosting.</p>
-              <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
-                {isLoading ? 'Loading…' : 'Get your website built — $20/mo'}
+              <h2 className="mv-h-title">Your local business site, live in <em>about 48 hours.</em></h2>
+              <p className="mv-h-sub">$0 design fee. From $30/month — covers hosting and edits.</p>
+              <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                See pricing
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
             </section>
@@ -1173,9 +1271,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           <div className="mv-h-sticky">
-            <span className="mv-h-sticky-text">$0 upfront · $20/mo hosting</span>
-            <button className="mv-h-pill" onClick={handleCheckout} disabled={isLoading}>
-              {isLoading ? 'Loading…' : 'Start'}
+            <span className="mv-h-sticky-text">$0 design fee · from $30/mo</span>
+            <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+              See pricing
             </button>
           </div>
         </div>
