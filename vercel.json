@@ -18,6 +18,15 @@
         },
         "api/deploy.ts": {
             "maxDuration": 60
+        },
+        "api/paypal-config.ts": {
+            "maxDuration": 10
+        },
+        "api/paypal-create-subscription.ts": {
+            "maxDuration": 30
+        },
+        "api/paypal-capture-subscription.ts": {
+            "maxDuration": 30
         }
     },
     "headers": [

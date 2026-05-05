@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
+import PayPalSubscribeModal from './PayPalSubscribeModal';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -216,6 +217,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [paypalOpen, setPaypalOpen] = useState(false);
+  const [paypalCtx, setPaypalCtx] = useState<{ tier: 'single' | 'multi'; plan: 'monthly' | 'yearly' } | null>(null);
   const [activeHomeTier, setActiveHomeTier] = useState<'single' | 'multi'>('multi');
 
   const closeCheckout = () => {
@@ -764,6 +767,52 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="mv-f-tier-cta">{isLoading && fiveTier === 'multi' ? 'Loading…' : 'Start →'}</span>
                 </button>
               </div>
+
+              {/* PayPal alternative payment */}
+              <div className="mv-f-paypal" style={{ marginTop: 18, textAlign: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px auto 12px', maxWidth: 360, color: '#666', fontSize: 12, letterSpacing: '.08em', textTransform: 'uppercase', fontWeight: 600 }}>
+                  <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.12)' }} />
+                  <span>Or pay with PayPal</span>
+                  <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.12)' }} />
+                </div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const value = fiveIsYearly ? 36 : 5;
+                      if (typeof window !== 'undefined' && (window as any).fbq) {
+                        (window as any).fbq('track', 'InitiateCheckout', { value, currency: 'USD', content_name: 'Single Page Website', content_category: 'subscription' }, { eventID: `ic_paypal_single_${pricingPlan}_${Date.now()}` });
+                      }
+                      setPaypalCtx({ tier: 'single', plan: pricingPlan });
+                      setPaypalOpen(true);
+                    }}
+                    disabled={isLoading}
+                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 999, padding: '12px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 18px rgba(0,0,0,.08)' }}
+                  >
+                    <span style={{ fontWeight: 800 }}>PayPal</span>
+                    <span style={{ opacity: .85 }}>· Single {fiveIsYearly ? '$36/yr' : '$5/mo'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const value = fiveIsYearly ? 72 : 10;
+                      if (typeof window !== 'undefined' && (window as any).fbq) {
+                        (window as any).fbq('track', 'InitiateCheckout', { value, currency: 'USD', content_name: 'Multi-Page Website', content_category: 'subscription' }, { eventID: `ic_paypal_multi_${pricingPlan}_${Date.now()}` });
+                      }
+                      setPaypalCtx({ tier: 'multi', plan: pricingPlan });
+                      setPaypalOpen(true);
+                    }}
+                    disabled={isLoading}
+                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 999, padding: '12px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 18px rgba(0,0,0,.08)' }}
+                  >
+                    <span style={{ fontWeight: 800 }}>PayPal</span>
+                    <span style={{ opacity: .85 }}>· Multi {fiveIsYearly ? '$72/yr' : '$10/mo'}</span>
+                  </button>
+                </div>
+                <p style={{ margin: '10px auto 0', fontSize: 11, color: '#888', maxWidth: 320 }}>
+                  No PayPal account required — pay with debit or credit card.
+                </p>
+              </div>
             </section>
 
             {/* FAQ */}
@@ -832,6 +881,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           </div>
         )}
+
+        <PayPalSubscribeModal
+          open={paypalOpen}
+          ctx={paypalCtx}
+          onClose={() => setPaypalOpen(false)}
+        />
       </>
     );
   }

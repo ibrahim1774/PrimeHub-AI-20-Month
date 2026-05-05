@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { Storage } from '@google-cloud/storage';
 import crypto from 'crypto';
+import { verifyWebhookSignature, PRICE_BY_KEY } from './_paypal';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
@@ -72,6 +73,11 @@ export default async function handler(req: any, res: any) {
 
     const sig = req.headers['stripe-signature'];
     const buf = await buffer(req);
+
+    // Branch by signature header — PayPal uses paypal-transmission-id, Stripe uses stripe-signature.
+    if (!sig && req.headers['paypal-transmission-id']) {
+        return handlePayPalWebhook(req, res, buf);
+    }
 
     let event;
 
@@ -229,4 +235,66 @@ export default async function handler(req: any, res: any) {
     }
 
     res.json({ received: true });
+}
+
+function parseCustomId(s: string | undefined): Record<string, string> {
+    const out: Record<string, string> = {};
+    if (!s) return out;
+    for (const part of s.split('|')) {
+        const eq = part.indexOf('=');
+        if (eq > 0) out[part.slice(0, eq)] = part.slice(eq + 1);
+    }
+    return out;
+}
+
+async function handlePayPalWebhook(req: any, res: any, buf: Buffer) {
+    const rawBody = buf.toString('utf8');
+    let event: any;
+    try {
+        event = JSON.parse(rawBody);
+    } catch (e) {
+        return res.status(400).send('invalid json');
+    }
+
+    const ok = await verifyWebhookSignature(req.headers, rawBody);
+    if (!ok) {
+        console.error('[PayPal Webhook] signature verification failed');
+        return res.status(400).send('signature verification failed');
+    }
+
+    const type = event.event_type;
+    console.log(`[PayPal Webhook] received ${type} (id=${event.id})`);
+
+    if (type === 'BILLING.SUBSCRIPTION.ACTIVATED') {
+        const resource = event.resource || {};
+        const subscriptionId = resource.id;
+        const customId: string = resource.custom_id || '';
+        const meta = parseCustomId(customId);
+        const tier = (meta.tier === 'multi' ? 'multi' : 'single') as 'single' | 'multi';
+        const plan = (meta.plan === 'yearly' ? 'yearly' : 'monthly') as 'monthly' | 'yearly';
+        const value = PRICE_BY_KEY[`${tier}-${plan}` as keyof typeof PRICE_BY_KEY];
+        const email = resource.subscriber?.email_address;
+        const clientIp = meta.ip;
+        const userAgent = meta.ua;
+        const origin = req.headers?.origin || 'https://www.amalvera.com';
+        const eventSourceUrl = `${origin}/5?status=success&session_id=${subscriptionId}&plan=${plan}&tier=${tier}&provider=paypal`;
+
+        if (FB_ACCESS_TOKEN) {
+            sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
+                email,
+                clientIp,
+                userAgent,
+                value,
+                currency: 'USD',
+                eventId: `purchase_${subscriptionId}`,
+                eventSourceUrl,
+            });
+        } else {
+            console.warn('[PayPal Webhook] FB_ACCESS_TOKEN not set; skipping CAPI event');
+        }
+    } else if (type === 'BILLING.SUBSCRIPTION.CANCELLED' || type === 'BILLING.SUBSCRIPTION.PAYMENT.FAILED') {
+        console.log(`[PayPal Webhook] ${type} for subscription ${event.resource?.id}`);
+    }
+
+    return res.json({ received: true });
 }
