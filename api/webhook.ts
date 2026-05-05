@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import { Storage } from '@google-cloud/storage';
 import crypto from 'crypto';
-import { verifyWebhookSignature, regionToPath, type Region } from './_paypal';
+import { verifyWebhookSignature, regionToPath, type Region } from '../lib/paypal';
 
 const PAYPAL_VALID_REGIONS = new Set(['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home']);
 

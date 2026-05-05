@@ -1,4 +1,4 @@
-import { resolvePlanId, type Region } from './_paypal';
+import { resolvePlanId, type Region } from '../lib/paypal';
 
 const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home'];
 

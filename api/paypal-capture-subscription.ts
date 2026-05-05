@@ -1,4 +1,4 @@
-import { getSubscription, regionToPath, type Region } from './_paypal';
+import { getSubscription, regionToPath, type Region } from '../lib/paypal';
 
 const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home'];
 
