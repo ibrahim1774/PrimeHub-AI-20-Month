@@ -661,35 +661,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <nav className="mv-f-nav">
             <span className="mv-f-logo">amalvera</span>
             <button className="mv-f-pill" style={{ padding: '10px 18px', fontSize: 13 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              Build mine — 24h
+              See pricing
             </button>
           </nav>
 
           <div className="mv-f-stack">
-            {/* Hero — compact, all key info */}
+            {/* Hero — compact, with embedded examples gallery */}
             <section className="mv-f-card mv-f-hero mv-h-anim">
-              <div className="mv-f-eyebrow">AI-built websites · From $5/mo</div>
-              <h1 className="mv-f-title">A custom website for your local business — <em>built by AI</em> in 24 hours.</h1>
-              <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
-              <p className="mv-f-promise-body">The moment you check out, send us your <em>Google Business Profile</em>, <em>Facebook page</em>, or <em>Instagram page</em>. We deliver your custom site in 24 hours — no hassle. Custom. Beautiful. Yours.</p>
-              <p className="mv-f-sub">We use AI plus your real photos and business info to build a one-of-a-kind site. We host it too. You just cover the small monthly cost.</p>
-              <div className="mv-f-quick">
-                <div className="mv-f-quickitem"><b>$5/mo</b>1-page site, custom to your business</div>
-                <div className="mv-f-quickitem"><b>$10/mo</b>Multi-page site with SEO</div>
-                <div className="mv-f-quickitem"><b>You send</b>Your Google, Facebook, or Instagram link</div>
-                <div className="mv-f-quickitem"><b>We do</b>The whole site, hosting, edits</div>
-              </div>
-              <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                We build it, host it, deliver in 24h
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </button>
-            </section>
+              <div className="mv-f-eyebrow">Custom websites · From $5/mo</div>
+              <h1 className="mv-f-title">Custom websites for <em>local businesses.</em></h1>
+              <p className="mv-f-sub">We build it. We host it. We deliver it in 24 hours. That's it.</p>
 
-            {/* Examples */}
-            <section className="mv-f-card mv-f-examples mv-h-anim">
-              <div className="mv-f-eyebrow">Examples</div>
-              <h2 className="mv-f-title">Real AI sites for <em>real local businesses.</em></h2>
-              <p className="mv-f-sub">Each one is built from scratch using the business's own photos, name, and details. Tap to watch a walkthrough.</p>
+              <div className="mv-f-eyebrow" style={{ marginTop: 6 }}>Real sites · Real local businesses</div>
               <div className="mv-f-gallery">
                 {fiveExamples.map((item, i) => (
                   <div key={i} className="mv-f-gcard">
@@ -720,17 +703,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   </div>
                 ))}
               </div>
+
+              <div className="mv-f-promise" style={{ marginTop: 18 }}><strong>We deliver within 24 hours</strong></div>
+              <button className="mv-f-pill" style={{ marginTop: 10 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                See pricing
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
             </section>
 
             {/* How it works */}
             <section className="mv-f-card mv-f-how mv-h-anim">
               <div className="mv-f-eyebrow">How it works</div>
               <h2 className="mv-f-title">Three simple steps.</h2>
-              <p className="mv-f-sub">All we need is a link. Our AI handles the rest.</p>
+              <p className="mv-f-sub">All we need is one link. We handle the rest.</p>
               <div className="mv-f-steps">
                 <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link</div><div className="mv-f-step-b">Your Google Business Profile, Facebook page, or Instagram. That's all.</div></div>
-                <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">AI builds your site</div><div className="mv-f-step-b">We use your real photos, business name, and details to build a custom site just for you.</div></div>
-                <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours.</div><div className="mv-f-step-b">Your site is live within 24 hours. We host it too — just cover the monthly cost.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">We build your site</div><div className="mv-f-step-b">Our team uses AI to build a custom site for your business — with nice-looking backgrounds and your real info.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours</div><div className="mv-f-step-b">Up and running within 24 hours. We host it too — you just cover the monthly cost.</div></div>
               </div>
             </section>
 
@@ -753,7 +742,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     </div>
                   </div>
                   <ul className="mv-f-tier-list">
-                    <li>One custom page, built by AI</li>
+                    <li>One custom page, built for your business</li>
                     <li>Your real photos + business info</li>
                     <li>Hosting + edits included</li>
                   </ul>
@@ -784,11 +773,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-f-faq-list">
                 <details className="mv-f-faq-item" open>
                   <summary className="mv-f-faq-summary">What do I have to send you?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Just one link — your Google Business Profile page, Facebook page, or Instagram page. Our AI uses that to build your whole site.</div>
+                  <div className="mv-f-faq-a">Just one link — your Google Business Profile page, Facebook page, or Instagram page. That's all we need.</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Is it really custom?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Yes. We use your real photos, your business name, and your details from your page. Every site is one of a kind.</div>
+                  <div className="mv-f-faq-a">Yes. Our team uses AI to build a custom site for your business with nice-looking backgrounds, your real photos, and your business info. Every site is one of a kind.</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">What's the difference between $5 and $10?<span className="mv-f-faq-icon">+</span></summary>
@@ -808,10 +797,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             {/* Final CTA */}
             <section className="mv-f-card mv-f-final mv-h-anim">
               <div className="mv-f-eyebrow">Ready?</div>
-              <h2 className="mv-f-title">Your AI-built site, live in <em>24 hours.</em></h2>
-              <p className="mv-f-sub" style={{ marginLeft: 'auto', marginRight: 'auto' }}>From $5/month. We host it. You just cover the cost.</p>
+              <h2 className="mv-f-title">Your custom site, live in <em>24 hours.</em></h2>
+              <p className="mv-f-sub" style={{ marginLeft: 'auto', marginRight: 'auto' }}>We build it. We host it. We deliver it in 24 hours.</p>
               <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                We build it, host it, deliver in 24h
+                See pricing
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
             </section>
@@ -820,9 +809,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
 
           <div className="mv-f-sticky">
-            <span className="mv-f-sticky-text">We custom build it · host it · deliver in 24 hours</span>
+            <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
             <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              Build mine — 24h
+              See pricing
             </button>
           </div>
         </div>
