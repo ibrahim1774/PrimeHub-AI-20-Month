@@ -1,7 +1,9 @@
 import Stripe from 'stripe';
 import { Storage } from '@google-cloud/storage';
 import crypto from 'crypto';
-import { verifyWebhookSignature, PRICE_BY_KEY } from './_paypal';
+import { verifyWebhookSignature, regionToPath, type Region } from './_paypal';
+
+const PAYPAL_VALID_REGIONS = new Set(['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home']);
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
@@ -270,14 +272,18 @@ async function handlePayPalWebhook(req: any, res: any, buf: Buffer) {
         const subscriptionId = resource.id;
         const customId: string = resource.custom_id || '';
         const meta = parseCustomId(customId);
-        const tier = (meta.tier === 'multi' ? 'multi' : 'single') as 'single' | 'multi';
-        const plan = (meta.plan === 'yearly' ? 'yearly' : 'monthly') as 'monthly' | 'yearly';
-        const value = PRICE_BY_KEY[`${tier}-${plan}` as keyof typeof PRICE_BY_KEY];
+        const region = (PAYPAL_VALID_REGIONS.has(meta.r) ? meta.r : 'five') as Region;
+        const usesTier = region === 'five' || region === 'home';
+        const tier = usesTier ? ((meta.t === 'multi' ? 'multi' : 'single') as 'single' | 'multi') : undefined;
+        const plan = (meta.p === 'yearly' ? 'yearly' : 'monthly') as 'monthly' | 'yearly';
+        const value = Number(meta.v) || 0;
+        const currency = (meta.c === 'AUD' ? 'AUD' : 'USD') as 'USD' | 'AUD';
         const email = resource.subscriber?.email_address;
         const clientIp = meta.ip;
         const userAgent = meta.ua;
         const origin = req.headers?.origin || 'https://www.amalvera.com';
-        const eventSourceUrl = `${origin}/5?status=success&session_id=${subscriptionId}&plan=${plan}&tier=${tier}&provider=paypal`;
+        const tierQ = usesTier ? `&tier=${tier}` : '';
+        const eventSourceUrl = `${origin}${regionToPath(region)}?status=success&session_id=${subscriptionId}&plan=${plan}${tierQ}&provider=paypal`;
 
         if (FB_ACCESS_TOKEN) {
             sendFBConversionsEvent(FB_PIXEL_ID, FB_ACCESS_TOKEN, {
@@ -285,7 +291,7 @@ async function handlePayPalWebhook(req: any, res: any, buf: Buffer) {
                 clientIp,
                 userAgent,
                 value,
-                currency: 'USD',
+                currency,
                 eventId: `purchase_${subscriptionId}`,
                 eventSourceUrl,
             });

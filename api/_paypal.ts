@@ -4,20 +4,74 @@
 export const PAYPAL_API = 'https://api-m.paypal.com';
 
 const PRODUCT_NAME = 'Amalvera Website Hosting';
-const PRODUCT_ID_HINT = 'AMALVERA-HOSTING';
 
-type PlanKey = 'single-monthly' | 'single-yearly' | 'multi-monthly' | 'multi-yearly';
+export type Region =
+    | 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
+export type Tier = 'single' | 'multi';
+export type Plan = 'monthly' | 'yearly';
 
-const PLAN_SPECS: Record<PlanKey, { name: string; description: string; amount: string; interval: 'MONTH' | 'YEAR' }> = {
-    'single-monthly': { name: 'single-monthly', description: 'Amalvera Single Page — Monthly', amount: '5.00',  interval: 'MONTH' },
-    'single-yearly':  { name: 'single-yearly',  description: 'Amalvera Single Page — Yearly',  amount: '36.00', interval: 'YEAR'  },
-    'multi-monthly':  { name: 'multi-monthly',  description: 'Amalvera Multi-Page + SEO — Monthly', amount: '10.00', interval: 'MONTH' },
-    'multi-yearly':   { name: 'multi-yearly',   description: 'Amalvera Multi-Page + SEO — Yearly',  amount: '72.00', interval: 'YEAR'  },
+export type Pricing = {
+    planName: string;        // unique name per (region, tier, plan)
+    description: string;
+    amount: string;          // string like '5.00'
+    currency: 'USD' | 'AUD';
+    interval: 'MONTH' | 'YEAR';
+    value: number;           // numeric for analytics
 };
+
+// Mirrors api/create-checkout.ts pricing exactly.
+export function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing {
+    const isYearly = plan === 'yearly';
+    const interval: 'MONTH' | 'YEAR' = isYearly ? 'YEAR' : 'MONTH';
+    const currency: 'USD' | 'AUD' = region === 'aus' ? 'AUD' : 'USD';
+
+    let value = 0;
+    let label = '';
+
+    if (region === 'five') {
+        const t = tier === 'multi' ? 'multi' : 'single';
+        value = isYearly
+            ? (t === 'multi' ? 72 : 36)
+            : (t === 'multi' ? 10 : 5);
+        label = `Amalvera /5 ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'home') {
+        const t = tier === 'single' ? 'single' : 'multi';
+        value = isYearly ? 99 : (t === 'single' ? 30 : 50);
+        label = `Amalvera /home ${t === 'single' ? 'Single Page' : 'Multi-Service'} ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'ten' || region === 'barber') {
+        value = isYearly ? 49 : 10;
+        label = `Amalvera /${region} ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'localbusiness') {
+        value = isYearly ? 135 : 20;
+        label = `Amalvera /local-business ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'aus') {
+        value = isYearly ? 99 : 20;
+        label = `Amalvera /aus ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else {
+        // 'us'
+        value = isYearly ? 99 : 20;
+        label = `Amalvera /1 ${isYearly ? 'Yearly' : 'Monthly'}`;
+    }
+
+    const tierSegment = (region === 'five' || region === 'home')
+        ? `-${tier === 'multi' ? 'multi' : 'single'}`
+        : '';
+    const planName = `${region}${tierSegment}-${plan}-${currency}`;
+    const description = `${label} — ${currency} ${value.toFixed(2)} per ${isYearly ? 'year' : 'month'}`;
+
+    return {
+        planName,
+        description,
+        amount: value.toFixed(2),
+        currency,
+        interval,
+        value,
+    };
+}
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
 let cachedProductId: string | null = null;
-const cachedPlanIds: Map<PlanKey, string> = new Map();
+const cachedPlanIds: Map<string, string> = new Map(); // key = planName
 
 export async function getAccessToken(): Promise<string> {
     if (cachedToken && Date.now() < cachedToken.expiresAt - 30_000) return cachedToken.value;
@@ -59,16 +113,20 @@ async function ppFetch(path: string, init: RequestInit & { token?: string } = {}
 
 async function ensureProductId(): Promise<string> {
     if (cachedProductId) return cachedProductId;
-    // List existing products and try to match by name.
-    const list = await ppFetch('/v1/catalogs/products?page_size=20');
-    const found = (list.products || []).find((p: any) => p.name === PRODUCT_NAME);
-    if (found) {
-        cachedProductId = found.id;
-        return found.id;
+    // Page through up to 100 products looking for our product by name.
+    let page = 1;
+    while (page <= 5) {
+        const list = await ppFetch(`/v1/catalogs/products?page=${page}&page_size=20`);
+        const found = (list.products || []).find((p: any) => p.name === PRODUCT_NAME);
+        if (found) {
+            cachedProductId = found.id;
+            return found.id;
+        }
+        if (!list.products || list.products.length < 20) break;
+        page++;
     }
     const created = await ppFetch('/v1/catalogs/products', {
         method: 'POST',
-        headers: { 'PayPal-Request-Id': PRODUCT_ID_HINT },
         body: JSON.stringify({
             name: PRODUCT_NAME,
             description: 'AI-generated website hosting subscription',
@@ -81,34 +139,40 @@ async function ensureProductId(): Promise<string> {
 }
 
 async function findExistingPlanId(productId: string, planName: string): Promise<string | null> {
-    const list = await ppFetch(`/v1/billing/plans?product_id=${encodeURIComponent(productId)}&page_size=20`);
-    const found = (list.plans || []).find((p: any) => p.name === planName && p.status === 'ACTIVE');
-    return found ? found.id : null;
+    // Page through plans for our product.
+    let page = 1;
+    while (page <= 5) {
+        const list = await ppFetch(`/v1/billing/plans?product_id=${encodeURIComponent(productId)}&page=${page}&page_size=20`);
+        const found = (list.plans || []).find((p: any) => p.name === planName && p.status === 'ACTIVE');
+        if (found) return found.id;
+        if (!list.plans || list.plans.length < 20) return null;
+        page++;
+    }
+    return null;
 }
 
-async function createPlan(productId: string, key: PlanKey): Promise<string> {
-    const spec = PLAN_SPECS[key];
+async function createPlan(productId: string, p: Pricing): Promise<string> {
     const created = await ppFetch('/v1/billing/plans', {
         method: 'POST',
         body: JSON.stringify({
             product_id: productId,
-            name: spec.name,
-            description: spec.description,
+            name: p.planName,
+            description: p.description.slice(0, 127),
             status: 'ACTIVE',
             billing_cycles: [
                 {
-                    frequency: { interval_unit: spec.interval, interval_count: 1 },
+                    frequency: { interval_unit: p.interval, interval_count: 1 },
                     tenure_type: 'REGULAR',
                     sequence: 1,
                     total_cycles: 0, // infinite
                     pricing_scheme: {
-                        fixed_price: { value: spec.amount, currency_code: 'USD' },
+                        fixed_price: { value: p.amount, currency_code: p.currency },
                     },
                 },
             ],
             payment_preferences: {
                 auto_bill_outstanding: true,
-                setup_fee: { value: '0', currency_code: 'USD' },
+                setup_fee: { value: '0', currency_code: p.currency },
                 setup_fee_failure_action: 'CONTINUE',
                 payment_failure_threshold: 3,
             },
@@ -117,15 +181,15 @@ async function createPlan(productId: string, key: PlanKey): Promise<string> {
     return created.id!;
 }
 
-export async function resolvePlanId(tier: 'single' | 'multi', plan: 'monthly' | 'yearly'): Promise<string> {
-    const key: PlanKey = `${tier}-${plan}` as PlanKey;
-    const cached = cachedPlanIds.get(key);
-    if (cached) return cached;
+export async function resolvePlanId(region: Region, tier: Tier | undefined, plan: Plan): Promise<{ planId: string; pricing: Pricing }> {
+    const pricing = getPricing(region, tier, plan);
+    const cached = cachedPlanIds.get(pricing.planName);
+    if (cached) return { planId: cached, pricing };
     const productId = await ensureProductId();
-    const existing = await findExistingPlanId(productId, PLAN_SPECS[key].name);
-    const id = existing || (await createPlan(productId, key));
-    cachedPlanIds.set(key, id);
-    return id;
+    const existing = await findExistingPlanId(productId, pricing.planName);
+    const id = existing || (await createPlan(productId, pricing));
+    cachedPlanIds.set(pricing.planName, id);
+    return { planId: id, pricing };
 }
 
 export async function getSubscription(subscriptionId: string): Promise<any> {
@@ -159,9 +223,15 @@ export async function verifyWebhookSignature(headers: Record<string, any>, rawBo
     }
 }
 
-export const PRICE_BY_KEY: Record<PlanKey, number> = {
-    'single-monthly': 5,
-    'single-yearly': 36,
-    'multi-monthly': 10,
-    'multi-yearly': 72,
-};
+// Map the directory path used in the success URL.
+export function regionToPath(region: Region): string {
+    switch (region) {
+        case 'us': return '/1';
+        case 'aus': return '/aus';
+        case 'ten': return '/10';
+        case 'five': return '/5';
+        case 'barber': return '/barber';
+        case 'localbusiness': return '/local-business';
+        case 'home': return '/';
+    }
+}

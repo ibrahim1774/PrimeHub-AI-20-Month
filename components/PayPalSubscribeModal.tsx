@@ -1,11 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+export type PayPalRegion = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 
+export type PayPalCtx = {
+    region: PayPalRegion;
+    tier?: Tier;          // required for 'five' and 'home'
+    plan: Plan;
+    label: string;        // e.g. "Single Page", "$10/mo plan"
+    priceText: string;    // e.g. "$5/mo", "$72/yr", "$99/yr AUD"
+};
+
 type Props = {
     open: boolean;
-    ctx: { tier: Tier; plan: Plan } | null;
+    ctx: PayPalCtx | null;
     onClose: () => void;
 };
 
@@ -20,7 +29,7 @@ function clearChildren(el: HTMLElement) {
     while (el.firstChild) el.removeChild(el.firstChild);
 }
 
-async function loadPayPalSdk(): Promise<void> {
+async function loadPayPalSdk(currency: string): Promise<void> {
     if (window.paypal) return;
     if (window.__paypalSdkPromise) return window.__paypalSdkPromise;
     window.__paypalSdkPromise = (async () => {
@@ -35,7 +44,7 @@ async function loadPayPalSdk(): Promise<void> {
                 intent: 'subscription',
                 components: 'buttons,funding-eligibility',
                 'enable-funding': 'card',
-                currency: 'USD',
+                currency,
             });
             s.src = `https://www.paypal.com/sdk/js?${params.toString()}`;
             s.dataset.sdkIntegrationSource = 'button-factory';
@@ -60,25 +69,43 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
         setError(null);
         setLoading(true);
 
+        const currency = ctx.region === 'aus' ? 'AUD' : 'USD';
+
         (async () => {
             try {
-                await loadPayPalSdk();
+                // Pre-flight: resolve plan-id on the server before showing PayPal buttons.
+                // This surfaces backend/env errors (missing keys, sandbox-vs-live mismatch,
+                // PayPal API rejections) directly to the user instead of hiding them
+                // behind a generic "Something went wrong" from the SDK's onError.
+                const preflight = await fetch('/api/paypal-create-subscription', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ region: ctx.region, tier: ctx.tier, plan: ctx.plan }),
+                });
+                const preJson = await preflight.json().catch(() => ({}));
+                if (!preflight.ok) {
+                    if (!cancelled) setError(`Setup error: ${preJson.error || preflight.statusText} (HTTP ${preflight.status}). Check Vercel env vars (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET) and that the PayPal app is set to LIVE.`);
+                    return;
+                }
+                const planId: string = preJson.planId;
+                const customId: string = preJson.customId;
+
+                await loadPayPalSdk(currency);
                 if (cancelled || !containerRef.current) return;
                 clearChildren(containerRef.current);
                 buttonsInstance = window.paypal.Buttons({
                     style: { layout: 'vertical', shape: 'rect', color: 'gold', label: 'subscribe' },
                     createSubscription: async (_data: any, actions: any) => {
-                        const r = await fetch('/api/paypal-create-subscription', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ tier: ctx.tier, plan: ctx.plan }),
-                        });
-                        const j = await r.json();
-                        if (!r.ok) throw new Error(j.error || 'Failed to create subscription');
-                        return actions.subscription.create({
-                            plan_id: j.planId,
-                            custom_id: j.customId,
-                        });
+                        try {
+                            return await actions.subscription.create({
+                                plan_id: planId,
+                                custom_id: customId,
+                            });
+                        } catch (e: any) {
+                            const msg = e?.message || 'PayPal could not create the subscription. The plan may not be ACTIVE in PayPal yet.';
+                            setError(msg);
+                            throw e;
+                        }
                     },
                     onApprove: async (data: any) => {
                         try {
@@ -87,6 +114,7 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     subscriptionID: data.subscriptionID,
+                                    region: ctx.region,
                                     tier: ctx.tier,
                                     plan: ctx.plan,
                                 }),
@@ -103,7 +131,11 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                     },
                     onError: (err: any) => {
                         console.error('[PayPal Buttons error]', err);
-                        setError('Something went wrong. Please try again.');
+                        // Show the real PayPal SDK error verbatim — invaluable for debugging
+                        // (e.g. "RESOURCE_NOT_FOUND" for a wrong plan_id, "INVALID_REQUEST" for
+                        // a sandbox plan used with live keys, etc.)
+                        const msg = (err && (err.message || err.toString && err.toString())) || 'Something went wrong with PayPal.';
+                        setError(String(msg));
                     },
                     onCancel: () => {
                         // user cancelled inside PayPal popup
@@ -122,17 +154,12 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
             try { buttonsInstance?.close?.(); } catch {}
             if (containerRef.current) clearChildren(containerRef.current);
         };
-    }, [open, ctx?.tier, ctx?.plan]);
+    }, [open, ctx?.region, ctx?.tier, ctx?.plan]);
 
     if (!open || !ctx) return null;
 
-    const price = ctx.tier === 'single'
-        ? (ctx.plan === 'yearly' ? '$36/yr' : '$5/mo')
-        : (ctx.plan === 'yearly' ? '$72/yr' : '$10/mo');
-    const label = ctx.tier === 'single' ? 'Single Page' : 'Multi-Page + SEO';
-
     return (
-        <div className="mv-checkout-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+        <div className="mv-checkout-backdrop" onClick={onClose} role="dialog" aria-modal="true" style={{ zIndex: 99999 }}>
             <div
                 className="mv-checkout-modal"
                 onClick={(e) => e.stopPropagation()}
@@ -143,7 +170,7 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                     Subscribe with PayPal
                 </h3>
                 <p style={{ margin: '0 0 16px', fontSize: 14, color: '#555' }}>
-                    {label} — <strong>{price}</strong>
+                    {ctx.label} — <strong>{ctx.priceText}</strong>
                     <br />
                     <span style={{ fontSize: 12, color: '#777' }}>
                         Pay with PayPal, debit, or credit card. No PayPal account required.
