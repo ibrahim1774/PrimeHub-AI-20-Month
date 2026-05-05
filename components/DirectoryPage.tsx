@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import PayPalSubscribeModal, { type PayPalCtx } from './PayPalSubscribeModal';
+import PaymentBadgeRow from './PaymentBadgeRow';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -750,44 +751,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
               </div>
 
-              {/* PayPal — primary payment option */}
-              <div className="mv-f-paypal-primary" style={{ margin: '6px 0 14px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <button
-                    type="button"
-                    onClick={() => openPaypal({ region: 'five', tier: 'single', plan: pricingPlan, label: 'Single Page Website', priceText: fiveIsYearly ? '$36/yr' : '$5/mo' })}
-                    disabled={isLoading}
-                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 14, padding: '16px 20px', fontWeight: 800, fontSize: 16, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, boxShadow: '0 12px 28px rgba(0,0,0,.10)' }}
-                  >
-                    <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.15, gap: 2 }}>
-                      <span>Pay with PayPal — Single Page</span>
-                      <span style={{ fontSize: 11, fontWeight: 600, opacity: .7, letterSpacing: '.06em', textTransform: 'uppercase' }}>No account needed · Card or PayPal</span>
-                    </span>
-                    <span style={{ fontWeight: 800 }}>{fiveIsYearly ? '$36/yr' : '$5/mo'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => openPaypal({ region: 'five', tier: 'multi', plan: pricingPlan, label: 'Multi-Page + SEO', priceText: fiveIsYearly ? '$72/yr' : '$10/mo' })}
-                    disabled={isLoading}
-                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 14, padding: '16px 20px', fontWeight: 800, fontSize: 16, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, boxShadow: '0 12px 28px rgba(0,0,0,.10)' }}
-                  >
-                    <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.15, gap: 2 }}>
-                      <span>Pay with PayPal — Multi-Page + SEO</span>
-                      <span style={{ fontSize: 11, fontWeight: 600, opacity: .7, letterSpacing: '.06em', textTransform: 'uppercase' }}>No account needed · Card or PayPal</span>
-                    </span>
-                    <span style={{ fontWeight: 800 }}>{fiveIsYearly ? '$72/yr' : '$10/mo'}</span>
-                  </button>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '4px auto 14px', maxWidth: 360, color: '#888', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 600 }}>
-                <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.10)' }} />
-                <span>Or pay with card via Stripe</span>
-                <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.10)' }} />
-              </div>
+              <PaymentBadgeRow />
 
               <div className="mv-f-tiers">
-                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => handleCheckout('single', pricingPlan)} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => openPaypal({ region: 'five', tier: 'single', plan: pricingPlan, label: 'Single Page Website', priceText: fiveIsYearly ? '$36/yr' : '$5/mo' })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">1-page site, custom to your business</div>
                     <div className="mv-f-tier-price">
@@ -800,9 +767,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Your real photos + business info</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <span className="mv-f-tier-cta">{isLoading && fiveTier === 'single' ? 'Loading…' : 'Start →'}</span>
+                  <span className="mv-f-tier-cta">Start →</span>
                 </button>
-                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => handleCheckout('multi', pricingPlan)} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: 'five', tier: 'multi', plan: pricingPlan, label: 'Multi-Page + SEO', priceText: fiveIsYearly ? '$72/yr' : '$10/mo' })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">Multi-page site with SEO</div>
                     <div className="mv-f-tier-price">
@@ -815,55 +782,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Built-in SEO so Google can find you</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <span className="mv-f-tier-cta">{isLoading && fiveTier === 'multi' ? 'Loading…' : 'Start →'}</span>
+                  <span className="mv-f-tier-cta">Start →</span>
                 </button>
               </div>
 
-              {/* PayPal alternative payment */}
-              <div className="mv-f-paypal" style={{ marginTop: 18, textAlign: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px auto 12px', maxWidth: 360, color: '#666', fontSize: 12, letterSpacing: '.08em', textTransform: 'uppercase', fontWeight: 600 }}>
-                  <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.12)' }} />
-                  <span>Or pay with PayPal</span>
-                  <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.12)' }} />
-                </div>
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const value = fiveIsYearly ? 36 : 5;
-                      if (typeof window !== 'undefined' && (window as any).fbq) {
-                        (window as any).fbq('track', 'InitiateCheckout', { value, currency: 'USD', content_name: 'Single Page Website', content_category: 'subscription' }, { eventID: `ic_paypal_single_${pricingPlan}_${Date.now()}` });
-                      }
-                      setPaypalCtx({ tier: 'single', plan: pricingPlan });
-                      setPaypalOpen(true);
-                    }}
-                    disabled={isLoading}
-                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 999, padding: '12px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 18px rgba(0,0,0,.08)' }}
-                  >
-                    <span style={{ fontWeight: 800 }}>PayPal</span>
-                    <span style={{ opacity: .85 }}>· Single {fiveIsYearly ? '$36/yr' : '$5/mo'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const value = fiveIsYearly ? 72 : 10;
-                      if (typeof window !== 'undefined' && (window as any).fbq) {
-                        (window as any).fbq('track', 'InitiateCheckout', { value, currency: 'USD', content_name: 'Multi-Page Website', content_category: 'subscription' }, { eventID: `ic_paypal_multi_${pricingPlan}_${Date.now()}` });
-                      }
-                      setPaypalCtx({ tier: 'multi', plan: pricingPlan });
-                      setPaypalOpen(true);
-                    }}
-                    disabled={isLoading}
-                    style={{ background: '#ffc439', color: '#0d0d0d', border: 0, borderRadius: 999, padding: '12px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 18px rgba(0,0,0,.08)' }}
-                  >
-                    <span style={{ fontWeight: 800 }}>PayPal</span>
-                    <span style={{ opacity: .85 }}>· Multi {fiveIsYearly ? '$72/yr' : '$10/mo'}</span>
-                  </button>
-                </div>
-                <p style={{ margin: '10px auto 0', fontSize: 11, color: '#888', maxWidth: 320 }}>
-                  No PayPal account required — pay with debit or credit card.
-                </p>
-              </div>
+              <p style={{ margin: '14px auto 0', fontSize: 12, color: '#666', textAlign: 'center', maxWidth: 380, lineHeight: 1.5 }}>
+                Secure checkout powered by <strong style={{ color: '#003087' }}>PayPal</strong>. Pay with PayPal balance or with any major debit/credit card — <em>no PayPal account required</em>.
+              </p>
             </section>
 
             {/* FAQ */}
