@@ -661,7 +661,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <nav className="mv-f-nav">
             <span className="mv-f-logo">amalvera</span>
             <button className="mv-f-pill" style={{ padding: '10px 18px', fontSize: 13 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              See pricing
+              Build mine — 24h
             </button>
           </nav>
 
@@ -680,7 +680,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="mv-f-quickitem"><b>We do</b>The whole site, hosting, edits</div>
               </div>
               <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                See pricing
+                We build it, host it, deliver in 24h
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
             </section>
@@ -811,7 +811,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <h2 className="mv-f-title">Your AI-built site, live in <em>24 hours.</em></h2>
               <p className="mv-f-sub" style={{ marginLeft: 'auto', marginRight: 'auto' }}>From $5/month. We host it. You just cover the cost.</p>
               <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                See pricing
+                We build it, host it, deliver in 24h
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
             </section>
@@ -820,9 +820,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
 
           <div className="mv-f-sticky">
-            <span className="mv-f-sticky-text">From $5/mo · We host it</span>
+            <span className="mv-f-sticky-text">We custom build it · host it · deliver in 24 hours</span>
             <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              See pricing
+              Build mine — 24h
             </button>
           </div>
         </div>
