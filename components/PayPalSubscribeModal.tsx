@@ -82,9 +82,14 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ region: ctx.region, tier: ctx.tier, plan: ctx.plan }),
                 });
-                const preJson = await preflight.json().catch(() => ({}));
+                const rawText = await preflight.text();
+                let preJson: any = {};
+                try { preJson = rawText ? JSON.parse(rawText) : {}; } catch { /* non-JSON response */ }
                 if (!preflight.ok) {
-                    if (!cancelled) setError(`Setup error: ${preJson.error || preflight.statusText} (HTTP ${preflight.status}). Check Vercel env vars (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET) and that the PayPal app is set to LIVE.`);
+                    const detail = preJson.error
+                        ? preJson.error
+                        : (rawText ? rawText.slice(0, 600) : preflight.statusText);
+                    if (!cancelled) setError(`Setup error (HTTP ${preflight.status}): ${detail}`);
                     return;
                 }
                 const planId: string = preJson.planId;
@@ -179,7 +184,7 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                 {loading && <div style={{ padding: 12, textAlign: 'center', color: '#555' }}>Loading PayPal…</div>}
                 <div ref={containerRef} id="paypal-button-container" />
                 {error && (
-                    <div style={{ marginTop: 12, padding: 10, background: '#fff3f3', color: '#a00', borderRadius: 6, fontSize: 13 }}>
+                    <div style={{ marginTop: 12, padding: 10, background: '#fff3f3', color: '#a00', borderRadius: 6, fontSize: 12, maxHeight: 220, overflow: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', lineHeight: 1.4 }}>
                         {error}
                     </div>
                 )}
