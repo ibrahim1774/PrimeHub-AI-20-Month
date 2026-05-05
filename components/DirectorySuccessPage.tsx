@@ -18,8 +18,10 @@ const DirectorySuccessPage: React.FC = () => {
       const isAus = pathname === '/aus';
       const isYearly = plan === 'yearly';
       const homeMonthly = tier === 'multi' ? 50.00 : 30.00;
-      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? 5.00 : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
-      const yearly = (pathname === '/10' || pathname === '/5' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
+      const fiveMonthly = tier === 'multi' ? 10.00 : 5.00;
+      const fiveYearly = tier === 'multi' ? 72.00 : 36.00;
+      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
+      const yearly = pathname === '/5' ? fiveYearly : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $30/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {

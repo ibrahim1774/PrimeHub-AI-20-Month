@@ -248,7 +248,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...(region === 'home' ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -343,22 +343,31 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     return () => observer.disconnect();
   }, [region]);
 
-  const handleCheckout = async (homeTier?: 'single' | 'multi') => {
+  const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const isHomeRegion = region === 'home';
-    const effectiveTier: 'single' | 'multi' = homeTier ?? activeHomeTier;
-    if (isHomeRegion) setActiveHomeTier(effectiveTier);
+    const usesTier = region === 'home' || region === 'five';
+    const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
+    if (usesTier) setActiveHomeTier(effectiveTier);
+    const effectivePlan = planOverride ?? pricingPlan;
     const homeMonthly = effectiveTier === 'single' ? 30 : 50;
+    const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
+    const fiveYearly = effectiveTier === 'single' ? 36 : 72;
 
     // Fire Meta Pixel InitiateCheckout event when user starts checkout
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      const value = isHomeRegion ? homeMonthly : (pricingPlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
-      const eventID = `ic_${isHomeRegion ? effectiveTier : pricingPlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      const value = region === 'home'
+        ? homeMonthly
+        : region === 'five'
+          ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
+          : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+      const eventID = `ic_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       (window as any).fbq('track', 'InitiateCheckout', {
         value,
         currency: cfg.currency,
-        content_name: isHomeRegion ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Service Website') : (pricingPlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan'),
+        content_name: usesTier
+          ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
+          : (effectivePlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan'),
         content_category: 'subscription',
       }, { eventID });
     }
@@ -367,7 +376,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: true, ...(isHomeRegion ? { tier: effectiveTier } : {}) }),
+        body: JSON.stringify({ plan: effectivePlan, source: cfg.source, embedded: true, ...(usesTier ? { tier: effectiveTier } : {}) }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -540,6 +549,303 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </button>
     </div>
   );
+
+  if (region === 'five') {
+    const fiveExamples = freewebsite49Gallery;
+    const fiveTier: 'single' | 'multi' = activeHomeTier;
+    const fiveIsYearly = pricingPlan === 'yearly';
+    const singleMonthly = 5;
+    const singleYearly = 36;
+    const multiMonthly = 10;
+    const multiYearly = 72;
+    return (
+      <>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          .mv-f-page {
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            color: #0d0d0d;
+            -webkit-font-smoothing: antialiased;
+            padding: 16px 14px 100px;
+          }
+          .mv-f-nav { display:flex; align-items:center; justify-content:space-between; max-width:1180px; margin:0 auto 14px; padding:12px 6px; }
+          .mv-f-logo { font-weight:900; font-size:22px; letter-spacing:-0.02em; }
+          .mv-f-stack { display:flex; flex-direction:column; gap:14px; max-width:1180px; margin:0 auto; }
+          .mv-f-card { position:relative; border-radius:26px; padding:42px 28px; overflow:hidden; opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+          .mv-f-card.is-visible { opacity:1; transform:translateY(0); }
+          .mv-f-hero { background:#f5efe4; }
+          .mv-f-examples { background:#dde7d4; }
+          .mv-f-how { background:#e6dff0; }
+          .mv-f-pricing { background:#f0e4b8; }
+          .mv-f-faq { background:#fdf8f0; }
+          .mv-f-final { background:#fbdfd0; text-align:center; }
+          .mv-f-eyebrow { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#0d0d0d; opacity:.55; margin-bottom:14px; }
+          .mv-f-title { font-weight:800; font-size:34px; line-height:1.08; letter-spacing:-.025em; margin:0 0 12px; max-width:680px; }
+          .mv-f-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
+          .mv-f-sub { font-size:16px; line-height:1.55; color:#2a2a2a; margin:0 0 18px; max-width:580px; }
+          .mv-f-pill { display:inline-flex; align-items:center; gap:8px; background:#0d0d0d; color:#fff; border:0; cursor:pointer; padding:14px 22px; border-radius:999px; font-weight:600; font-size:15px; transition:background .2s ease, transform .2s ease; }
+          .mv-f-pill:hover:not(:disabled) { background:#1f63ff; transform:translateY(-2px); }
+          .mv-f-pill svg { width:14px; height:14px; }
+          .mv-f-quick { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0 18px; max-width:560px; }
+          .mv-f-quickitem { background:#fff; border-radius:14px; padding:12px 14px; font-size:13px; line-height:1.4; box-shadow:0 6px 18px rgba(0,0,0,.04); }
+          .mv-f-quickitem b { display:block; font-size:14px; margin-bottom:2px; }
+          .mv-f-promise { display:flex; align-items:center; gap:10px; margin:8px 0 16px; padding:14px 18px; background:#0d0d0d; color:#fff; border-radius:14px; font-weight:700; font-size:15px; line-height:1.35; max-width:580px; box-shadow:0 12px 28px rgba(0,0,0,.18); }
+          .mv-f-promise strong { background:#d4914a; color:#fff; padding:2px 8px; border-radius:6px; font-weight:800; letter-spacing:.01em; }
+          .mv-f-promise-body { font-weight:600; font-size:13px; line-height:1.5; color:#3a3a3a; background:rgba(255,255,255,.85); border-radius:14px; padding:14px 18px; max-width:600px; margin:-6px 0 14px; }
+          .mv-f-promise-body em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
+          .mv-f-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:6px -4px 0; }
+          .mv-f-gallery::-webkit-scrollbar { height:5px; }
+          .mv-f-gallery::-webkit-scrollbar-thumb { background:rgba(0,0,0,.15); border-radius:999px; }
+          .mv-f-gcard { flex:0 0 auto; width:180px; aspect-ratio:9/16; background:#0d0d0d; border-radius:16px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.10); }
+          .mv-f-gcard wistia-player { width:100%; height:100%; display:block; }
+          .mv-f-steps { display:grid; grid-template-columns:1fr; gap:12px; margin-top:8px; }
+          .mv-f-step { background:rgba(255,255,255,.7); border-radius:14px; padding:18px 18px; }
+          .mv-f-step-num { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:24px; color:#4a3a6a; }
+          .mv-f-step-h { font-weight:800; font-size:15px; margin:4px 0 4px; }
+          .mv-f-step-b { font-size:13px; color:#3a3a3a; line-height:1.55; }
+          .mv-f-toggle { display:inline-flex; gap:4px; background:rgba(255,255,255,.65); padding:4px; border-radius:999px; margin:0 0 16px; }
+          .mv-f-toggle button { background:transparent; border:0; padding:8px 16px; border-radius:999px; font-weight:600; font-size:13px; cursor:pointer; color:#0d0d0d; transition:background .2s ease; }
+          .mv-f-toggle button.active { background:#0d0d0d; color:#fff; }
+          .mv-f-toggle .mv-f-save { display:inline-block; font-size:10px; padding:2px 6px; border-radius:999px; background:#d4914a; color:#fff; margin-left:6px; letter-spacing:.04em; font-weight:700; }
+          .mv-f-tiers { display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+          .mv-f-tier { background:#fff; border-radius:20px; padding:22px 22px; text-align:left; cursor:pointer; border:0; width:100%; transition:transform .25s ease, box-shadow .25s ease; box-shadow:0 12px 28px rgba(0,0,0,.06); display:flex; flex-direction:column; gap:10px; font-family:inherit; color:inherit; }
+          .mv-f-tier:hover:not(:disabled) { transform:translateY(-3px); box-shadow:0 18px 40px rgba(0,0,0,.10); }
+          .mv-f-tier-multi { background:#0d0d0d; color:#fff; }
+          .mv-f-tier-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+          .mv-f-tier-name { font-weight:800; font-size:15px; letter-spacing:-.01em; }
+          .mv-f-tier-multi .mv-f-tier-name { color:#fff; }
+          .mv-f-tier-price { font-weight:800; font-size:30px; letter-spacing:-.025em; }
+          .mv-f-tier-price small { font-size:13px; font-weight:600; opacity:.6; margin-left:2px; }
+          .mv-f-tier-strike { font-size:12px; opacity:.55; text-decoration:line-through; margin-left:6px; font-weight:500; }
+          .mv-f-tier-list { list-style:none; padding:0; margin:0; font-size:13px; line-height:1.55; }
+          .mv-f-tier-multi .mv-f-tier-list { color:rgba(255,255,255,.85); }
+          .mv-f-tier-list li::before { content:'— '; color:#d4914a; font-weight:700; }
+          .mv-f-tier-cta { display:inline-flex; align-items:center; gap:6px; align-self:flex-start; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#0d0d0d; margin-top:4px; }
+          .mv-f-tier-multi .mv-f-tier-cta { color:#fff; }
+          .mv-f-tier-compact { padding:18px 20px; }
+          .mv-f-tier-compact .mv-f-tier-price { font-size:26px; }
+          .mv-f-faq-list { width:100%; }
+          .mv-f-faq-item { background:#fff; border-radius:14px; margin-bottom:8px; overflow:hidden; }
+          .mv-f-faq-summary { list-style:none; cursor:pointer; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:14px; }
+          .mv-f-faq-summary::-webkit-details-marker { display:none; }
+          .mv-f-faq-icon { font-size:20px; transition:transform .25s ease; }
+          .mv-f-faq-item[open] .mv-f-faq-icon { transform:rotate(45deg); }
+          .mv-f-faq-a { padding:0 18px 14px; font-size:13px; color:#3a3a3a; line-height:1.6; }
+          .mv-f-footer { text-align:center; font-size:12px; color:#999; margin-top:18px; padding:12px; }
+          .mv-f-sticky { position:fixed; left:12px; right:12px; bottom:12px; z-index:90; background:rgba(13,13,13,.96); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#fff; border-radius:999px; padding:10px 10px 10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:1080px; margin:0 auto; box-shadow:0 12px 32px rgba(0,0,0,.20); }
+          .mv-f-sticky-text { font-size:13px; font-weight:600; }
+          .mv-f-sticky .mv-f-pill { padding:10px 18px; font-size:13px; }
+          @keyframes mvFadeIn { from { opacity:0 } to { opacity:1 } }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(10,10,10,.82); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:mvFadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0d0d0d; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#1f63ff; }
+          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:12px; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#777; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#0d0d0d; }
+          @media (min-width: 760px) {
+            .mv-f-card { padding:56px 48px; }
+            .mv-f-title { font-size:46px; }
+            .mv-f-steps { grid-template-columns:repeat(3, 1fr); gap:14px; }
+            .mv-f-tiers { flex-direction:row; align-items:stretch; }
+            .mv-f-tier { flex:1; }
+          }
+          @media (min-width: 1024px) {
+            .mv-f-title { font-size:54px; }
+            .mv-f-hero .mv-f-title { font-size:60px; }
+          }
+        `}</style>
+        <div className="mv-f-page">
+          <nav className="mv-f-nav">
+            <span className="mv-f-logo">amalvera</span>
+            <button className="mv-f-pill" style={{ padding: '10px 18px', fontSize: 13 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+              See pricing
+            </button>
+          </nav>
+
+          <div className="mv-f-stack">
+            {/* Hero — compact, all key info */}
+            <section className="mv-f-card mv-f-hero mv-h-anim">
+              <div className="mv-f-eyebrow">AI-built websites · From $5/mo</div>
+              <h1 className="mv-f-title">A custom website for your local business — <em>built by AI</em> in 24 hours.</h1>
+              <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
+              <p className="mv-f-promise-body">The moment you check out, send us your <em>Google Business Profile</em>, <em>Facebook page</em>, or <em>Instagram page</em>. We deliver your custom site in 24 hours — no hassle. Custom. Beautiful. Yours.</p>
+              <p className="mv-f-sub">We use AI plus your real photos and business info to build a one-of-a-kind site. We host it too. You just cover the small monthly cost.</p>
+              <div className="mv-f-quick">
+                <div className="mv-f-quickitem"><b>$5/mo</b>1-page site, custom to your business</div>
+                <div className="mv-f-quickitem"><b>$10/mo</b>Multi-page site with SEO</div>
+                <div className="mv-f-quickitem"><b>You send</b>Your Google, Facebook, or Instagram link</div>
+                <div className="mv-f-quickitem"><b>We do</b>The whole site, hosting, edits</div>
+              </div>
+              <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                See pricing
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </section>
+
+            {/* Examples */}
+            <section className="mv-f-card mv-f-examples mv-h-anim">
+              <div className="mv-f-eyebrow">Examples</div>
+              <h2 className="mv-f-title">Real AI sites for <em>real local businesses.</em></h2>
+              <p className="mv-f-sub">Each one is built from scratch using the business's own photos, name, and details. Tap to watch a walkthrough.</p>
+              <div className="mv-f-gallery">
+                {fiveExamples.map((item, i) => (
+                  <div key={i} className="mv-f-gcard">
+                    <wistia-player
+                      media-id={item.mediaId}
+                      aspect={item.aspect}
+                      autoplay="true"
+                      muted="true"
+                      {...({
+                        loop: 'true',
+                        'playbar': 'false',
+                        'play-button': 'false',
+                        'small-play-button': 'false',
+                        'fullscreen-button': 'false',
+                        'volume-control': 'false',
+                        'settings-control': 'false',
+                        'playback-rate-control': 'false',
+                        'controls-visible-on-load': 'true',
+                        'big-play-button': 'true',
+                        'silent-auto-play': 'true',
+                        'playsinline': 'true',
+                        'preload': 'auto',
+                        'end-video-behavior': 'loop',
+                        'resumable': 'false',
+                        'player-color': '0d0d0d',
+                      } as any)}
+                    ></wistia-player>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* How it works */}
+            <section className="mv-f-card mv-f-how mv-h-anim">
+              <div className="mv-f-eyebrow">How it works</div>
+              <h2 className="mv-f-title">Three simple steps.</h2>
+              <p className="mv-f-sub">All we need is a link. Our AI handles the rest.</p>
+              <div className="mv-f-steps">
+                <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link</div><div className="mv-f-step-b">Your Google Business Profile, Facebook page, or Instagram. That's all.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">AI builds your site</div><div className="mv-f-step-b">We use your real photos, business name, and details to build a custom site just for you.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours.</div><div className="mv-f-step-b">Your site is live within 24 hours. We host it too — just cover the monthly cost.</div></div>
+              </div>
+            </section>
+
+            {/* Pricing */}
+            <section id="mv-f-pricing" className="mv-f-card mv-f-pricing mv-h-anim">
+              <div className="mv-f-eyebrow">Pricing</div>
+              <h2 className="mv-f-title">Pick your plan.</h2>
+              <p className="mv-f-sub">Pay monthly, or save 40% by paying yearly.</p>
+              <div className="mv-f-toggle" role="tablist" aria-label="Billing plan">
+                <button type="button" className={pricingPlan === 'monthly' ? 'active' : ''} onClick={() => setPricingPlan('monthly')}>Monthly</button>
+                <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
+              </div>
+              <div className="mv-f-tiers">
+                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => handleCheckout('single', pricingPlan)} disabled={isLoading}>
+                  <div className="mv-f-tier-head">
+                    <div className="mv-f-tier-name">1-page site, custom to your business</div>
+                    <div className="mv-f-tier-price">
+                      ${fiveIsYearly ? singleYearly : singleMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
+                      {fiveIsYearly && <span className="mv-f-tier-strike">${singleMonthly * 12}</span>}
+                    </div>
+                  </div>
+                  <ul className="mv-f-tier-list">
+                    <li>One custom page, built by AI</li>
+                    <li>Your real photos + business info</li>
+                    <li>Hosting + edits included</li>
+                  </ul>
+                  <span className="mv-f-tier-cta">{isLoading && fiveTier === 'single' ? 'Loading…' : 'Start →'}</span>
+                </button>
+                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => handleCheckout('multi', pricingPlan)} disabled={isLoading}>
+                  <div className="mv-f-tier-head">
+                    <div className="mv-f-tier-name">Multi-page site with SEO</div>
+                    <div className="mv-f-tier-price">
+                      ${fiveIsYearly ? multiYearly : multiMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
+                      {fiveIsYearly && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
+                    </div>
+                  </div>
+                  <ul className="mv-f-tier-list">
+                    <li>Multiple pages — service, about, contact</li>
+                    <li>Built-in SEO so Google can find you</li>
+                    <li>Hosting + edits included</li>
+                  </ul>
+                  <span className="mv-f-tier-cta">{isLoading && fiveTier === 'multi' ? 'Loading…' : 'Start →'}</span>
+                </button>
+              </div>
+            </section>
+
+            {/* FAQ */}
+            <section className="mv-f-card mv-f-faq mv-h-anim">
+              <div className="mv-f-eyebrow">Questions</div>
+              <h2 className="mv-f-title">Common <em>questions.</em></h2>
+              <div className="mv-f-faq-list">
+                <details className="mv-f-faq-item" open>
+                  <summary className="mv-f-faq-summary">What do I have to send you?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">Just one link — your Google Business Profile page, Facebook page, or Instagram page. Our AI uses that to build your whole site.</div>
+                </details>
+                <details className="mv-f-faq-item">
+                  <summary className="mv-f-faq-summary">Is it really custom?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">Yes. We use your real photos, your business name, and your details from your page. Every site is one of a kind.</div>
+                </details>
+                <details className="mv-f-faq-item">
+                  <summary className="mv-f-faq-summary">What's the difference between $5 and $10?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO so Google can find you for the things you do.</div>
+                </details>
+                <details className="mv-f-faq-item">
+                  <summary className="mv-f-faq-summary">Do you host it?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">Yes. We host the site for you. You don't pay extra. The monthly cost covers everything.</div>
+                </details>
+                <details className="mv-f-faq-item">
+                  <summary className="mv-f-faq-summary">How fast is it live?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">Within 24 hours of you sending us your link.</div>
+                </details>
+              </div>
+            </section>
+
+            {/* Final CTA */}
+            <section className="mv-f-card mv-f-final mv-h-anim">
+              <div className="mv-f-eyebrow">Ready?</div>
+              <h2 className="mv-f-title">Your AI-built site, live in <em>24 hours.</em></h2>
+              <p className="mv-f-sub" style={{ marginLeft: 'auto', marginRight: 'auto' }}>From $5/month. We host it. You just cover the cost.</p>
+              <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                See pricing
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </section>
+          </div>
+
+          <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
+
+          <div className="mv-f-sticky">
+            <span className="mv-f-sticky-text">From $5/mo · We host it</span>
+            <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+              See pricing
+            </button>
+          </div>
+        </div>
+
+        {/* Embedded checkout modal */}
+        {modalOpen && clientSecret && (
+          <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+            <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+              <div className="mv-checkout-frame-inner">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+              <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
+                Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   if (region === 'home') {
     const homeVideos = freewebsite49Gallery;
