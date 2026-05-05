@@ -1,9 +1,71 @@
 import Stripe from 'stripe';
 import { Storage } from '@google-cloud/storage';
 import crypto from 'crypto';
-import { verifyWebhookSignature, regionToPath, type Region } from '../lib/paypal';
-
+// Inlined PayPal helpers (kept self-contained per file to avoid Vercel
+// bundler edge cases that previously caused FUNCTION_INVOCATION_FAILED).
+const PAYPAL_API = 'https://api-m.paypal.com';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
 const PAYPAL_VALID_REGIONS = new Set(['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home']);
+
+function regionToPath(region: Region): string {
+    switch (region) {
+        case 'us': return '/1';
+        case 'aus': return '/aus';
+        case 'ten': return '/10';
+        case 'five': return '/5';
+        case 'barber': return '/barber';
+        case 'localbusiness': return '/local-business';
+        case 'home': return '/';
+    }
+}
+
+let _paypalToken: { value: string; expiresAt: number } | null = null;
+async function getPayPalAccessToken(): Promise<string> {
+    if (_paypalToken && Date.now() < _paypalToken.expiresAt - 30_000) return _paypalToken.value;
+    const id = process.env.PAYPAL_CLIENT_ID;
+    const secret = process.env.PAYPAL_CLIENT_SECRET;
+    if (!id || !secret) throw new Error('PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET not set');
+    const basic = Buffer.from(`${id}:${secret}`).toString('base64');
+    const r = await fetch(`${PAYPAL_API}/v1/oauth2/token`, {
+        method: 'POST',
+        headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=client_credentials',
+    });
+    const j: any = await r.json();
+    if (!r.ok || !j.access_token) throw new Error(`PayPal auth failed: ${r.status}`);
+    _paypalToken = { value: j.access_token, expiresAt: Date.now() + (j.expires_in || 3600) * 1000 };
+    return _paypalToken.value;
+}
+
+async function verifyWebhookSignature(headers: Record<string, any>, rawBodyJsonString: string): Promise<boolean> {
+    const webhookId = process.env.PAYPAL_WEBHOOK_ID;
+    if (!webhookId) {
+        console.warn('[paypal] PAYPAL_WEBHOOK_ID not set; skipping signature verification');
+        return false;
+    }
+    try {
+        const token = await getPayPalAccessToken();
+        const body = {
+            auth_algo: headers['paypal-auth-algo'],
+            cert_url: headers['paypal-cert-url'],
+            transmission_id: headers['paypal-transmission-id'],
+            transmission_sig: headers['paypal-transmission-sig'],
+            transmission_time: headers['paypal-transmission-time'],
+            webhook_id: webhookId,
+            webhook_event: JSON.parse(rawBodyJsonString),
+        };
+        const r = await fetch(`${PAYPAL_API}/v1/notifications/verify-webhook-signature`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        const j: any = await r.json();
+        return j.verification_status === 'SUCCESS';
+    } catch (e) {
+        console.error('[paypal] verifyWebhookSignature error', e);
+        return false;
+    }
+}
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
