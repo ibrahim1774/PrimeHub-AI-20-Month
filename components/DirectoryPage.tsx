@@ -296,7 +296,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -394,7 +394,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -921,7 +921,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   See pricing
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: 16, height: 16 }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
-                <PaymentBadgeRow />
+                {!isBarberFive && <PaymentBadgeRow />}
               </div>
             </section>
 
@@ -1006,7 +1006,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
 
               <div className="mv-f-tiers">
-                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => isBarberFive ? handleCheckout('single', pricingPlan) : openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">{singleTierName}</div>
                     <div className="mv-f-tier-price">
@@ -1017,10 +1017,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <ul className="mv-f-tier-list">
                     {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
-                  <span className="mv-f-tier-cta">Start →</span>
-                  <PaymentBadgeRow />
+                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'single' ? 'Loading…' : 'Start →'}</span>
+                  {!isBarberFive && <PaymentBadgeRow />}
                 </button>
-                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => isBarberFive ? handleCheckout('multi', pricingPlan) : openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">{multiTierName}</div>
                     <div className="mv-f-tier-price">
@@ -1031,13 +1031,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <ul className="mv-f-tier-list">
                     {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
-                  <span className="mv-f-tier-cta">Start →</span>
-                  <PaymentBadgeRow />
+                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : 'Start →'}</span>
+                  {!isBarberFive && <PaymentBadgeRow />}
                 </button>
               </div>
 
-              <p style={{ margin: '14px auto 0', fontSize: 12, color: '#666', textAlign: 'center', maxWidth: 380, lineHeight: 1.5 }}>
-                Secure checkout powered by <strong style={{ color: '#003087' }}>PayPal</strong>. Pay with PayPal balance or with any major debit/credit card.
+              <p style={{ margin: '14px auto 0', fontSize: 12, color: 'inherit', opacity: 0.65, textAlign: 'center', maxWidth: 380, lineHeight: 1.5 }}>
+                {isBarberFive
+                  ? 'Secure checkout powered by Stripe. Pay with any major debit or credit card.'
+                  : <>Secure checkout powered by <strong style={{ color: '#003087' }}>PayPal</strong>. Pay with PayPal balance or with any major debit/credit card.</>}
               </p>
             </section>
 
