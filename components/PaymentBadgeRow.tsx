@@ -74,6 +74,9 @@ const PaymentBadgeRow: React.FC = () => {
                 maxWidth: 240,
             }}
         >
+            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: '#003087', textAlign: 'center', lineHeight: 1.2 }}>
+                Secure checkout — we accept
+            </div>
             {/* Wide, slim PayPal pill */}
             <div
                 style={{
