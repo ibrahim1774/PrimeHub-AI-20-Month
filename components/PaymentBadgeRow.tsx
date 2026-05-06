@@ -96,7 +96,7 @@ const PaymentBadgeRow: React.FC = () => {
                 <span style={badgeStyle}><DiscoverMark /></span>
             </div>
             <div style={{ fontSize: 11, color: '#5b6b7d', textAlign: 'center', lineHeight: 1.4 }}>
-                Pay with your card directly — <strong>no PayPal account needed</strong>.
+                Pay with your card or PayPal balance.
             </div>
         </div>
     );

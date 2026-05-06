@@ -926,7 +926,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
 
               <p style={{ margin: '14px auto 0', fontSize: 12, color: '#666', textAlign: 'center', maxWidth: 380, lineHeight: 1.5 }}>
-                Secure checkout powered by <strong style={{ color: '#003087' }}>PayPal</strong>. Pay with PayPal balance or with any major debit/credit card — <em>no PayPal account required</em>.
+                Secure checkout powered by <strong style={{ color: '#003087' }}>PayPal</strong>. Pay with PayPal balance or with any major debit/credit card.
               </p>
             </section>
 

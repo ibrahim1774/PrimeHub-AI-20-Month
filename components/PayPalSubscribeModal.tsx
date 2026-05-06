@@ -187,7 +187,7 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                     {ctx.label} — <strong>{ctx.priceText}</strong>
                     <br />
                     <span style={{ fontSize: 12, color: '#777' }}>
-                        Pay with PayPal, debit, or credit card. No PayPal account required.
+                        Pay with PayPal, debit, or credit card.
                     </span>
                 </p>
                 {loading && <div style={{ padding: 12, textAlign: 'center', color: '#555' }}>Loading PayPal…</div>}
