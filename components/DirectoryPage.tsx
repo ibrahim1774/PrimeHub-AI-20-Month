@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -201,6 +201,22 @@ const REGIONS: Record<Region, {
     monthlyAmount: 20,
     yearlyAmount: 99,
     yearlyWas: 240,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  barberFive: {
+    source: 'barberFive',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 10,
+    yearlyAmount: 72,
+    yearlyWas: 120,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -415,9 +431,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   // one-time payment (Stripe-only), and freewebsite/* + barberleads have no
   // checkout (they scroll to a lead form), so they're excluded here.
   const supportsPayPal = (r: string) =>
-    r === 'us' || r === 'aus' || r === 'ten' || r === 'five' || r === 'barber' || r === 'localbusiness' || r === 'home';
+    r === 'us' || r === 'aus' || r === 'ten' || r === 'five' || r === 'barber' || r === 'localbusiness' || r === 'home' || r === 'barberFive';
 
   const computePaypalCtx = (r: any, t: 'single' | 'multi' | undefined, p: 'monthly' | 'yearly'): PayPalCtx => {
+    if (r === 'barberFive') {
+      const tier = t === 'multi' ? 'multi' : 'single';
+      const yearly = p === 'yearly';
+      return {
+        region: 'barberFive', tier, plan: p,
+        label: tier === 'multi' ? 'Multi-Page Barbershop Site + SEO' : 'Single Page Barbershop Site',
+        priceText: tier === 'multi' ? (yearly ? '$144/yr' : '$20/mo') : (yearly ? '$72/yr' : '$10/mo'),
+      };
+    }
     if (r === 'five') {
       const tier = t === 'multi' ? 'multi' : 'single';
       const yearly = p === 'yearly';
@@ -608,14 +633,41 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'five') {
-    const fiveExamples = freewebsite49Gallery;
+  if (region === 'five' || region === 'barberFive') {
+    const isBarberFive = region === 'barberFive';
+    const barberFiveGallery = [
+      { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
+      { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
+      { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
+    ];
+    const fiveExamples = isBarberFive ? barberFiveGallery : freewebsite49Gallery;
     const fiveTier: 'single' | 'multi' = activeHomeTier;
     const fiveIsYearly = pricingPlan === 'yearly';
-    const singleMonthly = 5;
-    const singleYearly = 36;
-    const multiMonthly = 10;
-    const multiYearly = 72;
+    const singleMonthly = isBarberFive ? 10 : 5;
+    const singleYearly = isBarberFive ? 72 : 36;
+    const multiMonthly = isBarberFive ? 20 : 10;
+    const multiYearly = isBarberFive ? 144 : 72;
+    const heroEyebrow = isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
+    const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
+    const examplesEyebrow = isBarberFive ? 'Real sites · Real barbershops' : 'Real sites · Real local businesses';
+    const playerColor = isBarberFive ? 'c9a96e' : '0d0d0d';
+    const ppRegion: 'five' | 'barberFive' = isBarberFive ? 'barberFive' : 'five';
+    const singleLabel = isBarberFive ? 'Single Page Barbershop Site' : 'Single Page Website';
+    const multiLabel = isBarberFive ? 'Multi-Page Barbershop Site + SEO' : 'Multi-Page + SEO';
+    const singleTierName = isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
+    const multiTierName = isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
+    const singleBullets = isBarberFive
+      ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included']
+      : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included'];
+    const multiBullets = isBarberFive
+      ? ['Multiple pages — services, about, contact', 'Built-in SEO so clients find you on Google', 'Hosting + edits included']
+      : ['Multiple pages — service, about, contact', 'Built-in SEO so Google can find you', 'Hosting + edits included'];
+    const faqDiffQ = isBarberFive
+      ? `What's the difference between $${singleMonthly} and $${multiMonthly}?`
+      : `What's the difference between $5 and $10?`;
+    const faqDiffA = isBarberFive
+      ? `$${singleMonthly}/mo is one custom page — perfect if you just want a clean online home for your shop. $${multiMonthly}/mo is a multi-page site with SEO so clients find you on Google for cuts, fades, and the styles you specialize in.`
+      : `$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO so Google can find you for the things you do.`;
     return (
       <>
         <style>{`
@@ -714,8 +766,53 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-title { font-size:54px; }
             .mv-f-hero .mv-f-title { font-size:60px; }
           }
+
+          ${isBarberFive ? `
+            /* Black + gold barber theme */
+            .mv-f-page-barber { background:#0a0a0a !important; color:#f5f0e0 !important; }
+            .mv-f-page-barber .mv-f-logo { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-pill { background:#c9a96e; color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-pill:hover:not(:disabled) { background:#d8b67a; color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-hero { background:#141414; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+            .mv-f-page-barber .mv-f-how { background:#0f0f0f; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.12); }
+            .mv-f-page-barber .mv-f-pricing { background:#141414; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.22); }
+            .mv-f-page-barber .mv-f-faq { background:#0f0f0f; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.12); }
+            .mv-f-page-barber .mv-f-final { background:#0a0a0a; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+            .mv-f-page-barber .mv-f-eyebrow { color:#c9a96e; opacity:.95; }
+            .mv-f-page-barber .mv-f-title { color:#f5f0e0; }
+            .mv-f-page-barber .mv-f-title em { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-sub { color:#cfc8b8; }
+            .mv-f-page-barber .mv-f-promise { background:#c9a96e; color:#0a0a0a; box-shadow:0 12px 28px rgba(0,0,0,.35); }
+            .mv-f-page-barber .mv-f-promise strong { background:#0a0a0a; color:#c9a96e; }
+            .mv-f-page-barber .mv-f-promise-body { background:rgba(245,240,224,.06); color:#cfc8b8; }
+            .mv-f-page-barber .mv-f-step { background:rgba(201,169,110,.07); color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+            .mv-f-page-barber .mv-f-step-num { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-step-h { color:#f5f0e0; }
+            .mv-f-page-barber .mv-f-step-b { color:#cfc8b8; }
+            .mv-f-page-barber .mv-f-toggle { background:rgba(201,169,110,.10); }
+            .mv-f-page-barber .mv-f-toggle button { color:#f5f0e0; }
+            .mv-f-page-barber .mv-f-toggle button.active { background:#c9a96e; color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-toggle .mv-f-save { background:#0a0a0a; color:#c9a96e; }
+            .mv-f-page-barber .mv-f-tier { background:#1c1c1c; color:#f5f0e0; box-shadow:0 12px 28px rgba(0,0,0,.45), inset 0 0 0 1px rgba(201,169,110,.22); }
+            .mv-f-page-barber .mv-f-tier:hover:not(:disabled) { box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 0 0 1px rgba(201,169,110,.45); }
+            .mv-f-page-barber .mv-f-tier-multi { background:#c9a96e; color:#0a0a0a; box-shadow:0 12px 28px rgba(201,169,110,.30); }
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-name,
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-cta { color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-list { color:rgba(10,10,10,.85); }
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-list li::before { color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-tier-list li::before { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-tier-cta { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-faq-item { background:#1c1c1c; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+            .mv-f-page-barber .mv-f-faq-summary { color:#f5f0e0; }
+            .mv-f-page-barber .mv-f-faq-a { color:#cfc8b8; }
+            .mv-f-page-barber .mv-f-footer { color:#7a7367; }
+            .mv-f-page-barber .mv-f-sticky { background:rgba(201,169,110,.97); color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-sticky .mv-f-sticky-text { color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-sticky .mv-f-pill { background:#0a0a0a; color:#c9a96e; }
+            .mv-f-page-barber .mv-f-sticky .mv-f-pill:hover:not(:disabled) { background:#1f1f1f; color:#f5f0e0; }
+          ` : ''}
         `}</style>
-        <div className="mv-f-page">
+        <div className={`mv-f-page${isBarberFive ? ' mv-f-page-barber' : ''}`}>
           <nav className="mv-f-nav">
             <span className="mv-f-logo">amalvera</span>
             <button className="mv-f-pill" style={{ padding: '10px 18px', fontSize: 13 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
@@ -726,11 +823,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="mv-f-stack">
             {/* Hero — compact, with embedded examples gallery */}
             <section className="mv-f-card mv-f-hero mv-h-anim">
-              <div className="mv-f-eyebrow">Custom websites · From $5/mo</div>
-              <h1 className="mv-f-title">Custom websites for <em>local businesses.</em></h1>
+              <div className="mv-f-eyebrow">{heroEyebrow}</div>
+              <h1 className="mv-f-title">{isBarberFive ? 'Custom websites for ' : 'Custom websites for '}<em>{heroTitleEm}</em></h1>
               <p className="mv-f-sub">We build it. We host it. We deliver it in 24 hours. That's it.</p>
 
-              <div className="mv-f-eyebrow" style={{ marginTop: 6 }}>Real sites · Real local businesses</div>
+              <div className="mv-f-eyebrow" style={{ marginTop: 6 }}>{examplesEyebrow}</div>
               <div className="mv-f-gallery">
                 {fiveExamples.map((item, i) => (
                   <div key={i} className="mv-f-gcard">
@@ -755,7 +852,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                         'preload': 'auto',
                         'end-video-behavior': 'loop',
                         'resumable': 'false',
-                        'player-color': '0d0d0d',
+                        'player-color': playerColor,
                       } as any)}
                     ></wistia-player>
                   </div>
@@ -796,33 +893,29 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <PaymentBadgeRow />
 
               <div className="mv-f-tiers">
-                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => openPaypal({ region: 'five', tier: 'single', plan: pricingPlan, label: 'Single Page Website', priceText: fiveIsYearly ? '$36/yr' : '$5/mo' })} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
-                    <div className="mv-f-tier-name">1-page site, custom to your business</div>
+                    <div className="mv-f-tier-name">{singleTierName}</div>
                     <div className="mv-f-tier-price">
                       ${fiveIsYearly ? singleYearly : singleMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
                       {fiveIsYearly && <span className="mv-f-tier-strike">${singleMonthly * 12}</span>}
                     </div>
                   </div>
                   <ul className="mv-f-tier-list">
-                    <li>One custom page, built for your business</li>
-                    <li>Your real photos + business info</li>
-                    <li>Hosting + edits included</li>
+                    {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
                 </button>
-                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: 'five', tier: 'multi', plan: pricingPlan, label: 'Multi-Page + SEO', priceText: fiveIsYearly ? '$72/yr' : '$10/mo' })} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
-                    <div className="mv-f-tier-name">Multi-page site with SEO</div>
+                    <div className="mv-f-tier-name">{multiTierName}</div>
                     <div className="mv-f-tier-price">
                       ${fiveIsYearly ? multiYearly : multiMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
                       {fiveIsYearly && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
                     </div>
                   </div>
                   <ul className="mv-f-tier-list">
-                    <li>Multiple pages — service, about, contact</li>
-                    <li>Built-in SEO so Google can find you</li>
-                    <li>Hosting + edits included</li>
+                    {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
                 </button>
@@ -847,8 +940,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <div className="mv-f-faq-a">Yes. Our team uses AI to build a custom site for your business with nice-looking backgrounds, your real photos, and your business info. Every site is one of a kind.</div>
                 </details>
                 <details className="mv-f-faq-item">
-                  <summary className="mv-f-faq-summary">What's the difference between $5 and $10?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO so Google can find you for the things you do.</div>
+                  <summary className="mv-f-faq-summary">{faqDiffQ}<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">{faqDiffA}</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Do you host it?<span className="mv-f-faq-icon">+</span></summary>

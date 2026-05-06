@@ -2,8 +2,8 @@
 
 const PAYPAL_API = 'https://api-m.paypal.com';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
-const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home'];
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive';
+const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home', 'barberFive'];
 
 function regionToPath(region: Region): string {
     switch (region) {
@@ -14,6 +14,7 @@ function regionToPath(region: Region): string {
         case 'barber': return '/barber';
         case 'localbusiness': return '/local-business';
         case 'home': return '/';
+        case 'barberFive': return '/barber-5';
     }
 }
 
@@ -57,7 +58,7 @@ export default async function handler(req: any, res: any) {
         if (!subscriptionID) return res.status(400).json({ error: 'missing subscriptionID' });
         if (!VALID_REGIONS.includes(region)) return res.status(400).json({ error: 'invalid region' });
         if (plan !== 'monthly' && plan !== 'yearly') return res.status(400).json({ error: 'invalid plan' });
-        const usesTier = region === 'five' || region === 'home';
+        const usesTier = region === 'five' || region === 'home' || region === 'barberFive';
         if (usesTier && tier !== 'single' && tier !== 'multi') return res.status(400).json({ error: 'invalid tier' });
 
         const sub = await getSubscription(subscriptionID);

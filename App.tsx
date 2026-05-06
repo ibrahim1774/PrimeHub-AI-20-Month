@@ -8,7 +8,7 @@ import DirectorySuccessPage from './components/DirectorySuccessPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive';
 
 const dirPaths: Record<string, Region> = {
   '/': 'home',
@@ -18,6 +18,7 @@ const dirPaths: Record<string, Region> = {
   '/5': 'five',
   '/19': 'nineteen',
   '/barber': 'barber',
+  '/barber-5': 'barberFive',
   '/local-business': 'localbusiness',
   '/freewebsite': 'freewebsite',
   '/freewebsite49': 'freewebsite49',

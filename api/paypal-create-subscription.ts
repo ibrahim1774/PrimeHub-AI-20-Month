@@ -5,11 +5,11 @@
 const PAYPAL_API = 'https://api-m.paypal.com';
 const PRODUCT_NAME = 'Amalvera Website Hosting';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive';
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 
-const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home'];
+const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home', 'barberFive'];
 
 type Pricing = {
     planName: string;
@@ -30,6 +30,10 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         const t = tier === 'multi' ? 'multi' : 'single';
         value = isYearly ? (t === 'multi' ? 72 : 36) : (t === 'multi' ? 10 : 5);
         label = `Amalvera /5 ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'barberFive') {
+        const t = tier === 'multi' ? 'multi' : 'single';
+        value = isYearly ? (t === 'multi' ? 144 : 72) : (t === 'multi' ? 20 : 10);
+        label = `Amalvera /barber-5 ${t === 'multi' ? 'Multi-Page Barbershop + SEO' : 'Single Page Barbershop'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'home') {
         const t = tier === 'single' ? 'single' : 'multi';
         value = isYearly ? 99 : (t === 'single' ? 30 : 50);
@@ -47,7 +51,7 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         value = isYearly ? 99 : 20;
         label = `Amalvera /1 ${isYearly ? 'Yearly' : 'Monthly'}`;
     }
-    const tierSegment = (region === 'five' || region === 'home') ? `-${tier === 'multi' ? 'multi' : 'single'}` : '';
+    const tierSegment = (region === 'five' || region === 'home' || region === 'barberFive') ? `-${tier === 'multi' ? 'multi' : 'single'}` : '';
     const planName = `${region}${tierSegment}-${plan}-${currency}`;
     const description = `${label} — ${currency} ${value.toFixed(2)} per ${isYearly ? 'year' : 'month'}`;
     return { planName, description, amount: value.toFixed(2), currency, interval, value };
@@ -164,7 +168,7 @@ export default async function handler(req: any, res: any) {
         const { region, tier, plan } = req.body || {};
         if (!VALID_REGIONS.includes(region)) return res.status(400).json({ error: 'invalid region' });
         if (plan !== 'monthly' && plan !== 'yearly') return res.status(400).json({ error: 'invalid plan' });
-        const usesTier = region === 'five' || region === 'home';
+        const usesTier = region === 'five' || region === 'home' || region === 'barberFive';
         if (usesTier && tier !== 'single' && tier !== 'multi') return res.status(400).json({ error: 'invalid tier' });
         const safeTier = usesTier ? (tier as Tier) : undefined;
 

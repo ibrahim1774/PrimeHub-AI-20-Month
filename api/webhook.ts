@@ -4,8 +4,8 @@ import crypto from 'crypto';
 // Inlined PayPal helpers (kept self-contained per file to avoid Vercel
 // bundler edge cases that previously caused FUNCTION_INVOCATION_FAILED).
 const PAYPAL_API = 'https://api-m.paypal.com';
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home';
-const PAYPAL_VALID_REGIONS = new Set(['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home']);
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive';
+const PAYPAL_VALID_REGIONS = new Set(['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home', 'barberFive']);
 
 function regionToPath(region: Region): string {
     switch (region) {
@@ -16,6 +16,7 @@ function regionToPath(region: Region): string {
         case 'barber': return '/barber';
         case 'localbusiness': return '/local-business';
         case 'home': return '/';
+        case 'barberFive': return '/barber-5';
     }
 }
 
@@ -335,7 +336,7 @@ async function handlePayPalWebhook(req: any, res: any, buf: Buffer) {
         const customId: string = resource.custom_id || '';
         const meta = parseCustomId(customId);
         const region = (PAYPAL_VALID_REGIONS.has(meta.r) ? meta.r : 'five') as Region;
-        const usesTier = region === 'five' || region === 'home';
+        const usesTier = region === 'five' || region === 'home' || region === 'barberFive';
         const tier = usesTier ? ((meta.t === 'multi' ? 'multi' : 'single') as 'single' | 'multi') : undefined;
         const plan = (meta.p === 'yearly' ? 'yearly' : 'monthly') as 'monthly' | 'yearly';
         const value = Number(meta.v) || 0;
