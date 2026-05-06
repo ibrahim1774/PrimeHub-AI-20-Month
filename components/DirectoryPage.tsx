@@ -676,12 +676,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const multiBullets = isBarberFive
       ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included']
       : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included'];
-    const faqDiffQ = isBarberFive
-      ? `What's the difference between $${singleMonthly} and $${multiMonthly}?`
-      : `What's the difference between $5 and $10?`;
-    const faqDiffA = isBarberFive
-      ? `$${singleMonthly}/mo is one custom page — perfect if you just want a clean online home for your shop. $${multiMonthly}/mo is a multi-page site with SEO best-practices baked in across pages for the cuts, fades, and styles you specialize in.`
-      : `$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO best-practices baked in across pages for the things you do.`;
     return (
       <>
         <style>{`
@@ -994,23 +988,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-f-faq-list">
                 <details className="mv-f-faq-item" open>
                   <summary className="mv-f-faq-summary">What do I have to send you?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Just one link — your Google Business Profile page, Facebook page, or Instagram page. That's all we need.</div>
+                  <div className="mv-f-faq-a">Send us a link — your Google Business Profile, Facebook, or Instagram page. If you don't have those, just send a few photos and your business info, and we'll build a custom site from that.</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Is it really custom?<span className="mv-f-faq-icon">+</span></summary>
                   <div className="mv-f-faq-a">Yes. Our team uses AI to build a custom site for your business with nice-looking backgrounds, your real photos, and your business info. Every site is one of a kind.</div>
                 </details>
                 <details className="mv-f-faq-item">
-                  <summary className="mv-f-faq-summary">{faqDiffQ}<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">{faqDiffA}</div>
-                </details>
-                <details className="mv-f-faq-item">
-                  <summary className="mv-f-faq-summary">Do you host it?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Yes. We host the site for you. You don't pay extra. The monthly cost covers everything.</div>
+                  <summary className="mv-f-faq-summary">Can I make edits to the site?<span className="mv-f-faq-icon">+</span></summary>
+                  <div className="mv-f-faq-a">Yes. Any time you want changes — copy, photos, layout — just message us and we'll make the edits for you. It's all included in the monthly cost.</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">How fast is it live?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Within 24 hours of you sending us your link.</div>
+                  <div className="mv-f-faq-a">Within 24 hours of you sending us your link or info.</div>
                 </details>
               </div>
             </section>
