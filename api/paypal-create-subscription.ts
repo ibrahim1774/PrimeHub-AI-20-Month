@@ -52,7 +52,10 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         label = `Amalvera /1 ${isYearly ? 'Yearly' : 'Monthly'}`;
     }
     const tierSegment = (region === 'five' || region === 'home' || region === 'barberFive') ? `-${tier === 'multi' ? 'multi' : 'single'}` : '';
-    const planName = `${region}${tierSegment}-${plan}-${currency}`;
+    // Include the price in the plan name so a price change automatically
+    // materialises as a NEW PayPal plan instead of silently reusing the old
+    // (now mispriced) one. Existing subscribers keep their original plan.
+    const planName = `${region}${tierSegment}-${plan}-${value}-${currency}`;
     const description = `${label} — ${currency} ${value.toFixed(2)} per ${isYearly ? 'year' : 'month'}`;
     return { planName, description, amount: value.toFixed(2), currency, interval, value };
 }
