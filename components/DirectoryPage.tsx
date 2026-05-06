@@ -660,14 +660,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included']
       : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included'];
     const multiBullets = isBarberFive
-      ? ['Multiple pages — services, about, contact', 'Built-in SEO so clients find you on Google', 'Hosting + edits included']
-      : ['Multiple pages — service, about, contact', 'Built-in SEO so Google can find you', 'Hosting + edits included'];
+      ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included']
+      : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included'];
     const faqDiffQ = isBarberFive
       ? `What's the difference between $${singleMonthly} and $${multiMonthly}?`
       : `What's the difference between $5 and $10?`;
     const faqDiffA = isBarberFive
-      ? `$${singleMonthly}/mo is one custom page — perfect if you just want a clean online home for your shop. $${multiMonthly}/mo is a multi-page site with SEO so clients find you on Google for cuts, fades, and the styles you specialize in.`
-      : `$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO so Google can find you for the things you do.`;
+      ? `$${singleMonthly}/mo is one custom page — perfect if you just want a clean online home for your shop. $${multiMonthly}/mo is a multi-page site with SEO best-practices baked in across pages for the cuts, fades, and styles you specialize in.`
+      : `$5/mo is one custom page — great if you want a simple online home. $10/mo is a multi-page site with SEO best-practices baked in across pages for the things you do.`;
     return (
       <>
         <style>{`
@@ -732,8 +732,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-tier-list { list-style:none; padding:0; margin:0; font-size:13px; line-height:1.55; }
           .mv-f-tier-multi .mv-f-tier-list { color:rgba(255,255,255,.85); }
           .mv-f-tier-list li::before { content:'— '; color:#d4914a; font-weight:700; }
-          .mv-f-tier-cta { display:inline-flex; align-items:center; gap:6px; align-self:flex-start; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#0d0d0d; margin-top:4px; }
-          .mv-f-tier-multi .mv-f-tier-cta { color:#fff; }
+          .mv-f-tier-cta { display:inline-flex; align-items:center; justify-content:center; gap:8px; align-self:stretch; font-weight:800; font-size:16px; letter-spacing:.04em; text-transform:uppercase; color:#fff; background:#0d0d0d; padding:16px 22px; border-radius:999px; margin-top:12px; box-shadow:0 10px 24px rgba(13,13,13,.22); transition:transform .2s ease, box-shadow .2s ease, background .2s ease; }
+          .mv-f-tier:hover:not(:disabled) .mv-f-tier-cta { transform:translateY(-2px); box-shadow:0 16px 32px rgba(13,13,13,.30); background:#1f63ff; }
+          .mv-f-tier-multi .mv-f-tier-cta { color:#0d0d0d; background:#ffd54a; box-shadow:0 10px 24px rgba(255,213,74,.35); }
+          .mv-f-tier-multi:hover:not(:disabled) .mv-f-tier-cta { background:#ffe27d; box-shadow:0 16px 32px rgba(255,213,74,.45); }
           .mv-f-tier-compact { padding:18px 20px; }
           .mv-f-tier-compact .mv-f-tier-price { font-size:26px; }
           .mv-f-faq-list { width:100%; }
@@ -796,12 +798,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-page-barber .mv-f-tier { background:#1c1c1c; color:#f5f0e0; box-shadow:0 12px 28px rgba(0,0,0,.45), inset 0 0 0 1px rgba(201,169,110,.22); }
             .mv-f-page-barber .mv-f-tier:hover:not(:disabled) { box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 0 0 1px rgba(201,169,110,.45); }
             .mv-f-page-barber .mv-f-tier-multi { background:#c9a96e; color:#0a0a0a; box-shadow:0 12px 28px rgba(201,169,110,.30); }
-            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-name,
-            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-cta { color:#0a0a0a; }
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-name { color:#0a0a0a; }
             .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-list { color:rgba(10,10,10,.85); }
             .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-list li::before { color:#0a0a0a; }
             .mv-f-page-barber .mv-f-tier-list li::before { color:#c9a96e; }
-            .mv-f-page-barber .mv-f-tier-cta { color:#c9a96e; }
+            .mv-f-page-barber .mv-f-tier-cta { color:#0a0a0a; background:#c9a96e; box-shadow:0 10px 24px rgba(201,169,110,.35); }
+            .mv-f-page-barber .mv-f-tier:hover:not(:disabled) .mv-f-tier-cta { background:#d8b67a; box-shadow:0 16px 32px rgba(201,169,110,.45); }
+            .mv-f-page-barber .mv-f-tier-multi .mv-f-tier-cta { color:#c9a96e; background:#0a0a0a; box-shadow:0 10px 24px rgba(0,0,0,.45); }
+            .mv-f-page-barber .mv-f-tier-multi:hover:not(:disabled) .mv-f-tier-cta { background:#1f1f1f; color:#f5f0e0; }
             .mv-f-page-barber .mv-f-faq-item { background:#1c1c1c; color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
             .mv-f-page-barber .mv-f-faq-summary { color:#f5f0e0; }
             .mv-f-page-barber .mv-f-faq-a { color:#cfc8b8; }
@@ -1624,7 +1628,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                       <line x1="24" y1="24" x2="40" y2="38" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
                     </svg>
                     <div className="mv-h-pillar-h">SEO optimized</div>
-                    <div className="mv-h-pillar-b">Clean code, schema markup, fast loading — could help your site show up on Google.</div>
+                    <div className="mv-h-pillar-b">Clean code, schema markup, and fast loading — modern SEO best-practices baked in.</div>
                   </div>
                 </div>
               </div>
@@ -1695,7 +1699,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="mv-h-faq-list">
                   <details className="mv-h-faq-item" open>
                     <summary className="mv-h-faq-summary">What do I get with the website?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and SEO optimized so it could help you show up on Google.</div>
+                    <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and modern SEO best-practices baked in.</div>
                   </details>
                   <details className="mv-h-faq-item">
                     <summary className="mv-h-faq-summary">What's the difference between $30 and $50?<span className="mv-h-faq-icon">+</span></summary>
@@ -3561,7 +3565,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-feature-card mv-anim-fade mv-feature-stat">
                 <div className="mv-feature-stat-num">+185%</div>
                 <div className="mv-feature-h">More inbound leads</div>
-                <div className="mv-feature-b">when your site ranks on Google's first page versus relying on word-of-mouth alone.</div>
+                <div className="mv-feature-b">that businesses see when they invest in a polished online presence versus relying on word-of-mouth alone.</div>
               </div>
               <div className="mv-feature-card mv-anim-fade mv-feature-stat">
                 <div className="mv-feature-stat-num">3.2×</div>
@@ -3577,15 +3581,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </section>
         )}
 
-        {/* /home — Built to Rank on Google */}
+        {/* /home — Engineered for discoverability */}
         {region === 'home' && (
           <section className="mv-shell mv-feature mv-feature-rank">
-            <div className="mv-feature-eyebrow mv-anim-fade">◊ Built to Rank ◊</div>
+            <div className="mv-feature-eyebrow mv-anim-fade">◊ Built to Be Found ◊</div>
             <h2 className="mv-feature-title mv-anim-fade">
-              How we get you <em>found on Google.</em>
+              Engineered for <em>discoverability.</em>
             </h2>
             <p className="mv-feature-sub mv-anim-fade">
-              Every site we ship is engineered to rank — fast, semantic, schema-marked, and structured so Google understands exactly what you do and where you serve.
+              Every site we ship is fast, semantic, schema-marked, and structured with modern SEO best-practices — so search engines understand exactly what you do and where you serve.
             </p>
             <div className="mv-feature-grid">
               <div className="mv-feature-card mv-anim-fade">
