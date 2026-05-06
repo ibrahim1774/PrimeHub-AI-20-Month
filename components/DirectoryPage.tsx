@@ -671,11 +671,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const singleTierName = isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
     const multiTierName = isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
     const singleBullets = isBarberFive
-      ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included']
-      : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included'];
+      ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included', 'Cancel anytime · no contracts']
+      : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included', 'Cancel anytime · no contracts'];
     const multiBullets = isBarberFive
-      ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included']
-      : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included'];
+      ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts']
+      : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts'];
     return (
       <>
         <style>{`
