@@ -43,7 +43,9 @@ async function loadPayPalSdk(currency: string): Promise<void> {
                 vault: 'true',
                 intent: 'subscription',
                 components: 'buttons,funding-eligibility',
-                'enable-funding': 'card',
+                // 'card' = guest debit/credit card; 'venmo' = Venmo button for US iOS/Android.
+                // PayPal One-Touch (login-skip for repeat users) is on by default.
+                'enable-funding': 'card,venmo',
                 currency,
             });
             s.src = `https://www.paypal.com/sdk/js?${params.toString()}`;
@@ -105,6 +107,13 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
                             return await actions.subscription.create({
                                 plan_id: planId,
                                 custom_id: customId,
+                                application_context: {
+                                    // Skip the shipping/address collection step in the
+                                    // PayPal popup — it's a hosting subscription, no
+                                    // physical delivery, faster to checkout.
+                                    shipping_preference: 'NO_SHIPPING',
+                                    user_action: 'SUBSCRIBE_NOW',
+                                },
                             });
                         } catch (e: any) {
                             const msg = e?.message || 'PayPal could not create the subscription. The plan may not be ACTIVE in PayPal yet.';
