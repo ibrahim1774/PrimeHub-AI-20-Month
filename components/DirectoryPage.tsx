@@ -359,7 +359,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [region, cfg.monthlyAmount, cfg.currency]);
 
   useEffect(() => {
-    if (region !== 'home' && region !== 'five') return;
+    if (region !== 'home' && region !== 'five' && region !== 'barberFive') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
