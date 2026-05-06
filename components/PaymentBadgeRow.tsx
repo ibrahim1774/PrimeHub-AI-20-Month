@@ -6,14 +6,14 @@ import React from 'react';
 
 const badgeStyle: React.CSSProperties = {
     background: '#fff',
-    borderRadius: 6,
-    padding: '4px 8px',
-    boxShadow: '0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04)',
+    borderRadius: 4,
+    padding: '2px 6px',
+    boxShadow: '0 1px 3px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04)',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 26,
-    minWidth: 42,
+    height: 18,
+    minWidth: 30,
     flex: '0 0 auto',
 };
 
@@ -35,7 +35,7 @@ const VisaMark: React.FC = () => (
 );
 
 const MastercardMark: React.FC = () => (
-    <svg height="16" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
+    <svg height="11" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
         <circle cx="15" cy="12" r="7" fill="#EB001B"/>
         <circle cx="23" cy="12" r="7" fill="#F79E1B"/>
         <path fill="#FF5F00" d="M19 7.13a7 7 0 0 1 0 9.74 7 7 0 0 1 0-9.74z"/>
@@ -43,7 +43,7 @@ const MastercardMark: React.FC = () => (
 );
 
 const AmexMark: React.FC = () => (
-    <svg height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="American Express">
+    <svg height="11" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="American Express">
         <rect width="60" height="40" rx="4" fill="#1F72CD"/>
         <text x="30" y="17" textAnchor="middle" fill="#fff" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8">AMERICAN</text>
         <text x="30" y="27" textAnchor="middle" fill="#fff" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8">EXPRESS</text>
@@ -51,7 +51,7 @@ const AmexMark: React.FC = () => (
 );
 
 const DiscoverMark: React.FC = () => (
-    <svg height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Discover">
+    <svg height="11" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Discover">
         <rect width="60" height="40" rx="4" fill="#fff" stroke="#e6e6e6"/>
         <text x="30" y="20" textAnchor="middle" fill="#231F20" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="9">DISCOVER</text>
         <circle cx="42" cy="28" r="6" fill="#FF6000"/>
@@ -64,32 +64,31 @@ const PaymentBadgeRow: React.FC = () => {
             style={{
                 background: 'linear-gradient(180deg, #f7faff 0%, #ffffff 100%)',
                 border: '1px solid #e3ebf5',
-                borderRadius: 14,
-                padding: '16px 16px 14px',
-                margin: '14px 0 18px',
+                borderRadius: 10,
+                padding: '8px 10px',
+                margin: '10px auto',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 12,
+                gap: 6,
+                maxWidth: 240,
             }}
         >
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#003087' }}>
-                Secure checkout — we accept
-            </div>
-            {/* Large PayPal pill */}
+            {/* Wide, slim PayPal pill */}
             <div
                 style={{
                     background: '#FFC439',
-                    borderRadius: 10,
-                    padding: '12px 28px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,.10), 0 0 0 1px rgba(0,0,0,.04)',
+                    borderRadius: 999,
+                    padding: '6px 22px',
+                    boxShadow: '0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minWidth: 140,
+                    width: '100%',
+                    height: 28,
                 }}
             >
-                <PayPalMark height={26} />
+                <PayPalMark height={14} />
             </div>
             {/* Card brands underneath */}
             <div
@@ -98,10 +97,9 @@ const PaymentBadgeRow: React.FC = () => {
                     flexWrap: 'nowrap',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: 6,
+                    gap: 4,
                     width: '100%',
                     overflowX: 'auto',
-                    paddingBottom: 2,
                     WebkitOverflowScrolling: 'touch',
                 }}
             >
@@ -109,9 +107,6 @@ const PaymentBadgeRow: React.FC = () => {
                 <span style={badgeStyle}><MastercardMark /></span>
                 <span style={badgeStyle}><AmexMark /></span>
                 <span style={badgeStyle}><DiscoverMark /></span>
-            </div>
-            <div style={{ fontSize: 11, color: '#5b6b7d', textAlign: 'center', lineHeight: 1.4 }}>
-                Pay with your card or PayPal balance.
             </div>
         </div>
     );
