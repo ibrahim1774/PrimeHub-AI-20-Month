@@ -253,7 +253,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   const openPaypal = (ctx: PayPalCtx) => {
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      const value = ctx.region === 'aus' ? Number(ctx.priceText.replace(/[^0-9.]/g, '')) : Number(ctx.priceText.replace(/[^0-9.]/g, ''));
+      const value = Number(ctx.priceText.replace(/[^0-9.]/g, ''));
       (window as any).fbq('track', 'InitiateCheckout', {
         value,
         currency: ctx.region === 'aus' ? 'AUD' : 'USD',
