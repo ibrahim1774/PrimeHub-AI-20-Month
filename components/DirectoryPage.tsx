@@ -686,12 +686,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             color: #0d0d0d;
             -webkit-font-smoothing: antialiased;
-            padding: 16px 14px 100px;
+            padding: 6px 14px 100px;
           }
-          .mv-f-nav { display:flex; align-items:center; justify-content:space-between; max-width:1180px; margin:0 auto 14px; padding:12px 6px; }
-          .mv-f-logo { font-weight:900; font-size:22px; letter-spacing:-0.02em; }
+          .mv-f-nav { display:flex; align-items:center; justify-content:center; max-width:1180px; margin:0 auto 6px; padding:6px 6px; }
+          .mv-f-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; }
           .mv-f-stack { display:flex; flex-direction:column; gap:14px; max-width:1180px; margin:0 auto; }
-          .mv-f-card { position:relative; border-radius:22px; padding:26px 20px; overflow:hidden; opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+          .mv-f-card { position:relative; border-radius:22px; padding:18px 18px; overflow:hidden; opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
           .mv-f-card.is-visible { opacity:1; transform:translateY(0); }
           .mv-f-hero { background:#f5efe4; }
           .mv-f-examples { background:#dde7d4; }
@@ -709,7 +709,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-quick { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0 18px; max-width:560px; }
           .mv-f-quickitem { background:#fff; border-radius:14px; padding:12px 14px; font-size:13px; line-height:1.4; box-shadow:0 6px 18px rgba(0,0,0,.04); }
           .mv-f-quickitem b { display:block; font-size:14px; margin-bottom:2px; }
-          .mv-f-promise { display:flex; align-items:center; gap:10px; margin:6px 0 10px; padding:10px 14px; background:#0d0d0d; color:#fff; border-radius:12px; font-weight:700; font-size:13px; line-height:1.3; max-width:580px; box-shadow:0 8px 20px rgba(0,0,0,.16); }
+          .mv-f-promise { display:flex; align-items:center; justify-content:center; gap:10px; margin:8px auto 0; padding:8px 14px; background:#0d0d0d; color:#fff; border-radius:999px; font-weight:700; font-size:12px; line-height:1.2; max-width:280px; box-shadow:0 6px 16px rgba(0,0,0,.14); }
           .mv-f-promise strong { background:#d4914a; color:#fff; padding:2px 8px; border-radius:6px; font-weight:800; letter-spacing:.01em; }
           .mv-f-promise-body { font-weight:600; font-size:13px; line-height:1.5; color:#3a3a3a; background:rgba(255,255,255,.85); border-radius:14px; padding:14px 18px; max-width:600px; margin:-6px 0 14px; }
           .mv-f-promise-body em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
@@ -726,7 +726,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-gallery-hint { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:#0d0d0d; opacity:.55; animation:mvSwipeHint 1.8s ease-in-out infinite; }
           .mv-f-gallery-hint svg { width:14px; height:14px; }
           @keyframes mvSwipeHint { 0%,100% { transform:translateX(0); opacity:.55; } 50% { transform:translateX(6px); opacity:.85; } }
-          .mv-f-gcard { flex:0 0 auto; width:180px; aspect-ratio:9/16; background:#0d0d0d; border-radius:16px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.10); }
+          .mv-f-gcard { flex:0 0 auto; width:130px; aspect-ratio:9/16; background:#0d0d0d; border-radius:14px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.10); }
           .mv-f-gcard wistia-player { width:100%; height:100%; display:block; }
           .mv-f-steps { display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
           .mv-f-step { background:rgba(255,255,255,.7); border-radius:12px; padding:12px 14px; }
@@ -841,9 +841,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <div className={`mv-f-page${isBarberFive ? ' mv-f-page-barber' : ''}`}>
           <nav className="mv-f-nav">
             <span className="mv-f-logo">amalvera</span>
-            <button className="mv-f-pill" style={{ padding: '10px 18px', fontSize: 13 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              See pricing
-            </button>
           </nav>
 
           <div className="mv-f-stack">
@@ -908,13 +905,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 ))}
                 </div>
               </div>
-              <PaymentBadgeRow />
-
-              <div className="mv-f-promise" style={{ marginTop: 18 }}><strong>We deliver within 24 hours</strong></div>
-              <button className="mv-f-pill" style={{ marginTop: 10 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                See pricing
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </button>
+              <div className="mv-f-promise" style={{ marginTop: 12 }}><strong>We deliver within 24 hours</strong></div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginTop: 10 }}>
+                <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                  See pricing
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+                <PaymentBadgeRow />
+              </div>
             </section>
 
             {/* How it works */}
