@@ -688,7 +688,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             -webkit-font-smoothing: antialiased;
             padding: 6px 14px 100px;
           }
-          .mv-f-nav { display:flex; align-items:center; justify-content:center; max-width:1180px; margin:0 auto 6px; padding:6px 6px; }
+          .mv-f-nav { display:flex; align-items:center; justify-content:flex-start; max-width:1180px; margin:0 auto 6px; padding:6px 6px; }
           .mv-f-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; }
           .mv-f-stack { display:flex; flex-direction:column; gap:14px; max-width:1180px; margin:0 auto; }
           .mv-f-card { position:relative; border-radius:22px; padding:18px 18px; overflow:hidden; opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
@@ -709,8 +709,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-quick { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0 18px; max-width:560px; }
           .mv-f-quickitem { background:#fff; border-radius:14px; padding:12px 14px; font-size:13px; line-height:1.4; box-shadow:0 6px 18px rgba(0,0,0,.04); }
           .mv-f-quickitem b { display:block; font-size:14px; margin-bottom:2px; }
-          .mv-f-promise { display:flex; align-items:center; justify-content:center; gap:10px; margin:8px auto 0; padding:8px 14px; background:#0d0d0d; color:#fff; border-radius:999px; font-weight:700; font-size:12px; line-height:1.2; max-width:280px; box-shadow:0 6px 16px rgba(0,0,0,.14); }
-          .mv-f-promise strong { background:#d4914a; color:#fff; padding:2px 8px; border-radius:6px; font-weight:800; letter-spacing:.01em; }
+          .mv-f-promise { display:inline-flex; align-items:center; justify-content:center; gap:6px; margin:8px auto 0; padding:8px 16px; background:#ffffff; color:#0d0d0d; border-radius:999px; font-weight:800; font-size:12px; line-height:1.2; max-width:280px; box-shadow:0 6px 16px rgba(0,0,0,.10), 0 0 0 1px rgba(0,0,0,.06); }
+          .mv-f-promise strong { background:transparent; color:inherit; padding:0; font-weight:800; letter-spacing:.01em; }
           .mv-f-promise-body { font-weight:600; font-size:13px; line-height:1.5; color:#3a3a3a; background:rgba(255,255,255,.85); border-radius:14px; padding:14px 18px; max-width:600px; margin:-6px 0 14px; }
           .mv-f-promise-body em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
           .mv-f-gallery-wrap { position:relative; }
@@ -803,8 +803,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-page-barber .mv-f-title { color:#f5f0e0; }
             .mv-f-page-barber .mv-f-title em { color:#c9a96e; }
             .mv-f-page-barber .mv-f-sub { color:#cfc8b8; }
-            .mv-f-page-barber .mv-f-promise { background:#c9a96e; color:#0a0a0a; box-shadow:0 12px 28px rgba(0,0,0,.35); }
-            .mv-f-page-barber .mv-f-promise strong { background:#0a0a0a; color:#c9a96e; }
+            .mv-f-page-barber .mv-f-promise { background:#ffffff; color:#0a0a0a; box-shadow:0 8px 20px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.4); }
+            .mv-f-page-barber .mv-f-promise strong { background:transparent; color:inherit; }
             .mv-f-page-barber .mv-f-promise-body { background:rgba(245,240,224,.06); color:#cfc8b8; }
             .mv-f-page-barber .mv-f-step { background:rgba(201,169,110,.07); color:#f5f0e0; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
             .mv-f-page-barber .mv-f-step-num { color:#c9a96e; }
@@ -907,9 +907,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
               <div className="mv-f-promise" style={{ marginTop: 12 }}><strong>We deliver within 24 hours</strong></div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginTop: 10 }}>
-                <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                <button className="mv-f-pill" style={{ padding: '8px 16px', fontSize: 12, fontWeight: 800 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
                   See pricing
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: 12, height: 12 }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
                 <PaymentBadgeRow />
               </div>
@@ -950,7 +950,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
-                  <TierPaymentBadge />
+                  <PaymentBadgeRow />
                 </button>
                 <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
@@ -964,7 +964,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
-                  <TierPaymentBadge />
+                  <PaymentBadgeRow />
                 </button>
               </div>
 
