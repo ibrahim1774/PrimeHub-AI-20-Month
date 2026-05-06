@@ -729,6 +729,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-gallery-hint svg { width:14px; height:14px; }
           @keyframes mvSwipeHint { 0%,100% { transform:translateX(0); opacity:.55; } 50% { transform:translateX(6px); opacity:.85; } }
           .mv-f-gcard { flex:0 0 auto; width:130px; aspect-ratio:9/16; background:#0d0d0d; border-radius:14px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.10); }
+          .mv-f-gallery-compact .mv-f-gcard { width:96px; border-radius:10px; }
+          .mv-f-gallery-compact .mv-f-gallery-arrow { width:30px; height:30px; }
+          .mv-f-gallery-compact .mv-f-gallery-arrow svg { width:14px; height:14px; }
           .mv-f-gcard wistia-player { width:100%; height:100%; display:block; }
           .mv-f-steps { display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
           .mv-f-step { background:rgba(255,255,255,.7); border-radius:12px; padding:12px 14px; }
@@ -942,6 +945,64 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-f-toggle" role="tablist" aria-label="Billing plan">
                 <button type="button" className={pricingPlan === 'monthly' ? 'active' : ''} onClick={() => setPricingPlan('monthly')}>Monthly</button>
                 <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
+              </div>
+
+              <div className="mv-f-gallery-wrap mv-f-gallery-compact" style={{ marginBottom: 10 }}>
+                <button
+                  type="button"
+                  className="mv-f-gallery-arrow mv-f-gallery-arrow-prev"
+                  aria-label="Previous example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.mv-f-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -160, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="mv-f-gallery-arrow mv-f-gallery-arrow-next"
+                  aria-label="Next example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.mv-f-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 160, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="mv-f-gallery">
+                  {fiveExamples.map((item, i) => (
+                    <div key={`p-${i}`} className="mv-f-gcard">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'false',
+                          'big-play-button': 'false',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': playerColor,
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+                <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
               </div>
 
               <div className="mv-f-tiers">
