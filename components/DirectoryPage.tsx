@@ -705,9 +705,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-promise strong { background:#d4914a; color:#fff; padding:2px 8px; border-radius:6px; font-weight:800; letter-spacing:.01em; }
           .mv-f-promise-body { font-weight:600; font-size:13px; line-height:1.5; color:#3a3a3a; background:rgba(255,255,255,.85); border-radius:14px; padding:14px 18px; max-width:600px; margin:-6px 0 14px; }
           .mv-f-promise-body em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
-          .mv-f-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:6px -4px 0; }
+          .mv-f-gallery-wrap { position:relative; }
+          .mv-f-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:6px -4px 0; scroll-behavior:smooth; }
           .mv-f-gallery::-webkit-scrollbar { height:5px; }
           .mv-f-gallery::-webkit-scrollbar-thumb { background:rgba(0,0,0,.15); border-radius:999px; }
+          .mv-f-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:999px; background:rgba(255,255,255,.96); color:#0d0d0d; border:0; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 8px 22px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.06); z-index:5; transition:transform .2s ease, background .2s ease; }
+          .mv-f-gallery-arrow:hover { transform:translateY(-50%) scale(1.06); background:#fff; }
+          .mv-f-gallery-arrow:active { transform:translateY(-50%) scale(0.96); }
+          .mv-f-gallery-arrow svg { width:18px; height:18px; }
+          .mv-f-gallery-arrow-prev { left:-4px; }
+          .mv-f-gallery-arrow-next { right:-4px; }
+          .mv-f-gallery-hint { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:#0d0d0d; opacity:.55; animation:mvSwipeHint 1.8s ease-in-out infinite; }
+          .mv-f-gallery-hint svg { width:14px; height:14px; }
+          @keyframes mvSwipeHint { 0%,100% { transform:translateX(0); opacity:.55; } 50% { transform:translateX(6px); opacity:.85; } }
           .mv-f-gcard { flex:0 0 auto; width:180px; aspect-ratio:9/16; background:#0d0d0d; border-radius:16px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.10); }
           .mv-f-gcard wistia-player { width:100%; height:100%; display:block; }
           .mv-f-steps { display:grid; grid-template-columns:1fr; gap:12px; margin-top:8px; }
@@ -814,6 +824,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-page-barber .mv-f-sticky .mv-f-sticky-text { color:#0a0a0a; }
             .mv-f-page-barber .mv-f-sticky .mv-f-pill { background:#0a0a0a; color:#c9a96e; }
             .mv-f-page-barber .mv-f-sticky .mv-f-pill:hover:not(:disabled) { background:#1f1f1f; color:#f5f0e0; }
+            .mv-f-page-barber .mv-f-gallery-arrow { background:#c9a96e; color:#0a0a0a; box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.5); }
+            .mv-f-page-barber .mv-f-gallery-arrow:hover { background:#d8b67a; }
+            .mv-f-page-barber .mv-f-gallery-hint { color:#c9a96e; opacity:.85; }
           ` : ''}
         `}</style>
         <div className={`mv-f-page${isBarberFive ? ' mv-f-page-barber' : ''}`}>
@@ -832,7 +845,30 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <p className="mv-f-sub">We build it. We host it. We deliver it in 24 hours. That's it.</p>
 
               <div className="mv-f-eyebrow" style={{ marginTop: 6 }}>{examplesEyebrow}</div>
-              <div className="mv-f-gallery">
+              <div className="mv-f-gallery-wrap">
+                <button
+                  type="button"
+                  className="mv-f-gallery-arrow mv-f-gallery-arrow-prev"
+                  aria-label="Previous example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.mv-f-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="mv-f-gallery-arrow mv-f-gallery-arrow-next"
+                  aria-label="Next example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.mv-f-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="mv-f-gallery">
                 {fiveExamples.map((item, i) => (
                   <div key={i} className="mv-f-gcard">
                     <wistia-player
@@ -861,6 +897,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     ></wistia-player>
                   </div>
                 ))}
+                </div>
+              </div>
+              <div className="mv-f-gallery-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                Swipe or use arrows to see more
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
               </div>
 
               <PaymentBadgeRow />
