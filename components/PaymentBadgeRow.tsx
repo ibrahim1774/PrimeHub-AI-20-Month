@@ -114,4 +114,41 @@ const PaymentBadgeRow: React.FC = () => {
     );
 };
 
+// Compact per-tier badge: just the 'Secure Checkout with PayPal' caption
+// and the four card-brand chips. Used inside each pricing-tier card
+// underneath the Start button.
+export const TierPaymentBadge: React.FC = () => {
+    return (
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 5,
+                marginTop: 8,
+                width: '100%',
+            }}
+        >
+            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'currentColor', opacity: 0.6, textAlign: 'center', lineHeight: 1.2 }}>
+                Secure Checkout with PayPal
+            </div>
+            <div
+                style={{
+                    display: 'flex',
+                    flexWrap: 'nowrap',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 4,
+                    width: '100%',
+                }}
+            >
+                <span style={badgeStyle}><VisaMark /></span>
+                <span style={badgeStyle}><MastercardMark /></span>
+                <span style={badgeStyle}><AmexMark /></span>
+                <span style={badgeStyle}><DiscoverMark /></span>
+            </div>
+        </div>
+    );
+};
+
 export default PaymentBadgeRow;

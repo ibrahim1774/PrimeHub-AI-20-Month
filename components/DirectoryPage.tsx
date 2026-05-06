@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import PayPalSubscribeModal, { type PayPalCtx } from './PayPalSubscribeModal';
-import PaymentBadgeRow from './PaymentBadgeRow';
+import PaymentBadgeRow, { TierPaymentBadge } from './PaymentBadgeRow';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -939,8 +939,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
               </div>
 
-              <PaymentBadgeRow />
-
               <div className="mv-f-tiers">
                 <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
@@ -954,6 +952,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
+                  <TierPaymentBadge />
                 </button>
                 <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
                   <div className="mv-f-tier-head">
@@ -967,6 +966,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
                   <span className="mv-f-tier-cta">Start →</span>
+                  <TierPaymentBadge />
                 </button>
               </div>
 
