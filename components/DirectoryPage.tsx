@@ -1000,16 +1000,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
-            {/* Final CTA */}
-            <section className="mv-f-card mv-f-final mv-h-anim">
-              <div className="mv-f-eyebrow">Ready?</div>
-              <h2 className="mv-f-title">Your custom site, live in <em>24 hours.</em></h2>
-              <p className="mv-f-sub" style={{ marginLeft: 'auto', marginRight: 'auto' }}>We build it. We host it. We deliver it in 24 hours.</p>
-              <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                See pricing
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </button>
-            </section>
           </div>
 
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
