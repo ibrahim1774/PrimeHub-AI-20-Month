@@ -905,8 +905,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 ))}
                 </div>
               </div>
-              <div className="mv-f-promise" style={{ marginTop: 12 }}><strong>We deliver within 24 hours</strong></div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginTop: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginTop: 12 }}>
+                <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
                 <button
                   className="mv-f-pill"
                   style={{ width: '100%', maxWidth: 240, justifyContent: 'center', padding: '14px 20px', fontSize: 16, fontWeight: 800 }}
