@@ -512,6 +512,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     | { kind: 'video'; mediaId: string; aspect: string; label: string }
     | { kind: 'image'; src: string; label: string }
   > = [
+    { kind: 'video', mediaId: 'zeucv84sfn', aspect: '0.5056179775280899', label: 'Sample Site' },
     { kind: 'video', mediaId: 'dp2jzg06lf', aspect: '0.509915014164306', label: 'Sample Site' },
     { kind: 'video', mediaId: 'va1232reyg', aspect: '0.5373134328358209', label: 'Sample Site' },
     { kind: 'video', mediaId: 'ra875to7uc', aspect: '0.5397301349325337', label: 'Sample Site' },
@@ -650,6 +651,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   if (region === 'five' || region === 'barberFive') {
     const isBarberFive = region === 'barberFive';
     const barberFiveGallery = [
+      { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
