@@ -62,10 +62,8 @@ const PaymentBadgeRow: React.FC = () => {
     return (
         <div
             style={{
-                background: 'linear-gradient(180deg, #f7faff 0%, #ffffff 100%)',
-                border: '1px solid #e3ebf5',
-                borderRadius: 10,
-                padding: '8px 10px',
+                background: 'transparent',
+                padding: 0,
                 margin: '10px auto',
                 display: 'flex',
                 flexDirection: 'column',
@@ -74,10 +72,7 @@ const PaymentBadgeRow: React.FC = () => {
                 maxWidth: 240,
             }}
         >
-            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: '#003087', textAlign: 'center', lineHeight: 1.2 }}>
-                Secure checkout — we accept
-            </div>
-            {/* Wide, slim PayPal pill */}
+            {/* PayPal pill on top */}
             <div
                 style={{
                     background: '#FFC439',
@@ -93,7 +88,11 @@ const PaymentBadgeRow: React.FC = () => {
             >
                 <PayPalMark height={14} />
             </div>
-            {/* Card brands underneath */}
+            {/* Caption between PayPal and card brands */}
+            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'currentColor', opacity: 0.6, textAlign: 'center', lineHeight: 1.2 }}>
+                Secure checkout — we accept
+            </div>
+            {/* Card brands at bottom */}
             <div
                 style={{
                     display: 'flex',
