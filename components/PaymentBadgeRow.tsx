@@ -72,7 +72,11 @@ const PaymentBadgeRow: React.FC = () => {
                 maxWidth: 240,
             }}
         >
-            {/* PayPal pill on top */}
+            {/* Caption above the PayPal pill */}
+            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'currentColor', opacity: 0.6, textAlign: 'center', lineHeight: 1.2 }}>
+                Secure Checkout with PayPal
+            </div>
+            {/* PayPal pill */}
             <div
                 style={{
                     background: '#FFC439',
@@ -87,10 +91,6 @@ const PaymentBadgeRow: React.FC = () => {
                 }}
             >
                 <PayPalMark height={14} />
-            </div>
-            {/* Caption between PayPal and card brands */}
-            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'currentColor', opacity: 0.6, textAlign: 'center', lineHeight: 1.2 }}>
-                Secure checkout — we accept
             </div>
             {/* Card brands at bottom */}
             <div

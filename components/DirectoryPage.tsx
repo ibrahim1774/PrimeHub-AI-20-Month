@@ -908,12 +908,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 ))}
                 </div>
               </div>
-              <div className="mv-f-gallery-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
-                Swipe or use arrows to see more
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
-              </div>
-
               <PaymentBadgeRow />
 
               <div className="mv-f-promise" style={{ marginTop: 18 }}><strong>We deliver within 24 hours</strong></div>
