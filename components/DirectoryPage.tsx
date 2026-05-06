@@ -722,6 +722,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 ))}
               </div>
 
+              <PaymentBadgeRow />
+
               <div className="mv-f-promise" style={{ marginTop: 18 }}><strong>We deliver within 24 hours</strong></div>
               <button className="mv-f-pill" style={{ marginTop: 10 }} onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
                 See pricing

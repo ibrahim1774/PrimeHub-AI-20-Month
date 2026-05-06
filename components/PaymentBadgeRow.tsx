@@ -6,18 +6,19 @@ import React from 'react';
 
 const badgeStyle: React.CSSProperties = {
     background: '#fff',
-    borderRadius: 8,
-    padding: '6px 10px',
+    borderRadius: 6,
+    padding: '4px 8px',
     boxShadow: '0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04)',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 32,
-    minWidth: 52,
+    height: 26,
+    minWidth: 42,
+    flex: '0 0 auto',
 };
 
 const PayPalMark: React.FC = () => (
-    <svg height="18" viewBox="0 0 124 33" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
+    <svg height="14" viewBox="0 0 124 33" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
         <path fill="#253B80" d="M46.211 6.749h-6.839a.95.95 0 0 0-.939.802l-2.766 17.537a.57.57 0 0 0 .564.658h3.265a.95.95 0 0 0 .939-.803l.746-4.73a.95.95 0 0 1 .938-.803h2.165c4.505 0 7.105-2.18 7.784-6.5.306-1.89.013-3.375-.872-4.415-.972-1.142-2.696-1.746-4.985-1.746zM47 13.154c-.374 2.454-2.249 2.454-4.062 2.454h-1.032l.724-4.583a.57.57 0 0 1 .563-.481h.473c1.235 0 2.4 0 3.002.704.359.42.469 1.044.332 1.906zM66.654 13.075h-3.275a.57.57 0 0 0-.563.481l-.145.916-.229-.332c-.709-1.029-2.29-1.373-3.868-1.373-3.619 0-6.71 2.741-7.312 6.586-.313 1.918.132 3.752 1.22 5.031.998 1.176 2.426 1.666 4.125 1.666 2.916 0 4.533-1.875 4.533-1.875l-.146.91a.57.57 0 0 0 .562.66h2.95a.95.95 0 0 0 .939-.803l1.77-11.209a.568.568 0 0 0-.561-.658zm-4.565 6.374c-.316 1.871-1.801 3.127-3.695 3.127-.951 0-1.711-.305-2.199-.883-.484-.574-.668-1.391-.514-2.301.295-1.855 1.805-3.152 3.67-3.152.93 0 1.686.309 2.184.892.499.589.697 1.411.554 2.317zM84.096 13.075h-3.291a.954.954 0 0 0-.787.417l-4.539 6.686-1.924-6.425a.953.953 0 0 0-.912-.678h-3.234a.57.57 0 0 0-.541.754l3.625 10.638-3.408 4.811a.57.57 0 0 0 .465.9h3.287a.949.949 0 0 0 .781-.408l10.946-15.8a.57.57 0 0 0-.468-.895z"/>
         <path fill="#179BD7" d="M94.992 6.749h-6.84a.95.95 0 0 0-.938.802l-2.766 17.537a.569.569 0 0 0 .562.658h3.51a.665.665 0 0 0 .656-.562l.785-4.971a.95.95 0 0 1 .938-.803h2.164c4.506 0 7.105-2.18 7.785-6.5.307-1.89.012-3.375-.873-4.415-.971-1.142-2.694-1.746-4.983-1.746zm.789 6.405c-.373 2.454-2.248 2.454-4.062 2.454h-1.031l.725-4.583a.568.568 0 0 1 .562-.481h.473c1.234 0 2.4 0 3.002.704.359.42.468 1.044.331 1.906zM115.434 13.075h-3.273a.567.567 0 0 0-.562.481l-.145.916-.23-.332c-.709-1.029-2.289-1.373-3.867-1.373-3.619 0-6.709 2.741-7.311 6.586-.312 1.918.131 3.752 1.219 5.031 1 1.176 2.426 1.666 4.125 1.666 2.916 0 4.533-1.875 4.533-1.875l-.146.91a.57.57 0 0 0 .564.66h2.949a.95.95 0 0 0 .938-.803l1.771-11.209a.571.571 0 0 0-.565-.658zm-4.565 6.374c-.314 1.871-1.801 3.127-3.695 3.127-.949 0-1.711-.305-2.199-.883-.484-.574-.666-1.391-.514-2.301.297-1.855 1.805-3.152 3.67-3.152.93 0 1.686.309 2.184.892.501.589.699 1.411.554 2.317zM119.295 7.23l-2.807 17.858a.569.569 0 0 0 .562.658h2.822c.469 0 .867-.34.939-.803l2.768-17.536a.57.57 0 0 0-.562-.659h-3.16a.571.571 0 0 0-.562.482z"/>
         <path fill="#253B80" d="M7.266 29.154l.523-3.322-1.165-.027H1.061L4.927 1.292a.316.316 0 0 1 .314-.268h9.38c3.114 0 5.263.648 6.385 1.927.526.6.861 1.227 1.023 1.917.17.724.173 1.589.007 2.644l-.012.077v.676l.526.298a3.69 3.69 0 0 1 1.065.812c.45.513.741 1.165.864 1.938.127.795.085 1.741-.123 2.812-.24 1.232-.628 2.305-1.152 3.183a6.547 6.547 0 0 1-1.825 2c-.696.494-1.523.869-2.458 1.109-.906.236-1.939.355-3.072.355h-.73c-.522 0-1.029.188-1.427.525a2.21 2.21 0 0 0-.744 1.328l-.055.299-.924 5.855-.042.215c-.011.068-.03.102-.058.125a.155.155 0 0 1-.096.035H7.266z"/>
@@ -28,13 +29,13 @@ const PayPalMark: React.FC = () => (
 );
 
 const VisaMark: React.FC = () => (
-    <svg height="14" viewBox="0 0 1000 324.68" xmlns="http://www.w3.org/2000/svg" aria-label="Visa">
+    <svg height="11" viewBox="0 0 1000 324.68" xmlns="http://www.w3.org/2000/svg" aria-label="Visa">
         <path fill="#1A1F71" d="M433.35 6.62L284.41 318.13H187.7L114.4 34.49c-4.45-17.46-8.32-23.86-21.86-31.23C70.46-8.7 33.93-19.9 1.84-26.85L4 6.62h155.66c19.83 0 37.66 13.21 42.18 36.03L241.14 250.5l95.5-243.88h96.71zm380.96 209.44c.39-93.92-129.86-99.1-128.97-141.06.28-12.76 12.43-26.33 39-29.79 13.18-1.72 49.5-3.04 90.66 15.91l16.16-75.46C829.04 -7.6 800.62 -15 765.27 -15c-90.99 0-155 48.39-155.55 117.69-.6 51.24 45.74 79.83 80.66 96.86 35.92 17.45 47.97 28.66 47.83 44.27-.25 23.91-28.66 34.46-55.22 34.87-46.34.72-73.21-12.53-94.65-22.51l-16.7 78c21.55 9.89 61.34 18.51 102.61 18.95 96.7 0 159.97-47.79 160.06-121.9zM1009 318.13L1099.16-15h-89.45c-20.21 0-37.27 11.78-44.83 29.84L778.9 318.13h96.7l19.21-53.16h118.16l11.14 53.16H1009zM922.69 192.13l48.49-133.69 27.92 133.69H922.69zm-326.7-186l-76.18 311.51h-92.07L504.18 6.62h91.81z" transform="translate(15 15)"/>
     </svg>
 );
 
 const MastercardMark: React.FC = () => (
-    <svg height="22" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
+    <svg height="16" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
         <circle cx="15" cy="12" r="7" fill="#EB001B"/>
         <circle cx="23" cy="12" r="7" fill="#F79E1B"/>
         <path fill="#FF5F00" d="M19 7.13a7 7 0 0 1 0 9.74 7 7 0 0 1 0-9.74z"/>
@@ -42,7 +43,7 @@ const MastercardMark: React.FC = () => (
 );
 
 const AmexMark: React.FC = () => (
-    <svg height="22" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="American Express">
+    <svg height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="American Express">
         <rect width="60" height="40" rx="4" fill="#1F72CD"/>
         <text x="30" y="17" textAnchor="middle" fill="#fff" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8">AMERICAN</text>
         <text x="30" y="27" textAnchor="middle" fill="#fff" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="8">EXPRESS</text>
@@ -50,7 +51,7 @@ const AmexMark: React.FC = () => (
 );
 
 const DiscoverMark: React.FC = () => (
-    <svg height="22" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Discover">
+    <svg height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Discover">
         <rect width="60" height="40" rx="4" fill="#fff" stroke="#e6e6e6"/>
         <text x="30" y="20" textAnchor="middle" fill="#231F20" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="9">DISCOVER</text>
         <circle cx="42" cy="28" r="6" fill="#FF6000"/>
@@ -75,8 +76,20 @@ const PaymentBadgeRow: React.FC = () => {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#003087' }}>
                 Secure checkout — we accept
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 8 }}>
-                <span style={{ ...badgeStyle, background: '#FFC439', minWidth: 72 }}><PayPalMark /></span>
+            <div
+                style={{
+                    display: 'flex',
+                    flexWrap: 'nowrap',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 6,
+                    width: '100%',
+                    overflowX: 'auto',
+                    paddingBottom: 2,
+                    WebkitOverflowScrolling: 'touch',
+                }}
+            >
+                <span style={{ ...badgeStyle, background: '#FFC439', minWidth: 60 }}><PayPalMark /></span>
                 <span style={badgeStyle}><VisaMark /></span>
                 <span style={badgeStyle}><MastercardMark /></span>
                 <span style={badgeStyle}><AmexMark /></span>
