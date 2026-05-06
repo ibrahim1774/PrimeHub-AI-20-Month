@@ -236,6 +236,20 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [paypalOpen, setPaypalOpen] = useState(false);
   const [paypalCtx, setPaypalCtx] = useState<PayPalCtx | null>(null);
+  const [showFiveSticky, setShowFiveSticky] = useState(false);
+
+  // Reveal the /5 + /barber-5 sticky CTA only after the hero is scrolled past.
+  useEffect(() => {
+    if (region !== 'five' && region !== 'barberFive') return;
+    const heroEl = document.querySelector('.mv-f-hero');
+    if (!heroEl) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setShowFiveSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -40% 0px' }
+    );
+    obs.observe(heroEl);
+    return () => obs.disconnect();
+  }, [region]);
 
   const openPaypal = (ctx: PayPalCtx) => {
     if (typeof window !== 'undefined' && (window as any).fbq) {
@@ -756,7 +770,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-faq-item[open] .mv-f-faq-icon { transform:rotate(45deg); }
           .mv-f-faq-a { padding:0 18px 14px; font-size:13px; color:#3a3a3a; line-height:1.6; }
           .mv-f-footer { text-align:center; font-size:12px; color:#999; margin-top:18px; padding:12px; }
-          .mv-f-sticky { position:fixed; left:12px; right:12px; bottom:12px; z-index:90; background:rgba(13,13,13,.96); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#fff; border-radius:999px; padding:10px 10px 10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:1080px; margin:0 auto; box-shadow:0 12px 32px rgba(0,0,0,.20); }
+          .mv-f-sticky { position:fixed; left:12px; right:12px; bottom:12px; z-index:90; background:rgba(13,13,13,.96); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#fff; border-radius:999px; padding:10px 10px 10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:1080px; margin:0 auto; box-shadow:0 12px 32px rgba(0,0,0,.20); transform:translateY(140%); opacity:0; pointer-events:none; transition:transform .35s cubic-bezier(.22,1,.36,1), opacity .35s ease; }
+          .mv-f-sticky.is-visible { transform:translateY(0); opacity:1; pointer-events:auto; }
           .mv-f-sticky-text { font-size:13px; font-weight:600; }
           .mv-f-sticky .mv-f-pill { padding:10px 18px; font-size:13px; }
           @keyframes mvFadeIn { from { opacity:0 } to { opacity:1 } }
@@ -920,7 +935,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <h2 className="mv-f-title">Three simple steps.</h2>
               <p className="mv-f-sub">All we need is one link. We handle the rest.</p>
               <div className="mv-f-steps">
-                <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link</div><div className="mv-f-step-b">Your Google Business Profile, Facebook page, or Instagram. That's all.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link or info</div><div className="mv-f-step-b">A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.</div></div>
                 <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">We build your site</div><div className="mv-f-step-b">Our team uses AI to build a custom site for your business — with nice-looking backgrounds and your real info.</div></div>
                 <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours</div><div className="mv-f-step-b">Up and running within 24 hours. We host it too — you just cover the monthly cost.</div></div>
               </div>
@@ -1004,7 +1019,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
 
-          <div className="mv-f-sticky">
+          <div className={`mv-f-sticky${showFiveSticky ? ' is-visible' : ''}`}>
             <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
             <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
               See pricing
