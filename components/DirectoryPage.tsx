@@ -411,6 +411,46 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     }
   };
 
+  // Subscription regions where PayPal is the primary payment path. /19 is a
+  // one-time payment (Stripe-only), and freewebsite/* + barberleads have no
+  // checkout (they scroll to a lead form), so they're excluded here.
+  const supportsPayPal = (r: string) =>
+    r === 'us' || r === 'aus' || r === 'ten' || r === 'five' || r === 'barber' || r === 'localbusiness' || r === 'home';
+
+  const computePaypalCtx = (r: any, t: 'single' | 'multi' | undefined, p: 'monthly' | 'yearly'): PayPalCtx => {
+    if (r === 'five') {
+      const tier = t === 'multi' ? 'multi' : 'single';
+      const yearly = p === 'yearly';
+      return {
+        region: 'five', tier, plan: p,
+        label: tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page Website',
+        priceText: tier === 'multi' ? (yearly ? '$72/yr' : '$10/mo') : (yearly ? '$36/yr' : '$5/mo'),
+      };
+    }
+    if (r === 'home') {
+      const tier = t === 'single' ? 'single' : 'multi';
+      return {
+        region: 'home', tier, plan: 'monthly',
+        label: tier === 'single' ? 'Single Page Website' : 'Multi-Service Website',
+        priceText: tier === 'single' ? '$30/mo' : '$50/mo',
+      };
+    }
+    const yearly = p === 'yearly';
+    if (r === 'ten' || r === 'barber') return { region: r, plan: p, label: 'Website Subscription', priceText: yearly ? '$49/yr' : '$10/mo' };
+    if (r === 'localbusiness') return { region: r, plan: p, label: 'Local Business Website', priceText: yearly ? '$135/yr' : '$20/mo' };
+    if (r === 'aus') return { region: r, plan: p, label: 'Website Subscription', priceText: yearly ? '$99/yr AUD' : '$20/mo AUD' };
+    return { region: 'us', plan: p, label: 'Website Subscription', priceText: yearly ? '$99/yr' : '$20/mo' };
+  };
+
+  // Single entry point used by every CTA button across regions.
+  const mainCheckout = () => {
+    if (supportsPayPal(region)) {
+      openPaypal(computePaypalCtx(region, activeHomeTier, pricingPlan));
+    } else {
+      handleCheckout();
+    }
+  };
+
   const scrollToFreeWebsiteForm = () => {
     const el = typeof document !== 'undefined' ? document.getElementById('fw-form') : null;
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -419,7 +459,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const CtaButton = ({ large = true }: { large?: boolean }) => (
     <button
       className={`mv-cta ${large ? 'mv-cta-lg' : ''}`}
-      onClick={(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? scrollToFreeWebsiteForm : handleCheckout}
+      onClick={(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? scrollToFreeWebsiteForm : mainCheckout}
       disabled={(region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads') && isLoading}
     >
       <span className="mv-cta-inner">
@@ -1452,6 +1492,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   ))}
                 </div>
                 </div>
+                <PaymentBadgeRow />
               </div>
             </section>
 
@@ -1503,6 +1544,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
                 <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
               </div>
+              <PaymentBadgeRow />
               <div className="mv-h-tier-row">
                 <div className="mv-h-tier">
                   <div className="mv-h-tier-eyebrow">Single page</div>
@@ -1513,8 +1555,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Live in ~48 hours</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => handleCheckout('single')} disabled={isLoading}>
-                    {isLoading && activeHomeTier === 'single' ? 'Loading…' : 'Start — $30/mo'}
+                  <button className="mv-h-pill" onClick={() => openPaypal(computePaypalCtx('home', 'single', 'monthly'))} disabled={isLoading}>
+                    Start — $30/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
@@ -1528,8 +1570,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Deeper SEO setup</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => handleCheckout('multi')} disabled={isLoading}>
-                    {isLoading && activeHomeTier === 'multi' ? 'Loading…' : 'Start — $50/mo'}
+                  <button className="mv-h-pill" onClick={() => openPaypal(computePaypalCtx('home', 'multi', 'monthly'))} disabled={isLoading}>
+                    Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
@@ -1622,6 +1664,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           </div>
         )}
+
+        <PayPalSubscribeModal
+          open={paypalOpen}
+          ctx={paypalCtx}
+          onClose={() => setPaypalOpen(false)}
+        />
       </>
     );
   }
@@ -3188,6 +3236,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           {/* Showcase between hero title and How It Works on /10 */}
           {(region === 'ten' || region === 'five' || region === 'barber' || region === 'localbusiness' || region === 'home' || (region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads')) && <PortfolioSection />}
 
+          {/* Payment trust badges — PayPal + major card brands */}
+          {supportsPayPal(region) && region !== 'home' && region !== 'five' && (
+            <section className="mv-shell" style={{ marginTop: 0, marginBottom: 0 }}>
+              <PaymentBadgeRow />
+            </section>
+          )}
+
           {/* /home — Why a Website */}
           {region === 'home' && (
             <section className="mv-shell mv-feature mv-feature-why">
@@ -3681,6 +3736,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
         </div>
       )}
+
+      <PayPalSubscribeModal
+        open={paypalOpen}
+        ctx={paypalCtx}
+        onClose={() => setPaypalOpen(false)}
+      />
     </>
   );
 };
