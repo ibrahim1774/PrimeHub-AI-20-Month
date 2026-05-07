@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -242,6 +242,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  barberTrial: {
+    source: 'barberTrial',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 10,
+    yearlyAmount: 72,
+    yearlyWas: 120,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -256,7 +272,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   // Reveal the /5 + /barber-5 sticky CTA only after the hero is scrolled past.
   useEffect(() => {
-    if (region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth') return;
+    if (region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial') return;
     const heroEl = document.querySelector('.mv-f-hero');
     if (!heroEl) return;
     const obs = new IntersectionObserver(
@@ -312,7 +328,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -389,7 +405,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [region, cfg.monthlyAmount, cfg.currency]);
 
   useEffect(() => {
-    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth') return;
+    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
@@ -410,7 +426,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -664,11 +680,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth') {
-    // Both /barber-5 and /barber-5-month share the dark/gold barber theme
-    // and Stripe-only checkout. The only difference is the price tier.
-    const isBarberFive = region === 'barberFive' || region === 'barberFiveMonth';
+  if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial') {
+    // /barber-5, /barber-5-month, and /barber-trial share the dark/gold barber theme
+    // and Stripe-only checkout. /barber-trial adds a 1-day free trial flow.
+    const isBarberFive = region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial';
     const isBarberFiveMonth = region === 'barberFiveMonth';
+    const isBarberTrial = region === 'barberTrial';
     const barberFiveGallery = [
       { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
@@ -678,11 +695,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveExamples = isBarberFive ? barberFiveGallery : freewebsite49Gallery;
     const fiveTier: 'single' | 'multi' = activeHomeTier;
     const fiveIsYearly = pricingPlan === 'yearly';
-    const singleMonthly = isBarberFiveMonth ? 5 : isBarberFive ? 10 : 5;
-    const singleYearly = isBarberFiveMonth ? 36 : isBarberFive ? 72 : 36;
-    const multiMonthly = isBarberFiveMonth ? 10 : isBarberFive ? 20 : 10;
-    const multiYearly = isBarberFiveMonth ? 72 : isBarberFive ? 144 : 72;
-    const heroEyebrow = isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
+    const singleMonthly = isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 10 : 5;
+    const singleYearly = isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 72 : 36;
+    const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 20 : 10;
+    const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 144 : 72;
+    const heroEyebrow = isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
+    const primaryCtaLabel = isBarberTrial ? 'Get started for free' : 'See pricing';
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
     const examplesEyebrow = isBarberFive ? 'Real sites · Real barbershops' : 'Real sites · Real local businesses';
     const playerColor = isBarberFive ? 'c9a96e' : '0d0d0d';
@@ -937,7 +955,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                   disabled={isLoading}
                 >
-                  See pricing
+                  {primaryCtaLabel}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: 16, height: 16 }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
                 {!isBarberFive && <PaymentBadgeRow />}
@@ -960,7 +978,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section id="mv-f-pricing" className="mv-f-card mv-f-pricing mv-h-anim">
               <div className="mv-f-eyebrow">Pricing</div>
               <h2 className="mv-f-title">Pick your plan.</h2>
-              <p className="mv-f-sub">Pay monthly, or save 40% by paying yearly.</p>
+              <p className="mv-f-sub">{isBarberTrial ? 'Start with a 1-day free trial. Cancel anytime — no risk.' : 'Pay monthly, or save 40% by paying yearly.'}</p>
               <div className="mv-f-toggle" role="tablist" aria-label="Billing plan">
                 <button type="button" className={pricingPlan === 'monthly' ? 'active' : ''} onClick={() => setPricingPlan('monthly')}>Monthly</button>
                 <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
@@ -1036,7 +1054,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <ul className="mv-f-tier-list">
                     {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
-                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'single' ? 'Loading…' : 'Start →'}</span>
+                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'single' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${singleMonthly}/mo` : 'Start →'}</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
                 <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => isBarberFive ? handleCheckout('multi', pricingPlan) : openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
@@ -1050,11 +1068,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <ul className="mv-f-tier-list">
                     {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
-                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : 'Start →'}</span>
+                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${multiMonthly}/mo` : 'Start →'}</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
               </div>
 
+              {isBarberTrial && (
+                <div style={{ margin: '14px auto 0', maxWidth: 520, background: 'rgba(201,169,110,0.10)', border: '1px solid rgba(201,169,110,0.35)', borderRadius: 14, padding: '14px 16px', fontSize: 13, lineHeight: 1.55, color: '#cfc8b8', textAlign: 'left' }}>
+                  <div style={{ fontWeight: 800, color: '#c9a96e', marginBottom: 6, fontSize: 13, letterSpacing: '.02em' }}>How the 1-day trial works</div>
+                  We'll build out your site within 24 hours. If you love it, you'll be charged ${singleMonthly}/month after the trial ends. If not, just message us and we'll make any changes you need — no risk, cancel anytime.
+                </div>
+              )}
               <p style={{ margin: '14px auto 0', fontSize: 12, color: 'inherit', opacity: 0.65, textAlign: 'center', maxWidth: 380, lineHeight: 1.5 }}>
                 {isBarberFive
                   ? 'Secure checkout powered by Stripe. Pay with any major debit or credit card.'
@@ -1093,7 +1117,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className={`mv-f-sticky${showFiveSticky ? ' is-visible' : ''}`}>
             <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
             <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              See pricing
+              {primaryCtaLabel}
             </button>
           </div>
         </div>

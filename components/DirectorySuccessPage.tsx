@@ -24,8 +24,10 @@ const DirectorySuccessPage: React.FC = () => {
       const barberFiveYearly = tier === 'multi' ? 144.00 : 72.00;
       const barberFiveMonthMonthly = tier === 'multi' ? 10.00 : 5.00;
       const barberFiveMonthYearly = tier === 'multi' ? 72.00 : 36.00;
-      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
-      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
+      const barberTrialMonthly = tier === 'multi' ? 20.00 : 10.00;
+      const barberTrialYearly = tier === 'multi' ? 144.00 : 72.00;
+      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
+      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $10/mo single or $20/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {
