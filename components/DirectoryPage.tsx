@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -226,6 +226,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  barberFiveMonth: {
+    source: 'barberFiveMonth',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 5,
+    yearlyAmount: 36,
+    yearlyWas: 60,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -240,7 +256,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   // Reveal the /5 + /barber-5 sticky CTA only after the hero is scrolled past.
   useEffect(() => {
-    if (region !== 'five' && region !== 'barberFive') return;
+    if (region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth') return;
     const heroEl = document.querySelector('.mv-f-hero');
     if (!heroEl) return;
     const obs = new IntersectionObserver(
@@ -296,7 +312,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -373,7 +389,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [region, cfg.monthlyAmount, cfg.currency]);
 
   useEffect(() => {
-    if (region !== 'home' && region !== 'five' && region !== 'barberFive') return;
+    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
@@ -394,7 +410,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -648,8 +664,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'five' || region === 'barberFive') {
-    const isBarberFive = region === 'barberFive';
+  if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth') {
+    // Both /barber-5 and /barber-5-month share the dark/gold barber theme
+    // and Stripe-only checkout. The only difference is the price tier.
+    const isBarberFive = region === 'barberFive' || region === 'barberFiveMonth';
+    const isBarberFiveMonth = region === 'barberFiveMonth';
     const barberFiveGallery = [
       { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
@@ -659,10 +678,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveExamples = isBarberFive ? barberFiveGallery : freewebsite49Gallery;
     const fiveTier: 'single' | 'multi' = activeHomeTier;
     const fiveIsYearly = pricingPlan === 'yearly';
-    const singleMonthly = isBarberFive ? 10 : 5;
-    const singleYearly = isBarberFive ? 72 : 36;
-    const multiMonthly = isBarberFive ? 20 : 10;
-    const multiYearly = isBarberFive ? 144 : 72;
+    const singleMonthly = isBarberFiveMonth ? 5 : isBarberFive ? 10 : 5;
+    const singleYearly = isBarberFiveMonth ? 36 : isBarberFive ? 72 : 36;
+    const multiMonthly = isBarberFiveMonth ? 10 : isBarberFive ? 20 : 10;
+    const multiYearly = isBarberFiveMonth ? 72 : isBarberFive ? 144 : 72;
     const heroEyebrow = isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
     const examplesEyebrow = isBarberFive ? 'Real sites · Real barbershops' : 'Real sites · Real local businesses';

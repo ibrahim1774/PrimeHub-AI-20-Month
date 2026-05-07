@@ -16,11 +16,12 @@ export default async function handler(req: any, res: any) {
         const isTen = source === 'ten';
         const isFive = source === 'five';
         const isBarberFive = source === 'barberFive';
+        const isBarberFiveMonth = source === 'barberFiveMonth';
         const isNineteen = source === 'nineteen';
         const isBarber = source === 'barber';
         const isLocalBusiness = source === 'localbusiness';
         const isHome = source === 'home';
-        const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isNineteen || isBarber || isLocalBusiness || isHome;
+        const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isNineteen || isBarber || isLocalBusiness || isHome;
 
         if (!isDirectory && !pendingId) {
             return res.status(400).json({ error: 'Missing pendingId' });
@@ -29,10 +30,11 @@ export default async function handler(req: any, res: any) {
         const homeTier: 'single' | 'multi' = isHome ? (tier === 'single' ? 'single' : 'multi') : 'multi';
         const fiveTier: 'single' | 'multi' = isFive ? (tier === 'multi' ? 'multi' : 'single') : 'single';
         const barberFiveTier: 'single' | 'multi' = isBarberFive ? (tier === 'multi' ? 'multi' : 'single') : 'single';
+        const barberFiveMonthTier: 'single' | 'multi' = isBarberFiveMonth ? (tier === 'multi' ? 'multi' : 'single') : 'single';
 
         // /19 is a one-time payment, no subscription, no yearly variant
         const isYearly = !isNineteen && plan === 'yearly';
-        const yearlyAmountCents = isBarberFive ? (barberFiveTier === 'multi' ? 14400 : 7200) : isFive ? (fiveTier === 'multi' ? 7200 : 3600) : isTen || isBarber ? 4900 : isLocalBusiness ? 13500 : 9900;
+        const yearlyAmountCents = isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 7200 : 3600) : isBarberFive ? (barberFiveTier === 'multi' ? 14400 : 7200) : isFive ? (fiveTier === 'multi' ? 7200 : 3600) : isTen || isBarber ? 4900 : isLocalBusiness ? 13500 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -44,6 +46,8 @@ export default async function handler(req: any, res: any) {
                 ? 'Amalvera - Local Business Website Build'
                 : isHome
                 ? (homeTier === 'single' ? 'Amalvera - Single Page Website' : 'Amalvera - Multi-Service Website')
+                : isBarberFiveMonth
+                ? (barberFiveMonthTier === 'single' ? 'Amalvera - Barbershop Website (Single Page)' : 'Amalvera - Barbershop Website (Multi-Page + SEO)')
                 : isBarberFive
                 ? (barberFiveTier === 'single' ? 'Amalvera - Barbershop Website (Single Page)' : 'Amalvera - Barbershop Website (Multi-Page + SEO)')
                 : isFive
@@ -52,9 +56,9 @@ export default async function handler(req: any, res: any) {
                 ? `${companyName} - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim()
                 : `PrimeHub - ${isNineteen ? 'Custom Website Design' : isYearly ? 'Annual' : 'Premium'} ${isNineteen ? '' : 'Subscription'}`.trim();
 
-        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isBarberFive ? '/barber-5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : isHome ? '/' : '/1';
+        const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isBarberFiveMonth ? '/barber-5-month' : isBarberFive ? '/barber-5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : isHome ? '/' : '/1';
         const successUrl = isDirectory
-            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberFive ? `&tier=${barberFiveTier}` : ''}`
+            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberFiveMonth ? `&tier=${barberFiveMonthTier}` : isBarberFive ? `&tier=${barberFiveTier}` : ''}`
             : `${origin}/generator?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
@@ -64,9 +68,9 @@ export default async function handler(req: any, res: any) {
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';
 
-        const monthlyAmountCents = isBarberFive ? (barberFiveTier === 'multi' ? 2000 : 1000) : isTen || isBarber ? 1000 : isFive ? (fiveTier === 'multi' ? 1000 : 500) : isNineteen ? 1900 : isHome ? (homeTier === 'single' ? 1000 : 2000) : 2000;
-        const monthlyAmountDisplay = isBarberFive ? (barberFiveTier === 'multi' ? '$20' : '$10') : isTen || isBarber ? '$10' : isFive ? (fiveTier === 'multi' ? '$10' : '$5') : isNineteen ? '$19' : isHome ? (homeTier === 'single' ? '$10' : '$20') : '$20';
-        const yearlyAmountDisplay = isBarberFive ? (barberFiveTier === 'multi' ? '$144' : '$72') : isFive ? (fiveTier === 'multi' ? '$72' : '$36') : isTen || isBarber ? '$49' : isLocalBusiness ? '$135' : '$99';
+        const monthlyAmountCents = isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 1000 : 500) : isBarberFive ? (barberFiveTier === 'multi' ? 2000 : 1000) : isTen || isBarber ? 1000 : isFive ? (fiveTier === 'multi' ? 1000 : 500) : isNineteen ? 1900 : isHome ? (homeTier === 'single' ? 1000 : 2000) : 2000;
+        const monthlyAmountDisplay = isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$10' : '$5') : isBarberFive ? (barberFiveTier === 'multi' ? '$20' : '$10') : isTen || isBarber ? '$10' : isFive ? (fiveTier === 'multi' ? '$10' : '$5') : isNineteen ? '$19' : isHome ? (homeTier === 'single' ? '$10' : '$20') : '$20';
+        const yearlyAmountDisplay = isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$72' : '$36') : isBarberFive ? (barberFiveTier === 'multi' ? '$144' : '$72') : isFive ? (fiveTier === 'multi' ? '$72' : '$36') : isTen || isBarber ? '$49' : isLocalBusiness ? '$135' : '$99';
 
         // Description differs for one-time /19 vs subscription pages
         const description = isNineteen
@@ -100,7 +104,7 @@ export default async function handler(req: any, res: any) {
                 companyName: companyName || '',
                 plan: isNineteen ? 'one-time' : plan,
                 source: source || 'generator',
-                ...(isHome ? { tier: homeTier } : isFive ? { tier: fiveTier } : isBarberFive ? { tier: barberFiveTier } : {}),
+                ...(isHome ? { tier: homeTier } : isFive ? { tier: fiveTier } : isBarberFiveMonth ? { tier: barberFiveMonthTier } : isBarberFive ? { tier: barberFiveTier } : {}),
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',
             },
