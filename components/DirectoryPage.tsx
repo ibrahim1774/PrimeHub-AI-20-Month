@@ -430,7 +430,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
-    const homeMonthly = effectiveTier === 'single' ? 10 : 20;
+    const homeMonthly = effectiveTier === 'single' ? 20 : 50;
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
 
@@ -477,7 +477,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   // one-time payment (Stripe-only), and freewebsite/* + barberleads have no
   // checkout (they scroll to a lead form), so they're excluded here.
   const supportsPayPal = (r: string) =>
-    r === 'us' || r === 'aus' || r === 'ten' || r === 'five' || r === 'barber' || r === 'localbusiness' || r === 'home' || r === 'barberFive';
+    r === 'us' || r === 'aus' || r === 'ten' || r === 'five' || r === 'barber' || r === 'localbusiness' || r === 'barberFive';
 
   const computePaypalCtx = (r: any, t: 'single' | 'multi' | undefined, p: 'monthly' | 'yearly'): PayPalCtx => {
     if (r === 'barberFive') {
@@ -503,7 +503,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       return {
         region: 'home', tier, plan: 'monthly',
         label: tier === 'single' ? 'Single Page Website' : 'Multi-Service Website',
-        priceText: tier === 'single' ? '$10/mo' : '$20/mo',
+        priceText: tier === 'single' ? '$20/mo' : '$50/mo',
       };
     }
     const yearly = p === 'yearly';
@@ -534,7 +534,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       disabled={(region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads') && isLoading}
     >
       <span className="mv-cta-inner">
-        {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? 'Get My Free Website' : isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : region === 'localbusiness' ? 'Get Your Local Business Website Built' : region === 'home' ? 'Get Your Website Built — From $10/Month' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
+        {(region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') ? 'Get My Free Website' : isLoading ? 'Loading…' : region === 'barber' ? 'Get Your Barbershop Website Built' : region === 'localbusiness' ? 'Get Your Local Business Website Built' : region === 'home' ? 'Get Your Website Built — From $20/Month' : (region === 'ten' || region === 'five') ? 'Get Access to Your Website System' : 'Get Started'}
         {((region === 'freewebsite' || region === 'freewebsite49' || region === 'barberleads') || !isLoading) && <span aria-hidden="true" style={{ marginLeft: 10, letterSpacing: 0 }}>▸</span>}
       </span>
     </button>
@@ -1851,34 +1851,33 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
                 <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
               </div>
-              <PaymentBadgeRow />
               <div className="mv-h-tier-row">
                 <div className="mv-h-tier">
                   <div className="mv-h-tier-eyebrow">Single page</div>
-                  <div className="mv-h-tier-price">$10<span>/mo</span></div>
+                  <div className="mv-h-tier-price">$20<span>/mo</span></div>
                   <ul className="mv-h-tier-list">
                     <li>One-page custom site</li>
                     <li>Mobile-responsive · SEO basics</li>
                     <li>Live in ~48 hours</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => openPaypal(computePaypalCtx('home', 'single', 'monthly'))} disabled={isLoading}>
-                    Start — $10/mo
+                  <button className="mv-h-pill" onClick={() => handleCheckout('single', 'monthly')} disabled={isLoading}>
+                    Start — $20/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
                 <div className="mv-h-or">or</div>
                 <div className="mv-h-tier mv-h-tier-feat">
                   <div className="mv-h-tier-eyebrow">Multi-service</div>
-                  <div className="mv-h-tier-price">$20<span>/mo</span></div>
+                  <div className="mv-h-tier-price">$50<span>/mo</span></div>
                   <ul className="mv-h-tier-list">
                     <li>Multiple service pages</li>
                     <li>Service-area + city pages</li>
                     <li>Deeper SEO setup</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => openPaypal(computePaypalCtx('home', 'multi', 'monthly'))} disabled={isLoading}>
-                    Start — $20/mo
+                  <button className="mv-h-pill" onClick={() => handleCheckout('multi', 'monthly')} disabled={isLoading}>
+                    Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
@@ -1912,8 +1911,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and modern SEO best-practices baked in.</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">What's the difference between $10 and $20?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">$10/mo gets you a single-page custom site — perfect for a focused business with one main offer. $20/mo gets you a multi-service site with separate pages for each service and service area, plus deeper SEO setup.</div>
+                    <summary className="mv-h-faq-summary">What's the difference between $20 and $50?<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">$20/mo gets you a single-page custom site — perfect for a focused business with one main offer. $50/mo gets you a multi-service site with separate pages for each service and service area, plus deeper SEO setup.</div>
                   </details>
                   <details className="mv-h-faq-item">
                     <summary className="mv-h-faq-summary">What is the monthly fee for?<span className="mv-h-faq-icon">+</span></summary>
@@ -1935,7 +1934,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section className="mv-h-card mv-h-final mv-h-anim">
               <div className="mv-h-eyebrow">Ready when you are</div>
               <h2 className="mv-h-title">Your local business site, live in <em>about 48 hours.</em></h2>
-              <p className="mv-h-sub">$0 design fee. From $10/month — covers hosting and edits.</p>
+              <p className="mv-h-sub">$0 design fee. From $20/month — covers hosting and edits.</p>
               <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
                 See pricing
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -1948,7 +1947,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           <div className="mv-h-sticky">
-            <span className="mv-h-sticky-text">$0 design fee · from $10/mo</span>
+            <span className="mv-h-sticky-text">$0 design fee · from $20/mo</span>
             <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
               See pricing
             </button>

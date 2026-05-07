@@ -17,7 +17,7 @@ const DirectorySuccessPage: React.FC = () => {
       const tier = params.get('tier');
       const isAus = pathname === '/aus';
       const isYearly = plan === 'yearly';
-      const homeMonthly = tier === 'multi' ? 20.00 : 10.00;
+      const homeMonthly = tier === 'multi' ? 50.00 : 20.00;
       const fiveMonthly = tier === 'multi' ? 10.00 : 5.00;
       const fiveYearly = tier === 'multi' ? 72.00 : 36.00;
       const barberFiveMonthly = tier === 'multi' ? 20.00 : 10.00;
