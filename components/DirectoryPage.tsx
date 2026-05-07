@@ -1719,6 +1719,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-hero-media { width: 100%; margin-top: 20px; }
           .mv-h-hero-media .mv-h-gallery-row { padding: 4px 4px 10px; }
 
+          /* In-pricing gallery: sits between headline and tiers */
+          .mv-h-pricing-gallery { width: 100%; max-width: 920px; margin: 0 auto 18px; }
+          .mv-h-pricing-gallery .mv-h-gallery-card { width: 132px; }
+          .mv-h-pricing-gallery .mv-h-gallery-row { padding: 4px 4px 10px; gap: 10px; }
+
           /* Compact pass — tighten paddings + font sizes site-wide */
           .mv-h-stack { gap: 10px; }
           .mv-h-card { padding: 36px 26px; min-height: 0; border-radius: 22px; }
@@ -1768,6 +1773,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-h-hero-media .mv-h-gallery-card { width: 168px; }
             .mv-h-gallery .mv-h-gallery-card { width: 184px; }
             .mv-h-gallery .mv-h-gallery-row { gap: 12px; padding: 6px 6px 12px; }
+            .mv-h-pricing-gallery .mv-h-gallery-card { width: 152px; }
             .mv-h-gallery-arrow { width: 42px; height: 42px; }
             .mv-h-gallery-arrow svg { width: 18px; height: 18px; }
             .mv-h-pillar-grid { gap: 12px; }
@@ -1922,14 +1928,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
-            {/* Gallery — section 4: headline, then videos below */}
-            <section className="mv-h-card mv-h-gallery mv-h-anim">
-              <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Gallery</div>
-                <h2 className="mv-h-title">Real builds. <em>Real local businesses.</em></h2>
-                <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
+            {/* Pricing — gallery videos sit right below the headline */}
+            <section id="mv-h-pricing" className="mv-h-card mv-h-pricing mv-h-anim mv-h-pricing-section">
+              <div className="mv-h-pricing-head">
+                <div className="mv-h-eyebrow">Pricing</div>
+                <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
+                <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
               </div>
-              <div className="mv-h-visual">
+
+              <div className="mv-h-pricing-gallery">
                 <div className="mv-h-gallery-wrap">
                   <button
                     type="button"
@@ -1960,7 +1967,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   </button>
                   <div className="mv-h-gallery-row">
                     {homeVideos.map((item, i) => (
-                      <div key={i} className="mv-h-gallery-card">
+                      <div key={`pricing-${i}`} className="mv-h-gallery-card">
                         <wistia-player
                           media-id={item.mediaId}
                           aspect={item.aspect}
@@ -1975,8 +1982,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                             'volume-control': 'false',
                             'settings-control': 'false',
                             'playback-rate-control': 'false',
-                            'controls-visible-on-load': 'true',
-                            'big-play-button': 'true',
+                            'controls-visible-on-load': 'false',
+                            'big-play-button': 'false',
                             'silent-auto-play': 'true',
                             'playsinline': 'true',
                             'preload': 'auto',
@@ -1990,15 +1997,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   </div>
                 </div>
               </div>
-            </section>
 
-            {/* Pricing */}
-            <section id="mv-h-pricing" className="mv-h-card mv-h-pricing mv-h-anim mv-h-pricing-section">
-              <div className="mv-h-pricing-head">
-                <div className="mv-h-eyebrow">Pricing</div>
-                <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
-                <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
-              </div>
               <div className="mv-h-tier-row">
                 <div className="mv-h-tier">
                   <div className="mv-h-tier-eyebrow">Single page</div>
