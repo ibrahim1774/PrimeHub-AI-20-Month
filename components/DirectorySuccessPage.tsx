@@ -28,7 +28,7 @@ const DirectorySuccessPage: React.FC = () => {
       const barberTrialYearly = tier === 'multi' ? 144.00 : 72.00;
       const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
       const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
-      // pathname '/' (home) → $10/mo single or $20/mo multi based on ?tier=
+      // pathname '/' (home) → $20/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
       (window as any).fbq('track', 'Purchase', {
         currency: isAus ? 'AUD' : 'USD',
