@@ -879,8 +879,74 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-page-barber .mv-f-gallery-arrow:hover { background:#d8b67a; }
             .mv-f-page-barber .mv-f-gallery-hint { color:#c9a96e; opacity:.85; }
           ` : ''}
+
+          ${isBarberTrial ? `
+            /* Desktop polish for /barber-trial only */
+            @media (min-width: 900px) {
+              .mv-f-page-trial { padding: 24px 32px 120px; }
+              .mv-f-page-trial .mv-f-stack { max-width: 1120px; gap: 18px; }
+              .mv-f-page-trial .mv-f-card { padding: 56px 56px; border-radius: 28px; }
+
+              /* Hero: two-column grid — text + CTA on left, gallery on right */
+              .mv-f-page-trial .mv-f-hero {
+                display: grid;
+                grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+                grid-template-rows: auto auto auto 1fr auto;
+                column-gap: 56px;
+                row-gap: 10px;
+                align-items: start;
+              }
+              .mv-f-page-trial .mv-f-hero > :nth-child(1) { grid-column: 1; grid-row: 1; }
+              .mv-f-page-trial .mv-f-hero > :nth-child(2) { grid-column: 1; grid-row: 2; max-width: none; }
+              .mv-f-page-trial .mv-f-hero > :nth-child(3) { grid-column: 1; grid-row: 3; max-width: 480px; }
+              .mv-f-page-trial .mv-f-hero > :nth-child(4) { grid-column: 2; grid-row: 1; margin-top: 0 !important; }
+              .mv-f-page-trial .mv-f-hero > :nth-child(5) { grid-column: 2; grid-row: 2 / span 4; align-self: stretch; }
+              .mv-f-page-trial .mv-f-hero > :nth-child(6) {
+                grid-column: 1; grid-row: 5;
+                align-items: flex-start !important;
+                margin-top: 22px !important;
+              }
+              .mv-f-page-trial .mv-f-hero .mv-f-title { font-size: 64px; line-height: 1.02; }
+              .mv-f-page-trial .mv-f-hero .mv-f-sub { font-size: 18px; }
+              .mv-f-page-trial .mv-f-hero .mv-f-pill {
+                max-width: none !important;
+                width: auto !important;
+                padding: 18px 32px !important;
+                font-size: 17px !important;
+              }
+
+              /* Bigger gallery cards on desktop */
+              .mv-f-page-trial .mv-f-gcard { width: 168px; }
+              .mv-f-page-trial .mv-f-gallery-compact .mv-f-gcard { width: 132px; }
+              .mv-f-page-trial .mv-f-gallery { gap: 14px; }
+              .mv-f-page-trial .mv-f-hero .mv-f-gallery { justify-content: flex-start; }
+
+              /* How-it-works: keep title left, give the 3 steps room */
+              .mv-f-page-trial .mv-f-how .mv-f-title { font-size: 40px; }
+              .mv-f-page-trial .mv-f-step { padding: 18px 20px; }
+              .mv-f-page-trial .mv-f-step-h { font-size: 16px; }
+              .mv-f-page-trial .mv-f-step-b { font-size: 13px; }
+
+              /* Pricing card breathes */
+              .mv-f-page-trial .mv-f-pricing .mv-f-title { font-size: 40px; }
+              .mv-f-page-trial .mv-f-tiers { gap: 18px; }
+              .mv-f-page-trial .mv-f-tier { padding: 22px 24px; }
+              .mv-f-page-trial .mv-f-tier-price { font-size: 30px; }
+              .mv-f-page-trial .mv-f-tier-cta { padding: 14px 20px; font-size: 15px; }
+
+              /* FAQ */
+              .mv-f-page-trial .mv-f-faq .mv-f-title { font-size: 40px; }
+              .mv-f-page-trial .mv-f-faq-summary { font-size: 16px; padding: 18px 22px; }
+              .mv-f-page-trial .mv-f-faq-a { font-size: 14px; padding: 0 22px 18px; }
+            }
+
+            @media (min-width: 1280px) {
+              .mv-f-page-trial .mv-f-hero .mv-f-title { font-size: 72px; }
+              .mv-f-page-trial .mv-f-gcard { width: 184px; }
+            }
+          ` : ''}
         `}</style>
-        <div className={`mv-f-page${isBarberFive ? ' mv-f-page-barber' : ''}`}>
+        <div className={`mv-f-page${isBarberFive ? ' mv-f-page-barber' : ''}${isBarberTrial ? ' mv-f-page-trial' : ''}`}>
           <nav className="mv-f-nav">
             <span className="mv-f-logo">amalvera</span>
           </nav>
