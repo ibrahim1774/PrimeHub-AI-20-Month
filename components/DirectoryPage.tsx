@@ -1402,9 +1402,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-gallery-row::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
           .mv-h-gallery-card {
             flex: 0 0 auto;
-            width: 200px;
-            scroll-snap-align: center;
-            border-radius: 18px;
+            width: 168px;
+            scroll-snap-align: start;
+            border-radius: 14px;
             overflow: hidden;
             background: #0d0d0d;
             aspect-ratio: 9/16;
@@ -1716,30 +1716,70 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
 
           /* Hero media (gallery in hero) — stacked under text on mobile */
-          .mv-h-hero-media { width: 100%; margin-top: 28px; }
-          .mv-h-hero-media .mv-h-gallery-row { padding: 4px 4px 12px; }
+          .mv-h-hero-media { width: 100%; margin-top: 20px; }
+          .mv-h-hero-media .mv-h-gallery-row { padding: 4px 4px 10px; }
+
+          /* Compact pass — tighten paddings + font sizes site-wide */
+          .mv-h-stack { gap: 10px; }
+          .mv-h-card { padding: 36px 26px; min-height: 0; border-radius: 22px; }
+          .mv-h-eyebrow { font-size: 11px; margin-bottom: 10px; }
+          .mv-h-title { font-size: 30px; max-width: 600px; margin: 0 0 10px; }
+          .mv-h-sub { font-size: 14px; max-width: 480px; margin: 0 0 18px; }
+          .mv-h-pill { padding: 13px 22px; font-size: 14px; }
+          .mv-h-hero { min-height: 0; }
+          .mv-h-final { min-height: 0; }
+          .mv-h-final .mv-h-title { font-size: 28px; }
+          .mv-h-step { padding: 14px 16px; border-radius: 12px; }
+          .mv-h-step-num { font-size: 20px; margin-bottom: 4px; }
+          .mv-h-step-h { font-size: 13px; }
+          .mv-h-step-b { font-size: 12px; line-height: 1.45; }
+          .mv-h-steps { gap: 10px; }
+          .mv-h-pillar { padding: 18px 18px; border-radius: 14px; }
+          .mv-h-pillar-icon { width: 28px; height: 28px; margin-bottom: 10px; }
+          .mv-h-pillar-h { font-size: 14px; margin-bottom: 4px; }
+          .mv-h-pillar-b { font-size: 12px; line-height: 1.45; }
+          .mv-h-pillar-grid { gap: 10px; margin-top: 6px; }
+          .mv-h-tier { padding: 20px 20px 22px; border-radius: 18px; }
+          .mv-h-tier-eyebrow { font-size: 10px; margin-bottom: 8px; }
+          .mv-h-tier-price { font-size: 36px; margin-bottom: 12px; }
+          .mv-h-tier-price span { font-size: 13px; }
+          .mv-h-tier-list { font-size: 12.5px; line-height: 1.5; margin: 0 0 16px; }
+          .mv-h-tier-list li { padding: 2px 0; }
+          .mv-h-or { font-size: 16px; padding: 2px 0; }
+          .mv-h-faq-summary { font-size: 13px; padding: 14px 16px; }
+          .mv-h-faq-a { font-size: 12.5px; padding: 0 16px 14px; }
+          .mv-h-pricing-head { margin: 0 auto 16px; }
 
           /* Desktop polish for the hero gallery + main gallery */
           @media (min-width: 900px) {
+            .mv-h-card { padding: 44px 40px; }
+            .mv-h-title { font-size: 38px; max-width: 620px; }
+            .mv-h-sub { font-size: 15px; }
+            .mv-h-final .mv-h-title { font-size: 32px; }
             .mv-h-hero {
               display: grid;
               grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-              column-gap: 56px;
+              column-gap: 44px;
               align-items: center;
-              min-height: 600px;
             }
-            .mv-h-hero .mv-h-card-text { max-width: 560px; }
+            .mv-h-hero .mv-h-title { font-size: 44px; }
+            .mv-h-hero .mv-h-card-text { max-width: 520px; }
             .mv-h-hero-media { margin-top: 0; }
-            .mv-h-hero-media .mv-h-gallery-card { width: 200px; }
-            /* Keep the standalone gallery row breathing on desktop */
-            .mv-h-gallery .mv-h-gallery-card { width: 220px; }
-            .mv-h-gallery .mv-h-gallery-row { gap: 16px; padding: 6px 6px 14px; }
-            .mv-h-gallery-arrow { width: 48px; height: 48px; }
-            .mv-h-gallery-arrow svg { width: 20px; height: 20px; }
+            .mv-h-hero-media .mv-h-gallery-card { width: 168px; }
+            .mv-h-gallery .mv-h-gallery-card { width: 184px; }
+            .mv-h-gallery .mv-h-gallery-row { gap: 12px; padding: 6px 6px 12px; }
+            .mv-h-gallery-arrow { width: 42px; height: 42px; }
+            .mv-h-gallery-arrow svg { width: 18px; height: 18px; }
+            .mv-h-pillar-grid { gap: 12px; }
+            .mv-h-pillar { padding: 20px 20px; }
+            .mv-h-pillar-h { font-size: 15px; }
+            .mv-h-pillar-b { font-size: 13px; }
+            .mv-h-tier-price { font-size: 42px; }
           }
           @media (min-width: 1280px) {
-            .mv-h-hero-media .mv-h-gallery-card { width: 220px; }
-            .mv-h-gallery .mv-h-gallery-card { width: 240px; }
+            .mv-h-hero .mv-h-title { font-size: 52px; }
+            .mv-h-hero-media .mv-h-gallery-card { width: 184px; }
+            .mv-h-gallery .mv-h-gallery-card { width: 200px; }
           }
         `}</style>
         <div className="mv-h-page">
@@ -1770,7 +1810,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     aria-label="Previous"
                     onClick={(e) => {
                       const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
-                      row?.scrollBy({ left: -240, behavior: 'smooth' });
+                      if (!row) return;
+                      const next = Math.max(0, row.scrollLeft - 240);
+                      row.scrollTo({ left: next, behavior: 'smooth' });
                     }}
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
@@ -1781,7 +1823,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     aria-label="Next"
                     onClick={(e) => {
                       const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
-                      row?.scrollBy({ left: 240, behavior: 'smooth' });
+                      if (!row) return;
+                      const max = row.scrollWidth - row.clientWidth;
+                      const next = Math.min(max, row.scrollLeft + 240);
+                      row.scrollTo({ left: next, behavior: 'smooth' });
                     }}
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
@@ -1820,67 +1865,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
-            {/* Gallery */}
-            <section className="mv-h-card mv-h-gallery mv-h-anim">
+            {/* How it works — barber-style, local-business copy */}
+            <section className="mv-h-card mv-h-how mv-h-anim">
               <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Gallery</div>
-                <h2 className="mv-h-title">Real builds. <em>Real local businesses.</em></h2>
-                <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
+                <div className="mv-h-eyebrow">How it works</div>
+                <h2 className="mv-h-title">Three simple steps.</h2>
+                <p className="mv-h-sub">All we need is a link. We handle the rest.</p>
               </div>
               <div className="mv-h-visual">
-                <div className="mv-h-gallery-wrap">
-                  <button
-                    type="button"
-                    className="mv-h-gallery-arrow mv-h-gallery-arrow-prev"
-                    aria-label="Previous"
-                    onClick={(e) => {
-                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
-                      row?.scrollBy({ left: -220, behavior: 'smooth' });
-                    }}
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
-                  </button>
-                  <button
-                    type="button"
-                    className="mv-h-gallery-arrow mv-h-gallery-arrow-next"
-                    aria-label="Next"
-                    onClick={(e) => {
-                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
-                      row?.scrollBy({ left: 220, behavior: 'smooth' });
-                    }}
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
-                  </button>
-                <div className="mv-h-gallery-row">
-                  {homeVideos.map((item, i) => (
-                    <div key={i} className="mv-h-gallery-card">
-                      <wistia-player
-                        media-id={item.mediaId}
-                        aspect={item.aspect}
-                        autoplay="true"
-                        muted="true"
-                        {...({
-                          loop: 'true',
-                          'playbar': 'false',
-                          'play-button': 'false',
-                          'small-play-button': 'false',
-                          'fullscreen-button': 'false',
-                          'volume-control': 'false',
-                          'settings-control': 'false',
-                          'playback-rate-control': 'false',
-                          'controls-visible-on-load': 'true',
-                          'big-play-button': 'true',
-                          'silent-auto-play': 'true',
-                          'playsinline': 'true',
-                          'preload': 'auto',
-                          'end-video-behavior': 'loop',
-                          'resumable': 'false',
-                          'player-color': '0d0d0d',
-                        } as any)}
-                      ></wistia-player>
-                    </div>
-                  ))}
-                </div>
+                <div className="mv-h-steps">
+                  <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">Send us your link or info</div><div className="mv-h-step-b">A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">We build your site</div><div className="mv-h-step-b">Our team uses AI to design a custom site for your local business — your real photos, your services, your info.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">Live in 48 hours</div><div className="mv-h-step-b">Up and running within about 48 hours. We host it too — you just cover the monthly cost.</div></div>
                 </div>
               </div>
             </section>
@@ -1926,6 +1922,76 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
+            {/* Gallery — section 4: headline, then videos below */}
+            <section className="mv-h-card mv-h-gallery mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Gallery</div>
+                <h2 className="mv-h-title">Real builds. <em>Real local businesses.</em></h2>
+                <p className="mv-h-sub">Each one custom. Tap a preview to watch the walkthrough.</p>
+              </div>
+              <div className="mv-h-visual">
+                <div className="mv-h-gallery-wrap">
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-prev"
+                    aria-label="Previous"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      if (!row) return;
+                      const next = Math.max(0, row.scrollLeft - 240);
+                      row.scrollTo({ left: next, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-next"
+                    aria-label="Next"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      if (!row) return;
+                      const max = row.scrollWidth - row.clientWidth;
+                      const next = Math.min(max, row.scrollLeft + 240);
+                      row.scrollTo({ left: next, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                  </button>
+                  <div className="mv-h-gallery-row">
+                    {homeVideos.map((item, i) => (
+                      <div key={i} className="mv-h-gallery-card">
+                        <wistia-player
+                          media-id={item.mediaId}
+                          aspect={item.aspect}
+                          autoplay="true"
+                          muted="true"
+                          {...({
+                            loop: 'true',
+                            'playbar': 'false',
+                            'play-button': 'false',
+                            'small-play-button': 'false',
+                            'fullscreen-button': 'false',
+                            'volume-control': 'false',
+                            'settings-control': 'false',
+                            'playback-rate-control': 'false',
+                            'controls-visible-on-load': 'true',
+                            'big-play-button': 'true',
+                            'silent-auto-play': 'true',
+                            'playsinline': 'true',
+                            'preload': 'auto',
+                            'end-video-behavior': 'loop',
+                            'resumable': 'false',
+                            'player-color': '0d0d0d',
+                          } as any)}
+                        ></wistia-player>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Pricing */}
             <section id="mv-h-pricing" className="mv-h-card mv-h-pricing mv-h-anim mv-h-pricing-section">
               <div className="mv-h-pricing-head">
@@ -1962,22 +2028,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
-                </div>
-              </div>
-            </section>
-
-            {/* How It Works */}
-            <section className="mv-h-card mv-h-how mv-h-anim">
-              <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">How it works</div>
-                <h2 className="mv-h-title">Three steps to <em>live.</em></h2>
-                <p className="mv-h-sub">Sign up. Tell us a bit about your business. Your site can be live in about 48 hours.</p>
-              </div>
-              <div className="mv-h-visual">
-                <div className="mv-h-steps">
-                  <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">Sign up</div><div className="mv-h-step-b">Quick form. Takes about 60 seconds. The custom design is on us.</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">Tell us about your work</div><div className="mv-h-step-b">Your business, service area, photos you want featured.</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">We deliver</div><div className="mv-h-step-b">Your site can be live in about 48 hours.</div></div>
                 </div>
               </div>
             </section>
