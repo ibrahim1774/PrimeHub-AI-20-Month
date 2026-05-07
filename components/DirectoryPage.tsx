@@ -1714,6 +1714,33 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-h-steps { grid-template-columns: 1fr; }
             .mv-h-gallery-card { width: 160px; }
           }
+
+          /* Hero media (gallery in hero) — stacked under text on mobile */
+          .mv-h-hero-media { width: 100%; margin-top: 28px; }
+          .mv-h-hero-media .mv-h-gallery-row { padding: 4px 4px 12px; }
+
+          /* Desktop polish for the hero gallery + main gallery */
+          @media (min-width: 900px) {
+            .mv-h-hero {
+              display: grid;
+              grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+              column-gap: 56px;
+              align-items: center;
+              min-height: 600px;
+            }
+            .mv-h-hero .mv-h-card-text { max-width: 560px; }
+            .mv-h-hero-media { margin-top: 0; }
+            .mv-h-hero-media .mv-h-gallery-card { width: 200px; }
+            /* Keep the standalone gallery row breathing on desktop */
+            .mv-h-gallery .mv-h-gallery-card { width: 220px; }
+            .mv-h-gallery .mv-h-gallery-row { gap: 16px; padding: 6px 6px 14px; }
+            .mv-h-gallery-arrow { width: 48px; height: 48px; }
+            .mv-h-gallery-arrow svg { width: 20px; height: 20px; }
+          }
+          @media (min-width: 1280px) {
+            .mv-h-hero-media .mv-h-gallery-card { width: 220px; }
+            .mv-h-gallery .mv-h-gallery-card { width: 240px; }
+          }
         `}</style>
         <div className="mv-h-page">
           <nav className="mv-h-nav">
@@ -1734,6 +1761,62 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   See pricing
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
+              </div>
+              <div className="mv-h-hero-media">
+                <div className="mv-h-gallery-wrap">
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-prev"
+                    aria-label="Previous"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      row?.scrollBy({ left: -240, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="mv-h-gallery-arrow mv-h-gallery-arrow-next"
+                    aria-label="Next"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.mv-h-gallery-row') as HTMLElement | null;
+                      row?.scrollBy({ left: 240, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                  </button>
+                  <div className="mv-h-gallery-row">
+                    {homeVideos.map((item, i) => (
+                      <div key={`hero-${i}`} className="mv-h-gallery-card">
+                        <wistia-player
+                          media-id={item.mediaId}
+                          aspect={item.aspect}
+                          autoplay="true"
+                          muted="true"
+                          {...({
+                            loop: 'true',
+                            'playbar': 'false',
+                            'play-button': 'false',
+                            'small-play-button': 'false',
+                            'fullscreen-button': 'false',
+                            'volume-control': 'false',
+                            'settings-control': 'false',
+                            'playback-rate-control': 'false',
+                            'controls-visible-on-load': 'true',
+                            'big-play-button': 'true',
+                            'silent-auto-play': 'true',
+                            'playsinline': 'true',
+                            'preload': 'auto',
+                            'end-video-behavior': 'loop',
+                            'resumable': 'false',
+                            'player-color': '0d0d0d',
+                          } as any)}
+                        ></wistia-player>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -1799,7 +1882,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   ))}
                 </div>
                 </div>
-                <PaymentBadgeRow />
               </div>
             </section>
 
@@ -1970,12 +2052,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           </div>
         )}
-
-        <PayPalSubscribeModal
-          open={paypalOpen}
-          ctx={paypalCtx}
-          onClose={() => setPaypalOpen(false)}
-        />
       </>
     );
   }
