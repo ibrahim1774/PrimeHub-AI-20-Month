@@ -903,7 +903,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               .mv-f-page-trial .mv-f-hero > :nth-child(5) { grid-column: 2; grid-row: 2 / span 4; align-self: stretch; }
               .mv-f-page-trial .mv-f-hero > :nth-child(6) {
                 grid-column: 1; grid-row: 5;
-                align-items: flex-start !important;
+                align-items: center !important;
+                align-self: flex-start;
+                max-width: 320px;
                 margin-top: 22px !important;
               }
               .mv-f-page-trial .mv-f-hero .mv-f-title { font-size: 64px; line-height: 1.02; }
