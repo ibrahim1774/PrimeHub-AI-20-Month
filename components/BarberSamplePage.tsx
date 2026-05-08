@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 
@@ -62,6 +62,24 @@ const BarberSamplePage: React.FC = () => {
   }, [plan]);
 
   const closeCheckout = () => { setCheckoutOpen(false); setClientSecret(null); };
+
+  // Lock body scroll + close-on-Escape while the mobile pricing modal is open
+  useEffect(() => {
+    const isMobileModalOpen = !collapsedMobile;
+    if (!isMobileModalOpen && !checkoutOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (checkoutOpen) closeCheckout();
+      else if (isMobileModalOpen) setCollapsedMobile(true);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [collapsedMobile, checkoutOpen]);
 
   return (
     <>
@@ -145,20 +163,43 @@ const BarberSamplePage: React.FC = () => {
 
 @media (max-width: 720px) {
   .bsp-card { display: none; }
+
+  /* Mobile expanded = centered modal with its own backdrop */
+  .bsp-card-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.78);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    z-index: 9989;
+    animation: bspFade 0.22s ease forwards;
+  }
+  .bsp-card-backdrop.is-open { display: block; }
+
   .bsp-card.expanded {
     display: flex;
     flex-direction: column;
     position: fixed;
-    inset: 0;
-    top: 0; right: 0; bottom: 0; left: 0;
-    transform: none;
-    width: auto;
-    max-height: 100vh;
-    height: 100vh;
-    border-radius: 0;
-    border: none;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - 24px);
+    max-width: 420px;
+    height: auto;
+    max-height: min(86dvh, 86vh);
+    border-radius: 18px;
+    border: 1px solid rgba(212,166,74,0.25);
     padding: 0;
     overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,166,74,0.10);
+    z-index: 9991;
+    animation: bspModalIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes bspModalIn {
+    from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
   }
   .bsp-card.expanded .bsp-mobile-header {
     display: flex;
@@ -168,9 +209,7 @@ const BarberSamplePage: React.FC = () => {
     background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
     border-bottom: 1px solid rgba(212,166,74,0.20);
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    z-index: 2;
+    border-radius: 18px 18px 0 0;
   }
   .bsp-card.expanded .bsp-mobile-header-text {
     font-family: 'Instrument Serif', serif;
@@ -190,10 +229,11 @@ const BarberSamplePage: React.FC = () => {
     flex-shrink: 0;
   }
   .bsp-card.expanded .bsp-card-body {
-    flex: 1;
+    flex: 1 1 auto;
     overflow-y: auto;
-    padding: 16px 18px 16px;
+    padding: 16px 18px 18px;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
   .bsp-mobile-bar { display: flex; }
   .bsp-mobile-bar.hidden { display: none; }
@@ -260,6 +300,12 @@ const BarberSamplePage: React.FC = () => {
 
       <div className="bsp-page">
         <iframe src={SAMPLE_URL} title="Sample Barber Shop Site" className="bsp-iframe" loading="eager" />
+
+        <div
+          className={`bsp-card-backdrop ${!collapsedMobile ? 'is-open' : ''}`}
+          onClick={() => setCollapsedMobile(true)}
+          aria-hidden="true"
+        />
 
         <aside className={`bsp-card ${!collapsedMobile ? 'expanded' : ''}`}>
           <div className="bsp-mobile-header">
