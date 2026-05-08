@@ -86,13 +86,12 @@ const BarberSamplePage: React.FC = () => {
       <style>{`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
-/* Body scrolls naturally; iframe is non-interactive (pointer-events: none) so
-   visitors can swipe to scroll the WHOLE sample site, but no link or button
-   inside (Book Now, etc.) ever fires. */
-.bsp-page { position: relative; width: 100vw; min-height: 100vh; background: #0a0907; font-family: 'DM Sans', system-ui, sans-serif; }
-.bsp-iframe { position: relative; display: block; width: 100%; height: 6200px; border: 0; background: #000; pointer-events: none; }
-@media (min-width: 1100px) { .bsp-iframe { height: 4400px; } }
-.bsp-iframe-vignette { position: fixed; top: 0; bottom: 0; right: 0; width: 460px; pointer-events: none; background: linear-gradient(270deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 50%, rgba(0,0,0,0) 100%); z-index: 2; }
+/* The iframe fills the viewport and scrolls natively (its own scroll
+   context). The sandbox attribute on <iframe> prevents the sample from
+   escaping to the parent, opening popups, or submitting forms. */
+.bsp-page { position: relative; width: 100vw; height: 100vh; background: #0a0907; font-family: 'DM Sans', system-ui, sans-serif; overflow: hidden; }
+.bsp-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.bsp-iframe-vignette { position: absolute; top: 0; bottom: 0; right: 0; width: 460px; pointer-events: none; background: linear-gradient(270deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 50%, rgba(0,0,0,0) 100%); z-index: 2; }
 @media (max-width: 720px) { .bsp-iframe-vignette { display: none; } }
 
 /* DESKTOP STICKY CARD — premium dark + warm gold */
@@ -314,7 +313,6 @@ const BarberSamplePage: React.FC = () => {
           loading="eager"
           sandbox="allow-same-origin allow-scripts"
           referrerPolicy="no-referrer"
-          scrolling="no"
         />
         <div className="bsp-iframe-vignette" aria-hidden="true" />
 
