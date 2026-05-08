@@ -266,6 +266,20 @@ const BarberSamplePreview: React.FC<Props> = ({
 .bsp-badge::before, .bsp-badge::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.45), transparent); }
 .bsp-badge-dot { display: none; }
 
+/* GUARANTEE — pinned at the top of the pricing modal so visitors see
+   the offer before any pricing. Strong gold border + glow makes it
+   the first thing the eye lands on. */
+.bsp-guarantee { position: relative; margin: 0 0 16px; padding: 14px 16px 13px; border-radius: 12px; background: linear-gradient(180deg, rgba(212,166,74,0.16) 0%, rgba(212,166,74,0.06) 100%); border: 1px solid rgba(212,166,74,0.55); box-shadow: 0 0 0 1px rgba(212,166,74,0.10), 0 12px 28px rgba(212,166,74,0.16), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
+.bsp-guarantee::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #f0cd84, #d4a64a); border-radius: 12px 0 0 12px; }
+.bsp-guarantee-eyebrow { display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #f0cd84; margin: 0 0 6px; }
+.bsp-guarantee-icon { width: 14px; height: 14px; flex-shrink: 0; color: #f0cd84; }
+.bsp-guarantee-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 14px; line-height: 1.4; color: #f5ecd7; margin: 0; letter-spacing: 0.005em; }
+.bsp-guarantee-body strong { font-style: normal; font-weight: 600; color: #f0cd84; }
+@media (max-width: 720px) {
+  .bsp-guarantee { padding: 13px 15px 12px; }
+  .bsp-guarantee-body { font-size: 14.5px; }
+}
+
 .bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 19px; line-height: 1.18; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
 .bsp-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
 .bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 11.5px; line-height: 1.5; color: #a39880; margin: 0 0 10px; }
@@ -570,6 +584,21 @@ const BarberSamplePreview: React.FC<Props> = ({
             <button className="bsp-mobile-header-close" onClick={() => setCollapsedMobile(true)} aria-label="Close">&times;</button>
           </div>
           <div className="bsp-card-body">
+
+          <div className="bsp-guarantee" role="note" aria-label="Our guarantee">
+            <div className="bsp-guarantee-eyebrow">
+              <svg className="bsp-guarantee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+              <span>Our Guarantee</span>
+            </div>
+            <p className="bsp-guarantee-body">
+              If we don&rsquo;t deliver your site within <strong>24 hours</strong>,
+              you keep the site and we&rsquo;ll fully refund your money.
+            </p>
+          </div>
+
           <h2 className="bsp-title">
             <em>Yours can be done in 24 hours.</em>
           </h2>
