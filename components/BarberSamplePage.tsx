@@ -39,6 +39,7 @@ const BarberSamplePage: React.FC = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [introVisible, setIntroVisible] = useState(true);
 
   const startCheckout = useCallback(async (tier: Tier) => {
     setLoading(true);
@@ -110,6 +111,20 @@ const BarberSamplePage: React.FC = () => {
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   };
+
+  // Intro banner: auto-dismiss after 5s OR as soon as the iframe takes
+  // focus (cross-origin iframe scroll/click steals window focus on the
+  // parent — that's our 'visitor engaged' signal).
+  useEffect(() => {
+    if (!introVisible) return;
+    const dismiss = () => setIntroVisible(false);
+    const timeoutId = window.setTimeout(dismiss, 5000);
+    window.addEventListener('blur', dismiss);
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.removeEventListener('blur', dismiss);
+    };
+  }, [introVisible]);
 
   // Lock body scroll + close-on-Escape while the mobile pricing modal is open
   useEffect(() => {
@@ -229,6 +244,41 @@ const BarberSamplePage: React.FC = () => {
 
 .bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
+
+/* INTRO BANNER — wayfinding moment shown for the first ~5s before
+   the sticky CTA is revealed. Same premium dark + gold treatment. */
+.bsp-intro {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9989;
+  width: calc(100vw - 32px);
+  max-width: 460px;
+  padding: 24px 28px 22px;
+  text-align: center;
+  background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%);
+  border: 1px solid rgba(212,166,74,0.30);
+  border-radius: 18px;
+  color: #e9e1cf;
+  cursor: pointer;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.06);
+  font-family: 'DM Sans', sans-serif;
+  animation: bspIntroIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.bsp-intro-eyebrow { font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 10px; }
+.bsp-intro-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #f5ecd7; margin: 0 0 16px; }
+.bsp-intro-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
+.bsp-intro-chev { width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 999px; border: 1px solid rgba(212,166,74,0.45); display: flex; align-items: center; justify-content: center; color: #d4a64a; animation: bspIntroBounce 1.6s ease-in-out infinite; }
+.bsp-intro-chev svg { width: 16px; height: 16px; }
+.bsp-intro-tap { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #847b66; }
+@keyframes bspIntroIn { from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+@keyframes bspIntroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+/* While the intro is visible, hold back the sticky CTA so visitors
+   focus on the wayfinding moment first. */
+.bsp-page.has-intro .bsp-card,
+.bsp-page.has-intro .bsp-mobile-bar { display: none !important; }
 
 @media (max-width: 720px) {
   .bsp-card { display: none; }
@@ -402,7 +452,7 @@ const BarberSamplePage: React.FC = () => {
 }
       `}</style>
 
-      <div className="bsp-page">
+      <div className={`bsp-page${introVisible ? ' has-intro' : ''}`}>
         <iframe
           src={SAMPLE_URL}
           title="Sample Barber Shop Site"
@@ -412,6 +462,26 @@ const BarberSamplePage: React.FC = () => {
           referrerPolicy="no-referrer"
         />
         <div className="bsp-iframe-vignette" aria-hidden="true" />
+
+        {introVisible && (
+          <div
+            className="bsp-intro"
+            role="dialog"
+            aria-label="Welcome to the sample"
+            onClick={() => setIntroVisible(false)}
+          >
+            <div className="bsp-intro-eyebrow">A sample &middot; built for a client</div>
+            <h2 className="bsp-intro-title">
+              Scroll through the site we built <em>for a client of ours.</em>
+            </h2>
+            <div className="bsp-intro-chev" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            <div className="bsp-intro-tap">Tap to continue</div>
+          </div>
+        )}
 
         <div
           className={`bsp-card-backdrop ${!collapsedMobile ? 'is-open' : ''}`}
