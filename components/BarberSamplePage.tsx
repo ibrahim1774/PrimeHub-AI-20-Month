@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 
@@ -61,6 +61,40 @@ const BarberSamplePage: React.FC = () => {
   }, [plan]);
 
   const closeCheckout = () => { setCheckoutOpen(false); setClientSecret(null); };
+
+  // Stripe-modal scroll-hint chip
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const [scrollHintVisible, setScrollHintVisible] = useState(false);
+
+  // When the Stripe modal opens, watch overlay scroll. Show the chip
+  // only when there's content below the fold; hide it once the user
+  // has scrolled past ~80% so they aren't prompted at the bottom.
+  useEffect(() => {
+    if (!checkoutOpen) { setScrollHintVisible(false); return; }
+    const el = overlayRef.current;
+    if (!el) return;
+    const update = () => {
+      const canScroll = el.scrollHeight - el.clientHeight > 24;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 24;
+      const past80 = el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight) > 0.8;
+      setScrollHintVisible(canScroll && !atBottom && !past80);
+    };
+    // Stripe checkout takes a beat to render its full height; poll a few times
+    const ids = [setTimeout(update, 50), setTimeout(update, 400), setTimeout(update, 1200)];
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      ids.forEach(clearTimeout);
+      el.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [checkoutOpen]);
+
+  const scrollOverlayDown = () => {
+    const el = overlayRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+  };
 
   // Lock body scroll + close-on-Escape while the mobile pricing modal is open
   useEffect(() => {
@@ -245,12 +279,18 @@ const BarberSamplePage: React.FC = () => {
   z-index: 9998;
   animation: bspFade 0.25s ease forwards;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  overflow-y: auto;
+  overflow-y: scroll;          /* always show track */
   padding: 24px;
   overscroll-behavior: contain;
+  scrollbar-width: thin;       /* Firefox */
+  scrollbar-color: #d4a64a rgba(255,255,255,0.08);
 }
+.bsp-overlay::-webkit-scrollbar { width: 10px; }
+.bsp-overlay::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius: 999px; }
+.bsp-overlay::-webkit-scrollbar-thumb { background: #d4a64a; border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+.bsp-overlay::-webkit-scrollbar-thumb:hover { background: #e8c074; background-clip: content-box; }
 @keyframes bspFade { from { opacity: 0; } to { opacity: 1; } }
 .bsp-modal {
   position: relative;
@@ -289,10 +329,46 @@ const BarberSamplePage: React.FC = () => {
   overflow: visible;
   border-radius: 0 0 18px 18px;
 }
+
+/* Sticky 'scroll for more' chip — sits over the bottom of the
+   Stripe checkout so visitors know to keep going to fill out the
+   payment form. Click jumps the overlay scroll all the way down. */
+.bsp-scroll-hint {
+  position: sticky;
+  bottom: 14px;
+  margin: -52px auto 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: #0a0907;
+  color: #d4a64a;
+  border: 1px solid rgba(212,166,74,0.45);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(212,166,74,0.10);
+  animation: bspScrollBounce 1.6s ease-in-out infinite;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.bsp-scroll-hint:hover { background: #14110b; }
+.bsp-scroll-hint svg { width: 12px; height: 12px; }
+.bsp-scroll-hint.is-hidden { opacity: 0; transform: translateY(8px); pointer-events: none; }
+@keyframes bspScrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
 @media (max-width: 720px) {
   .bsp-overlay { padding: 12px; }
   .bsp-modal { max-width: 100%; }
   .bsp-modal-head-title { font-size: 15px; }
+  .bsp-scroll-hint { font-size: 10.5px; padding: 8px 14px; }
 }
       `}</style>
 
@@ -419,7 +495,7 @@ const BarberSamplePage: React.FC = () => {
         </div>
 
         {checkoutOpen && clientSecret && (
-          <div className="bsp-overlay" onClick={closeCheckout}>
+          <div className="bsp-overlay" ref={overlayRef} onClick={closeCheckout}>
             <div className="bsp-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
               <div className="bsp-modal-head">
                 <h3 className="bsp-modal-head-title">Secure <em>checkout.</em></h3>
@@ -430,6 +506,17 @@ const BarberSamplePage: React.FC = () => {
                   <EmbeddedCheckout />
                 </EmbeddedCheckoutProvider>
               </div>
+              <button
+                type="button"
+                className={`bsp-scroll-hint ${scrollHintVisible ? '' : 'is-hidden'}`}
+                onClick={(e) => { e.stopPropagation(); scrollOverlayDown(); }}
+                aria-label="Scroll to see the rest of the form"
+              >
+                Scroll for more
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
             </div>
           </div>
         )}
