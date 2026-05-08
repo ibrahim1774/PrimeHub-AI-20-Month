@@ -255,13 +255,13 @@ const BarberGeneratorPage: React.FC = () => {
 
 .bgp-card {
   width: 100%;
-  max-width: 500px;
+  max-width: 420px;
   background:
     radial-gradient(140% 100% at 0% 0%, rgba(212,166,74,0.06), transparent 50%),
     linear-gradient(180deg, #14110b 0%, #0a0907 65%, #050403 100%);
   border: 1px solid rgba(212,166,74,0.24);
   border-radius: 4px;
-  padding: 40px 40px 34px;
+  padding: 28px 30px 24px;
   box-shadow:
     0 50px 110px rgba(0,0,0,0.7),
     0 0 0 1px rgba(212,166,74,0.06),
@@ -277,20 +277,20 @@ const BarberGeneratorPage: React.FC = () => {
   border: 1px solid rgba(212,166,74,0.55);
   pointer-events: none;
 }
-.bgp-card::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
-.bgp-card::after  { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.bgp-card::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.bgp-card::after  { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
 
 /* Brand mark — gold-ringed disc with razor+comb monogram */
 .bgp-logo-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin: 0 0 22px;
+  gap: 8px;
+  margin: 0 0 14px;
 }
 .bgp-logo {
-  width: 68px;
-  height: 68px;
+  width: 52px;
+  height: 52px;
   border-radius: 999px;
   background:
     radial-gradient(60% 60% at 50% 35%, rgba(212,166,74,0.35), transparent 70%),
@@ -305,26 +305,26 @@ const BarberGeneratorPage: React.FC = () => {
     0 0 0 4px rgba(212,166,74,0.06);
   position: relative;
 }
-.bgp-logo svg { width: 32px; height: 32px; color: #d4a64a; }
+.bgp-logo svg { width: 26px; height: 26px; color: #d4a64a; }
 .bgp-logo-name {
   font-family: 'Cormorant Garamond', 'Newsreader', serif;
   font-style: italic;
   font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.32em;
+  font-size: 11.5px;
+  letter-spacing: 0.30em;
   color: #d4a64a;
   text-transform: uppercase;
-  padding-left: 0.32em;
+  padding-left: 0.30em;
 }
 
 .bgp-eyebrow {
   font-family: 'Inter', sans-serif;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: 0.40em;
+  letter-spacing: 0.36em;
   text-transform: uppercase;
   color: #d4a64a;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -342,11 +342,11 @@ const BarberGeneratorPage: React.FC = () => {
 .bgp-title {
   font-family: 'Cormorant Garamond', 'Newsreader', serif;
   font-weight: 500;
-  font-size: 38px;
+  font-size: 28px;
   line-height: 1.08;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.010em;
   color: #f5ecd7;
-  margin: 0 0 14px;
+  margin: 0 0 8px;
   text-align: center;
 }
 .bgp-title em {
@@ -357,25 +357,25 @@ const BarberGeneratorPage: React.FC = () => {
 .bgp-sub {
   font-family: 'Newsreader', 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 14.5px;
-  line-height: 1.55;
+  font-size: 12.5px;
+  line-height: 1.5;
   color: #a39880;
-  margin: 0 0 28px;
+  margin: 0 0 18px;
   text-align: center;
   letter-spacing: 0.005em;
 }
 
-.bgp-field { display: block; margin-bottom: 18px; }
+.bgp-field { display: block; margin-bottom: 12px; }
 .bgp-field label {
   display: block;
   font-family: 'Inter', sans-serif;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
-  letter-spacing: 0.30em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #d4a64a;
-  margin-bottom: 8px;
-  padding-left: 0.30em;
+  margin-bottom: 5px;
+  padding-left: 0.28em;
 }
 .bgp-field input {
   width: 100%;
@@ -383,10 +383,10 @@ const BarberGeneratorPage: React.FC = () => {
   border: 0;
   border-bottom: 1px solid rgba(212,166,74,0.30);
   border-radius: 0;
-  padding: 8px 2px 10px;
+  padding: 5px 2px 7px;
   color: #f5ecd7;
   font-family: 'Cormorant Garamond', 'Newsreader', serif;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.005em;
   transition: border-color 0.25s, color 0.25s;
@@ -400,15 +400,15 @@ const BarberGeneratorPage: React.FC = () => {
   border-bottom-color: #d4a64a;
 }
 
-.bgp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 22px 0 18px; }
+.bgp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 14px 0 12px; }
 
 .bgp-note {
   font-family: 'Newsreader', 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 12.5px;
+  font-size: 11.5px;
   color: #847b66;
-  line-height: 1.6;
-  margin: 0 0 22px;
+  line-height: 1.5;
+  margin: 0 0 14px;
   text-align: center;
   letter-spacing: 0.005em;
 }
@@ -419,43 +419,43 @@ const BarberGeneratorPage: React.FC = () => {
   background: linear-gradient(180deg, #e8c074 0%, #d4a64a 100%);
   color: #0a0907;
   border: 1px solid #d4a64a;
-  padding: 16px 22px;
+  padding: 12px 18px;
   border-radius: 2px;
   font-family: 'Cormorant Garamond', 'Newsreader', serif;
   font-style: italic;
   font-weight: 600;
-  font-size: 17px;
-  letter-spacing: 0.06em;
+  font-size: 15px;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.25s, background 0.25s;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 16px 40px rgba(212,166,74,0.28), inset 0 1px 0 rgba(255,255,255,0.30);
+  box-shadow: 0 14px 32px rgba(212,166,74,0.26), inset 0 1px 0 rgba(255,255,255,0.30);
   position: relative;
 }
 .bgp-submit:hover {
   transform: translateY(-1px);
-  box-shadow: 0 22px 48px rgba(212,166,74,0.40), inset 0 1px 0 rgba(255,255,255,0.40);
+  box-shadow: 0 20px 40px rgba(212,166,74,0.40), inset 0 1px 0 rgba(255,255,255,0.40);
   background: linear-gradient(180deg, #f0cd84 0%, #dab156 100%);
 }
 .bgp-submit:disabled { opacity: 0.50; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .bgp-foot {
-  margin-top: 16px;
+  margin-top: 10px;
   font-family: 'Inter', sans-serif;
-  font-size: 9.5px;
+  font-size: 8.5px;
   color: #5d5645;
   text-align: center;
-  letter-spacing: 0.30em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  padding-left: 0.30em;
+  padding-left: 0.28em;
 }
 
 @media (max-width: 480px) {
-  .bgp-card { padding: 32px 24px 26px; }
-  .bgp-title { font-size: 30px; }
-  .bgp-sub { font-size: 13.5px; }
-  .bgp-field input { font-size: 17px; }
+  .bgp-card { padding: 24px 22px 20px; }
+  .bgp-title { font-size: 24px; }
+  .bgp-sub { font-size: 12px; }
+  .bgp-field input { font-size: 15px; }
 }
       `}</style>
 
@@ -485,11 +485,10 @@ const BarberGeneratorPage: React.FC = () => {
 
           <div className="bgp-eyebrow">Barber site generator</div>
           <h1 className="bgp-title">
-            See your barbershop site <em>in a few seconds.</em>
+            See your barbershop site <em>in seconds.</em>
           </h1>
           <p className="bgp-sub">
-            Enter your shop name, phone, and location — we'll render a
-            personalized sample with your business on it. No signup, no wait.
+            Shop name, phone, and city &mdash; we'll render your sample.
           </p>
 
           <div className="bgp-field">
@@ -536,10 +535,7 @@ const BarberGeneratorPage: React.FC = () => {
           <div className="bgp-rule" />
 
           <p className="bgp-note">
-            We'll generate a personalized barbershop site preview using the
-            same template you can deploy as your own. After previewing,
-            tap <strong style={{ color: '#d4a64a' }}>Deploy My Site</strong> to
-            launch — fully customized and live within 24 hours.
+            Fully customized and live within 24 hours.
           </p>
 
           <button

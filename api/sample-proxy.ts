@@ -78,15 +78,53 @@ export default async function handler(req: any, res: any) {
                 .replace(/\bWellington-Harrington\b/g, '');
 
             // Replace the upstream logo image with the visitor's shop
-            // name rendered in the same font family the page uses.
-            // Only when a shop name was provided.
+            // name in white serif text. The wrapping <a class="logo-mark">
+            // anchor inherits the browser's default link color (blue),
+            // which is why we force white on the span.
             if (shop) {
                 const safeShop = escapeHtml(shop);
                 html = html.replace(
                     /<img\b[^>]*class="logo-img"[^>]*\/?>/g,
-                    `<span class="logo-img" style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;letter-spacing:0.01em;color:inherit;display:inline-block;line-height:1;">${safeShop}</span>`,
+                    `<span class="logo-img" style="font-family:'Newsreader',serif;font-size:24px;font-weight:600;letter-spacing:0.01em;color:#ffffff;display:inline-block;line-height:1;text-decoration:none;white-space:nowrap;">${safeShop}</span>`,
                 );
             }
+
+            // Replace "Book Online / Book Now / Book an Appointment"
+            // links (all pointing at vagaro.com/euphoriabarbershop) with
+            // a "Call us · {phone}" tel: link, since the visitor's shop
+            // doesn't have a Vagaro booking page.
+            if (phone) {
+                const safePhone = escapeHtml(phone);
+                const digits = phone.replace(/\D/g, '');
+                const telHref = digits ? `tel:${digits}` : `tel:${safePhone}`;
+                // Swap href first (in any vagaro link), then visible text.
+                html = html.replace(
+                    /https:\/\/www\.vagaro\.com\/euphoriabarbershop/g,
+                    telHref,
+                );
+                const callLabel = `Call us · ${safePhone}`;
+                html = html
+                    .replace(/Book an Appointment/g, callLabel)
+                    .replace(/Book Online/g, callLabel)
+                    .replace(/Book Now/g, callLabel);
+            }
+
+            // Remove the "By Email" block in the contact section.
+            html = html.replace(
+                /<div class="visit-info-block">\s*<div class="visit-label">By Email<\/div>[\s\S]*?<\/div>/,
+                '',
+            );
+
+            // Remove the "Linktree" link (and its leading separator) in
+            // the footer, plus the email link there.
+            html = html.replace(
+                /<span class="footer-sep">[^<]*<\/span>\s*<a [^>]*linktr\.ee[^>]*>[^<]*<\/a>/g,
+                '',
+            );
+            html = html.replace(
+                /<span class="footer-sep">[^<]*<\/span>\s*<a [^>]*mailto:[^>]*>[^<]*<\/a>/g,
+                '',
+            );
         }
 
         // Inject `<base href="https://dist-black-nine-17.vercel.app/">` as the
