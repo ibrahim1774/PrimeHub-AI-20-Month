@@ -118,7 +118,7 @@ const BarberSamplePage: React.FC = () => {
   useEffect(() => {
     if (!introVisible) return;
     const dismiss = () => setIntroVisible(false);
-    const timeoutId = window.setTimeout(dismiss, 5000);
+    const timeoutId = window.setTimeout(dismiss, 3000);
     window.addEventListener('blur', dismiss);
     return () => {
       window.clearTimeout(timeoutId);
@@ -265,6 +265,13 @@ const BarberSamplePage: React.FC = () => {
   box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.06);
   font-family: 'DM Sans', sans-serif;
   animation: bspIntroIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+  /* iOS: kill the 300ms tap-delay + tap-highlight so the touch event
+     completes immediately and the iframe behind starts receiving
+     touches on the very next swipe. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .bsp-intro-eyebrow { font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 10px; }
 .bsp-intro-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #f5ecd7; margin: 0 0 16px; }
@@ -468,7 +475,7 @@ const BarberSamplePage: React.FC = () => {
             className="bsp-intro"
             role="dialog"
             aria-label="Welcome to the sample"
-            onClick={() => setIntroVisible(false)}
+            onPointerDown={() => setIntroVisible(false)}
           >
             <div className="bsp-intro-eyebrow">A sample &middot; built for a client</div>
             <h2 className="bsp-intro-title">
