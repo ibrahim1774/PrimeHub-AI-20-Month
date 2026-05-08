@@ -21,16 +21,15 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
 };
 
 const BENEFITS = [
-  { icon: '🎨', title: 'Fully custom', desc: 'Your branding, photos, logo, booking link — not a template.' },
-  { icon: '📱', title: 'Mobile + SEO ready', desc: 'Sharp on every screen, schema markup, set up to rank.' },
-  { icon: '🔧', title: 'We maintain it', desc: 'Need a change? Email us. We handle it.' },
-  { icon: '🌐', title: 'Custom domain', desc: 'Your own .com or a free Vercel subdomain.' },
+  { icon: '🎨', title: 'Made for you', desc: 'Your photos, logo, colors. Not a template.' },
+  { icon: '📱', title: 'Phone-ready · Google-ready', desc: 'Looks sharp on any screen. Built to rank.' },
+  { icon: '🔧', title: 'We do the edits', desc: 'Need a change? Email us. We fix it.' },
 ];
 
 const STEPS = [
-  { n: '01', title: 'Pick your plan', desc: 'Single page or multi-page · monthly or yearly.' },
-  { n: '02', title: 'Send us your info', desc: 'Logo, photos, hours, booking link — we\'ll guide you.' },
-  { n: '03', title: 'We build it', desc: 'Live within 48 hours. Edit anytime, we maintain it.' },
+  { n: '01', title: 'Pick a plan', desc: 'One page or many pages.' },
+  { n: '02', title: 'Send us your stuff', desc: 'Photos, hours, booking link. We help.' },
+  { n: '03', title: 'We build it', desc: 'Live in 48 hours. Easy to change later.' },
 ];
 
 const BarberSamplePage: React.FC = () => {
@@ -97,48 +96,48 @@ const BarberSamplePage: React.FC = () => {
 .bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.3); border-radius: 3px; }
 @keyframes bspIn { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
 
-.bsp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.22); color: #22c55e; padding: 5px 12px; border-radius: 100px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.bsp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.22); color: #22c55e; padding: 4px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
 .bsp-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: bspPulse 2s infinite; }
 @keyframes bspPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-.bsp-title { font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.18; color: #fff; margin: 0 0 8px; }
+.bsp-title { font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.18; color: #fff; margin: 0 0 6px; }
 .bsp-title em { color: #d4a64a; font-style: italic; }
-.bsp-sub { font-size: 13px; line-height: 1.55; color: #94a3b8; margin: 0 0 16px; }
+.bsp-sub { font-size: 12.5px; line-height: 1.5; color: #94a3b8; margin: 0 0 12px; }
 
 /* BOX CONTAINERS for benefits + steps */
-.bsp-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 14px 12px; margin-bottom: 14px; }
-.bsp-box-title { font-size: 10px; font-weight: 800; color: #d4a64a; text-transform: uppercase; letter-spacing: 0.18em; margin: 0 0 10px; }
-.bsp-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
-.bsp-box li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.45; }
-.bsp-bullet-icon { flex-shrink: 0; font-size: 14px; line-height: 1; padding-top: 1px; width: 22px; text-align: center; }
-.bsp-bullet-num { flex-shrink: 0; font-family: 'Instrument Serif', serif; font-size: 16px; font-style: italic; color: #d4a64a; line-height: 1; padding-top: 2px; min-width: 26px; }
-.bsp-bullet-body strong { display: block; font-size: 12.5px; font-weight: 600; color: #f1f5f9; margin-bottom: 1px; }
-.bsp-bullet-body span { display: block; font-size: 11.5px; color: #94a3b8; line-height: 1.45; }
+.bsp-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 12px 10px; margin-bottom: 10px; }
+.bsp-box-title { font-size: 9.5px; font-weight: 800; color: #d4a64a; text-transform: uppercase; letter-spacing: 0.16em; margin: 0 0 8px; }
+.bsp-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.bsp-box li { display: flex; gap: 9px; align-items: flex-start; line-height: 1.35; }
+.bsp-bullet-icon { flex-shrink: 0; font-size: 13px; line-height: 1; padding-top: 1px; width: 20px; text-align: center; }
+.bsp-bullet-num { flex-shrink: 0; font-family: 'Instrument Serif', serif; font-size: 14px; font-style: italic; color: #d4a64a; line-height: 1; padding-top: 2px; min-width: 22px; }
+.bsp-bullet-body strong { display: block; font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 1px; }
+.bsp-bullet-body span { display: block; font-size: 11px; color: #94a3b8; line-height: 1.4; }
 
 /* PLAN TOGGLE */
-.bsp-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 3px; margin-bottom: 12px; }
-.bsp-toggle button { flex: 1; padding: 10px 10px; background: transparent; border: none; color: #94a3b8; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 7px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.bsp-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+.bsp-toggle button { flex: 1; padding: 8px 8px; background: transparent; border: none; color: #94a3b8; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 7px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .bsp-toggle button.active { background: rgba(212,166,74,0.15); color: #d4a64a; }
-.bsp-save { background: #d4a64a; color: #0a0a0a; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em; }
+.bsp-save { background: #d4a64a; color: #0a0a0a; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.05em; }
 
 /* TIER ROWS */
-.bsp-tiers { display: flex; flex-direction: column; gap: 10px; }
-.bsp-tier { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 14px; text-align: left; color: #e2e8f0; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
+.bsp-tiers { display: flex; flex-direction: column; gap: 8px; }
+.bsp-tier { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 11px 12px; text-align: left; color: #e2e8f0; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
 .bsp-tier:hover:not(:disabled) { background: rgba(212,166,74,0.06); border-color: rgba(212,166,74,0.30); transform: translateY(-1px); }
 .bsp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
 .bsp-tier-multi { background: linear-gradient(135deg, rgba(212,166,74,0.10), rgba(212,166,74,0.04)); border-color: rgba(212,166,74,0.30); }
 .bsp-tier-multi:hover:not(:disabled) { background: linear-gradient(135deg, rgba(212,166,74,0.18), rgba(212,166,74,0.08)); }
 .bsp-tier-left { display: flex; flex-direction: column; gap: 2px; }
-.bsp-tier-name { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
-.bsp-tier-desc { font-size: 11px; color: #94a3b8; line-height: 1.45; }
+.bsp-tier-name { font-size: 12.5px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+.bsp-tier-desc { font-size: 10.5px; color: #94a3b8; line-height: 1.4; }
 .bsp-tier-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex-shrink: 0; }
-.bsp-tier-price { font-family: 'Instrument Serif', serif; font-size: 22px; color: #d4a64a; font-style: italic; line-height: 1; }
-.bsp-tier-per { font-size: 10.5px; color: #64748b; }
+.bsp-tier-price { font-family: 'Instrument Serif', serif; font-size: 20px; color: #d4a64a; font-style: italic; line-height: 1; }
+.bsp-tier-per { font-size: 10px; color: #64748b; }
 .bsp-tier-wrap { position: relative; }
 .bsp-recommended { position: absolute; top: -8px; right: 12px; background: #d4a64a; color: #0a0a0a; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase; z-index: 1; }
 
-.bsp-foot { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 4px; }
-.bsp-foot-row { font-size: 11px; color: #64748b; display: flex; align-items: center; gap: 5px; line-height: 1.4; }
+.bsp-foot { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 3px; }
+.bsp-foot-row { font-size: 10.5px; color: #64748b; display: flex; align-items: center; gap: 5px; line-height: 1.4; }
 .bsp-foot-row svg { flex-shrink: 0; color: #d4a64a; }
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
@@ -205,7 +204,7 @@ const BarberSamplePage: React.FC = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
+    padding: 10px 14px;
     background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
     border-bottom: 1px solid rgba(212,166,74,0.20);
     flex-shrink: 0;
@@ -213,17 +212,17 @@ const BarberSamplePage: React.FC = () => {
   }
   .bsp-card.expanded .bsp-mobile-header-text {
     font-family: 'Instrument Serif', serif;
-    font-size: 16px;
+    font-size: 15px;
     color: #d4a64a;
     font-style: italic;
   }
   .bsp-card.expanded .bsp-mobile-header-close {
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     border-radius: 8px;
     background: rgba(255,255,255,0.10);
     border: 1px solid rgba(255,255,255,0.12);
     color: #cbd5e1;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
@@ -231,7 +230,7 @@ const BarberSamplePage: React.FC = () => {
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 16px 18px 18px;
+    padding: 12px 14px 14px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
@@ -318,10 +317,10 @@ const BarberSamplePage: React.FC = () => {
             Sample Site &middot; Built for a Real Client
           </div>
           <h2 className="bsp-title">
-            A sample barbershop site we built for a client. <em>Yours can go live in 24 hours.</em>
+            We built this site. <em>Yours can be live in 24 hours.</em>
           </h2>
           <p className="bsp-sub">
-            Custom to your branding, photos, logo, and booking link. Design &amp; content are free &mdash; you only pay hosting.
+            Your photos, logo, and booking link. Design is free — you just pay hosting.
           </p>
 
           <div className="bsp-box">
@@ -364,7 +363,7 @@ const BarberSamplePage: React.FC = () => {
               <button className="bsp-tier" onClick={() => startCheckout('single')} disabled={loading}>
                 <div className="bsp-tier-left">
                   <div className="bsp-tier-name">Single Page</div>
-                  <div className="bsp-tier-desc">One polished page &middot; all your info, gallery, contact</div>
+                  <div className="bsp-tier-desc">One page · info, gallery, contact</div>
                 </div>
                 <div className="bsp-tier-right">
                   <span className="bsp-tier-price">{PRICING.single[plan].display}</span>
@@ -377,7 +376,7 @@ const BarberSamplePage: React.FC = () => {
               <button className="bsp-tier bsp-tier-multi" onClick={() => startCheckout('multi')} disabled={loading}>
                 <div className="bsp-tier-left">
                   <div className="bsp-tier-name">Multi-Page + SEO</div>
-                  <div className="bsp-tier-desc">Home, About, Services, Contact &middot; SEO &middot; like this sample</div>
+                  <div className="bsp-tier-desc">Like this sample · Home, Services, Contact</div>
                 </div>
                 <div className="bsp-tier-right">
                   <span className="bsp-tier-price">{PRICING.multi[plan].display}</span>
@@ -392,11 +391,7 @@ const BarberSamplePage: React.FC = () => {
           <div className="bsp-foot">
             <div className="bsp-foot-row">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
-              Secure Stripe checkout &middot; cancel anytime
-            </div>
-            <div className="bsp-foot-row">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19.2l11-11L18.6 6.8z"/></svg>
-              Live in 48 hrs &middot; custom domain supported
+              Secure Stripe · cancel anytime
             </div>
           </div>
 
