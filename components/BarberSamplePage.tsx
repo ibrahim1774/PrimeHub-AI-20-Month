@@ -151,9 +151,9 @@ const BarberSamplePage: React.FC = () => {
 }
 
 /* STRIPE MODAL */
-.bsp-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); z-index: 9998; animation: bspFade 0.25s ease forwards; }
+.bsp-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); z-index: 9998; animation: bspFade 0.25s ease forwards; display: flex; align-items: center; justify-content: center; padding: 24px; }
 @keyframes bspFade { from { opacity: 0; } to { opacity: 1; } }
-.bsp-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 94vw; max-width: 540px; max-height: calc(100vh - 32px); z-index: 9999; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; }
+.bsp-modal { position: relative; width: 100%; max-width: 540px; height: min(740px, calc(100vh - 48px)); z-index: 9999; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; }
 .bsp-modal-head { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; color: #e2e8f0; font-family: 'DM Sans', sans-serif; }
 .bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 20px; color: #fff; margin: 0; }
 .bsp-modal-head-title em { color: #d4a64a; font-style: italic; }
@@ -161,7 +161,8 @@ const BarberSamplePage: React.FC = () => {
 .bsp-modal-close:hover { background: rgba(255,255,255,0.16); color: #fff; }
 .bsp-modal-body { padding: 0; background: #fff; overflow-y: auto; flex: 1; }
 @media (max-width: 720px) {
-  .bsp-modal { width: 96vw; max-height: calc(100vh - 16px); }
+  .bsp-overlay { padding: 12px; }
+  .bsp-modal { height: calc(100vh - 24px); }
   .bsp-modal-head-title { font-size: 16px; }
 }
       `}</style>
@@ -172,10 +173,10 @@ const BarberSamplePage: React.FC = () => {
         <aside className={`bsp-card ${!collapsedMobile ? 'expanded' : ''}`}>
           <div className="bsp-badge">
             <span className="bsp-badge-dot" />
-            Live Sample &middot; Euphoria Barbershop
+            Sample Site &middot; Built for a Real Client
           </div>
           <h2 className="bsp-title">
-            We built this site for a real barber. <em>We can build yours.</em>
+            A sample barbershop site we built for a client. <em>Yours can go live in 24 hours.</em>
           </h2>
           <p className="bsp-sub">
             Custom to your branding, photos, logo, and booking link. Design &amp; content are free &mdash; you only pay hosting.
@@ -268,11 +269,11 @@ const BarberSamplePage: React.FC = () => {
         <div className={`bsp-mobile-bar ${collapsedMobile ? '' : 'hidden'}`}>
           <div className="bsp-mobile-top">
             <span className="bsp-mobile-pulse" />
-            <span className="bsp-mobile-eyebrow">Live Sample &middot; Built for a Real Barber</span>
+            <span className="bsp-mobile-eyebrow">Sample Site &middot; Built for a Real Barber Client</span>
           </div>
 
           <div className="bsp-mobile-bar-text">
-            <strong>We&apos;ll build the same for you</strong> &mdash; <em>from $10/mo</em>
+            <strong>Yours can go live in 24 hours</strong> &mdash; <em>from $10/mo</em>
           </div>
 
           <div className="bsp-mobile-bullets">
@@ -287,9 +288,8 @@ const BarberSamplePage: React.FC = () => {
         </div>
 
         {checkoutOpen && clientSecret && (
-          <>
-            <div className="bsp-overlay" onClick={closeCheckout} />
-            <div className="bsp-modal" role="dialog" aria-modal="true">
+          <div className="bsp-overlay" onClick={closeCheckout}>
+            <div className="bsp-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
               <div className="bsp-modal-head">
                 <h3 className="bsp-modal-head-title">Secure <em>checkout.</em></h3>
                 <button className="bsp-modal-close" onClick={closeCheckout} aria-label="Close">&times;</button>
@@ -300,7 +300,7 @@ const BarberSamplePage: React.FC = () => {
                 </EmbeddedCheckoutProvider>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>
