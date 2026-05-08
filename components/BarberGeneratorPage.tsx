@@ -27,6 +27,8 @@ const BarberGeneratorPage: React.FC = () => {
         source="barberGenerator"
         ctaLabel="Deploy My Site"
         topNotice={NOTICE}
+        showIntroBanner={false}
+        autoScroll={false}
       />
     );
   }
