@@ -253,16 +253,16 @@ const BarberSamplePage: React.FC = () => {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 9989;
-  width: calc(100vw - 32px);
-  max-width: 460px;
-  padding: 24px 28px 22px;
+  width: calc(100vw - 48px);
+  max-width: 340px;
+  padding: 16px 20px 14px;
   text-align: center;
   background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%);
   border: 1px solid rgba(212,166,74,0.30);
-  border-radius: 18px;
+  border-radius: 14px;
   color: #e9e1cf;
   cursor: pointer;
-  box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.06);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,166,74,0.06);
   font-family: 'DM Sans', sans-serif;
   animation: bspIntroIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
   /* iOS: kill the 300ms tap-delay + tap-highlight so the touch event
@@ -273,12 +273,11 @@ const BarberSamplePage: React.FC = () => {
   -webkit-user-select: none;
   user-select: none;
 }
-.bsp-intro-eyebrow { font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 10px; }
-.bsp-intro-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px; line-height: 1.2; color: #f5ecd7; margin: 0 0 16px; }
+.bsp-intro-eyebrow { font-size: 9px; font-weight: 600; color: #d4a64a; letter-spacing: 0.20em; text-transform: uppercase; margin: 0 0 7px; }
+.bsp-intro-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 17px; line-height: 1.2; color: #f5ecd7; margin: 0 0 10px; }
 .bsp-intro-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
-.bsp-intro-chev { width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 999px; border: 1px solid rgba(212,166,74,0.45); display: flex; align-items: center; justify-content: center; color: #d4a64a; animation: bspIntroBounce 1.6s ease-in-out infinite; }
-.bsp-intro-chev svg { width: 16px; height: 16px; }
-.bsp-intro-tap { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #847b66; }
+.bsp-intro-chev { width: 24px; height: 24px; margin: 0 auto; border-radius: 999px; border: 1px solid rgba(212,166,74,0.45); display: flex; align-items: center; justify-content: center; color: #d4a64a; animation: bspIntroBounce 1.6s ease-in-out infinite; }
+.bsp-intro-chev svg { width: 12px; height: 12px; }
 @keyframes bspIntroIn { from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
 @keyframes bspIntroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
@@ -486,7 +485,6 @@ const BarberSamplePage: React.FC = () => {
                 <polyline points="6 9 12 15 18 9" />
               </svg>
             </div>
-            <div className="bsp-intro-tap">Tap to continue</div>
           </div>
         )}
 
