@@ -20,18 +20,6 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
   },
 };
 
-const BENEFITS = [
-  { title: 'Made for you', desc: 'Your photos, your logo, your colors.' },
-  { title: 'Looks great on any phone', desc: 'Fast. Clean. Built to be found on Google.' },
-  { title: 'We handle the changes', desc: 'Want to swap a photo? Just email us.' },
-];
-
-const STEPS = [
-  { n: '01', title: 'Pick a plan', desc: 'One page or many pages.' },
-  { n: '02', title: 'Send us your stuff', desc: 'Photos, hours, booking link. We help.' },
-  { n: '03', title: 'We build it', desc: 'Live in 48 hours. Easy to change later.' },
-];
-
 const BarberSamplePage: React.FC = () => {
   const [plan, setPlan] = useState<Plan>('monthly');
   const [collapsedMobile, setCollapsedMobile] = useState(true);
@@ -151,21 +139,21 @@ const BarberSamplePage: React.FC = () => {
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-/* MOBILE BOTTOM BAR — refined dark + gold ribbon */
-.bsp-mobile-bar { display: none; position: fixed; bottom: 14px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.28); border-radius: 14px; padding: 14px 16px 14px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 56px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
+/* MOBILE BOTTOM BAR — refined dark + gold ribbon (sized 25% larger) */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 16px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 18px; padding: 18px 20px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 28px 64px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 14px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-pulse { display: none; }
-.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 19px; line-height: 1.2; color: #f5ecd7; letter-spacing: -0.005em; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; line-height: 1.18; color: #f5ecd7; letter-spacing: -0.005em; }
 .bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
 .bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 15px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 @media (max-width: 720px) {
@@ -334,39 +322,11 @@ const BarberSamplePage: React.FC = () => {
           <div className="bsp-badge">A sample &middot; built for a client</div>
 
           <h2 className="bsp-title">
-            We built this site. <em>Yours can be live in 24 hours.</em>
+            This is a sample site. <em>Yours can be done in 24 hours.</em>
           </h2>
           <p className="bsp-sub">
-            Your photos, your logo, your booking link. Design is on us — you only cover hosting.
+            Your photos, logo, and booking link. Design is on us — you only cover hosting.
           </p>
-
-          <h3 className="bsp-list-eyebrow">What you get</h3>
-          <ul className="bsp-list">
-            {BENEFITS.map(b => (
-              <li key={b.title}>
-                <span className="bsp-bullet-rule" />
-                <div className="bsp-bullet-body">
-                  <strong>{b.title}</strong>
-                  <span>{b.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          <div className="bsp-rule" />
-
-          <h3 className="bsp-list-eyebrow">How it works</h3>
-          <ul className="bsp-list">
-            {STEPS.map(s => (
-              <li key={s.n}>
-                <span className="bsp-bullet-num">{s.n}</span>
-                <div className="bsp-bullet-body">
-                  <strong>{s.title}</strong>
-                  <span>{s.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
 
           <div className="bsp-rule" />
 
@@ -422,7 +382,7 @@ const BarberSamplePage: React.FC = () => {
           </div>
 
           <div className="bsp-mobile-bar-text">
-            Your barbershop, online <em>in 24 hours.</em>
+            This is a sample site &mdash; <em>yours can be done in 24 hours.</em>
           </div>
 
           <button className="bsp-mobile-bar-btn" onClick={() => setCollapsedMobile(false)}>
