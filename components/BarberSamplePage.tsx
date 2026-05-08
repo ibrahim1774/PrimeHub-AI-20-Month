@@ -11,12 +11,12 @@ type Plan = 'monthly' | 'yearly';
 
 const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
   single: {
-    monthly: { display: '$10', sub: '/month' },
-    yearly:  { display: '$72', sub: '/year · save $48' },
+    monthly: { display: '$5',  sub: '/month' },
+    yearly:  { display: '$36', sub: '/year · save $24' },
   },
   multi: {
-    monthly: { display: '$20', sub: '/month' },
-    yearly:  { display: '$144', sub: '/year · save $96' },
+    monthly: { display: '$10', sub: '/month' },
+    yearly:  { display: '$72', sub: '/year · save $48' },
   },
 };
 
@@ -48,7 +48,7 @@ const BarberSamplePage: React.FC = () => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan, source: 'barberFive', tier, embedded: true }),
+        body: JSON.stringify({ plan, source: 'barberFiveMonth', tier, embedded: true }),
       });
       const data = await res.json();
       if (!res.ok || !data.clientSecret) throw new Error(data?.error || 'Checkout failed to start');
@@ -107,40 +107,40 @@ const BarberSamplePage: React.FC = () => {
 .bsp-badge::before, .bsp-badge::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.45), transparent); }
 .bsp-badge-dot { display: none; }
 
-.bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 28px; line-height: 1.15; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 10px; }
+.bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 22px; line-height: 1.18; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
 .bsp-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
-.bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.55; color: #a39880; margin: 0 0 16px; }
+.bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 12px; line-height: 1.5; color: #a39880; margin: 0 0 14px; }
 .bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 14px 0; }
 
 /* List blocks — refined typography on dark, no boxy containers */
-.bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 700; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 10px; }
-.bsp-list { display: flex; flex-direction: column; gap: 11px; margin: 0 0 4px; padding: 0; list-style: none; }
-.bsp-list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.4; }
-.bsp-bullet-rule { flex-shrink: 0; width: 18px; height: 1px; background: #d4a64a; opacity: 0.85; margin-top: 8px; }
-.bsp-bullet-num { flex-shrink: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 18px; color: #d4a64a; line-height: 1; min-width: 26px; padding-top: 1px; }
-.bsp-bullet-body strong { display: block; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; color: #f5ecd7; margin-bottom: 2px; letter-spacing: 0.005em; }
-.bsp-bullet-body span { display: block; font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: #a39880; line-height: 1.5; }
+.bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 9px; }
+.bsp-list { display: flex; flex-direction: column; gap: 9px; margin: 0 0 4px; padding: 0; list-style: none; }
+.bsp-list li { display: flex; gap: 11px; align-items: flex-start; line-height: 1.4; }
+.bsp-bullet-rule { flex-shrink: 0; width: 16px; height: 1px; background: #d4a64a; opacity: 0.85; margin-top: 7px; }
+.bsp-bullet-num { flex-shrink: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 16px; color: #d4a64a; line-height: 1; min-width: 22px; padding-top: 1px; }
+.bsp-bullet-body strong { display: block; font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; color: #f5ecd7; margin-bottom: 1px; letter-spacing: 0.005em; }
+.bsp-bullet-body span { display: block; font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: #a39880; line-height: 1.45; }
 
 /* PLAN TOGGLE — refined underlined pair */
 .bsp-toggle { display: inline-flex; gap: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(212,166,74,0.18); align-self: flex-start; }
-.bsp-toggle button { padding: 9px 16px; background: transparent; border: none; color: #847b66; font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.16em; text-transform: uppercase; position: relative; }
+.bsp-toggle button { padding: 8px 14px; background: transparent; border: none; color: #847b66; font-family: 'DM Sans', sans-serif; font-size: 10.5px; font-weight: 600; cursor: pointer; transition: color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.16em; text-transform: uppercase; position: relative; }
 .bsp-toggle button.active { color: #d4a64a; }
 .bsp-toggle button.active::after { content: ''; position: absolute; left: 12%; right: 12%; bottom: -1px; height: 1px; background: #d4a64a; }
 .bsp-save { background: transparent; color: #d4a64a; font-size: 9px; font-weight: 700; border: 1px solid rgba(212,166,74,0.45); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.10em; text-transform: uppercase; }
 
 /* TIER ROWS — premium serif name + italic gold price */
-.bsp-tiers { display: flex; flex-direction: column; gap: 11px; }
-.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 12px; padding: 15px 16px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.bsp-tiers { display: flex; flex-direction: column; gap: 10px; }
+.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 12px; padding: 13px 15px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
 .bsp-tier:hover:not(:disabled) { border-color: rgba(212,166,74,0.45); background: linear-gradient(180deg, rgba(212,166,74,0.06), rgba(212,166,74,0.015)); transform: translateY(-1px); }
 .bsp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
 .bsp-tier-multi { background: linear-gradient(180deg, rgba(212,166,74,0.10), rgba(212,166,74,0.03)); border-color: rgba(212,166,74,0.40); box-shadow: 0 8px 24px rgba(212,166,74,0.10); }
 .bsp-tier-multi:hover:not(:disabled) { background: linear-gradient(180deg, rgba(212,166,74,0.16), rgba(212,166,74,0.05)); }
 .bsp-tier-left { display: flex; flex-direction: column; gap: 3px; }
-.bsp-tier-name { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 17px; color: #f5ecd7; letter-spacing: 0; }
-.bsp-tier-desc { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #a39880; line-height: 1.45; }
+.bsp-tier-name { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 15px; color: #f5ecd7; letter-spacing: 0; }
+.bsp-tier-desc { font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: #a39880; line-height: 1.4; }
 .bsp-tier-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0; flex-shrink: 0; }
-.bsp-tier-price { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 26px; color: #d4a64a; line-height: 1; }
-.bsp-tier-per { font-family: 'DM Sans', sans-serif; font-size: 10px; color: #847b66; letter-spacing: 0.04em; margin-top: 4px; }
+.bsp-tier-price { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 22px; color: #d4a64a; line-height: 1; }
+.bsp-tier-per { font-family: 'DM Sans', sans-serif; font-size: 9.5px; color: #847b66; letter-spacing: 0.04em; margin-top: 3px; }
 .bsp-tier-wrap { position: relative; }
 .bsp-recommended { position: absolute; top: -7px; right: 14px; background: #d4a64a; color: #0a0907; font-family: 'DM Sans', sans-serif; font-size: 8.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.18em; text-transform: uppercase; z-index: 1; }
 
@@ -211,8 +211,8 @@ const BarberSamplePage: React.FC = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    padding: 14px 22px;
+    background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%);
     border-bottom: 1px solid rgba(212,166,74,0.20);
     flex-shrink: 0;
     border-radius: 18px 18px 0 0;
@@ -238,7 +238,7 @@ const BarberSamplePage: React.FC = () => {
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 22px 22px 24px;
+    padding: 22px 26px 28px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
@@ -324,12 +324,10 @@ const BarberSamplePage: React.FC = () => {
 
         <aside className={`bsp-card ${!collapsedMobile ? 'expanded' : ''}`}>
           <div className="bsp-mobile-header">
-            <span className="bsp-mobile-header-text">Yours in 24 hours.</span>
+            <span className="bsp-mobile-header-text">A Sample</span>
             <button className="bsp-mobile-header-close" onClick={() => setCollapsedMobile(true)} aria-label="Close">&times;</button>
           </div>
           <div className="bsp-card-body">
-          <div className="bsp-badge">A sample &middot; built for a client</div>
-
           <h2 className="bsp-title">
             This is a sample site. <em>Yours can be done in 24 hours.</em>
           </h2>
@@ -339,7 +337,22 @@ const BarberSamplePage: React.FC = () => {
 
           <div className="bsp-rule" />
 
-          {/* Pricing FIRST so the toggle + tiers are above the fold */}
+          {/* What you get FIRST (above pricing, per request) */}
+          <h3 className="bsp-list-eyebrow">What you get</h3>
+          <ul className="bsp-list">
+            {BENEFITS.map(b => (
+              <li key={b.title}>
+                <span className="bsp-bullet-rule" />
+                <div className="bsp-bullet-body">
+                  <strong>{b.title}</strong>
+                  <span>{b.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="bsp-rule" />
+
           <div className="bsp-toggle" role="tablist" aria-label="Billing period">
             <button role="tab" aria-selected={plan === 'monthly'} className={plan === 'monthly' ? 'active' : ''} onClick={() => setPlan('monthly')}>Monthly</button>
             <button role="tab" aria-selected={plan === 'yearly'} className={plan === 'yearly' ? 'active' : ''} onClick={() => setPlan('yearly')}>Yearly <span className="bsp-save">Save 40%</span></button>
@@ -381,21 +394,6 @@ const BarberSamplePage: React.FC = () => {
               Secure Stripe &middot; cancel anytime
             </div>
           </div>
-
-          <div className="bsp-rule" />
-
-          <h3 className="bsp-list-eyebrow">What you get</h3>
-          <ul className="bsp-list">
-            {BENEFITS.map(b => (
-              <li key={b.title}>
-                <span className="bsp-bullet-rule" />
-                <div className="bsp-bullet-body">
-                  <strong>{b.title}</strong>
-                  <span>{b.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
 
           <div className="bsp-rule" />
 
