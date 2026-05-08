@@ -180,18 +180,13 @@ const BarberSamplePage: React.FC = () => {
     };
   }, [introVisible, collapsedMobile, checkoutOpen]);
 
-  // Intro banner: auto-dismiss after 5s OR as soon as the iframe takes
-  // focus (cross-origin iframe scroll/click steals window focus on the
-  // parent — that's our 'visitor engaged' signal).
+  // Intro banner: auto-dismiss after 10s. The banner is informational
+  // only (pointer-events: none + no click handler), so no other code
+  // path can block the visitor — the timer is the sole dismissal route.
   useEffect(() => {
     if (!introVisible) return;
-    const dismiss = () => setIntroVisible(false);
-    const timeoutId = window.setTimeout(dismiss, 10000);
-    window.addEventListener('blur', dismiss);
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.removeEventListener('blur', dismiss);
-    };
+    const timeoutId = window.setTimeout(() => setIntroVisible(false), 10000);
+    return () => window.clearTimeout(timeoutId);
   }, [introVisible]);
 
   // Lock body scroll + close-on-Escape while the mobile pricing modal is open
@@ -278,7 +273,7 @@ const BarberSamplePage: React.FC = () => {
 
 /* TIER ROWS — premium serif name + italic gold price */
 .bsp-tiers { display: flex; flex-direction: column; gap: 10px; }
-.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 12px; padding: 13px 15px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 12px; padding: 13px 15px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .bsp-tier:hover:not(:disabled) { border-color: rgba(212,166,74,0.45); background: linear-gradient(180deg, rgba(212,166,74,0.06), rgba(212,166,74,0.015)); transform: translateY(-1px); }
 .bsp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
 .bsp-tier-multi { background: linear-gradient(180deg, rgba(212,166,74,0.10), rgba(212,166,74,0.03)); border-color: rgba(212,166,74,0.40); box-shadow: 0 8px 24px rgba(212,166,74,0.10); }
@@ -312,7 +307,7 @@ const BarberSamplePage: React.FC = () => {
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 /* INTRO BANNER — wayfinding moment shown for the first ~5s before
@@ -331,25 +326,21 @@ const BarberSamplePage: React.FC = () => {
   border: 1px solid rgba(212,166,74,0.30);
   border-radius: 14px;
   color: #e9e1cf;
-  cursor: pointer;
   box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,166,74,0.06);
   font-family: 'DM Sans', sans-serif;
   animation: bspIntroIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
-  /* iOS: kill the 300ms tap-delay + tap-highlight so the touch event
-     completes immediately and the iframe behind starts receiving
-     touches on the very next swipe. */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  /* Banner is purely informational — let every pointer/touch event
+     pass through to whatever is underneath so nothing ever locks up
+     while the banner is on screen. */
+  pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
 }
 .bsp-intro-eyebrow { font-size: 9px; font-weight: 600; color: #d4a64a; letter-spacing: 0.20em; text-transform: uppercase; margin: 0 0 7px; }
 .bsp-intro-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 17px; line-height: 1.2; color: #f5ecd7; margin: 0 0 10px; }
 .bsp-intro-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
-.bsp-intro-chev { width: 24px; height: 24px; margin: 0 auto; border-radius: 999px; border: 1px solid rgba(212,166,74,0.45); display: flex; align-items: center; justify-content: center; color: #d4a64a; animation: bspIntroBounce 1.6s ease-in-out infinite; }
-.bsp-intro-chev svg { width: 12px; height: 12px; }
+.bsp-intro-hint { font-size: 10px; font-weight: 500; color: #847b66; letter-spacing: 0.10em; text-transform: uppercase; }
 @keyframes bspIntroIn { from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
-@keyframes bspIntroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 /* While the intro is visible, hold back the sticky CTA so visitors
    focus on the wayfinding moment first. */
@@ -543,19 +534,14 @@ const BarberSamplePage: React.FC = () => {
         {introVisible && (
           <div
             className="bsp-intro"
-            role="dialog"
+            role="status"
             aria-label="Welcome to the sample"
-            onPointerDown={() => setIntroVisible(false)}
           >
             <div className="bsp-intro-eyebrow">A sample &middot; built for a client</div>
             <h2 className="bsp-intro-title">
               A sample barbershop site <em>built for a client.</em>
             </h2>
-            <div className="bsp-intro-chev" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </div>
+            <div className="bsp-intro-hint">Scroll down to see the whole site</div>
           </div>
         )}
 
