@@ -1,19 +1,65 @@
 {
     "rewrites": [
-        { "source": "/1", "destination": "/index.html" },
-        { "source": "/aus", "destination": "/index.html" },
-        { "source": "/10", "destination": "/index.html" },
-        { "source": "/5", "destination": "/index.html" },
-        { "source": "/barber-5", "destination": "/index.html" },
-        { "source": "/barber-5-month", "destination": "/index.html" },
-        { "source": "/barber-trial", "destination": "/index.html" },
-        { "source": "/19", "destination": "/index.html" },
-        { "source": "/barber", "destination": "/index.html" },
-        { "source": "/local-business", "destination": "/index.html" },
-        { "source": "/freewebsite", "destination": "/index.html" },
-        { "source": "/freewebsite49", "destination": "/index.html" },
-        { "source": "/generator", "destination": "/index.html" },
-        { "source": "/barberleads", "destination": "/index.html" }
+        {
+            "source": "/1",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/aus",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/10",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/5",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber-5",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber-5-month",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber-trial",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/19",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/local-business",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/freewebsite",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/freewebsite49",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/generator",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barberleads",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber-sample",
+            "destination": "/index.html"
+        }
     ],
     "functions": {
         "api/webhook.ts": {
@@ -36,7 +82,10 @@
         {
             "source": "/gallery/(.*)",
             "headers": [
-                { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                }
             ]
         }
     ]
