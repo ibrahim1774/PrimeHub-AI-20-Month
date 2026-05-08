@@ -21,12 +21,10 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
 };
 
 const BENEFITS = [
-  { icon: '🎨', title: 'Custom branding', desc: 'Your logo, your colors, your photos — not a template.' },
-  { icon: '📅', title: 'Booking link wired up', desc: 'Vagaro, Booksy, Square — connected on every page.' },
-  { icon: '📱', title: 'Mobile-first design', desc: 'Looks sharp on every screen, loads in under a second.' },
-  { icon: '🔍', title: 'Google-ready SEO', desc: 'Schema markup, meta tags, fast pages — set up to rank.' },
-  { icon: '🔧', title: 'We maintain it', desc: 'Need a change? Email us. We update it for you.' },
-  { icon: '🌐', title: 'Custom domain', desc: 'Use your own .com or get a free Vercel subdomain.' },
+  { icon: '🎨', title: 'Fully custom', desc: 'Your branding, photos, logo, booking link — not a template.' },
+  { icon: '📱', title: 'Mobile + SEO ready', desc: 'Sharp on every screen, schema markup, set up to rank.' },
+  { icon: '🔧', title: 'We maintain it', desc: 'Need a change? Email us. We handle it.' },
+  { icon: '🌐', title: 'Custom domain', desc: 'Your own .com or a free Vercel subdomain.' },
 ];
 
 const STEPS = [
@@ -74,6 +72,8 @@ const BarberSamplePage: React.FC = () => {
 .bsp-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
 
 /* DESKTOP STICKY CARD — mid-right */
+.bsp-mobile-header { display: none; }
+.bsp-card-body { display: contents; }
 .bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 40px); overflow-y: auto; background: linear-gradient(160deg, #0f0f1a 0%, #0a0a14 50%, #0d1117 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px 22px 18px; color: #e2e8f0; z-index: 9990; box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,166,74,0.10); animation: bspIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.3) transparent; }
 .bsp-card::-webkit-scrollbar { width: 6px; }
 .bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.3); border-radius: 3px; }
@@ -145,7 +145,56 @@ const BarberSamplePage: React.FC = () => {
 
 @media (max-width: 720px) {
   .bsp-card { display: none; }
-  .bsp-card.expanded { display: block; position: fixed; inset: 12px; top: auto; bottom: 12px; transform: none; width: auto; right: 12px; left: 12px; max-height: calc(100vh - 24px); }
+  .bsp-card.expanded {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    top: 0; right: 0; bottom: 0; left: 0;
+    transform: none;
+    width: auto;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    overflow: hidden;
+  }
+  .bsp-card.expanded .bsp-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    border-bottom: 1px solid rgba(212,166,74,0.20);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .bsp-card.expanded .bsp-mobile-header-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    color: #d4a64a;
+    font-style: italic;
+  }
+  .bsp-card.expanded .bsp-mobile-header-close {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #cbd5e1;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .bsp-card.expanded .bsp-card-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 18px 16px;
+    -webkit-overflow-scrolling: touch;
+  }
   .bsp-mobile-bar { display: flex; }
   .bsp-mobile-bar.hidden { display: none; }
 }
@@ -213,6 +262,11 @@ const BarberSamplePage: React.FC = () => {
         <iframe src={SAMPLE_URL} title="Sample Barber Shop Site" className="bsp-iframe" loading="eager" />
 
         <aside className={`bsp-card ${!collapsedMobile ? 'expanded' : ''}`}>
+          <div className="bsp-mobile-header">
+            <span className="bsp-mobile-header-text">Yours in 24 hours.</span>
+            <button className="bsp-mobile-header-close" onClick={() => setCollapsedMobile(true)} aria-label="Close">×</button>
+          </div>
+          <div className="bsp-card-body">
           <div className="bsp-badge">
             <span className="bsp-badge-dot" />
             Sample Site &middot; Built for a Real Client
@@ -300,11 +354,7 @@ const BarberSamplePage: React.FC = () => {
             </div>
           </div>
 
-          {!collapsedMobile && (
-            <button onClick={() => setCollapsedMobile(true)} style={{ marginTop: 12, width: '100%', padding: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 8, color: '#cbd5e1', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-              Hide
-            </button>
-          )}
+          </div>
         </aside>
 
         {/* MOBILE BIGGER BOTTOM BAR */}
