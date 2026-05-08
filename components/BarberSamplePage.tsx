@@ -21,9 +21,9 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
 };
 
 const BENEFITS = [
-  { icon: '🎨', title: 'Made for you', desc: 'Your photos, logo, colors. Not a template.' },
-  { icon: '📱', title: 'Phone-ready · Google-ready', desc: 'Looks sharp on any screen. Built to rank.' },
-  { icon: '🔧', title: 'We do the edits', desc: 'Need a change? Email us. We fix it.' },
+  { title: 'Made for you', desc: 'Your photos, your logo, your colors.' },
+  { title: 'Looks great on any phone', desc: 'Fast. Clean. Built to be found on Google.' },
+  { title: 'We handle the changes', desc: 'Want to swap a photo? Just email us.' },
 ];
 
 const STEPS = [
@@ -83,82 +83,90 @@ const BarberSamplePage: React.FC = () => {
   return (
     <>
       <style>{`
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
-.bsp-page { position: relative; width: 100vw; height: 100vh; background: #0a0a0a; font-family: 'DM Sans', system-ui, sans-serif; overflow: hidden; }
+.bsp-page { position: relative; width: 100vw; height: 100vh; background: #0a0a0a; font-family: 'Cormorant Garamond', 'Instrument Serif', serif; overflow: hidden; }
 .bsp-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+/* Transparent shield over the iframe — visitors see the sample (cuts gallery, background, everything) but can't click 'Book Now' or any link / form. */
+.bsp-iframe-shield { position: absolute; inset: 0; z-index: 1; background: transparent; cursor: default; }
+/* Subtle vignette on the right edge so the desktop sticky card reads cleanly over the sample */
+.bsp-iframe-vignette { position: absolute; top: 0; bottom: 0; right: 0; width: 460px; pointer-events: none; background: linear-gradient(270deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 50%, rgba(0,0,0,0) 100%); z-index: 2; }
+@media (max-width: 720px) { .bsp-iframe-vignette { display: none; } }
 
-/* DESKTOP STICKY CARD — mid-right */
+/* DESKTOP STICKY CARD — mid-right, premium dark + warm gold */
 .bsp-mobile-header { display: none; }
 .bsp-card-body { display: contents; }
-.bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 40px); overflow-y: auto; background: linear-gradient(160deg, #0f0f1a 0%, #0a0a14 50%, #0d1117 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px 22px 18px; color: #e2e8f0; z-index: 9990; box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,166,74,0.10); animation: bspIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.3) transparent; }
-.bsp-card::-webkit-scrollbar { width: 6px; }
-.bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.3); border-radius: 3px; }
-@keyframes bspIn { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+.bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 360px; max-height: calc(100vh - 40px); overflow-y: auto; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%); border: 1px solid rgba(212,166,74,0.18); border-radius: 14px; padding: 22px 22px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.05), inset 0 1px 0 rgba(255,255,255,0.04); animation: bspIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.25) transparent; font-family: 'DM Sans', sans-serif; }
+.bsp-card::-webkit-scrollbar { width: 5px; }
+.bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.22); border-radius: 3px; }
+@keyframes bspIn { from { opacity: 0; transform: translateY(-50%) translateX(16px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
 
-.bsp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.22); color: #22c55e; padding: 4px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
-.bsp-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: bspPulse 2s infinite; }
-@keyframes bspPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* Refined gold ribbon — replaces the pulsing-dot SaaS badge */
+.bsp-badge { display: flex; align-items: center; gap: 10px; color: #d4a64a; font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 14px; }
+.bsp-badge::before, .bsp-badge::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.45), transparent); }
+.bsp-badge-dot { display: none; }
 
-.bsp-title { font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.18; color: #fff; margin: 0 0 6px; }
-.bsp-title em { color: #d4a64a; font-style: italic; }
-.bsp-sub { font-size: 12.5px; line-height: 1.5; color: #94a3b8; margin: 0 0 12px; }
+.bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 26px; line-height: 1.15; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
+.bsp-title em { color: #d4a64a; font-style: italic; font-weight: 400; }
+.bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 12.5px; line-height: 1.55; color: #a39880; margin: 0 0 14px; }
 
-/* BOX CONTAINERS for benefits + steps */
-.bsp-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 12px 10px; margin-bottom: 10px; }
-.bsp-box-title { font-size: 9.5px; font-weight: 800; color: #d4a64a; text-transform: uppercase; letter-spacing: 0.16em; margin: 0 0 8px; }
-.bsp-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.bsp-box li { display: flex; gap: 9px; align-items: flex-start; line-height: 1.35; }
-.bsp-bullet-icon { flex-shrink: 0; font-size: 13px; line-height: 1; padding-top: 1px; width: 20px; text-align: center; }
-.bsp-bullet-num { flex-shrink: 0; font-family: 'Instrument Serif', serif; font-size: 14px; font-style: italic; color: #d4a64a; line-height: 1; padding-top: 2px; min-width: 22px; }
-.bsp-bullet-body strong { display: block; font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 1px; }
-.bsp-bullet-body span { display: block; font-size: 11px; color: #94a3b8; line-height: 1.4; }
+/* Hairline divider used between sections in the card */
+.bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 14px 0 12px; }
 
-/* PLAN TOGGLE */
-.bsp-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 3px; margin-bottom: 10px; }
-.bsp-toggle button { flex: 1; padding: 8px 8px; background: transparent; border: none; color: #94a3b8; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 7px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-.bsp-toggle button.active { background: rgba(212,166,74,0.15); color: #d4a64a; }
-.bsp-save { background: #d4a64a; color: #0a0a0a; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.05em; }
+/* List blocks — no boxes, just refined typography on dark */
+.bsp-list { display: flex; flex-direction: column; gap: 11px; margin: 0 0 4px; padding: 0; list-style: none; }
+.bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 700; color: #d4a64a; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 8px; }
+.bsp-list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.4; }
+.bsp-bullet-rule { flex-shrink: 0; width: 18px; height: 1px; background: #d4a64a; opacity: 0.85; margin-top: 8px; }
+.bsp-bullet-num { flex-shrink: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 18px; color: #d4a64a; line-height: 1; min-width: 22px; padding-top: 1px; }
+.bsp-bullet-body strong { display: block; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; color: #f5ecd7; margin-bottom: 2px; letter-spacing: 0.005em; }
+.bsp-bullet-body span { display: block; font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: #a39880; line-height: 1.5; }
 
-/* TIER ROWS */
-.bsp-tiers { display: flex; flex-direction: column; gap: 8px; }
-.bsp-tier { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 11px 12px; text-align: left; color: #e2e8f0; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
-.bsp-tier:hover:not(:disabled) { background: rgba(212,166,74,0.06); border-color: rgba(212,166,74,0.30); transform: translateY(-1px); }
+/* PLAN TOGGLE — minimal underline pair, no chunky pill */
+.bsp-toggle { display: inline-flex; gap: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(212,166,74,0.18); align-self: flex-start; }
+.bsp-toggle button { padding: 8px 14px; background: transparent; border: none; color: #847b66; font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; letter-spacing: 0.08em; text-transform: uppercase; position: relative; }
+.bsp-toggle button.active { color: #d4a64a; }
+.bsp-toggle button.active::after { content: ''; position: absolute; left: 10%; right: 10%; bottom: -1px; height: 1px; background: #d4a64a; }
+.bsp-save { background: transparent; color: #d4a64a; font-size: 9px; font-weight: 700; padding: 0; border: 1px solid rgba(212,166,74,0.45); padding: 2px 6px; border-radius: 999px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* TIER ROWS — refined, less SaaS */
+.bsp-tiers { display: flex; flex-direction: column; gap: 10px; }
+.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 10px; padding: 14px 14px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.bsp-tier:hover:not(:disabled) { border-color: rgba(212,166,74,0.45); background: linear-gradient(180deg, rgba(212,166,74,0.06), rgba(212,166,74,0.015)); transform: translateY(-1px); }
 .bsp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
-.bsp-tier-multi { background: linear-gradient(135deg, rgba(212,166,74,0.10), rgba(212,166,74,0.04)); border-color: rgba(212,166,74,0.30); }
-.bsp-tier-multi:hover:not(:disabled) { background: linear-gradient(135deg, rgba(212,166,74,0.18), rgba(212,166,74,0.08)); }
-.bsp-tier-left { display: flex; flex-direction: column; gap: 2px; }
-.bsp-tier-name { font-size: 12.5px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
-.bsp-tier-desc { font-size: 10.5px; color: #94a3b8; line-height: 1.4; }
-.bsp-tier-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex-shrink: 0; }
-.bsp-tier-price { font-family: 'Instrument Serif', serif; font-size: 20px; color: #d4a64a; font-style: italic; line-height: 1; }
-.bsp-tier-per { font-size: 10px; color: #64748b; }
+.bsp-tier-multi { background: linear-gradient(180deg, rgba(212,166,74,0.10), rgba(212,166,74,0.03)); border-color: rgba(212,166,74,0.40); box-shadow: 0 8px 24px rgba(212,166,74,0.10); }
+.bsp-tier-multi:hover:not(:disabled) { background: linear-gradient(180deg, rgba(212,166,74,0.16), rgba(212,166,74,0.05)); }
+.bsp-tier-left { display: flex; flex-direction: column; gap: 3px; }
+.bsp-tier-name { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 16px; color: #f5ecd7; letter-spacing: 0; }
+.bsp-tier-desc { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #a39880; line-height: 1.45; }
+.bsp-tier-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0; flex-shrink: 0; }
+.bsp-tier-price { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 24px; color: #d4a64a; line-height: 1; }
+.bsp-tier-per { font-family: 'DM Sans', sans-serif; font-size: 10px; color: #847b66; letter-spacing: 0.04em; margin-top: 3px; }
 .bsp-tier-wrap { position: relative; }
-.bsp-recommended { position: absolute; top: -8px; right: 12px; background: #d4a64a; color: #0a0a0a; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase; z-index: 1; }
+.bsp-recommended { position: absolute; top: -7px; right: 14px; background: #d4a64a; color: #0a0907; font-family: 'DM Sans', sans-serif; font-size: 8.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; letter-spacing: 0.18em; text-transform: uppercase; z-index: 1; }
 
-.bsp-foot { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 3px; }
-.bsp-foot-row { font-size: 10.5px; color: #64748b; display: flex; align-items: center; gap: 5px; line-height: 1.4; }
+.bsp-foot { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(212,166,74,0.14); display: flex; flex-direction: column; gap: 4px; }
+.bsp-foot-row { font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: #847b66; display: flex; align-items: center; gap: 6px; line-height: 1.4; letter-spacing: 0.02em; }
 .bsp-foot-row svg { flex-shrink: 0; color: #d4a64a; }
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-/* MOBILE BOTTOM BAR — BIGGER */
-.bsp-mobile-bar { display: none; position: fixed; bottom: 14px; left: 14px; right: 14px; background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%); border: 1px solid rgba(212,166,74,0.35); border-radius: 18px; padding: 18px 20px; color: #e2e8f0; z-index: 9990; box-shadow: 0 22px 56px rgba(0,0,0,0.55); flex-direction: column; gap: 12px; font-family: 'DM Sans', sans-serif; }
+/* MOBILE BOTTOM BAR — refined dark + gold ribbon */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 14px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.28); border-radius: 14px; padding: 14px 16px 14px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 56px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
-.bsp-mobile-pulse { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px rgba(34,197,94,0.6); animation: bspPulse 2s infinite; flex-shrink: 0; }
-.bsp-mobile-eyebrow { font-size: 10px; font-weight: 700; color: #22c55e; letter-spacing: 0.14em; text-transform: uppercase; }
+.bsp-mobile-pulse { display: none; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-size: 16px; font-weight: 600; line-height: 1.3; color: #f1f5f9; }
-.bsp-mobile-bar-text strong { color: #fff; }
-.bsp-mobile-bar-text em { color: #d4a64a; font-style: normal; font-weight: 700; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1.05em; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 19px; line-height: 1.2; color: #f5ecd7; letter-spacing: -0.005em; }
+.bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
+.bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
-.bsp-mobile-bullets { display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px; }
-.bsp-mobile-bullet { font-size: 12px; color: #cbd5e1; display: flex; gap: 8px; line-height: 1.35; }
-.bsp-mobile-bullet-check { color: #d4a64a; flex-shrink: 0; font-weight: 700; }
+.bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: linear-gradient(135deg, #d4a64a, #e8c074); color: #0a0a0a; border: none; padding: 14px 18px; font-size: 15px; font-weight: 700; border-radius: 12px; cursor: pointer; letter-spacing: 0.02em; box-shadow: 0 6px 18px rgba(212,166,74,0.32); width: 100%; }
-.bsp-mobile-bar-btn:hover { transform: translateY(-1px); }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
+.bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 @media (max-width: 720px) {
   .bsp-card { display: none; }
@@ -298,7 +306,18 @@ const BarberSamplePage: React.FC = () => {
       `}</style>
 
       <div className="bsp-page">
-        <iframe src={SAMPLE_URL} title="Sample Barber Shop Site" className="bsp-iframe" loading="eager" />
+        <iframe
+          src={SAMPLE_URL}
+          title="Sample Barber Shop Site"
+          className="bsp-iframe"
+          loading="eager"
+          sandbox="allow-same-origin allow-scripts"
+          referrerPolicy="no-referrer"
+        />
+        {/* Click-shield: transparent layer that swallows every tap on the
+            iframe so 'Book Now' and any other link can't navigate. */}
+        <div className="bsp-iframe-shield" aria-hidden="true" />
+        <div className="bsp-iframe-vignette" aria-hidden="true" />
 
         <div
           className={`bsp-card-backdrop ${!collapsedMobile ? 'is-open' : ''}`}
@@ -312,46 +331,44 @@ const BarberSamplePage: React.FC = () => {
             <button className="bsp-mobile-header-close" onClick={() => setCollapsedMobile(true)} aria-label="Close">×</button>
           </div>
           <div className="bsp-card-body">
-          <div className="bsp-badge">
-            <span className="bsp-badge-dot" />
-            Sample Site &middot; Built for a Real Client
-          </div>
+          <div className="bsp-badge">A sample &middot; built for a client</div>
+
           <h2 className="bsp-title">
             We built this site. <em>Yours can be live in 24 hours.</em>
           </h2>
           <p className="bsp-sub">
-            Your photos, logo, and booking link. Design is free — you just pay hosting.
+            Your photos, your logo, your booking link. Design is on us — you only cover hosting.
           </p>
 
-          <div className="bsp-box">
-            <h3 className="bsp-box-title">What you get</h3>
-            <ul>
-              {BENEFITS.map(b => (
-                <li key={b.title}>
-                  <span className="bsp-bullet-icon">{b.icon}</span>
-                  <div className="bsp-bullet-body">
-                    <strong>{b.title}</strong>
-                    <span>{b.desc}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <h3 className="bsp-list-eyebrow">What you get</h3>
+          <ul className="bsp-list">
+            {BENEFITS.map(b => (
+              <li key={b.title}>
+                <span className="bsp-bullet-rule" />
+                <div className="bsp-bullet-body">
+                  <strong>{b.title}</strong>
+                  <span>{b.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-          <div className="bsp-box">
-            <h3 className="bsp-box-title">How it works</h3>
-            <ul>
-              {STEPS.map(s => (
-                <li key={s.n}>
-                  <span className="bsp-bullet-num">{s.n}</span>
-                  <div className="bsp-bullet-body">
-                    <strong>{s.title}</strong>
-                    <span>{s.desc}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="bsp-rule" />
+
+          <h3 className="bsp-list-eyebrow">How it works</h3>
+          <ul className="bsp-list">
+            {STEPS.map(s => (
+              <li key={s.n}>
+                <span className="bsp-bullet-num">{s.n}</span>
+                <div className="bsp-bullet-body">
+                  <strong>{s.title}</strong>
+                  <span>{s.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="bsp-rule" />
 
           <div className="bsp-toggle" role="tablist" aria-label="Billing period">
             <button role="tab" aria-selected={plan === 'monthly'} className={plan === 'monthly' ? 'active' : ''} onClick={() => setPlan('monthly')}>Monthly</button>
@@ -398,25 +415,18 @@ const BarberSamplePage: React.FC = () => {
           </div>
         </aside>
 
-        {/* MOBILE BIGGER BOTTOM BAR */}
+        {/* MOBILE BOTTOM RIBBON — refined */}
         <div className={`bsp-mobile-bar ${collapsedMobile ? '' : 'hidden'}`}>
           <div className="bsp-mobile-top">
-            <span className="bsp-mobile-pulse" />
-            <span className="bsp-mobile-eyebrow">Sample Site &middot; Built for a Real Barber Client</span>
+            <span className="bsp-mobile-eyebrow">A sample &middot; built for a client</span>
           </div>
 
           <div className="bsp-mobile-bar-text">
-            <strong>Yours can go live in 24 hours</strong> &mdash; <em>from $10/mo</em>
-          </div>
-
-          <div className="bsp-mobile-bullets">
-            <div className="bsp-mobile-bullet"><span className="bsp-mobile-bullet-check">✓</span><span>Custom branding · your photos, logo, booking link</span></div>
-            <div className="bsp-mobile-bullet"><span className="bsp-mobile-bullet-check">✓</span><span>Mobile-ready · Google-SEO · live in 48 hrs</span></div>
-            <div className="bsp-mobile-bullet"><span className="bsp-mobile-bullet-check">✓</span><span>We maintain it for you · cancel anytime</span></div>
+            Your barbershop, online <em>in 24 hours.</em>
           </div>
 
           <button className="bsp-mobile-bar-btn" onClick={() => setCollapsedMobile(false)}>
-            See Pricing &amp; Get Started &rarr;
+            See pricing
           </button>
         </div>
 
