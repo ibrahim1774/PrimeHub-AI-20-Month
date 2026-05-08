@@ -145,7 +145,7 @@ const BarberSamplePage: React.FC = () => {
 /* DESKTOP STICKY CARD — premium dark + warm gold */
 .bsp-mobile-header { display: none; }
 .bsp-card-body { display: contents; }
-.bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 40px); overflow-y: auto; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%); border: 1px solid rgba(212,166,74,0.18); border-radius: 16px; padding: 26px 30px 22px; color: #e9e1cf; z-index: 9990; box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.05), inset 0 1px 0 rgba(255,255,255,0.04); animation: bspIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.25) transparent; font-family: 'DM Sans', sans-serif; }
+.bsp-card { position: fixed; top: 50%; right: 18px; transform: translateY(-50%); width: 348px; max-height: calc(100vh - 36px); overflow-y: auto; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%); border: 1px solid rgba(212,166,74,0.18); border-radius: 14px; padding: 20px 24px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.05), inset 0 1px 0 rgba(255,255,255,0.04); animation: bspIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.25) transparent; font-family: 'DM Sans', sans-serif; }
 .bsp-card::-webkit-scrollbar { width: 5px; }
 .bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.22); border-radius: 3px; }
 @keyframes bspIn { from { opacity: 0; transform: translateY(-50%) translateX(16px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
@@ -158,11 +158,11 @@ const BarberSamplePage: React.FC = () => {
 .bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 19px; line-height: 1.18; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
 .bsp-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
 .bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 11.5px; line-height: 1.5; color: #a39880; margin: 0 0 10px; }
-.bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 12px 0; }
+.bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 10px 0; }
 
 /* List blocks — refined typography on dark, no boxy containers */
-.bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 9px; }
-.bsp-list { display: flex; flex-direction: column; gap: 9px; margin: 0 0 4px; padding: 0; list-style: none; }
+.bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 7px; }
+.bsp-list { display: flex; flex-direction: column; gap: 7px; margin: 0 0 2px; padding: 0; list-style: none; }
 .bsp-list li { display: flex; gap: 11px; align-items: flex-start; line-height: 1.4; }
 .bsp-bullet-rule { flex-shrink: 0; width: 16px; height: 1px; background: #d4a64a; opacity: 0.85; margin-top: 7px; }
 .bsp-bullet-num { flex-shrink: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 16px; color: #d4a64a; line-height: 1; min-width: 22px; padding-top: 1px; }
@@ -177,8 +177,8 @@ const BarberSamplePage: React.FC = () => {
 .bsp-save { background: transparent; color: #d4a64a; font-size: 9px; font-weight: 700; border: 1px solid rgba(212,166,74,0.45); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.10em; text-transform: uppercase; }
 
 /* TIER ROWS — premium serif name + italic gold price */
-.bsp-tiers { display: flex; flex-direction: column; gap: 10px; }
-.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 12px; padding: 13px 15px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.bsp-tiers { display: flex; flex-direction: column; gap: 8px; }
+.bsp-tier { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(212,166,74,0.16); border-radius: 11px; padding: 11px 14px; text-align: left; color: #e9e1cf; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
 .bsp-tier:hover:not(:disabled) { border-color: rgba(212,166,74,0.45); background: linear-gradient(180deg, rgba(212,166,74,0.06), rgba(212,166,74,0.015)); transform: translateY(-1px); }
 .bsp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
 .bsp-tier-multi { background: linear-gradient(180deg, rgba(212,166,74,0.10), rgba(212,166,74,0.03)); border-color: rgba(212,166,74,0.40); box-shadow: 0 8px 24px rgba(212,166,74,0.10); }
@@ -192,27 +192,27 @@ const BarberSamplePage: React.FC = () => {
 .bsp-tier-wrap { position: relative; }
 .bsp-recommended { position: absolute; top: -7px; right: 14px; background: #d4a64a; color: #0a0907; font-family: 'DM Sans', sans-serif; font-size: 8.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.18em; text-transform: uppercase; z-index: 1; }
 
-.bsp-foot { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(212,166,74,0.14); display: flex; flex-direction: column; gap: 5px; }
+.bsp-foot { margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(212,166,74,0.14); display: flex; flex-direction: column; gap: 4px; }
 .bsp-foot-row { font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: #847b66; display: flex; align-items: center; gap: 7px; line-height: 1.4; letter-spacing: 0.02em; }
 .bsp-foot-row svg { flex-shrink: 0; color: #d4a64a; }
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-/* MOBILE BOTTOM BAR — premium dark + gold */
-.bsp-mobile-bar { display: none; position: fixed; bottom: 16px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 18px; padding: 18px 20px; color: #e9e1cf; z-index: 9990; box-shadow: 0 28px 64px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 14px; font-family: 'DM Sans', sans-serif; }
+/* MOBILE BOTTOM BAR — premium dark + gold (compact) */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 12px; left: 12px; right: 12px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 14px; padding: 13px 16px 13px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 52px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-pulse { display: none; }
-.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 23px; line-height: 1.18; color: #f5ecd7; letter-spacing: -0.005em; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 18px; line-height: 1.18; color: #f5ecd7; letter-spacing: -0.005em; }
 .bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
 .bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 11px 18px; font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 @media (max-width: 720px) {
@@ -278,7 +278,7 @@ const BarberSamplePage: React.FC = () => {
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 6px 26px 24px;
+    padding: 4px 22px 20px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
