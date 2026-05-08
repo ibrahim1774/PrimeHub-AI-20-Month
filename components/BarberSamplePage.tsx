@@ -4,7 +4,10 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const SAMPLE_URL = 'https://dist-black-nine-17.vercel.app/';
+// Routed through our own origin so the iframe is same-origin with the
+// parent and we can drive `iframe.contentWindow.scrollTo` for the
+// auto-scroll loop. See api/sample-proxy.ts for the proxy itself.
+const SAMPLE_URL = '/api/sample-proxy';
 
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
@@ -78,6 +81,9 @@ const BarberSamplePage: React.FC = () => {
 
   const closeCheckout = () => { setCheckoutOpen(false); setClientSecret(null); };
 
+  // Iframe (auto-scroll target)
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
   // Stripe-modal scroll-hint chip
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [scrollHintVisible, setScrollHintVisible] = useState(false);
@@ -111,6 +117,68 @@ const BarberSamplePage: React.FC = () => {
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   };
+
+  // Same-origin auto-scroll loop. The iframe is loaded through
+  // /api/sample-proxy so the browser treats it as same-origin with the
+  // parent — meaning we can call iframe.contentWindow.scrollTo() and
+  // read its scroll dimensions. Pause while the intro banner, mobile
+  // pricing modal, or Stripe checkout modal are visible; reach the
+  // bottom and stop (don't loop, so the visitor can read the footer).
+  useEffect(() => {
+    const paused = introVisible || !collapsedMobile || checkoutOpen;
+    if (paused) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const SPEED_PX_PER_SEC = 70;
+    let frame = 0;
+    let last = performance.now();
+    let stopped = false;
+
+    const tick = (now: number) => {
+      if (stopped) return;
+      const dt = Math.min(0.1, (now - last) / 1000); // clamp on tab-switch
+      last = now;
+      try {
+        const win = iframe.contentWindow;
+        const doc = iframe.contentDocument;
+        if (!win || !doc) {
+          frame = requestAnimationFrame(tick);
+          return;
+        }
+        const max = doc.documentElement.scrollHeight - win.innerHeight;
+        const next = Math.min(max, win.scrollY + SPEED_PX_PER_SEC * dt);
+        win.scrollTo(0, next);
+        if (next >= max) return; // reached the bottom
+      } catch {
+        // Cross-origin error means the proxy didn't take effect; bail
+        // quietly rather than spamming the console.
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+
+    // Wait for the iframe to actually load before kicking off — also
+    // poll at small intervals in case the load event fired before the
+    // effect ran (e.g. if the proxy response was cached).
+    const start = () => {
+      if (stopped) return;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
+    const onLoad = () => start();
+    iframe.addEventListener('load', onLoad);
+    // The iframe might already be loaded by the time this effect runs
+    // (cached response / fast network). Schedule a delayed kick-off.
+    const kickoffId = window.setTimeout(start, 1200);
+
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(frame);
+      window.clearTimeout(kickoffId);
+      iframe.removeEventListener('load', onLoad);
+    };
+  }, [introVisible, collapsedMobile, checkoutOpen]);
 
   // Intro banner: auto-dismiss after 5s OR as soon as the iframe takes
   // focus (cross-origin iframe scroll/click steals window focus on the
@@ -155,7 +223,8 @@ const BarberSamplePage: React.FC = () => {
 .bsp-page { position: relative; width: 100vw; height: 100vh; background: #0a0907; font-family: 'DM Sans', system-ui, sans-serif; overflow: hidden; }
 /* Visually compress the embedded sample by ~12% (87.5% scale).
    transform-origin top-left + 1/scale on width/height keeps the
-   scaled iframe filling the viewport exactly. */
+   scaled iframe filling the viewport exactly. pointer-events: none
+   so the auto-scroll loop isn't fighting visitor touches. */
 .bsp-iframe {
   position: absolute;
   top: 0; left: 0;
@@ -165,6 +234,7 @@ const BarberSamplePage: React.FC = () => {
   background: #000;
   transform: scale(0.875);
   transform-origin: top left;
+  pointer-events: none;
 }
 @media (min-width: 1100px) {
   .bsp-iframe { width: 117.65%; height: 117.65%; transform: scale(0.85); }
@@ -466,6 +536,7 @@ const BarberSamplePage: React.FC = () => {
           loading="eager"
           sandbox="allow-same-origin allow-scripts"
           referrerPolicy="no-referrer"
+          ref={iframeRef}
         />
         <div className="bsp-iframe-vignette" aria-hidden="true" />
 
