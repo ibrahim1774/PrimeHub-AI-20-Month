@@ -36,6 +36,8 @@ interface Props {
   source: Source;
   ctaLabel?: string;
   topNotice?: string;
+  showIntroBanner?: boolean;
+  autoScroll?: boolean;
 }
 
 const BarberSamplePreview: React.FC<Props> = ({
@@ -43,6 +45,8 @@ const BarberSamplePreview: React.FC<Props> = ({
   source,
   ctaLabel = 'See pricing',
   topNotice,
+  showIntroBanner = true,
+  autoScroll = true,
 }) => {
   const [plan, setPlan] = useState<Plan>('monthly');
   const [collapsedMobile, setCollapsedMobile] = useState(true);
@@ -50,7 +54,7 @@ const BarberSamplePreview: React.FC<Props> = ({
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [introVisible, setIntroVisible] = useState(true);
+  const [introVisible, setIntroVisible] = useState(showIntroBanner);
   const [noticeVisible, setNoticeVisible] = useState(!!topNotice);
 
   const startCheckout = useCallback(async (tier: Tier) => {
@@ -134,6 +138,7 @@ const BarberSamplePreview: React.FC<Props> = ({
   // pricing modal, or Stripe checkout modal are visible; reach the
   // bottom and stop (don't loop, so the visitor can read the footer).
   useEffect(() => {
+    if (!autoScroll) return;
     const paused = introVisible || !collapsedMobile || checkoutOpen;
     if (paused) return;
     const iframe = iframeRef.current;
@@ -182,7 +187,7 @@ const BarberSamplePreview: React.FC<Props> = ({
       window.clearTimeout(kickoffId);
       iframe.removeEventListener('load', onLoad);
     };
-  }, [introVisible, collapsedMobile, checkoutOpen]);
+  }, [autoScroll, introVisible, collapsedMobile, checkoutOpen]);
 
   // Intro banner: auto-dismiss after 10s. The banner is informational
   // only (pointer-events: none + no click handler), so no other code
