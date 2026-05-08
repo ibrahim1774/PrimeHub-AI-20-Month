@@ -66,6 +66,27 @@ export default async function handler(req: any, res: any) {
             // about copy, addresses). Word-boundary match avoids
             // collisions like "Cambridgeshire".
             if (city) html = html.replace(/\bCambridge\b/g, escapeHtml(city));
+
+            // Strip Euphoria-specific provenance that doesn't apply to
+            // the visitor's shop (state + zip, est. year, neighborhood).
+            html = html
+                .replace(/,?\s*MA\s*02141/g, '')
+                .replace(/\b02141\b/g, '')
+                .replace(/\s*[·\-—]\s*Est\.\s*2013/gi, '')
+                .replace(/\bEst\.\s*2013\b/gi, '')
+                .replace(/\s+since\s+2013/gi, '')
+                .replace(/\bWellington-Harrington\b/g, '');
+
+            // Replace the upstream logo image with the visitor's shop
+            // name rendered in the same font family the page uses.
+            // Only when a shop name was provided.
+            if (shop) {
+                const safeShop = escapeHtml(shop);
+                html = html.replace(
+                    /<img\b[^>]*class="logo-img"[^>]*\/?>/g,
+                    `<span class="logo-img" style="font-family:'Newsreader',serif;font-size:22px;font-weight:600;letter-spacing:0.01em;color:inherit;display:inline-block;line-height:1;">${safeShop}</span>`,
+                );
+            }
         }
 
         // Inject `<base href="https://dist-black-nine-17.vercel.app/">` as the
