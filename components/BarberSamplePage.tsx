@@ -501,7 +501,7 @@ const BarberSamplePage: React.FC = () => {
           </div>
 
           <div className="bsp-mobile-bar-text">
-            This is a sample site &mdash; <em>yours can be done in 24 hours.</em>
+            This is a sample barber site design for our client &mdash; <em>yours can be done within 24 hours.</em>
           </div>
 
           <button className="bsp-mobile-bar-btn" onClick={() => setCollapsedMobile(false)}>
