@@ -11,7 +11,7 @@
 // That keeps the proxy cheap (one ~tens-of-KB HTML fetch per page load)
 // and avoids the visual breakage of also rewriting every asset URL.
 //
-// /barber-generator personalizes the sample by passing `?shop=…&phone=…`,
+// /barber-generator personalizes the sample by passing `?shop=…&phone=…&city=…`,
 // which triggers a string-replacement pass over the proxied HTML.
 
 const ORIGIN = 'https://dist-black-nine-17.vercel.app';
@@ -50,7 +50,8 @@ export default async function handler(req: any, res: any) {
         // visitor's shop name and phone before serving.
         const shop = (req.query?.shop || '').toString().trim().slice(0, 80);
         const phone = (req.query?.phone || '').toString().trim().slice(0, 40);
-        const personalize = !!(shop || phone);
+        const city = (req.query?.city || '').toString().trim().slice(0, 60);
+        const personalize = !!(shop || phone || city);
         if (personalize) {
             if (phone) {
                 const safe = escapeHtml(phone);
@@ -61,6 +62,10 @@ export default async function handler(req: any, res: any) {
                 if (digits) html = html.replace(/6179451137/g, digits);
             }
             if (shop) html = html.replace(/\bEuphoria\b/g, escapeHtml(shop));
+            // Cambridge, MA appears 35× in upstream copy (titles, meta,
+            // about copy, addresses). Word-boundary match avoids
+            // collisions like "Cambridgeshire".
+            if (city) html = html.replace(/\bCambridge\b/g, escapeHtml(city));
         }
 
         // Inject `<base href="https://dist-black-nine-17.vercel.app/">` as the

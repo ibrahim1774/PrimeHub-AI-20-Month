@@ -36,6 +36,10 @@ interface Props {
   source: Source;
   ctaLabel?: string;
   topNotice?: string;
+  /** Override the headline shown on the mobile sticky bottom bar. */
+  mobileBarText?: React.ReactNode;
+  /** Override the small eyebrow row on the mobile sticky bottom bar. */
+  mobileBarEyebrow?: string;
   showIntroBanner?: boolean;
   autoScroll?: boolean;
 }
@@ -45,6 +49,8 @@ const BarberSamplePreview: React.FC<Props> = ({
   source,
   ctaLabel = 'See pricing',
   topNotice,
+  mobileBarText,
+  mobileBarEyebrow,
   showIntroBanner = true,
   autoScroll = true,
 }) => {
@@ -649,12 +655,20 @@ const BarberSamplePreview: React.FC<Props> = ({
         </aside>
 
         <div className={`bsp-mobile-bar ${collapsedMobile ? '' : 'hidden'}`}>
-          <div className="bsp-mobile-top">
-            <span className="bsp-mobile-eyebrow">A sample &middot; built for a client</span>
-          </div>
+          {mobileBarEyebrow !== '' && (
+            <div className="bsp-mobile-top">
+              <span className="bsp-mobile-eyebrow">
+                {mobileBarEyebrow ?? 'A sample · built for a client'}
+              </span>
+            </div>
+          )}
 
           <div className="bsp-mobile-bar-text">
-            This is a sample barber site design for our client &mdash; <em>yours can be done within 24 hours.</em>
+            {mobileBarText ?? (
+              <>
+                This is a sample barber site design for our client &mdash; <em>yours can be done within 24 hours.</em>
+              </>
+            )}
           </div>
 
           <button className="bsp-mobile-bar-btn" onClick={() => setCollapsedMobile(false)}>
