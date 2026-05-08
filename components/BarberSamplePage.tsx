@@ -43,11 +43,26 @@ const BarberSamplePage: React.FC = () => {
   const startCheckout = useCallback(async (tier: Tier) => {
     setLoading(true);
     setError(null);
+
+    // Fire Meta Pixel InitiateCheckout (browser-side, dedups w/ CAPI on session id later)
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      const monthlyValue = tier === 'multi' ? 10 : 5;
+      const yearlyValue  = tier === 'multi' ? 72 : 36;
+      const value = plan === 'yearly' ? yearlyValue : monthlyValue;
+      const eventID = `ic_barberSample_${tier}_${plan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      (window as any).fbq('track', 'InitiateCheckout', {
+        value,
+        currency: 'USD',
+        content_name: tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page',
+        content_category: 'subscription',
+      }, { eventID });
+    }
+
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan, source: 'barberFiveMonth', tier, embedded: true }),
+        body: JSON.stringify({ plan, source: 'barberSample', tier, embedded: true }),
       });
       const data = await res.json();
       if (!res.ok || !data.clientSecret) throw new Error(data?.error || 'Checkout failed to start');

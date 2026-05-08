@@ -109,6 +109,12 @@ const App: React.FC = () => {
 
   // /barber-sample — live Euphoria iframe with sticky pricing CTA
   if (pathname === '/barber-sample') {
+    if (status === 'success') {
+      return <DirectorySuccessPage />;
+    }
+    if (status === 'cancelled') {
+      window.history.replaceState({}, '', pathname);
+    }
     return <BarberSamplePage />;
   }
 
