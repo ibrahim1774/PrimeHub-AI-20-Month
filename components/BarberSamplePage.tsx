@@ -151,19 +151,61 @@ const BarberSamplePage: React.FC = () => {
 }
 
 /* STRIPE MODAL */
-.bsp-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); z-index: 9998; animation: bspFade 0.25s ease forwards; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.bsp-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(8px);
+  z-index: 9998;
+  animation: bspFade 0.25s ease forwards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+}
 @keyframes bspFade { from { opacity: 0; } to { opacity: 1; } }
-.bsp-modal { position: relative; width: 100%; max-width: 540px; height: min(740px, calc(100vh - 48px)); z-index: 9999; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; }
-.bsp-modal-head { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; color: #e2e8f0; font-family: 'DM Sans', sans-serif; }
-.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 20px; color: #fff; margin: 0; }
+.bsp-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+.bsp-modal-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #e2e8f0;
+  font-family: 'DM Sans', sans-serif;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: #0a0a0a;
+  border-radius: 18px 18px 0 0;
+  z-index: 1;
+}
+.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 18px; color: #fff; margin: 0; }
 .bsp-modal-head-title em { color: #d4a64a; font-style: italic; }
-.bsp-modal-close { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10); color: #cbd5e1; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.bsp-modal-close { width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10); color: #cbd5e1; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .bsp-modal-close:hover { background: rgba(255,255,255,0.16); color: #fff; }
-.bsp-modal-body { padding: 0; background: #fff; overflow-y: auto; flex: 1; }
+.bsp-modal-body {
+  padding: 0;
+  background: #fff;
+  overflow: visible;
+  border-radius: 0 0 18px 18px;
+}
 @media (max-width: 720px) {
   .bsp-overlay { padding: 12px; }
-  .bsp-modal { height: calc(100vh - 24px); }
-  .bsp-modal-head-title { font-size: 16px; }
+  .bsp-modal { max-width: 100%; }
+  .bsp-modal-head-title { font-size: 15px; }
 }
       `}</style>
 
