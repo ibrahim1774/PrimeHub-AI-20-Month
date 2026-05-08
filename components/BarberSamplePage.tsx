@@ -118,7 +118,7 @@ const BarberSamplePage: React.FC = () => {
   useEffect(() => {
     if (!introVisible) return;
     const dismiss = () => setIntroVisible(false);
-    const timeoutId = window.setTimeout(dismiss, 3000);
+    const timeoutId = window.setTimeout(dismiss, 10000);
     window.addEventListener('blur', dismiss);
     return () => {
       window.clearTimeout(timeoutId);
@@ -478,7 +478,7 @@ const BarberSamplePage: React.FC = () => {
           >
             <div className="bsp-intro-eyebrow">A sample &middot; built for a client</div>
             <h2 className="bsp-intro-title">
-              Scroll through the site we built <em>for a client of ours.</em>
+              A sample barbershop site <em>built for a client.</em>
             </h2>
             <div className="bsp-intro-chev" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
