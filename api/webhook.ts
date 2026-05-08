@@ -174,15 +174,17 @@ export default async function handler(req: any, res: any) {
             const isBarberFiveMonth = source === 'barberFiveMonth';
             const isBarberTrial = source === 'barberTrial';
             const isBarberSample = source === 'barberSample';
+            const isBarberGenerator = source === 'barberGenerator';
             const isNineteen = source === 'nineteen';
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isNineteen || isBarber || isLocalBusiness || isHome;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
                 : isFive ? '/5'
+                : isBarberGenerator ? '/barber-generator'
                 : isBarberSample ? '/barber-sample'
                 : isBarberTrial ? '/barber-trial'
                 : isBarberFiveMonth ? '/barber-5-month'

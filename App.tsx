@@ -6,6 +6,7 @@ import SuccessPage from './components/SuccessPage';
 import DirectoryPage from './components/DirectoryPage';
 import DirectorySuccessPage from './components/DirectorySuccessPage';
 import BarberSamplePage from './components/BarberSamplePage';
+import BarberGeneratorPage from './components/BarberGeneratorPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
@@ -116,6 +117,17 @@ const App: React.FC = () => {
       window.history.replaceState({}, '', pathname);
     }
     return <BarberSamplePage />;
+  }
+
+  // /barber-generator — barber enters shop+phone, sees personalized sample
+  if (pathname === '/barber-generator') {
+    if (status === 'success') {
+      return <DirectorySuccessPage />;
+    }
+    if (status === 'cancelled') {
+      window.history.replaceState({}, '', pathname);
+    }
+    return <BarberGeneratorPage />;
   }
 
   // Directory pages incl. new luxurious home '/'

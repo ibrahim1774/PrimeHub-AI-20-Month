@@ -59,6 +59,10 @@
         {
             "source": "/barber-sample",
             "destination": "/index.html"
+        },
+        {
+            "source": "/barber-generator",
+            "destination": "/index.html"
         }
     ],
     "functions": {
