@@ -9,18 +9,6 @@ const SAMPLE_URL = 'https://dist-black-nine-17.vercel.app/';
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 
-const BENEFITS: { title: string; desc: string }[] = [
-  { title: 'Made for you', desc: 'Your photos, your logo, your colors.' },
-  { title: 'Looks great everywhere', desc: 'Fast and clean on every phone, built to be found on Google.' },
-  { title: 'We handle the changes', desc: 'Need to swap a photo or update hours? Just email us.' },
-];
-
-const STEPS: { n: string; title: string; desc: string }[] = [
-  { n: '01', title: 'Pick a plan', desc: 'One page or many.' },
-  { n: '02', title: 'Send us your stuff', desc: 'Photos, hours, booking link — we walk you through it.' },
-  { n: '03', title: 'We build it', desc: 'Live in about 24 hours. Easy to change later.' },
-];
-
 const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
   single: {
     monthly: { display: '$10', sub: '/month' },
@@ -31,6 +19,18 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
     yearly:  { display: '$144', sub: '/year · save $96' },
   },
 };
+
+const BENEFITS = [
+  { title: 'Made for you', desc: 'Your photos, your logo, your colors.' },
+  { title: 'Looks great on any phone', desc: 'Fast. Clean. Built to be found on Google.' },
+  { title: 'We handle the changes', desc: 'Want to swap a photo? Just email us.' },
+];
+
+const STEPS = [
+  { n: '01', title: 'Pick a plan', desc: 'One page or many pages.' },
+  { n: '02', title: 'Send us your stuff', desc: 'Photos, hours, booking link. We help.' },
+  { n: '03', title: 'We build it', desc: 'Live in 48 hours. Easy to change later.' },
+];
 
 const BarberSamplePage: React.FC = () => {
   const [plan, setPlan] = useState<Plan>('monthly');
@@ -85,20 +85,18 @@ const BarberSamplePage: React.FC = () => {
       <style>{`
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
-/* Body scrolls; iframe is non-interactive (pointer-events: none) so visitors
-   can scroll the WHOLE sample site by swiping the page, but tapping 'Book Now'
-   or any link does nothing. Sticky cards stay pinned via position: fixed. */
-.bsp-page { position: relative; width: 100vw; min-height: 100vh; background: #0a0907; font-family: 'Cormorant Garamond', 'Instrument Serif', serif; }
-.bsp-iframe { position: relative; display: block; width: 100%; height: 6200px; border: 0; background: #000; pointer-events: none; }
-@media (min-width: 1100px) { .bsp-iframe { height: 4400px; } }
+.bsp-page { position: relative; width: 100vw; height: 100vh; background: #0a0a0a; font-family: 'Cormorant Garamond', 'Instrument Serif', serif; overflow: hidden; }
+.bsp-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+/* Transparent shield over the iframe — visitors see the sample (cuts gallery, background, everything) but can't click 'Book Now' or any link / form. */
+.bsp-iframe-shield { position: absolute; inset: 0; z-index: 1; background: transparent; cursor: default; }
 /* Subtle vignette on the right edge so the desktop sticky card reads cleanly over the sample */
-.bsp-iframe-vignette { position: fixed; top: 0; bottom: 0; right: 0; width: 460px; pointer-events: none; background: linear-gradient(270deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 50%, rgba(0,0,0,0) 100%); z-index: 2; }
+.bsp-iframe-vignette { position: absolute; top: 0; bottom: 0; right: 0; width: 460px; pointer-events: none; background: linear-gradient(270deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 50%, rgba(0,0,0,0) 100%); z-index: 2; }
 @media (max-width: 720px) { .bsp-iframe-vignette { display: none; } }
 
 /* DESKTOP STICKY CARD — mid-right, premium dark + warm gold */
 .bsp-mobile-header { display: none; }
 .bsp-card-body { display: contents; }
-.bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 40px); overflow-y: auto; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%); border: 1px solid rgba(212,166,74,0.18); border-radius: 16px; padding: 28px 28px 26px; color: #e9e1cf; z-index: 9990; box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.05), inset 0 1px 0 rgba(255,255,255,0.04); animation: bspIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.25) transparent; font-family: 'DM Sans', sans-serif; }
+.bsp-card { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); width: 360px; max-height: calc(100vh - 40px); overflow-y: auto; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%); border: 1px solid rgba(212,166,74,0.18); border-radius: 14px; padding: 22px 22px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 40px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(212,166,74,0.05), inset 0 1px 0 rgba(255,255,255,0.04); animation: bspIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards; scrollbar-width: thin; scrollbar-color: rgba(212,166,74,0.25) transparent; font-family: 'DM Sans', sans-serif; }
 .bsp-card::-webkit-scrollbar { width: 5px; }
 .bsp-card::-webkit-scrollbar-thumb { background: rgba(212,166,74,0.22); border-radius: 3px; }
 @keyframes bspIn { from { opacity: 0; transform: translateY(-50%) translateX(16px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
@@ -153,21 +151,21 @@ const BarberSamplePage: React.FC = () => {
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-/* MOBILE BOTTOM BAR — refined dark + gold ribbon (sized 25% larger) */
-.bsp-mobile-bar { display: none; position: fixed; bottom: 16px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 18px; padding: 18px 20px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 28px 64px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 14px; font-family: 'DM Sans', sans-serif; }
+/* MOBILE BOTTOM BAR — refined dark + gold ribbon */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 14px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.28); border-radius: 14px; padding: 14px 16px 14px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 56px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-pulse { display: none; }
-.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; line-height: 1.18; color: #f5ecd7; letter-spacing: -0.005em; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 19px; line-height: 1.2; color: #f5ecd7; letter-spacing: -0.005em; }
 .bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
 .bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 15px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 @media (max-width: 720px) {
@@ -240,7 +238,7 @@ const BarberSamplePage: React.FC = () => {
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 22px 22px 24px;
+    padding: 12px 14px 14px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
@@ -315,8 +313,10 @@ const BarberSamplePage: React.FC = () => {
           loading="eager"
           sandbox="allow-same-origin allow-scripts"
           referrerPolicy="no-referrer"
-          scrolling="no"
         />
+        {/* Click-shield: transparent layer that swallows every tap on the
+            iframe so 'Book Now' and any other link can't navigate. */}
+        <div className="bsp-iframe-shield" aria-hidden="true" />
         <div className="bsp-iframe-vignette" aria-hidden="true" />
 
         <div
@@ -334,11 +334,39 @@ const BarberSamplePage: React.FC = () => {
           <div className="bsp-badge">A sample &middot; built for a client</div>
 
           <h2 className="bsp-title">
-            This is a sample site. <em>Yours can be done in 24 hours.</em>
+            We built this site. <em>Yours can be live in 24 hours.</em>
           </h2>
           <p className="bsp-sub">
-            Your photos, logo, and booking link. Design is on us — you only cover hosting.
+            Your photos, your logo, your booking link. Design is on us — you only cover hosting.
           </p>
+
+          <h3 className="bsp-list-eyebrow">What you get</h3>
+          <ul className="bsp-list">
+            {BENEFITS.map(b => (
+              <li key={b.title}>
+                <span className="bsp-bullet-rule" />
+                <div className="bsp-bullet-body">
+                  <strong>{b.title}</strong>
+                  <span>{b.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="bsp-rule" />
+
+          <h3 className="bsp-list-eyebrow">How it works</h3>
+          <ul className="bsp-list">
+            {STEPS.map(s => (
+              <li key={s.n}>
+                <span className="bsp-bullet-num">{s.n}</span>
+                <div className="bsp-bullet-body">
+                  <strong>{s.title}</strong>
+                  <span>{s.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
 
           <div className="bsp-rule" />
 
@@ -384,36 +412,6 @@ const BarberSamplePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bsp-rule" />
-
-          <h3 className="bsp-list-eyebrow">What you get</h3>
-          <ul className="bsp-list">
-            {BENEFITS.map(b => (
-              <li key={b.title}>
-                <span className="bsp-bullet-rule" />
-                <div className="bsp-bullet-body">
-                  <strong>{b.title}</strong>
-                  <span>{b.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          <div className="bsp-rule" />
-
-          <h3 className="bsp-list-eyebrow">How it works</h3>
-          <ul className="bsp-list">
-            {STEPS.map(s => (
-              <li key={s.n}>
-                <span className="bsp-bullet-num">{s.n}</span>
-                <div className="bsp-bullet-body">
-                  <strong>{s.title}</strong>
-                  <span>{s.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-
           </div>
         </aside>
 
@@ -424,7 +422,7 @@ const BarberSamplePage: React.FC = () => {
           </div>
 
           <div className="bsp-mobile-bar-text">
-            This is a sample site &mdash; <em>yours can be done in 24 hours.</em>
+            Your barbershop, online <em>in 24 hours.</em>
           </div>
 
           <button className="bsp-mobile-bar-btn" onClick={() => setCollapsedMobile(false)}>
