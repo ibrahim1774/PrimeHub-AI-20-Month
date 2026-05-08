@@ -21,14 +21,15 @@ const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
 };
 
 const BENEFITS = [
-  { title: 'Fully custom', desc: 'Your branding, photos, logo, booking link — not a template.' },
-  { title: 'We maintain it', desc: 'Need a change? Email us. We handle it.' },
+  { title: 'Fully custom',              desc: 'Your branding, photos, logo, booking link — not a template.' },
+  { title: 'We maintain it',            desc: 'Need a change? Email us. We handle it.' },
+  { title: 'Delivered within 24 hours', desc: 'From your info to a live site in a single day.' },
 ];
 
 const STEPS = [
   { n: '01', title: 'Choose your plan',            desc: 'Single page or multi-page.' },
   { n: '02', title: 'Tell us about your business', desc: 'Send your Google Business profile or Facebook page.' },
-  { n: '03', title: 'We deliver',                  desc: 'Your site goes live in 24–48 hours.' },
+  { n: '03', title: 'We deliver',                  desc: 'Your site is built and delivered within 24 hours.' },
 ];
 
 const BarberSamplePage: React.FC = () => {
@@ -107,8 +108,8 @@ const BarberSamplePage: React.FC = () => {
 
 .bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 19px; line-height: 1.18; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
 .bsp-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
-.bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 11.5px; line-height: 1.5; color: #a39880; margin: 0 0 14px; }
-.bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 14px 0; }
+.bsp-sub { font-family: 'DM Sans', sans-serif; font-size: 11.5px; line-height: 1.5; color: #a39880; margin: 0 0 10px; }
+.bsp-rule { height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.30), transparent); margin: 12px 0; }
 
 /* List blocks — refined typography on dark, no boxy containers */
 .bsp-list-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 9px; }
@@ -209,19 +210,18 @@ const BarberSamplePage: React.FC = () => {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 10px 14px;
-    background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%);
-    border-bottom: 1px solid rgba(212,166,74,0.18);
+    padding: 6px 10px 0;
+    background: transparent;
+    border-bottom: 0;
     flex-shrink: 0;
-    border-radius: 18px 18px 0 0;
   }
   .bsp-card.expanded .bsp-mobile-header-close {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #cbd5e1;
-    font-size: 20px;
+    width: 30px; height: 30px;
+    border-radius: 999px;
+    background: rgba(212,166,74,0.10);
+    border: 1px solid rgba(212,166,74,0.30);
+    color: #d4a64a;
+    font-size: 17px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
@@ -229,7 +229,7 @@ const BarberSamplePage: React.FC = () => {
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 22px 30px 28px;
+    padding: 6px 26px 24px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
@@ -327,7 +327,6 @@ const BarberSamplePage: React.FC = () => {
 
           <div className="bsp-rule" />
 
-          {/* What you get FIRST (above pricing, per request) */}
           <h3 className="bsp-list-eyebrow">What you get</h3>
           <ul className="bsp-list">
             {BENEFITS.map(b => (
@@ -343,6 +342,22 @@ const BarberSamplePage: React.FC = () => {
 
           <div className="bsp-rule" />
 
+          <h3 className="bsp-list-eyebrow">How it works</h3>
+          <ul className="bsp-list">
+            {STEPS.map(s => (
+              <li key={s.n}>
+                <span className="bsp-bullet-num">{s.n}</span>
+                <div className="bsp-bullet-body">
+                  <strong>{s.title}</strong>
+                  <span>{s.desc}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="bsp-rule" />
+
+          {/* Pricing as the final decision point */}
           <div className="bsp-toggle" role="tablist" aria-label="Billing period">
             <button role="tab" aria-selected={plan === 'monthly'} className={plan === 'monthly' ? 'active' : ''} onClick={() => setPlan('monthly')}>Monthly</button>
             <button role="tab" aria-selected={plan === 'yearly'} className={plan === 'yearly' ? 'active' : ''} onClick={() => setPlan('yearly')}>Yearly <span className="bsp-save">Save 40%</span></button>
@@ -384,21 +399,6 @@ const BarberSamplePage: React.FC = () => {
               Secure Stripe &middot; cancel anytime
             </div>
           </div>
-
-          <div className="bsp-rule" />
-
-          <h3 className="bsp-list-eyebrow">How it works</h3>
-          <ul className="bsp-list">
-            {STEPS.map(s => (
-              <li key={s.n}>
-                <span className="bsp-bullet-num">{s.n}</span>
-                <div className="bsp-bullet-body">
-                  <strong>{s.title}</strong>
-                  <span>{s.desc}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
 
           </div>
         </aside>
