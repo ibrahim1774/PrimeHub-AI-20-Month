@@ -5,6 +5,7 @@ import PreviewSite from './components/PreviewSite';
 import SuccessPage from './components/SuccessPage';
 import DirectoryPage from './components/DirectoryPage';
 import DirectorySuccessPage from './components/DirectorySuccessPage';
+import BarberSamplePage from './components/BarberSamplePage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
@@ -104,6 +105,11 @@ const App: React.FC = () => {
   // /generator — landing form / website generator flow
   if (pathname === '/generator') {
     return <LandingFlow />;
+  }
+
+  // /barber-sample — live Euphoria iframe with sticky pricing CTA
+  if (pathname === '/barber-sample') {
+    return <BarberSamplePage />;
   }
 
   // Directory pages incl. new luxurious home '/'
