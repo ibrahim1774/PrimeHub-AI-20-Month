@@ -25,3 +25,4 @@ dist-ssr
 
 public/gallery/_orig/
 .claude/
+.plans/
