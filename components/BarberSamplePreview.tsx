@@ -333,23 +333,23 @@ const BarberSamplePreview: React.FC<Props> = ({
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-/* ~25% smaller than the previous mobile sticky CTA: tighter padding,
-   smaller copy, slimmer button. Still premium, takes much less of
-   the visible hero. */
-.bsp-mobile-bar { display: none; position: fixed; bottom: 12px; left: 12px; right: 12px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 14px; padding: 12px 14px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 50px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
+/* Mobile sticky CTA — ~20% larger than the previous compact pass so
+   the headline reads comfortably from a thumb's distance, but still
+   smaller than the original (which was overpowering the hero). */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 14px; left: 12px; right: 12px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 16px; padding: 15px 18px; color: #e9e1cf; z-index: 9990; box-shadow: 0 24px 56px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 12px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-pulse { display: none; }
-.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.20em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 14px; line-height: 1.35; color: #f5ecd7; letter-spacing: 0; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 17px; line-height: 1.32; color: #f5ecd7; letter-spacing: 0; }
 .bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
 .bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 13px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 .bsp-intro {
@@ -409,8 +409,9 @@ const BarberSamplePreview: React.FC<Props> = ({
     max-width: 420px;
     height: auto;
     /* dvh accounts for the iOS browser bottom bar so the bottom of
-       the modal never disappears behind it. */
-    max-height: min(85dvh, 85vh);
+       the modal never disappears behind it. Bumped to 90 so the
+       Stripe foot row doesn't clip with the new tighter content. */
+    max-height: min(90dvh, 90vh);
     border-radius: 16px;
     border: 1px solid rgba(212,166,74,0.25);
     padding: 0;
@@ -424,13 +425,14 @@ const BarberSamplePreview: React.FC<Props> = ({
     to   { opacity: 1; transform: translate(-50%, -50%); }
   }
 
-  /* Header row holds the close button only — sticky so it stays
-     visible while the body scrolls. */
+  /* Header row holds the close button only. Slim padding so the
+     content underneath sits up at the top of the modal instead of
+     leaving an empty band. */
   .bsp-card.expanded .bsp-mobile-header {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 10px 12px 4px;
+    padding: 6px 10px 0;
     background: transparent;
     border-bottom: 0;
     flex-shrink: 0;
@@ -448,41 +450,42 @@ const BarberSamplePreview: React.FC<Props> = ({
     flex-shrink: 0;
   }
 
-  /* Scroll container: tight uniform side padding (16px) so nothing
-     ever touches an edge. Bottom padding includes safe-area-inset
-     so iOS home indicator never overlaps the last tier. */
+  /* Scroll container: 16px sides, minimal top so the guarantee
+     starts right under the close button row, safe-area bottom so
+     iOS home indicator never overlaps the foot row. */
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 8px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    padding: 4px 16px calc(16px + env(safe-area-inset-bottom, 0px));
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
 
-  /* Compact mobile-only overrides for the inner blocks so
-     everything fits inside the viewport without horizontal overflow. */
+  /* Compact mobile-only overrides — every block tightened so all
+     content (guarantee → title → lists → toggle → tiers → foot)
+     fits inside the viewport without clipping. */
   .bsp-card.expanded .bsp-guarantee {
-    margin: 0 0 12px;
-    padding: 10px 12px 10px 14px;
+    margin: 0 0 10px;
+    padding: 9px 12px 9px 14px;
     border-radius: 8px;
   }
   .bsp-card.expanded .bsp-guarantee::before { left: 0; top: 6px; bottom: 6px; }
-  .bsp-card.expanded .bsp-guarantee-eyebrow { font-size: 9.5px; letter-spacing: 0.20em; margin-bottom: 4px; }
-  .bsp-card.expanded .bsp-guarantee-body { font-size: 12.5px; line-height: 1.4; }
+  .bsp-card.expanded .bsp-guarantee-eyebrow { font-size: 9.5px; letter-spacing: 0.20em; margin-bottom: 3px; }
+  .bsp-card.expanded .bsp-guarantee-body { font-size: 12.5px; line-height: 1.38; }
 
-  .bsp-card.expanded .bsp-title { font-size: 17px; margin: 0 0 6px; }
-  .bsp-card.expanded .bsp-sub { font-size: 11px; line-height: 1.45; margin: 0 0 8px; }
-  .bsp-card.expanded .bsp-rule { margin: 10px 0; }
-  .bsp-card.expanded .bsp-list-eyebrow { font-size: 9px; margin-bottom: 7px; }
-  .bsp-card.expanded .bsp-list { gap: 7px; }
+  .bsp-card.expanded .bsp-title { font-size: 17px; margin: 0 0 4px; }
+  .bsp-card.expanded .bsp-sub { font-size: 11px; line-height: 1.42; margin: 0 0 4px; }
+  .bsp-card.expanded .bsp-rule { margin: 8px 0; }
+  .bsp-card.expanded .bsp-list-eyebrow { font-size: 9px; margin-bottom: 5px; }
+  .bsp-card.expanded .bsp-list { gap: 5px; }
   .bsp-card.expanded .bsp-bullet-body strong { font-size: 10.5px; }
-  .bsp-card.expanded .bsp-bullet-body span { font-size: 9.5px; line-height: 1.4; }
+  .bsp-card.expanded .bsp-bullet-body span { font-size: 9.5px; line-height: 1.38; }
 
-  /* Toggle: centered, compact */
+  /* Toggle: centered, compact, less vertical room around it */
   .bsp-card.expanded .bsp-toggle {
     align-self: center;
-    margin: 4px auto 14px;
+    margin: 0 auto 10px;
   }
   .bsp-card.expanded .bsp-toggle button {
     padding: 7px 12px;
@@ -519,7 +522,7 @@ const BarberSamplePreview: React.FC<Props> = ({
     letter-spacing: 0.16em;
   }
 
-  .bsp-card.expanded .bsp-foot { margin-top: 10px; padding-top: 10px; }
+  .bsp-card.expanded .bsp-foot { margin-top: 6px; padding-top: 8px; }
   .bsp-card.expanded .bsp-foot-row { font-size: 10px; }
 
   .bsp-mobile-bar { display: flex; }
