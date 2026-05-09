@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BarberSamplePreview from './BarberSamplePreview';
+import { captureBarberGeneratorLead } from '../services/leadService';
 
 const STICKY_TEXT =
   "This is a sample/demo site. Your final website can be fully customized and deployed within 24 hours, and we handle all edits for you.";
@@ -28,6 +29,15 @@ const BarberGeneratorPage: React.FC = () => {
     const cleanPhone = phone.trim();
     const cleanCity = city.trim();
     if (!cleanShop || !cleanPhone) return;
+
+    // Fire-and-forget the lead capture. We don't await — the visitor
+    // should never wait on the webhook to see their preview.
+    captureBarberGeneratorLead({
+      shop: cleanShop,
+      phone: cleanPhone,
+      city: cleanCity,
+    }).catch(() => {});
+
     const params = new URLSearchParams({ shop: cleanShop, phone: cleanPhone });
     if (cleanCity) params.set('city', cleanCity);
     setSampleUrl(`/api/sample-proxy?${params.toString()}`);
