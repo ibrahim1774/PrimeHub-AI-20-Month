@@ -135,8 +135,10 @@ const BarberSamplePreview: React.FC<Props> = ({
   // Iframe (auto-scroll target)
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  // Stripe-modal scroll-hint chip
+  // Stripe-modal scroll-hint chip — watches the modal body now that
+  // the modal scrolls internally instead of the overlay.
   const overlayRef = useRef<HTMLDivElement | null>(null);
+  const modalBodyRef = useRef<HTMLDivElement | null>(null);
   const [scrollHintVisible, setScrollHintVisible] = useState(false);
 
   // When the Stripe modal opens, watch overlay scroll. Show the chip
@@ -144,7 +146,7 @@ const BarberSamplePreview: React.FC<Props> = ({
   // has scrolled past ~80% so they aren't prompted at the bottom.
   useEffect(() => {
     if (!checkoutOpen) { setScrollHintVisible(false); return; }
-    const el = overlayRef.current;
+    const el = modalBodyRef.current;
     if (!el) return;
     const update = () => {
       const canScroll = el.scrollHeight - el.clientHeight > 24;
@@ -164,7 +166,7 @@ const BarberSamplePreview: React.FC<Props> = ({
   }, [checkoutOpen]);
 
   const scrollOverlayDown = () => {
-    const el = overlayRef.current;
+    const el = modalBodyRef.current;
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   };
@@ -554,10 +556,10 @@ const BarberSamplePreview: React.FC<Props> = ({
   z-index: 9998;
   animation: bspFade 0.25s ease forwards;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  overflow-y: scroll;
-  padding: 24px;
+  overflow-y: auto;
+  padding: 16px;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: #d4a64a rgba(255,255,255,0.08);
@@ -571,6 +573,10 @@ const BarberSamplePreview: React.FC<Props> = ({
   position: relative;
   width: 100%;
   max-width: 520px;
+  /* Cap to viewport height so the header (with X) is always
+     visible — the EmbeddedCheckout iframe inside scrolls instead
+     of pushing the close button off-screen. */
+  max-height: 92vh;
   background: #0a0a0a;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
@@ -578,9 +584,10 @@ const BarberSamplePreview: React.FC<Props> = ({
   display: flex;
   flex-direction: column;
   margin: auto;
+  overflow: hidden;
 }
 .bsp-modal-head {
-  padding: 14px 18px;
+  padding: 12px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex;
   align-items: center;
@@ -588,20 +595,21 @@ const BarberSamplePreview: React.FC<Props> = ({
   color: #e2e8f0;
   font-family: 'DM Sans', sans-serif;
   flex-shrink: 0;
-  position: sticky;
-  top: 0;
   background: #0a0a0a;
   border-radius: 18px 18px 0 0;
   z-index: 1;
 }
-.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 18px; color: #fff; margin: 0; }
+.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 16px; color: #fff; margin: 0; }
 .bsp-modal-head-title em { color: #d4a64a; font-style: italic; }
-.bsp-modal-close { width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10); color: #cbd5e1; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.bsp-modal-close { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10); color: #cbd5e1; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .bsp-modal-close:hover { background: rgba(255,255,255,0.16); color: #fff; }
 .bsp-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 0;
   background: #fff;
-  overflow: visible;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: 0 0 18px 18px;
 }
 
@@ -909,7 +917,7 @@ const BarberSamplePreview: React.FC<Props> = ({
               <button
                 type="button"
                 className="bsp-paypal-link"
-                onClick={() => { setCollapsedMobile(true); fireInitiateCheckoutPixels('single'); setPaypalCtx(buildPaypalCtx('single')); setPaypalOpen(true); }}
+                onClick={() => { fireInitiateCheckoutPixels('single'); setPaypalCtx(buildPaypalCtx('single')); setPaypalOpen(true); }}
                 disabled={loading}
               >
                 <span className="bsp-paypal-link-label">or pay with</span>
@@ -931,7 +939,7 @@ const BarberSamplePreview: React.FC<Props> = ({
               <button
                 type="button"
                 className="bsp-paypal-link"
-                onClick={() => { setCollapsedMobile(true); fireInitiateCheckoutPixels('multi'); setPaypalCtx(buildPaypalCtx('multi')); setPaypalOpen(true); }}
+                onClick={() => { fireInitiateCheckoutPixels('multi'); setPaypalCtx(buildPaypalCtx('multi')); setPaypalOpen(true); }}
                 disabled={loading}
               >
                 <span className="bsp-paypal-link-label">or pay with</span>
@@ -981,22 +989,22 @@ const BarberSamplePreview: React.FC<Props> = ({
                 <h3 className="bsp-modal-head-title">Secure <em>checkout.</em></h3>
                 <button className="bsp-modal-close" onClick={closeCheckout} aria-label="Close">&times;</button>
               </div>
-              <div className="bsp-modal-body">
+              <div className="bsp-modal-body" ref={modalBodyRef}>
                 <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
                   <EmbeddedCheckout />
                 </EmbeddedCheckoutProvider>
+                <button
+                  type="button"
+                  className={`bsp-scroll-hint ${scrollHintVisible ? '' : 'is-hidden'}`}
+                  onClick={(e) => { e.stopPropagation(); scrollOverlayDown(); }}
+                  aria-label="Scroll to see the rest of the form"
+                >
+                  Scroll for more
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
               </div>
-              <button
-                type="button"
-                className={`bsp-scroll-hint ${scrollHintVisible ? '' : 'is-hidden'}`}
-                onClick={(e) => { e.stopPropagation(); scrollOverlayDown(); }}
-                aria-label="Scroll to see the rest of the form"
-              >
-                Scroll for more
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
             </div>
           </div>
         )}
@@ -1025,7 +1033,9 @@ const BarberSamplePreview: React.FC<Props> = ({
                 onClick={() => {
                   const t = chooser.tier;
                   setChooser(null);
-                  setCollapsedMobile(true); // close the bsp-card so Stripe is the only layer
+                  // Leave the pricing modal (bsp-card.expanded) open
+                  // underneath so closing Stripe returns the visitor
+                  // to the pricing card, not all the way to the preview.
                   startCheckout(t);
                 }}
                 disabled={loading}
@@ -1040,7 +1050,8 @@ const BarberSamplePreview: React.FC<Props> = ({
                 onClick={() => {
                   const t = chooser.tier;
                   setChooser(null);
-                  setCollapsedMobile(true); // close the bsp-card so PayPal is the only layer
+                  // Same: keep the pricing modal underneath so the X
+                  // on PayPal returns to it instead of the preview.
                   fireInitiateCheckoutPixels(t);
                   setPaypalCtx(buildPaypalCtx(t));
                   setPaypalOpen(true);
