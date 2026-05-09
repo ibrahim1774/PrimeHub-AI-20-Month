@@ -36,7 +36,10 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         label = `Amalvera /barber-5 ${t === 'multi' ? 'Multi-Page Barbershop + SEO' : 'Single Page Barbershop'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'home') {
         const t = tier === 'single' ? 'single' : 'multi';
-        value = isYearly ? 99 : (t === 'single' ? 10 : 20);
+        // Match the prices the home page actually advertises: single = $20/mo,
+        // multi = $50/mo. Yearly placeholders kept loosely proportional, but
+        // home's yearly path isn't surfaced anywhere in the UI right now.
+        value = isYearly ? (t === 'single' ? 99 : 249) : (t === 'single' ? 20 : 50);
         label = `Amalvera /home ${t === 'single' ? 'Single Page' : 'Multi-Service'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'ten' || region === 'barber') {
         value = isYearly ? 49 : 10;
