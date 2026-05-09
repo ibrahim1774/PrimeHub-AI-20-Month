@@ -5,11 +5,11 @@
 const PAYPAL_API = 'https://api-m.paypal.com';
 const PRODUCT_NAME = 'Amalvera Website Hosting';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive' | 'barberGenerator';
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 
-const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home', 'barberFive'];
+const VALID_REGIONS: Region[] = ['us', 'aus', 'ten', 'five', 'barber', 'localbusiness', 'home', 'barberFive', 'barberGenerator'];
 
 type Pricing = {
     planName: string;
@@ -32,10 +32,16 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         label = `Amalvera /5 ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'barberFive') {
         const t = tier === 'multi' ? 'multi' : 'single';
-        // /barber-5, /barber-5-month, /barber-sample, /barber-generator all
-        // share this pricing: \$5/\$10 monthly, \$36/\$72 yearly.
+        // /barber-5, /barber-5-month, /barber-sample share this pricing:
+        // $5/$10 monthly, $36/$72 yearly.
         value = isYearly ? (t === 'multi' ? 72 : 36) : (t === 'multi' ? 10 : 5);
         label = `Amalvera Barbershop ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
+    } else if (region === 'barberGenerator') {
+        const t = tier === 'multi' ? 'multi' : 'single';
+        // /barber-generator carries higher pricing than barberFive:
+        // $10/$20 monthly, $72/$144 yearly.
+        value = isYearly ? (t === 'multi' ? 144 : 72) : (t === 'multi' ? 20 : 10);
+        label = `Amalvera Barber Generator ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'home') {
         const t = tier === 'single' ? 'single' : 'multi';
         // Match the prices the home page actually advertises: single = $20/mo,
@@ -56,7 +62,7 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         value = isYearly ? 99 : 20;
         label = `Amalvera /1 ${isYearly ? 'Yearly' : 'Monthly'}`;
     }
-    const tierSegment = (region === 'five' || region === 'home' || region === 'barberFive') ? `-${tier === 'multi' ? 'multi' : 'single'}` : '';
+    const tierSegment = (region === 'five' || region === 'home' || region === 'barberFive' || region === 'barberGenerator') ? `-${tier === 'multi' ? 'multi' : 'single'}` : '';
     // Include the price in the plan name so a price change automatically
     // materialises as a NEW PayPal plan instead of silently reusing the old
     // (now mispriced) one. Existing subscribers keep their original plan.
@@ -176,7 +182,7 @@ export default async function handler(req: any, res: any) {
         const { region, tier, plan } = req.body || {};
         if (!VALID_REGIONS.includes(region)) return res.status(400).json({ error: 'invalid region' });
         if (plan !== 'monthly' && plan !== 'yearly') return res.status(400).json({ error: 'invalid plan' });
-        const usesTier = region === 'five' || region === 'home' || region === 'barberFive';
+        const usesTier = region === 'five' || region === 'home' || region === 'barberFive' || region === 'barberGenerator';
         if (usesTier && tier !== 'single' && tier !== 'multi') return res.status(400).json({ error: 'invalid tier' });
         const safeTier = usesTier ? (tier as Tier) : undefined;
 

@@ -9,14 +9,27 @@ type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 type Source = 'barberSample' | 'barberGenerator';
 
-const PRICING: Record<Tier, Record<Plan, { display: string; sub: string }>> = {
+type Pricing = Record<Tier, Record<Plan, { display: string; sub: string; value: number }>>;
+
+const DEFAULT_PRICING: Pricing = {
   single: {
-    monthly: { display: '$5',  sub: '/month' },
-    yearly:  { display: '$36', sub: '/year · save $24' },
+    monthly: { display: '$5',  sub: '/month',           value: 5 },
+    yearly:  { display: '$36', sub: '/year · save $24', value: 36 },
   },
   multi: {
-    monthly: { display: '$10', sub: '/month' },
-    yearly:  { display: '$72', sub: '/year · save $48' },
+    monthly: { display: '$10', sub: '/month',           value: 10 },
+    yearly:  { display: '$72', sub: '/year · save $48', value: 72 },
+  },
+};
+
+export const GENERATOR_PRICING: Pricing = {
+  single: {
+    monthly: { display: '$10',  sub: '/month',           value: 10 },
+    yearly:  { display: '$72',  sub: '/year · save $48', value: 72 },
+  },
+  multi: {
+    monthly: { display: '$20',  sub: '/month',           value: 20 },
+    yearly:  { display: '$144', sub: '/year · save $96', value: 144 },
   },
 };
 
@@ -43,6 +56,8 @@ interface Props {
   mobileBarEyebrow?: string;
   showIntroBanner?: boolean;
   autoScroll?: boolean;
+  /** Pricing pair. Defaults to DEFAULT_PRICING ($5/$10 monthly). */
+  pricing?: Pricing;
 }
 
 const BarberSamplePreview: React.FC<Props> = ({
@@ -54,6 +69,7 @@ const BarberSamplePreview: React.FC<Props> = ({
   mobileBarEyebrow,
   showIntroBanner = true,
   autoScroll = true,
+  pricing = DEFAULT_PRICING,
 }) => {
   const [plan, setPlan] = useState<Plan>('monthly');
   const [collapsedMobile, setCollapsedMobile] = useState(true);
@@ -70,20 +86,28 @@ const BarberSamplePreview: React.FC<Props> = ({
   const [paypalCtx, setPaypalCtx] = useState<PayPalCtx | null>(null);
 
   const tierPricing = (tier: Tier) => {
-    const monthly = tier === 'multi' ? 10 : 5;
-    const yearly = tier === 'multi' ? 72 : 36;
+    const monthly = pricing[tier].monthly.value;
+    const yearly = pricing[tier].yearly.value;
     return { monthly, yearly, value: plan === 'yearly' ? yearly : monthly };
   };
 
-  const buildPaypalCtx = (tier: Tier): PayPalCtx => ({
-    region: 'barberFive',
-    tier,
-    plan,
-    label: tier === 'multi' ? 'Multi-Page Barbershop Site + SEO' : 'Single Page Barbershop Site',
-    priceText: plan === 'yearly'
-      ? (tier === 'multi' ? '$72/yr' : '$36/yr')
-      : (tier === 'multi' ? '$10/mo' : '$5/mo'),
-  });
+  // PayPal region: barberGenerator carries its own ($10/$20 monthly,
+  // $72/$144 yearly) plan; everything else (the static /barber-sample)
+  // reuses the existing barberFive PayPal subscription product.
+  const paypalRegion: 'barberFive' | 'barberGenerator' =
+    source === 'barberGenerator' ? 'barberGenerator' : 'barberFive';
+
+  const buildPaypalCtx = (tier: Tier): PayPalCtx => {
+    const p = tierPricing(tier);
+    const priceText = plan === 'yearly' ? `$${p.yearly}/yr` : `$${p.monthly}/mo`;
+    return {
+      region: paypalRegion,
+      tier,
+      plan,
+      label: tier === 'multi' ? 'Multi-Page Barbershop Site + SEO' : 'Single Page Barbershop Site',
+      priceText,
+    };
+  };
 
   const fireInitiateCheckoutPixels = (tier: Tier) => {
     if (typeof window === 'undefined') return;
@@ -573,10 +597,9 @@ const BarberSamplePreview: React.FC<Props> = ({
   position: relative;
   width: 100%;
   max-width: 520px;
-  /* Cap to viewport height so the header (with X) is always
-     visible — the EmbeddedCheckout iframe inside scrolls instead
-     of pushing the close button off-screen. */
-  max-height: 92vh;
+  /* Hard cap modal height so the X (which is absolutely positioned
+     on top of the modal) is always within the visible viewport. */
+  max-height: 88vh;
   background: #0a0a0a;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
@@ -587,11 +610,13 @@ const BarberSamplePreview: React.FC<Props> = ({
   overflow: hidden;
 }
 .bsp-modal-head {
-  padding: 12px 16px;
+  padding: 10px 14px;
+  /* Reserve right-edge space for the absolutely positioned X. */
+  padding-right: 52px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   color: #e2e8f0;
   font-family: 'DM Sans', sans-serif;
   flex-shrink: 0;
@@ -599,10 +624,29 @@ const BarberSamplePreview: React.FC<Props> = ({
   border-radius: 18px 18px 0 0;
   z-index: 1;
 }
-.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 16px; color: #fff; margin: 0; }
+.bsp-modal-head-title { font-family: 'Instrument Serif', serif; font-size: 15px; color: #fff; margin: 0; }
 .bsp-modal-head-title em { color: #d4a64a; font-style: italic; }
-.bsp-modal-close { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10); color: #cbd5e1; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.bsp-modal-close:hover { background: rgba(255,255,255,0.16); color: #fff; }
+/* X is absolutely positioned on the modal so internal scroll never
+   pushes it out of view, even if the EmbeddedCheckout iframe
+   reports an oversized intrinsic height. */
+.bsp-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  z-index: 5;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.40);
+}
+.bsp-modal-close:hover { background: rgba(255,255,255,0.20); }
 .bsp-modal-body {
   flex: 1 1 auto;
   min-height: 0;
@@ -910,8 +954,8 @@ const BarberSamplePreview: React.FC<Props> = ({
                   <div className="bsp-tier-desc">One page &middot; info, gallery, contact</div>
                 </div>
                 <div className="bsp-tier-right">
-                  <span className="bsp-tier-price">{PRICING.single[plan].display}</span>
-                  <span className="bsp-tier-per">{PRICING.single[plan].sub}</span>
+                  <span className="bsp-tier-price">{pricing.single[plan].display}</span>
+                  <span className="bsp-tier-per">{pricing.single[plan].sub}</span>
                 </div>
               </button>
               <button
@@ -932,8 +976,8 @@ const BarberSamplePreview: React.FC<Props> = ({
                   <div className="bsp-tier-desc">Like this sample &middot; Home, Services, Contact</div>
                 </div>
                 <div className="bsp-tier-right">
-                  <span className="bsp-tier-price">{PRICING.multi[plan].display}</span>
-                  <span className="bsp-tier-per">{PRICING.multi[plan].sub}</span>
+                  <span className="bsp-tier-price">{pricing.multi[plan].display}</span>
+                  <span className="bsp-tier-per">{pricing.multi[plan].sub}</span>
                 </div>
               </button>
               <button
@@ -1021,8 +1065,8 @@ const BarberSamplePreview: React.FC<Props> = ({
                 <span className="bsp-chooser-price">
                   &nbsp;&middot;&nbsp;
                   {plan === 'yearly'
-                    ? (chooser.tier === 'multi' ? '$72/yr' : '$36/yr')
-                    : (chooser.tier === 'multi' ? '$10/mo' : '$5/mo')}
+                    ? `$${tierPricing(chooser.tier).yearly}/yr`
+                    : `$${tierPricing(chooser.tier).monthly}/mo`}
                 </span>
               </h3>
               <p className="bsp-chooser-sub">Either option subscribes you {plan === 'yearly' ? 'yearly' : 'monthly'}. Cancel anytime.</p>
