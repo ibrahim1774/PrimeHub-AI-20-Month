@@ -1270,7 +1270,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="mv-f-hosting-note" role="note" aria-label="What the monthly fee covers">
                   <span className="mv-f-hosting-pill">$0 Design Fee</span>
                   <span className="mv-f-hosting-text">
-                    Your monthly payment covers <strong>website hosting</strong> only — design, build, and edits are included on us.
+                    Your monthly payment covers <strong>website hosting</strong> — design, build, and edits are included on us.
                   </span>
                 </div>
               )}
