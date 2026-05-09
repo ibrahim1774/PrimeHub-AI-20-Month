@@ -269,6 +269,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const [paypalOpen, setPaypalOpen] = useState(false);
   const [paypalCtx, setPaypalCtx] = useState<PayPalCtx | null>(null);
   const [showFiveSticky, setShowFiveSticky] = useState(false);
+  // Home-page payment-method chooser: tap "Start" on a tier, pick
+  // Stripe or PayPal in the dialog before either checkout opens.
+  const [homeChooser, setHomeChooser] = useState<null | { tier: 'single' | 'multi' }>(null);
 
   // Reveal the /5 + /barber-5 sticky CTA only after the hero is scrolled past.
   useEffect(() => {
@@ -1538,47 +1541,123 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-tier-list li { padding: 4px 0; }
           .mv-h-tier-list li::before { content: '— '; color: #d4914a; font-weight: 700; }
           .mv-h-tier .mv-h-pill { align-self: stretch; justify-content: center; }
-          /* PayPal alternate option, shown beneath the Stripe pill on
-             home tier cards. Clean text-link style so it reads as
-             "or pay with PayPal" without competing with the primary CTA. */
-          .mv-h-paypal {
-            display: inline-flex;
+
+          /* Payment-method chooser — bottom sheet on phones, centered
+             card on desktop. Lists Stripe + PayPal as side-by-side
+             options after the visitor taps "Start". */
+          .mv-h-chooser-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(10,10,10,0.66);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            z-index: 9998;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            animation: mvHChooserFade 0.2s ease forwards;
+          }
+          @keyframes mvHChooserFade { from { opacity: 0; } to { opacity: 1; } }
+          .mv-h-chooser {
+            position: relative;
+            width: min(92vw, 420px);
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 28px 26px 24px;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.04);
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            color: #0d0d0d;
+            animation: mvHChooserIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+          }
+          @keyframes mvHChooserIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .mv-h-chooser-close {
+            position: absolute; top: 12px; right: 12px;
+            width: 32px; height: 32px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.06);
+            border: 0;
+            color: #0d0d0d;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+          }
+          .mv-h-chooser-close:hover { background: rgba(0,0,0,0.10); }
+          .mv-h-chooser-eyebrow {
+            font-size: 10.5px; font-weight: 700;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: #6a6a6a;
+            margin: 6px 0 8px;
+          }
+          .mv-h-chooser-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            line-height: 1.15;
+            letter-spacing: -0.018em;
+            margin: 0 0 6px;
+          }
+          .mv-h-chooser-sub {
+            font-size: 13px;
+            color: #5a5a5a;
+            margin: 0 0 22px;
+          }
+          .mv-h-chooser-btn {
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            margin-top: 10px;
-            background: transparent;
-            border: 0;
-            padding: 6px 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 12.5px;
-            font-weight: 600;
+            gap: 8px;
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.10);
+            background: #fff;
             color: #0d0d0d;
-            opacity: 0.75;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 8px;
-            transition: opacity 0.2s ease, background 0.2s ease;
-            align-self: center;
-            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+            margin-bottom: 10px;
           }
-          .mv-h-paypal:hover:not(:disabled) { opacity: 1; background: rgba(0,0,0,0.04); }
-          .mv-h-paypal-label { letter-spacing: 0.005em; }
-          .mv-h-paypal-brand {
-            font-weight: 800;
+          .mv-h-chooser-btn:last-child { margin-bottom: 0; }
+          .mv-h-chooser-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 32px rgba(0,0,0,0.10);
+          }
+          .mv-h-chooser-btn:disabled { opacity: 0.55; cursor: wait; }
+          .mv-h-chooser-btn-meta {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6a6a6a;
+            letter-spacing: 0.02em;
+          }
+          /* Stripe primary — solid black */
+          .mv-h-chooser-btn-stripe {
+            background: #0d0d0d;
+            color: #ffffff;
+            border-color: #0d0d0d;
+          }
+          .mv-h-chooser-btn-stripe .mv-h-chooser-btn-meta { color: rgba(255,255,255,0.65); }
+          .mv-h-chooser-btn-stripe:hover:not(:disabled) { background: #1f63ff; border-color: #1f63ff; }
+
+          /* PayPal — official-ish gold/blue treatment */
+          .mv-h-chooser-btn-paypal {
+            background: #ffc439;
+            color: #003087;
+            border-color: #ffc439;
+          }
+          .mv-h-chooser-btn-paypal:hover:not(:disabled) { background: #f4b819; border-color: #f4b819; }
+          .mv-h-chooser-btn-paypal-mark {
+            display: inline-flex; align-items: baseline;
             font-style: italic;
-            background: linear-gradient(90deg, #003087 0%, #0070ba 50%, #009cde 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.01em;
           }
-          .mv-h-tier-feat .mv-h-paypal { color: #ffffff; opacity: 0.78; }
-          .mv-h-tier-feat .mv-h-paypal:hover:not(:disabled) { background: rgba(255,255,255,0.08); opacity: 1; }
-          .mv-h-tier-feat .mv-h-paypal-brand {
-            background: linear-gradient(90deg, #ffffff 0%, #cde9ff 50%, #9ad2ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-          }
+          .mv-h-chooser-btn-paypal-pal { color: #003087; }
+          .mv-h-chooser-btn-paypal-pal2 { color: #009cde; }
           .mv-h-or {
             text-align: center;
             font-family: 'Cormorant Garamond', serif;
@@ -2063,18 +2142,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Live in ~48 hours</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => handleCheckout('single', 'monthly')} disabled={isLoading}>
+                  <button className="mv-h-pill" onClick={() => setHomeChooser({ tier: 'single' })} disabled={isLoading}>
                     Start — $20/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  </button>
-                  <button
-                    type="button"
-                    className="mv-h-paypal"
-                    onClick={() => openPaypal(computePaypalCtx('home', 'single', 'monthly'))}
-                    disabled={isLoading}
-                  >
-                    <span className="mv-h-paypal-label">or pay with</span>
-                    <span className="mv-h-paypal-brand">PayPal</span>
                   </button>
                 </div>
                 <div className="mv-h-or">or</div>
@@ -2087,18 +2157,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Deeper SEO setup</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => handleCheckout('multi', 'monthly')} disabled={isLoading}>
+                  <button className="mv-h-pill" onClick={() => setHomeChooser({ tier: 'multi' })} disabled={isLoading}>
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  </button>
-                  <button
-                    type="button"
-                    className="mv-h-paypal"
-                    onClick={() => openPaypal(computePaypalCtx('home', 'multi', 'monthly'))}
-                    disabled={isLoading}
-                  >
-                    <span className="mv-h-paypal-label">or pay with</span>
-                    <span className="mv-h-paypal-brand">PayPal</span>
                   </button>
                 </div>
               </div>
@@ -2170,6 +2231,52 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
               <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
                 Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Payment-method chooser — appears between "Start" and either
+            checkout flow. Visitor picks Stripe (cards) or PayPal
+            (monthly subscription). */}
+        {homeChooser && (
+          <div className="mv-h-chooser-backdrop" onClick={() => setHomeChooser(null)} role="dialog" aria-modal="true">
+            <div className="mv-h-chooser" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-h-chooser-close" onClick={() => setHomeChooser(null)} aria-label="Close">✕</button>
+              <div className="mv-h-chooser-eyebrow">Choose payment method</div>
+              <h3 className="mv-h-chooser-title">
+                {homeChooser.tier === 'multi' ? 'Multi-service · $50/mo' : 'Single page · $20/mo'}
+              </h3>
+              <p className="mv-h-chooser-sub">Either option subscribes you monthly. Cancel anytime.</p>
+
+              <button
+                type="button"
+                className="mv-h-chooser-btn mv-h-chooser-btn-stripe"
+                onClick={() => {
+                  const tier = homeChooser.tier;
+                  setHomeChooser(null);
+                  handleCheckout(tier, 'monthly');
+                }}
+                disabled={isLoading}
+              >
+                <span className="mv-h-chooser-btn-label">Pay with card</span>
+                <span className="mv-h-chooser-btn-meta">via Stripe</span>
+              </button>
+
+              <button
+                type="button"
+                className="mv-h-chooser-btn mv-h-chooser-btn-paypal"
+                onClick={() => {
+                  const tier = homeChooser.tier;
+                  setHomeChooser(null);
+                  openPaypal(computePaypalCtx('home', tier, 'monthly'));
+                }}
+                disabled={isLoading}
+              >
+                <span className="mv-h-chooser-btn-label">Pay with</span>
+                <span className="mv-h-chooser-btn-paypal-mark">
+                  <span className="mv-h-chooser-btn-paypal-pal">Pay</span><span className="mv-h-chooser-btn-paypal-pal2">Pal</span>
+                </span>
               </button>
             </div>
           </div>
