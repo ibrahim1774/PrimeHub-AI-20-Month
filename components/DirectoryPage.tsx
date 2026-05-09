@@ -1538,6 +1538,47 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-tier-list li { padding: 4px 0; }
           .mv-h-tier-list li::before { content: '— '; color: #d4914a; font-weight: 700; }
           .mv-h-tier .mv-h-pill { align-self: stretch; justify-content: center; }
+          /* PayPal alternate option, shown beneath the Stripe pill on
+             home tier cards. Clean text-link style so it reads as
+             "or pay with PayPal" without competing with the primary CTA. */
+          .mv-h-paypal {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            background: transparent;
+            border: 0;
+            padding: 6px 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #0d0d0d;
+            opacity: 0.75;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: opacity 0.2s ease, background 0.2s ease;
+            align-self: center;
+            text-decoration: none;
+          }
+          .mv-h-paypal:hover:not(:disabled) { opacity: 1; background: rgba(0,0,0,0.04); }
+          .mv-h-paypal-label { letter-spacing: 0.005em; }
+          .mv-h-paypal-brand {
+            font-weight: 800;
+            font-style: italic;
+            background: linear-gradient(90deg, #003087 0%, #0070ba 50%, #009cde 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .mv-h-tier-feat .mv-h-paypal { color: #ffffff; opacity: 0.78; }
+          .mv-h-tier-feat .mv-h-paypal:hover:not(:disabled) { background: rgba(255,255,255,0.08); opacity: 1; }
+          .mv-h-tier-feat .mv-h-paypal-brand {
+            background: linear-gradient(90deg, #ffffff 0%, #cde9ff 50%, #9ad2ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
           .mv-h-or {
             text-align: center;
             font-family: 'Cormorant Garamond', serif;
@@ -2026,6 +2067,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     Start — $20/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
+                  <button
+                    type="button"
+                    className="mv-h-paypal"
+                    onClick={() => openPaypal(computePaypalCtx('home', 'single', 'monthly'))}
+                    disabled={isLoading}
+                  >
+                    <span className="mv-h-paypal-label">or pay with</span>
+                    <span className="mv-h-paypal-brand">PayPal</span>
+                  </button>
                 </div>
                 <div className="mv-h-or">or</div>
                 <div className="mv-h-tier mv-h-tier-feat">
@@ -2040,6 +2090,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <button className="mv-h-pill" onClick={() => handleCheckout('multi', 'monthly')} disabled={isLoading}>
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="mv-h-paypal"
+                    onClick={() => openPaypal(computePaypalCtx('home', 'multi', 'monthly'))}
+                    disabled={isLoading}
+                  >
+                    <span className="mv-h-paypal-label">or pay with</span>
+                    <span className="mv-h-paypal-brand">PayPal</span>
                   </button>
                 </div>
               </div>
