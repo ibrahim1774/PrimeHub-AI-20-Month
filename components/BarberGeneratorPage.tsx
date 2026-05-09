@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import BarberSamplePreview from './BarberSamplePreview';
+import BarberSamplePreview, { GENERATOR_PRICING } from './BarberSamplePreview';
 import { captureBarberGeneratorLead } from '../services/leadService';
 
 const STICKY_TEXT =
@@ -78,6 +78,7 @@ const BarberGeneratorPage: React.FC = () => {
         mobileBarEyebrow=""
         showIntroBanner={false}
         autoScroll={false}
+        pricing={GENERATOR_PRICING}
       />
     );
   }

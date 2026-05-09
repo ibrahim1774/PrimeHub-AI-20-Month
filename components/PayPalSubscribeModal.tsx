@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export type PayPalRegion = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive';
+export type PayPalRegion = 'us' | 'aus' | 'ten' | 'five' | 'barber' | 'localbusiness' | 'home' | 'barberFive' | 'barberGenerator';
 type Tier = 'single' | 'multi';
 type Plan = 'monthly' | 'yearly';
 
