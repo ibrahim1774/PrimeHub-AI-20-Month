@@ -214,9 +214,9 @@ const REGIONS: Record<Region, {
     source: 'barberFive',
     currency: 'USD',
     currencySymbol: '$',
-    monthlyAmount: 10,
-    yearlyAmount: 72,
-    yearlyWas: 120,
+    monthlyAmount: 5,
+    yearlyAmount: 36,
+    yearlyWas: 60,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -695,10 +695,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveExamples = isBarberFive ? barberFiveGallery : freewebsite49Gallery;
     const fiveTier: 'single' | 'multi' = activeHomeTier;
     const fiveIsYearly = pricingPlan === 'yearly';
-    const singleMonthly = isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 10 : 5;
-    const singleYearly = isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 72 : 36;
-    const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 20 : 10;
-    const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 144 : 72;
+    const singleMonthly = isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 5 : 5;
+    const singleYearly = isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 36 : 36;
+    const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 10 : 10;
+    const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 72 : 72;
     const heroEyebrow = isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
     const primaryCtaLabel = isBarberTrial ? 'Get started for free' : 'See pricing';
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
@@ -878,6 +878,20 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .mv-f-page-barber .mv-f-gallery-arrow { background:#c9a96e; color:#0a0a0a; box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.5); }
             .mv-f-page-barber .mv-f-gallery-arrow:hover { background:#d8b67a; }
             .mv-f-page-barber .mv-f-gallery-hint { color:#c9a96e; opacity:.85; }
+
+            /* Desktop polish for /barber-5 + /barber-5-month gallery so
+               the small 130px portrait cards don't sit awkwardly with
+               half the section empty on wider screens. */
+            @media (min-width: 900px) {
+              .mv-f-page-barber .mv-f-gcard { width: 168px; border-radius: 16px; }
+              .mv-f-page-barber .mv-f-gallery-compact .mv-f-gcard { width: 132px; }
+              .mv-f-page-barber .mv-f-gallery { gap: 14px; justify-content: center; }
+              .mv-f-page-barber .mv-f-gallery-hint { display: none; }
+            }
+            @media (min-width: 1280px) {
+              .mv-f-page-barber .mv-f-gcard { width: 196px; border-radius: 18px; }
+              .mv-f-page-barber .mv-f-gallery { gap: 18px; }
+            }
           ` : ''}
 
           ${isBarberTrial ? `
