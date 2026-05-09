@@ -269,7 +269,7 @@ const BarberSamplePreview: React.FC<Props> = ({
 /* GUARANTEE — pinned at the top of the pricing modal so visitors see
    the offer before any pricing. Strong gold border + glow makes it
    the first thing the eye lands on. */
-.bsp-guarantee { position: relative; margin: 0 0 16px; padding: 14px 16px 13px; border-radius: 12px; background: linear-gradient(180deg, rgba(212,166,74,0.16) 0%, rgba(212,166,74,0.06) 100%); border: 1px solid rgba(212,166,74,0.55); box-shadow: 0 0 0 1px rgba(212,166,74,0.10), 0 12px 28px rgba(212,166,74,0.16), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
+.bsp-guarantee { position: relative; margin: 4px 0 18px; padding: 16px 18px 15px 22px; border-radius: 12px; background: linear-gradient(180deg, rgba(212,166,74,0.16) 0%, rgba(212,166,74,0.06) 100%); border: 1px solid rgba(212,166,74,0.55); box-shadow: 0 0 0 1px rgba(212,166,74,0.10), 0 12px 28px rgba(212,166,74,0.16), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
 .bsp-guarantee::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #f0cd84, #d4a64a); border-radius: 12px 0 0 12px; }
 .bsp-guarantee-eyebrow { display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #f0cd84; margin: 0 0 6px; }
 .bsp-guarantee-icon { width: 14px; height: 14px; flex-shrink: 0; color: #f0cd84; }
@@ -409,13 +409,13 @@ const BarberSamplePreview: React.FC<Props> = ({
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 6px 10px 0;
+    padding: 14px 16px 6px;
     background: transparent;
     border-bottom: 0;
     flex-shrink: 0;
   }
   .bsp-card.expanded .bsp-mobile-header-close {
-    width: 30px; height: 30px;
+    width: 32px; height: 32px;
     border-radius: 999px;
     background: rgba(212,166,74,0.10);
     border: 1px solid rgba(212,166,74,0.30);
@@ -428,7 +428,11 @@ const BarberSamplePreview: React.FC<Props> = ({
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 6px 26px 24px;
+    /* Generous side + top + bottom padding so the guarantee block,
+       title, lists, and pricing tiers all have clear breathing room
+       against the modal border. The bottom 32px ensures the last
+       tier doesn't kiss the rounded edge. */
+    padding: 12px 24px 32px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }

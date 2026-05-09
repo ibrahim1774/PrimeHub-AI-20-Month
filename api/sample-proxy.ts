@@ -68,14 +68,29 @@ export default async function handler(req: any, res: any) {
             if (city) html = html.replace(/\bCambridge\b/g, escapeHtml(city));
 
             // Strip Euphoria-specific provenance that doesn't apply to
-            // the visitor's shop (state + zip, est. year, neighborhood).
+            // the visitor's shop. Year, state+zip, neighborhood, hard-
+            // coded review counts, the original street address, and
+            // city-prefixed taglines all get scrubbed so the personalized
+            // preview reads as generic, not someone-else's site.
             html = html
                 .replace(/,?\s*MA\s*02141/g, '')
                 .replace(/\b02141\b/g, '')
                 .replace(/\s*[·\-—]\s*Est\.\s*2013/gi, '')
                 .replace(/\bEst\.\s*2013\b/gi, '')
                 .replace(/\s+since\s+2013/gi, '')
-                .replace(/\bWellington-Harrington\b/g, '');
+                .replace(/\bWellington-Harrington\b/g, '')
+                // Hero rating line: "★★★★★ 4.6 rating · 145 reviews on Google"
+                .replace(/<div class="hero-rating">[\s\S]*?<\/div>/g, '')
+                // Stand-alone rating/review fragments anywhere else
+                .replace(/\b\d+(\.\d+)?\s*rating\b/gi, '')
+                .replace(/\b\d+\s*reviews?(\s+on\s+Google)?/gi, '')
+                .replace(/4\.6★\s*[·\-—]?\s*145\s*Google\s*reviews/gi, '')
+                // Original street address + footer tradition line
+                .replace(/766B\s+Cambridge\s+St[^<]*/g, '')
+                .replace(/\s*[·\-—]\s*A\s+Cambridge\s+Tradition/gi, '')
+                .replace(/\bA\s+Cambridge\s+Tradition\b/gi, '')
+                // City-specific superlative ("Cambridge's premier cut")
+                .replace(/Cambridge['’]s\s+premier\s+cut/gi, 'Premier cuts');
 
             // Replace the upstream logo image with the visitor's shop
             // name in white serif text. The wrapping <a class="logo-mark">

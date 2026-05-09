@@ -534,10 +534,6 @@ const BarberGeneratorPage: React.FC = () => {
 
           <div className="bgp-rule" />
 
-          <p className="bgp-note">
-            Fully customized and live within 24 hours.
-          </p>
-
           <button
             type="submit"
             className="bgp-submit"
@@ -545,8 +541,6 @@ const BarberGeneratorPage: React.FC = () => {
           >
             Generate My Barbershop Site
           </button>
-
-          <div className="bgp-foot">No signup &middot; instant preview</div>
         </form>
       </div>
     </>
