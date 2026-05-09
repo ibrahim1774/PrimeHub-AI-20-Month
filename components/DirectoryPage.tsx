@@ -2281,6 +2281,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </div>
           </div>
         )}
+
+        {/* PayPal subscription modal — rendered here so the chooser's
+            "Pay with PayPal" button has somewhere to open. The other
+            region branches mount their own copy. */}
+        <PayPalSubscribeModal
+          open={paypalOpen}
+          ctx={paypalCtx}
+          onClose={() => setPaypalOpen(false)}
+        />
       </>
     );
   }
