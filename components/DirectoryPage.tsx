@@ -804,6 +804,48 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-tier-compact { padding:12px 14px; }
           .mv-f-tier-compact .mv-f-tier-price { font-size:22px; }
 
+          /* "$0 Design Fee — hosting only" clarifier banner above the
+             pricing tiers. Visible on /barber-5 + /barber-5-month. */
+          .mv-f-hosting-note {
+            display:flex; align-items:center; gap:10px;
+            margin:0 auto 14px;
+            max-width:560px;
+            padding:10px 14px;
+            border-radius:14px;
+            background:linear-gradient(180deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.06) 100%);
+            border:1px solid rgba(201,169,110,0.40);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 16px rgba(0,0,0,0.20);
+            font-family:'Inter', sans-serif;
+            color:#f5ecd7;
+          }
+          .mv-f-hosting-pill {
+            flex-shrink:0;
+            background:#c9a96e; color:#0a0907;
+            font-size:10.5px; font-weight:800;
+            letter-spacing:0.10em; text-transform:uppercase;
+            padding:5px 10px;
+            border-radius:999px;
+            box-shadow:0 4px 10px rgba(201,169,110,0.30);
+          }
+          .mv-f-hosting-text { font-size:12.5px; line-height:1.45; color:#e9e1cf; letter-spacing:0.005em; }
+          .mv-f-hosting-text strong { color:#c9a96e; font-weight:700; }
+          @media (max-width: 640px) {
+            .mv-f-hosting-note { gap:9px; padding:9px 12px; }
+            .mv-f-hosting-pill { font-size:9.5px; padding:4px 8px; }
+            .mv-f-hosting-text { font-size:12px; }
+          }
+          /* Light-theme fallback when the barber dark wrapper isn't on
+             the page (kept just in case the note is reused later). */
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-hosting-note {
+            background:#fff;
+            border:1px solid rgba(13,13,13,0.08);
+            color:#0d0d0d;
+            box-shadow:0 6px 16px rgba(0,0,0,0.06);
+          }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-hosting-pill { background:#0d0d0d; color:#fff; }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-hosting-text { color:#2a2a2a; }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-hosting-text strong { color:#0d0d0d; }
+
           /* "or pay with PayPal" link beneath each barber-5 tier card */
           .mv-f-paypal-link {
             display:inline-flex; align-items:center; justify-content:center; gap:6px;
@@ -1222,6 +1264,16 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
                 <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
               </div>
+
+              {/* $0 Design clarifier — what the monthly fee actually pays for */}
+              {isBarberFive && (
+                <div className="mv-f-hosting-note" role="note" aria-label="What the monthly fee covers">
+                  <span className="mv-f-hosting-pill">$0 Design Fee</span>
+                  <span className="mv-f-hosting-text">
+                    Your monthly payment covers <strong>website hosting</strong> only — design, build, and edits are included on us.
+                  </span>
+                </div>
+              )}
 
               <div className="mv-f-tiers">
                 <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => {
