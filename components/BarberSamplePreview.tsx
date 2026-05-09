@@ -389,11 +389,13 @@ const BarberSamplePreview: React.FC<Props> = ({
     right: auto;
     bottom: auto;
     transform: translate(-50%, -50%);
-    width: calc(100vw - 24px);
-    max-width: 420px;
+    width: 92vw;
+    max-width: 400px;
     height: auto;
-    max-height: min(86dvh, 86vh);
-    border-radius: 18px;
+    /* dvh accounts for the iOS browser bottom bar so the bottom of
+       the modal never disappears behind it. */
+    max-height: min(85dvh, 85vh);
+    border-radius: 16px;
     border: 1px solid rgba(212,166,74,0.25);
     padding: 0;
     overflow: hidden;
@@ -405,37 +407,104 @@ const BarberSamplePreview: React.FC<Props> = ({
     from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
     to   { opacity: 1; transform: translate(-50%, -50%); }
   }
+
+  /* Header row holds the close button only — sticky so it stays
+     visible while the body scrolls. */
   .bsp-card.expanded .bsp-mobile-header {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 14px 16px 6px;
+    padding: 10px 12px 4px;
     background: transparent;
     border-bottom: 0;
     flex-shrink: 0;
   }
   .bsp-card.expanded .bsp-mobile-header-close {
-    width: 32px; height: 32px;
+    width: 30px; height: 30px;
     border-radius: 999px;
     background: rgba(212,166,74,0.10);
     border: 1px solid rgba(212,166,74,0.30);
     color: #d4a64a;
-    font-size: 17px;
+    font-size: 16px;
+    line-height: 1;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
+
+  /* Scroll container: tight uniform side padding (16px) so nothing
+     ever touches an edge. Bottom padding includes safe-area-inset
+     so iOS home indicator never overlaps the last tier. */
   .bsp-card.expanded .bsp-card-body {
     flex: 1 1 auto;
     overflow-y: auto;
-    /* Generous side + top + bottom padding so the guarantee block,
-       title, lists, and pricing tiers all have clear breathing room
-       against the modal border. The bottom 32px ensures the last
-       tier doesn't kiss the rounded edge. */
-    padding: 12px 24px 32px;
+    overflow-x: hidden;
+    padding: 8px 16px calc(20px + env(safe-area-inset-bottom, 0px));
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
+
+  /* Compact mobile-only overrides for the inner blocks so
+     everything fits inside 92vw without horizontal overflow. */
+  .bsp-card.expanded .bsp-guarantee {
+    margin: 2px 0 14px;
+    padding: 12px 14px 11px 18px;
+    border-radius: 10px;
+  }
+  .bsp-card.expanded .bsp-guarantee-eyebrow { font-size: 10px; letter-spacing: 0.18em; margin-bottom: 5px; }
+  .bsp-card.expanded .bsp-guarantee-body { font-size: 13px; line-height: 1.38; }
+
+  .bsp-card.expanded .bsp-title { font-size: 17px; margin: 0 0 6px; }
+  .bsp-card.expanded .bsp-sub { font-size: 11px; line-height: 1.45; margin: 0 0 8px; }
+  .bsp-card.expanded .bsp-rule { margin: 10px 0; }
+  .bsp-card.expanded .bsp-list-eyebrow { font-size: 9px; margin-bottom: 7px; }
+  .bsp-card.expanded .bsp-list { gap: 7px; }
+  .bsp-card.expanded .bsp-bullet-body strong { font-size: 10.5px; }
+  .bsp-card.expanded .bsp-bullet-body span { font-size: 9.5px; line-height: 1.4; }
+
+  /* Toggle: centered, compact */
+  .bsp-card.expanded .bsp-toggle {
+    align-self: center;
+    margin: 4px auto 14px;
+  }
+  .bsp-card.expanded .bsp-toggle button {
+    padding: 7px 12px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    gap: 6px;
+  }
+  .bsp-card.expanded .bsp-save { font-size: 8.5px; padding: 2px 6px; }
+
+  /* Pricing tiers — compact card, smaller type, no horizontal overflow */
+  .bsp-card.expanded .bsp-tiers { gap: 8px; }
+  .bsp-card.expanded .bsp-tier {
+    padding: 11px 13px;
+    gap: 10px;
+    border-radius: 11px;
+  }
+  .bsp-card.expanded .bsp-tier-name { font-size: 13px; }
+  .bsp-card.expanded .bsp-tier-desc { font-size: 9.5px; line-height: 1.35; }
+  .bsp-card.expanded .bsp-tier-price { font-size: 18px; }
+  .bsp-card.expanded .bsp-tier-per { font-size: 9px; margin-top: 2px; }
+
+  /* Recommended badge: pinned inside the multi tier's upper-left.
+     We add extra top padding to the multi tier so the tier-name copy
+     doesn't sit underneath the badge. The badge no longer floats
+     above the card, so nothing gets clipped by the modal scroll
+     container. */
+  .bsp-card.expanded .bsp-tier-multi { padding-top: 22px; }
+  .bsp-card.expanded .bsp-recommended {
+    top: 6px;
+    left: 12px;
+    right: auto;
+    font-size: 7.5px;
+    padding: 2px 7px;
+    letter-spacing: 0.16em;
+  }
+
+  .bsp-card.expanded .bsp-foot { margin-top: 10px; padding-top: 10px; }
+  .bsp-card.expanded .bsp-foot-row { font-size: 10px; }
+
   .bsp-mobile-bar { display: flex; }
   .bsp-mobile-bar.hidden { display: none; }
 }
