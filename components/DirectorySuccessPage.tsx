@@ -7,8 +7,8 @@ const DirectorySuccessPage: React.FC = () => {
   const [phase, setPhase] = useState<'success' | 'onboarding'>('success');
 
   useEffect(() => {
-    // Fire FB Pixel Purchase event with dedup eventID from Stripe session
-    if (typeof window !== 'undefined' && (window as any).fbq) {
+    // Fire FB + TikTok Pixel Purchase event with dedup eventID from Stripe session
+    if (typeof window !== 'undefined' && ((window as any).fbq || (window as any).ttq)) {
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
       const plan = params.get('plan') || 'monthly';
@@ -34,10 +34,15 @@ const DirectorySuccessPage: React.FC = () => {
       const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $20/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
-      (window as any).fbq('track', 'Purchase', {
-        currency: isAus ? 'AUD' : 'USD',
-        value,
-      }, { eventID });
+      const currency = isAus ? 'AUD' : 'USD';
+      const w = window as any;
+      if (w.fbq) {
+        w.fbq('track', 'Purchase', { currency, value }, { eventID });
+      }
+      if (w.ttq) {
+        // TikTok's purchase event is "CompletePayment".
+        w.ttq.track('CompletePayment', { currency, value }, { event_id: eventID });
+      }
     }
 
     // After 2.5s, show onboarding message
