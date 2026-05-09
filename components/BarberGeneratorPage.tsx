@@ -3,7 +3,7 @@ import BarberSamplePreview from './BarberSamplePreview';
 import { captureBarberGeneratorLead } from '../services/leadService';
 
 const STICKY_TEXT =
-  "This is a sample/demo site. Your final website can be fully customized and deployed within 24 hours, and we handle all edits for you.";
+  'Your final barber website will be fully customized and deployed within 24 hours, and we will handle all edits for you.';
 
 // Steps shown alongside the percentage on the loading screen.
 // Each step's threshold is the percent at which it becomes 'current'.

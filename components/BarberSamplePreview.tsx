@@ -245,11 +245,14 @@ const BarberSamplePreview: React.FC<Props> = ({
 .bsp-iframe {
   position: absolute;
   top: 0; left: 0;
-  width: 114.29%;
-  height: 114.29%;
+  /* Mobile: scale ~0.80 so the upstream hero feels naturally framed
+     instead of cropping in on the storefront photo. width/height are
+     1/scale so the scaled iframe still fills the viewport exactly. */
+  width: 125%;
+  height: 125%;
   border: 0;
   background: #000;
-  transform: scale(0.875);
+  transform: scale(0.80);
   transform-origin: top left;
   pointer-events: none;
 }
@@ -280,19 +283,15 @@ const BarberSamplePreview: React.FC<Props> = ({
 .bsp-badge::before, .bsp-badge::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(212,166,74,0.45), transparent); }
 .bsp-badge-dot { display: none; }
 
-/* GUARANTEE — pinned at the top of the pricing modal so visitors see
-   the offer before any pricing. Strong gold border + glow makes it
-   the first thing the eye lands on. */
-.bsp-guarantee { position: relative; margin: 4px 0 18px; padding: 16px 18px 15px 22px; border-radius: 12px; background: linear-gradient(180deg, rgba(212,166,74,0.16) 0%, rgba(212,166,74,0.06) 100%); border: 1px solid rgba(212,166,74,0.55); box-shadow: 0 0 0 1px rgba(212,166,74,0.10), 0 12px 28px rgba(212,166,74,0.16), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
-.bsp-guarantee::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #f0cd84, #d4a64a); border-radius: 12px 0 0 12px; }
-.bsp-guarantee-eyebrow { display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #f0cd84; margin: 0 0 6px; }
-.bsp-guarantee-icon { width: 14px; height: 14px; flex-shrink: 0; color: #f0cd84; }
-.bsp-guarantee-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 14px; line-height: 1.4; color: #f5ecd7; margin: 0; letter-spacing: 0.005em; }
+/* GUARANTEE — clean editorial section header, NOT an outlined input.
+   Soft gold tint + slim left rail anchor it visually without
+   competing with the pricing tiers below. */
+.bsp-guarantee { position: relative; margin: 0 0 16px; padding: 12px 14px 12px 16px; border-radius: 10px; background: linear-gradient(180deg, rgba(212,166,74,0.10) 0%, rgba(212,166,74,0.03) 100%); border: 0; box-shadow: none; overflow: hidden; }
+.bsp-guarantee::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, #f0cd84, #d4a64a); border-radius: 999px; }
+.bsp-guarantee-eyebrow { display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #f0cd84; margin: 0 0 5px; }
+.bsp-guarantee-icon { width: 13px; height: 13px; flex-shrink: 0; color: #f0cd84; }
+.bsp-guarantee-body { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 13.5px; line-height: 1.4; color: #f5ecd7; margin: 0; letter-spacing: 0.005em; }
 .bsp-guarantee-body strong { font-style: normal; font-weight: 600; color: #f0cd84; }
-@media (max-width: 720px) {
-  .bsp-guarantee { padding: 13px 15px 12px; }
-  .bsp-guarantee-body { font-size: 14.5px; }
-}
 
 .bsp-title { font-family: 'Cormorant Garamond', 'Instrument Serif', serif; font-weight: 500; font-size: 19px; line-height: 1.18; letter-spacing: -0.005em; color: #f5ecd7; margin: 0 0 8px; }
 .bsp-title em { color: #d4a64a; font-style: italic; font-weight: 500; }
@@ -334,20 +333,23 @@ const BarberSamplePreview: React.FC<Props> = ({
 
 .bsp-error { margin-top: 10px; padding: 9px 12px; background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30); border-radius: 8px; color: #fca5a5; font-size: 11.5px; }
 
-.bsp-mobile-bar { display: none; position: fixed; bottom: 16px; left: 14px; right: 14px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 18px; padding: 18px 20px; color: #e9e1cf; z-index: 9990; box-shadow: 0 28px 64px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 14px; font-family: 'DM Sans', sans-serif; }
+/* ~25% smaller than the previous mobile sticky CTA: tighter padding,
+   smaller copy, slimmer button. Still premium, takes much less of
+   the visible hero. */
+.bsp-mobile-bar { display: none; position: fixed; bottom: 12px; left: 12px; right: 12px; background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 70%); border: 1px solid rgba(212,166,74,0.32); border-radius: 14px; padding: 12px 14px; color: #e9e1cf; z-index: 9990; box-shadow: 0 22px 50px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.04); flex-direction: column; gap: 10px; font-family: 'DM Sans', sans-serif; }
 
 .bsp-mobile-top { display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-pulse { display: none; }
-.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #d4a64a; letter-spacing: 0.22em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
+.bsp-mobile-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; color: #d4a64a; letter-spacing: 0.20em; text-transform: uppercase; flex: 1; display: flex; align-items: center; gap: 10px; }
 .bsp-mobile-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,166,74,0.45), transparent); }
 
-.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 23px; line-height: 1.18; color: #f5ecd7; letter-spacing: -0.005em; }
+.bsp-mobile-bar-text { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 14px; line-height: 1.35; color: #f5ecd7; letter-spacing: 0; }
 .bsp-mobile-bar-text strong { font-weight: 500; color: #f5ecd7; }
 .bsp-mobile-bar-text em { color: #d4a64a; font-style: italic; font-weight: 500; }
 
 .bsp-mobile-bullets { display: none; }
 
-.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.18em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.bsp-mobile-bar-btn { background: transparent; color: #d4a64a; border: 1px solid #d4a64a; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; border-radius: 999px; cursor: pointer; letter-spacing: 0.16em; text-transform: uppercase; width: 100%; transition: background 0.2s, color 0.2s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .bsp-mobile-bar-btn:hover, .bsp-mobile-bar-btn:active { background: #d4a64a; color: #0a0907; }
 
 .bsp-intro {
@@ -403,8 +405,8 @@ const BarberSamplePreview: React.FC<Props> = ({
     right: auto;
     bottom: auto;
     transform: translate(-50%, -50%);
-    width: 92vw;
-    max-width: 400px;
+    width: min(92vw, 420px);
+    max-width: 420px;
     height: auto;
     /* dvh accounts for the iOS browser bottom bar so the bottom of
        the modal never disappears behind it. */
@@ -459,14 +461,15 @@ const BarberSamplePreview: React.FC<Props> = ({
   }
 
   /* Compact mobile-only overrides for the inner blocks so
-     everything fits inside 92vw without horizontal overflow. */
+     everything fits inside the viewport without horizontal overflow. */
   .bsp-card.expanded .bsp-guarantee {
-    margin: 2px 0 14px;
-    padding: 12px 14px 11px 18px;
-    border-radius: 10px;
+    margin: 0 0 12px;
+    padding: 10px 12px 10px 14px;
+    border-radius: 8px;
   }
-  .bsp-card.expanded .bsp-guarantee-eyebrow { font-size: 10px; letter-spacing: 0.18em; margin-bottom: 5px; }
-  .bsp-card.expanded .bsp-guarantee-body { font-size: 13px; line-height: 1.38; }
+  .bsp-card.expanded .bsp-guarantee::before { left: 0; top: 6px; bottom: 6px; }
+  .bsp-card.expanded .bsp-guarantee-eyebrow { font-size: 9.5px; letter-spacing: 0.20em; margin-bottom: 4px; }
+  .bsp-card.expanded .bsp-guarantee-body { font-size: 12.5px; line-height: 1.4; }
 
   .bsp-card.expanded .bsp-title { font-size: 17px; margin: 0 0 6px; }
   .bsp-card.expanded .bsp-sub { font-size: 11px; line-height: 1.45; margin: 0 0 8px; }
