@@ -804,6 +804,62 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-tier-compact { padding:12px 14px; }
           .mv-f-tier-compact .mv-f-tier-price { font-size:22px; }
 
+          /* "Our Guarantee" — 24-hour-delivery refund promise pinned
+             above the pricing cards on /barber-5 + /barber-5-month.
+             Bold gold border + slim accent rail so it reads as a
+             trust seal, not a form field. */
+          .mv-f-guarantee {
+            position:relative;
+            margin:0 auto 12px;
+            max-width:560px;
+            padding:14px 18px 13px 22px;
+            border-radius:14px;
+            background:linear-gradient(180deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.06) 100%);
+            border:1px solid rgba(201,169,110,0.55);
+            box-shadow:0 0 0 1px rgba(201,169,110,0.10), 0 12px 28px rgba(201,169,110,0.18), inset 0 1px 0 rgba(255,255,255,0.05);
+            color:#f5ecd7;
+            overflow:hidden;
+          }
+          .mv-f-guarantee::before {
+            content:''; position:absolute;
+            left:0; top:10px; bottom:10px; width:3px;
+            background:linear-gradient(180deg, #f0cd84, #c9a96e);
+            border-radius:999px;
+          }
+          .mv-f-guarantee-head { display:flex; align-items:center; gap:8px; margin:0 0 6px; }
+          .mv-f-guarantee-icon { width:16px; height:16px; flex-shrink:0; color:#f0cd84; }
+          .mv-f-guarantee-eyebrow {
+            font-family:'Inter', sans-serif;
+            font-size:11px; font-weight:800;
+            letter-spacing:0.22em; text-transform:uppercase;
+            color:#f0cd84;
+          }
+          .mv-f-guarantee-body {
+            font-family:'Inter', sans-serif;
+            font-size:13.5px; line-height:1.45;
+            color:#f5ecd7;
+            margin:0;
+            letter-spacing:0.005em;
+          }
+          .mv-f-guarantee-body strong { color:#f0cd84; font-weight:700; }
+          @media (max-width: 640px) {
+            .mv-f-guarantee { padding:13px 16px 12px 20px; }
+            .mv-f-guarantee-eyebrow { font-size:10.5px; }
+            .mv-f-guarantee-body { font-size:13px; }
+          }
+          /* Light-theme fallback */
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee {
+            background:#fffbef;
+            border-color:rgba(212,145,74,0.55);
+            color:#0d0d0d;
+            box-shadow:0 0 0 1px rgba(212,145,74,0.10), 0 12px 28px rgba(212,145,74,0.18);
+          }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee::before { background:linear-gradient(180deg, #f0bd6c, #d4914a); }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee-eyebrow,
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee-icon { color:#a85a1a; }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee-body { color:#2a2a2a; }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-guarantee-body strong { color:#a85a1a; }
+
           /* "$0 Design Fee — hosting only" clarifier banner above the
              pricing tiers. Visible on /barber-5 + /barber-5-month. */
           .mv-f-hosting-note {
@@ -1264,6 +1320,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
                 <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
               </div>
+
+              {/* 24-hour delivery guarantee — pinned above the pricing
+                  cards so visitors see the risk-free promise first. */}
+              {isBarberFive && (
+                <div className="mv-f-guarantee" role="note" aria-label="24-hour delivery guarantee">
+                  <div className="mv-f-guarantee-head">
+                    <svg className="mv-f-guarantee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z" />
+                      <polyline points="9 12 11 14 15 10" />
+                    </svg>
+                    <span className="mv-f-guarantee-eyebrow">Our Guarantee</span>
+                  </div>
+                  <p className="mv-f-guarantee-body">
+                    If we don't deliver your custom site within <strong>24 hours</strong>, we refund you in full — and you still keep the site.
+                  </p>
+                </div>
+              )}
 
               {/* $0 Design clarifier — what the monthly fee actually pays for */}
               {isBarberFive && (
