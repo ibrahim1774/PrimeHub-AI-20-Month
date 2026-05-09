@@ -67,18 +67,32 @@ const BarberSamplePreview: React.FC<Props> = ({
     setLoading(true);
     setError(null);
 
-    // Fire Meta Pixel InitiateCheckout (browser-side, dedups w/ CAPI on session id later)
-    if (typeof window !== 'undefined' && (window as any).fbq) {
+    // Fire Meta Pixel + TikTok Pixel InitiateCheckout (browser-side,
+    // dedups w/ each platform's CAPI on session id later).
+    if (typeof window !== 'undefined') {
       const monthlyValue = tier === 'multi' ? 10 : 5;
       const yearlyValue  = tier === 'multi' ? 72 : 36;
       const value = plan === 'yearly' ? yearlyValue : monthlyValue;
       const eventID = `ic_${source}_${tier}_${plan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      (window as any).fbq('track', 'InitiateCheckout', {
-        value,
-        currency: 'USD',
-        content_name: tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page',
-        content_category: 'subscription',
-      }, { eventID });
+      const contentName = tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page';
+      const w = window as any;
+      if (w.fbq) {
+        w.fbq('track', 'InitiateCheckout', {
+          value,
+          currency: 'USD',
+          content_name: contentName,
+          content_category: 'subscription',
+        }, { eventID });
+      }
+      if (w.ttq) {
+        w.ttq.track('InitiateCheckout', {
+          value,
+          currency: 'USD',
+          content_name: contentName,
+          content_type: 'product',
+          contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
+        }, { event_id: eventID });
+      }
     }
 
     try {

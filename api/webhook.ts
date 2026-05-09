@@ -75,6 +75,61 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
 const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
 
+// TikTok Pixel ID is public (already in the browser snippet) so it's
+// safe as a default. The access token MUST live in env vars.
+const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D4D45MRC77U2TCIL3ILG';
+const TIKTOK_ACCESS_TOKEN = process.env.TIKTOK_ACCESS_TOKEN;
+const TIKTOK_TEST_EVENT_CODE = process.env.TIKTOK_TEST_EVENT_CODE; // optional
+
+// TikTok Events API (v1.3). Mirrors sendFBConversionsEvent above.
+// Browser pixel fires 'CompletePayment' with the same event_id, so
+// TikTok dedupes the two automatically.
+async function sendTikTokConversionsEvent(pixelId: string, accessToken: string, data: any) {
+    try {
+        const sha256 = (text?: string) => {
+            if (!text) return undefined;
+            return crypto.createHash('sha256').update(text.trim().toLowerCase()).digest('hex');
+        };
+        const body: any = {
+            event_source: 'web',
+            event_source_id: pixelId,
+            ...(TIKTOK_TEST_EVENT_CODE ? { test_event_code: TIKTOK_TEST_EVENT_CODE } : {}),
+            data: [
+                {
+                    event: 'CompletePayment',
+                    event_time: Math.floor(Date.now() / 1000),
+                    event_id: data.eventId,
+                    user: {
+                        email: sha256(data.email),
+                        ip: data.clientIp,
+                        user_agent: data.userAgent,
+                    },
+                    properties: {
+                        currency: (data.currency || 'USD').toUpperCase(),
+                        value: data.value,
+                    },
+                    page: {
+                        url: data.eventSourceUrl,
+                    },
+                },
+            ],
+        };
+        const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Token': accessToken,
+            },
+            body: JSON.stringify(body),
+        });
+        const result = await response.json();
+        console.log('[TikTok CAPI Result]', result);
+        return result;
+    } catch (error) {
+        console.error('[TikTok CAPI Error]', error);
+    }
+}
+
 async function sendFBConversionsEvent(pixelId: string, accessToken: string, data: any) {
     try {
         const hash = (text: string) => {
@@ -208,6 +263,54 @@ export default async function handler(req: any, res: any) {
             });
         } else {
             console.warn('[Webhook] FB_ACCESS_TOKEN not set; skipping CAPI event');
+        }
+
+        // Trigger TikTok CAPI Purchase Event in parallel. Reuses the
+        // same event_id ('purchase_<stripe session id>') as the FB
+        // CAPI + TikTok pixel call so TikTok can dedupe browser ↔ server.
+        if (TIKTOK_ACCESS_TOKEN) {
+            const source = session.metadata?.source;
+            const isAus = source === 'australia';
+            const isTen = source === 'ten';
+            const isFive = source === 'five';
+            const isBarberFive = source === 'barberFive';
+            const isBarberFiveMonth = source === 'barberFiveMonth';
+            const isBarberTrial = source === 'barberTrial';
+            const isBarberSample = source === 'barberSample';
+            const isBarberGenerator = source === 'barberGenerator';
+            const isNineteen = source === 'nineteen';
+            const isBarber = source === 'barber';
+            const isLocalBusiness = source === 'localbusiness';
+            const isHome = source === 'home';
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isNineteen || isBarber || isLocalBusiness || isHome;
+            const origin = req.headers?.origin || 'https://www.amalvera.com';
+            const directoryPath = isAus ? '/aus'
+                : isTen ? '/10'
+                : isFive ? '/5'
+                : isBarberGenerator ? '/barber-generator'
+                : isBarberSample ? '/barber-sample'
+                : isBarberTrial ? '/barber-trial'
+                : isBarberFiveMonth ? '/barber-5-month'
+                : isBarberFive ? '/barber-5'
+                : isNineteen ? '/19'
+                : isBarber ? '/barber'
+                : isLocalBusiness ? '/local-business'
+                : isHome ? '/'
+                : '/1';
+            const eventSourceUrl = isDirectory
+                ? `${origin}${directoryPath}?status=success&session_id=${session.id}`
+                : `${origin}/?status=success&pendingId=${pendingId}&session_id=${session.id}`;
+            sendTikTokConversionsEvent(TIKTOK_PIXEL_ID, TIKTOK_ACCESS_TOKEN, {
+                email,
+                clientIp,
+                userAgent,
+                value,
+                currency: session.currency || 'usd',
+                eventId: `purchase_${session.id}`,
+                eventSourceUrl,
+            });
+        } else {
+            console.warn('[Webhook] TIKTOK_ACCESS_TOKEN not set; skipping TikTok CAPI');
         }
 
 
