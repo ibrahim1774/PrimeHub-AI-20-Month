@@ -172,15 +172,60 @@ const PayPalSubscribeModal: React.FC<Props> = ({ open, ctx, onClose }) => {
 
     if (!open || !ctx) return null;
 
+    // Self-contained inline styles — the previous mv-checkout-* class
+    // names only existed in DirectoryPage's <style> block, so the modal
+    // rendered invisibly on pages like /barber-generator that don't
+    // mount that stylesheet.
     return (
-        <div className="mv-checkout-backdrop" onClick={onClose} role="dialog" aria-modal="true" style={{ zIndex: 99999 }}>
+        <div
+            className="mv-checkout-backdrop"
+            onClick={onClose}
+            role="dialog"
+            aria-modal="true"
+            style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0, 0, 0, 0.78)',
+                WebkitBackdropFilter: 'blur(8px)',
+                backdropFilter: 'blur(8px)',
+                zIndex: 99999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+            }}
+        >
             <div
                 className="mv-checkout-modal"
                 onClick={(e) => e.stopPropagation()}
-                style={{ maxWidth: 480, padding: '24px 20px' }}
+                style={{
+                    position: 'relative',
+                    width: 'min(92vw, 480px)',
+                    maxHeight: '90vh',
+                    overflowY: 'auto',
+                    background: '#ffffff',
+                    color: '#0d0d0d',
+                    borderRadius: 18,
+                    padding: '28px 22px 22px',
+                    boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                }}
             >
-                <button className="mv-checkout-close" onClick={onClose} aria-label="Close">✕</button>
-                <h3 style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 700 }}>
+                <button
+                    onClick={onClose}
+                    aria-label="Close"
+                    style={{
+                        position: 'absolute', top: 10, right: 10,
+                        width: 32, height: 32, borderRadius: 999,
+                        background: 'rgba(0,0,0,0.06)', border: 0,
+                        color: '#0d0d0d', fontSize: 14, lineHeight: 1,
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                >
+                    ✕
+                </button>
+                <h3 style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>
                     Subscribe with PayPal
                 </h3>
                 <p style={{ margin: '0 0 16px', fontSize: 14, color: '#555' }}>

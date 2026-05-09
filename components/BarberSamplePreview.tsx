@@ -689,6 +689,8 @@ const BarberSamplePreview: React.FC<Props> = ({
 .bsp-chooser {
   position: relative;
   width: min(92vw, 400px);
+  max-height: 90vh;
+  overflow-y: auto;
   background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%);
   border: 1px solid rgba(212,166,74,0.30);
   border-radius: 18px;
@@ -697,7 +699,14 @@ const BarberSamplePreview: React.FC<Props> = ({
   text-align: center;
   font-family: 'DM Sans', sans-serif;
   box-shadow: 0 40px 90px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,166,74,0.06);
-  animation: bspIntroIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+  /* Local keyframes — DO NOT reuse bspIntroIn here. That animation
+     ends at transform: translate(-50%, -50%) which would shift this
+     flex-centered card off-screen. */
+  animation: bspChooserIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes bspChooserIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .bsp-chooser-close {
   position: absolute; top: 10px; right: 10px;
@@ -900,7 +909,7 @@ const BarberSamplePreview: React.FC<Props> = ({
               <button
                 type="button"
                 className="bsp-paypal-link"
-                onClick={() => { fireInitiateCheckoutPixels('single'); setPaypalCtx(buildPaypalCtx('single')); setPaypalOpen(true); }}
+                onClick={() => { setCollapsedMobile(true); fireInitiateCheckoutPixels('single'); setPaypalCtx(buildPaypalCtx('single')); setPaypalOpen(true); }}
                 disabled={loading}
               >
                 <span className="bsp-paypal-link-label">or pay with</span>
@@ -922,7 +931,7 @@ const BarberSamplePreview: React.FC<Props> = ({
               <button
                 type="button"
                 className="bsp-paypal-link"
-                onClick={() => { fireInitiateCheckoutPixels('multi'); setPaypalCtx(buildPaypalCtx('multi')); setPaypalOpen(true); }}
+                onClick={() => { setCollapsedMobile(true); fireInitiateCheckoutPixels('multi'); setPaypalCtx(buildPaypalCtx('multi')); setPaypalOpen(true); }}
                 disabled={loading}
               >
                 <span className="bsp-paypal-link-label">or pay with</span>
@@ -1013,7 +1022,12 @@ const BarberSamplePreview: React.FC<Props> = ({
               <button
                 type="button"
                 className="bsp-chooser-btn bsp-chooser-btn-stripe"
-                onClick={() => { const t = chooser.tier; setChooser(null); startCheckout(t); }}
+                onClick={() => {
+                  const t = chooser.tier;
+                  setChooser(null);
+                  setCollapsedMobile(true); // close the bsp-card so Stripe is the only layer
+                  startCheckout(t);
+                }}
                 disabled={loading}
               >
                 <span>Pay with card</span>
@@ -1026,6 +1040,7 @@ const BarberSamplePreview: React.FC<Props> = ({
                 onClick={() => {
                   const t = chooser.tier;
                   setChooser(null);
+                  setCollapsedMobile(true); // close the bsp-card so PayPal is the only layer
                   fireInitiateCheckoutPixels(t);
                   setPaypalCtx(buildPaypalCtx(t));
                   setPaypalOpen(true);
