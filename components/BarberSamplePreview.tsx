@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
+import PayPalSubscribeModal, { type PayPalCtx } from './PayPalSubscribeModal';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -63,37 +64,54 @@ const BarberSamplePreview: React.FC<Props> = ({
   const [introVisible, setIntroVisible] = useState(showIntroBanner);
   const [noticeVisible, setNoticeVisible] = useState(!!topNotice);
 
+  // Payment-method chooser state (Stripe ↔ PayPal) + PayPal modal state.
+  const [chooser, setChooser] = useState<null | { tier: Tier }>(null);
+  const [paypalOpen, setPaypalOpen] = useState(false);
+  const [paypalCtx, setPaypalCtx] = useState<PayPalCtx | null>(null);
+
+  const tierPricing = (tier: Tier) => {
+    const monthly = tier === 'multi' ? 10 : 5;
+    const yearly = tier === 'multi' ? 72 : 36;
+    return { monthly, yearly, value: plan === 'yearly' ? yearly : monthly };
+  };
+
+  const buildPaypalCtx = (tier: Tier): PayPalCtx => ({
+    region: 'barberFive',
+    tier,
+    plan,
+    label: tier === 'multi' ? 'Multi-Page Barbershop Site + SEO' : 'Single Page Barbershop Site',
+    priceText: plan === 'yearly'
+      ? (tier === 'multi' ? '$72/yr' : '$36/yr')
+      : (tier === 'multi' ? '$10/mo' : '$5/mo'),
+  });
+
+  const fireInitiateCheckoutPixels = (tier: Tier) => {
+    if (typeof window === 'undefined') return;
+    const { value } = tierPricing(tier);
+    const eventID = `ic_${source}_${tier}_${plan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const contentName = tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page';
+    const w = window as any;
+    if (w.fbq) {
+      w.fbq('track', 'InitiateCheckout', {
+        value, currency: 'USD',
+        content_name: contentName, content_category: 'subscription',
+      }, { eventID });
+    }
+    if (w.ttq) {
+      w.ttq.track('InitiateCheckout', {
+        value, currency: 'USD',
+        content_name: contentName,
+        content_type: 'product',
+        contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
+      }, { event_id: eventID });
+    }
+  };
+
   const startCheckout = useCallback(async (tier: Tier) => {
     setLoading(true);
     setError(null);
 
-    // Fire Meta Pixel + TikTok Pixel InitiateCheckout (browser-side,
-    // dedups w/ each platform's CAPI on session id later).
-    if (typeof window !== 'undefined') {
-      const monthlyValue = tier === 'multi' ? 10 : 5;
-      const yearlyValue  = tier === 'multi' ? 72 : 36;
-      const value = plan === 'yearly' ? yearlyValue : monthlyValue;
-      const eventID = `ic_${source}_${tier}_${plan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      const contentName = tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page';
-      const w = window as any;
-      if (w.fbq) {
-        w.fbq('track', 'InitiateCheckout', {
-          value,
-          currency: 'USD',
-          content_name: contentName,
-          content_category: 'subscription',
-        }, { eventID });
-      }
-      if (w.ttq) {
-        w.ttq.track('InitiateCheckout', {
-          value,
-          currency: 'USD',
-          content_name: contentName,
-          content_type: 'product',
-          contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
-        }, { event_id: eventID });
-      }
-    }
+    fireInitiateCheckoutPixels(tier);
 
     try {
       const res = await fetch('/api/create-checkout', {
@@ -624,6 +642,137 @@ const BarberSamplePreview: React.FC<Props> = ({
   .bsp-modal-head-title { font-size: 15px; }
   .bsp-scroll-hint { font-size: 10.5px; padding: 8px 14px; }
 }
+
+/* "or pay with PayPal" secondary link beneath each tier card. Subtle
+   so it doesn't compete with the primary tier button. */
+.bsp-paypal-link {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 6px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #847b66;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.bsp-paypal-link:hover:not(:disabled) { background: rgba(212,166,74,0.06); color: #d4a64a; }
+.bsp-paypal-link:disabled { opacity: 0.5; cursor: wait; }
+.bsp-paypal-link-label { letter-spacing: 0.005em; }
+.bsp-paypal-link-brand {
+  font-style: italic;
+  font-weight: 800;
+  background: linear-gradient(90deg, #d4a64a 0%, #f0cd84 50%, #009cde 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Stripe ↔ PayPal chooser modal */
+.bsp-chooser-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.78);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: bspFade 0.22s ease forwards;
+}
+.bsp-chooser {
+  position: relative;
+  width: min(92vw, 400px);
+  background: radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%);
+  border: 1px solid rgba(212,166,74,0.30);
+  border-radius: 18px;
+  padding: 24px 22px 22px;
+  color: #e9e1cf;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,166,74,0.06);
+  animation: bspIntroIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.bsp-chooser-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 30px; height: 30px;
+  border-radius: 999px;
+  background: rgba(212,166,74,0.10);
+  border: 1px solid rgba(212,166,74,0.30);
+  color: #d4a64a;
+  font-size: 16px; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.bsp-chooser-eyebrow {
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #d4a64a;
+  margin: 4px 0 8px;
+}
+.bsp-chooser-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #f5ecd7;
+  margin: 0 0 4px;
+}
+.bsp-chooser-price { font-style: italic; color: #d4a64a; font-weight: 500; }
+.bsp-chooser-sub {
+  font-size: 11.5px; color: #a39880;
+  margin: 0 0 18px;
+  letter-spacing: 0.005em;
+}
+.bsp-chooser-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,166,74,0.20);
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+  color: #e9e1cf;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+  margin-bottom: 10px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.bsp-chooser-btn:last-child { margin-bottom: 0; }
+.bsp-chooser-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.bsp-chooser-btn:disabled { opacity: 0.55; cursor: wait; }
+.bsp-chooser-btn-meta { font-size: 10.5px; font-weight: 600; color: #847b66; letter-spacing: 0.02em; }
+/* Stripe primary — gold-tinted */
+.bsp-chooser-btn-stripe {
+  background: linear-gradient(180deg, rgba(212,166,74,0.18), rgba(212,166,74,0.06));
+  border-color: rgba(212,166,74,0.50);
+  color: #f5ecd7;
+}
+.bsp-chooser-btn-stripe:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(212,166,74,0.28), rgba(212,166,74,0.10));
+  border-color: #d4a64a;
+}
+/* PayPal — official mark */
+.bsp-chooser-btn-paypal {
+  background: #ffc439;
+  color: #003087;
+  border-color: #ffc439;
+}
+.bsp-chooser-btn-paypal:hover:not(:disabled) { background: #f4b819; border-color: #f4b819; }
+.bsp-chooser-btn-paypal-mark { display: inline-flex; align-items: baseline; font-style: italic; font-weight: 800; font-size: 16px; letter-spacing: -0.01em; }
+.bsp-chooser-btn-paypal-pal { color: #003087; }
+.bsp-chooser-btn-paypal-pal2 { color: #009cde; }
       `}</style>
 
       <div className={`bsp-page${introVisible ? ' has-intro' : ''}`}>
@@ -738,7 +887,7 @@ const BarberSamplePreview: React.FC<Props> = ({
 
           <div className="bsp-tiers">
             <div className="bsp-tier-wrap">
-              <button className="bsp-tier" onClick={() => startCheckout('single')} disabled={loading}>
+              <button className="bsp-tier" onClick={() => setChooser({ tier: 'single' })} disabled={loading}>
                 <div className="bsp-tier-left">
                   <div className="bsp-tier-name">Single Page</div>
                   <div className="bsp-tier-desc">One page &middot; info, gallery, contact</div>
@@ -748,10 +897,19 @@ const BarberSamplePreview: React.FC<Props> = ({
                   <span className="bsp-tier-per">{PRICING.single[plan].sub}</span>
                 </div>
               </button>
+              <button
+                type="button"
+                className="bsp-paypal-link"
+                onClick={() => { fireInitiateCheckoutPixels('single'); setPaypalCtx(buildPaypalCtx('single')); setPaypalOpen(true); }}
+                disabled={loading}
+              >
+                <span className="bsp-paypal-link-label">or pay with</span>
+                <span className="bsp-paypal-link-brand">PayPal</span>
+              </button>
             </div>
             <div className="bsp-tier-wrap">
               <span className="bsp-recommended">Recommended</span>
-              <button className="bsp-tier bsp-tier-multi" onClick={() => startCheckout('multi')} disabled={loading}>
+              <button className="bsp-tier bsp-tier-multi" onClick={() => setChooser({ tier: 'multi' })} disabled={loading}>
                 <div className="bsp-tier-left">
                   <div className="bsp-tier-name">Multi-Page + SEO</div>
                   <div className="bsp-tier-desc">Like this sample &middot; Home, Services, Contact</div>
@@ -761,6 +919,15 @@ const BarberSamplePreview: React.FC<Props> = ({
                   <span className="bsp-tier-per">{PRICING.multi[plan].sub}</span>
                 </div>
               </button>
+              <button
+                type="button"
+                className="bsp-paypal-link"
+                onClick={() => { fireInitiateCheckoutPixels('multi'); setPaypalCtx(buildPaypalCtx('multi')); setPaypalOpen(true); }}
+                disabled={loading}
+              >
+                <span className="bsp-paypal-link-label">or pay with</span>
+                <span className="bsp-paypal-link-brand">PayPal</span>
+              </button>
             </div>
           </div>
 
@@ -769,7 +936,7 @@ const BarberSamplePreview: React.FC<Props> = ({
           <div className="bsp-foot">
             <div className="bsp-foot-row">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
-              Secure Stripe &middot; cancel anytime
+              Secure Stripe &middot; PayPal &middot; cancel anytime
             </div>
           </div>
 
@@ -824,6 +991,63 @@ const BarberSamplePreview: React.FC<Props> = ({
             </div>
           </div>
         )}
+
+        {/* Payment-method chooser — appears when a tier button is tapped.
+            Visitor picks Stripe (cards) or PayPal (subscription). */}
+        {chooser && (
+          <div className="bsp-chooser-backdrop" onClick={() => setChooser(null)} role="dialog" aria-modal="true">
+            <div className="bsp-chooser" onClick={(e) => e.stopPropagation()}>
+              <button className="bsp-chooser-close" onClick={() => setChooser(null)} aria-label="Close">&times;</button>
+              <div className="bsp-chooser-eyebrow">Choose payment</div>
+              <h3 className="bsp-chooser-title">
+                {chooser.tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page'}
+                <span className="bsp-chooser-price">
+                  &nbsp;&middot;&nbsp;
+                  {plan === 'yearly'
+                    ? (chooser.tier === 'multi' ? '$72/yr' : '$36/yr')
+                    : (chooser.tier === 'multi' ? '$10/mo' : '$5/mo')}
+                </span>
+              </h3>
+              <p className="bsp-chooser-sub">Either option subscribes you {plan === 'yearly' ? 'yearly' : 'monthly'}. Cancel anytime.</p>
+
+              <button
+                type="button"
+                className="bsp-chooser-btn bsp-chooser-btn-stripe"
+                onClick={() => { const t = chooser.tier; setChooser(null); startCheckout(t); }}
+                disabled={loading}
+              >
+                <span>Pay with card</span>
+                <span className="bsp-chooser-btn-meta">via Stripe</span>
+              </button>
+
+              <button
+                type="button"
+                className="bsp-chooser-btn bsp-chooser-btn-paypal"
+                onClick={() => {
+                  const t = chooser.tier;
+                  setChooser(null);
+                  fireInitiateCheckoutPixels(t);
+                  setPaypalCtx(buildPaypalCtx(t));
+                  setPaypalOpen(true);
+                }}
+                disabled={loading}
+              >
+                <span>Pay with</span>
+                <span className="bsp-chooser-btn-paypal-mark">
+                  <span className="bsp-chooser-btn-paypal-pal">Pay</span><span className="bsp-chooser-btn-paypal-pal2">Pal</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* PayPal subscription modal — opens when "Pay with PayPal" is
+            tapped from the chooser or directly from the tier card link. */}
+        <PayPalSubscribeModal
+          open={paypalOpen}
+          ctx={paypalCtx}
+          onClose={() => setPaypalOpen(false)}
+        />
       </div>
     </>
   );
