@@ -272,6 +272,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   // Home-page payment-method chooser: tap "Start" on a tier, pick
   // Stripe or PayPal in the dialog before either checkout opens.
   const [homeChooser, setHomeChooser] = useState<null | { tier: 'single' | 'multi' }>(null);
+  // Same chooser for /barber-5 + /barber-5-month tier cards (Stripe + PayPal).
+  const [barberFiveChooser, setBarberFiveChooser] = useState<null | { tier: 'single' | 'multi' }>(null);
 
   // Reveal the /5 + /barber-5 sticky CTA only after the hero is scrolled past.
   useEffect(() => {
@@ -801,6 +803,100 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-tier-multi:hover:not(:disabled) .mv-f-tier-cta { background:#ffe27d; box-shadow:0 16px 32px rgba(255,213,74,.45); }
           .mv-f-tier-compact { padding:12px 14px; }
           .mv-f-tier-compact .mv-f-tier-price { font-size:22px; }
+
+          /* "or pay with PayPal" link beneath each barber-5 tier card */
+          .mv-f-paypal-link {
+            display:inline-flex; align-items:center; justify-content:center; gap:6px;
+            margin: 4px auto 0;
+            background:transparent; border:0; padding:6px 10px;
+            border-radius:8px;
+            font-family:'Inter', sans-serif;
+            font-size:12px; font-weight:600;
+            color:#fff; opacity:0.78;
+            cursor:pointer;
+            transition: opacity 0.2s ease, background 0.2s ease;
+            width: fit-content;
+            align-self: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+          }
+          .mv-f-paypal-link:hover:not(:disabled) { opacity:1; background:rgba(255,255,255,0.06); }
+          .mv-f-paypal-link:disabled { opacity:0.5; cursor:wait; }
+          .mv-f-paypal-mark { display:inline-flex; align-items:baseline; font-style:italic; font-weight:800; font-size:14px; letter-spacing:-0.01em; }
+          .mv-f-paypal-pal  { color:#cde9ff; }
+          .mv-f-paypal-pal2 { color:#9ad2ff; }
+          .mv-f-page-barber .mv-f-paypal-link { color:#c9a96e; }
+          .mv-f-page-barber .mv-f-paypal-link:hover:not(:disabled) { background:rgba(201,169,110,0.10); }
+          .mv-f-page-barber .mv-f-paypal-pal  { color:#003087; }
+          .mv-f-page-barber .mv-f-paypal-pal2 { color:#009cde; }
+          .mv-f-page-barber .mv-f-paypal-link:hover:not(:disabled) .mv-f-paypal-pal { color:#0050d6; }
+
+          /* Barber chooser modal — Stripe ↔ PayPal selector for barber-5 family */
+          .mv-bc-backdrop {
+            position:fixed; inset:0;
+            background:rgba(10,10,10,0.78);
+            -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+            z-index:9999;
+            display:flex; align-items:center; justify-content:center;
+            padding:20px;
+            animation: mvHChooserFade 0.22s ease forwards;
+          }
+          .mv-bc-card {
+            position:relative;
+            width:min(92vw, 400px);
+            background:radial-gradient(120% 120% at 0% 0%, #14110b 0%, #0a0907 60%, #050403 100%);
+            border:1px solid rgba(201,169,110,0.40);
+            border-radius:18px;
+            padding:24px 22px 22px;
+            color:#e9e1cf;
+            text-align:center;
+            font-family:'Inter', sans-serif;
+            box-shadow:0 40px 90px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,169,110,0.08);
+          }
+          .mv-bc-close {
+            position:absolute; top:10px; right:10px;
+            width:30px; height:30px; border-radius:999px;
+            background:rgba(201,169,110,0.10);
+            border:1px solid rgba(201,169,110,0.30);
+            color:#c9a96e;
+            font-size:16px; line-height:1;
+            cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+          }
+          .mv-bc-eyebrow { font-size:10px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c9a96e; margin:4px 0 8px; }
+          .mv-bc-title { font-family:'Inter', sans-serif; font-weight:800; font-size:20px; line-height:1.2; color:#f5ecd7; margin:0 0 4px; letter-spacing:-0.01em; }
+          .mv-bc-price { color:#c9a96e; font-weight:700; }
+          .mv-bc-sub { font-size:12px; color:#a39880; margin:0 0 18px; }
+          .mv-bc-btn {
+            display:flex; align-items:center; justify-content:center; gap:8px;
+            width:100%; padding:14px 18px;
+            border-radius:12px; border:1px solid rgba(201,169,110,0.30);
+            background:linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+            color:#e9e1cf; font-family:'Inter', sans-serif;
+            font-size:14px; font-weight:700; cursor:pointer;
+            transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+            margin-bottom:10px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+          }
+          .mv-bc-btn:last-child { margin-bottom:0; }
+          .mv-bc-btn:hover:not(:disabled) { transform:translateY(-1px); }
+          .mv-bc-btn:disabled { opacity:0.55; cursor:wait; }
+          .mv-bc-btn-meta { font-size:11px; font-weight:600; color:#847b66; letter-spacing:0.02em; }
+          .mv-bc-btn-stripe {
+            background:linear-gradient(180deg, rgba(201,169,110,0.18), rgba(201,169,110,0.06));
+            border-color:rgba(201,169,110,0.50);
+            color:#f5ecd7;
+          }
+          .mv-bc-btn-stripe:hover:not(:disabled) {
+            background:linear-gradient(180deg, rgba(201,169,110,0.28), rgba(201,169,110,0.10));
+            border-color:#c9a96e;
+          }
+          .mv-bc-btn-paypal { background:#ffc439; color:#003087; border-color:#ffc439; }
+          .mv-bc-btn-paypal:hover:not(:disabled) { background:#f4b819; border-color:#f4b819; }
+          .mv-bc-btn-paypal-mark { display:inline-flex; align-items:baseline; font-style:italic; font-weight:800; font-size:16px; letter-spacing:-0.01em; }
+          .mv-bc-btn-paypal-pal  { color:#003087; }
+          .mv-bc-btn-paypal-pal2 { color:#009cde; }
           .mv-f-faq-list { width:100%; }
           .mv-f-faq-item { background:#fff; border-radius:14px; margin-bottom:8px; overflow:hidden; }
           .mv-f-faq-summary { list-style:none; cursor:pointer; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:14px; }
@@ -1128,7 +1224,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
 
               <div className="mv-f-tiers">
-                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => isBarberFive ? handleCheckout('single', pricingPlan) : openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })} disabled={isLoading}>
+                <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => {
+                  if (isBarberTrial) return handleCheckout('single', pricingPlan);
+                  if (isBarberFive)  return setBarberFiveChooser({ tier: 'single' });
+                  openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` });
+                }} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">{singleTierName}</div>
                     <div className="mv-f-tier-price">
@@ -1142,7 +1242,24 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'single' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${singleMonthly}/mo` : 'Start →'}</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
-                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => isBarberFive ? handleCheckout('multi', pricingPlan) : openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })} disabled={isLoading}>
+                {isBarberFive && !isBarberTrial && (
+                  <button
+                    type="button"
+                    className="mv-f-paypal-link"
+                    onClick={() => openPaypal({ region: 'barberFive', tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` })}
+                    disabled={isLoading}
+                  >
+                    <span>or pay with</span>
+                    <span className="mv-f-paypal-mark">
+                      <span className="mv-f-paypal-pal">Pay</span><span className="mv-f-paypal-pal2">Pal</span>
+                    </span>
+                  </button>
+                )}
+                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => {
+                  if (isBarberTrial) return handleCheckout('multi', pricingPlan);
+                  if (isBarberFive)  return setBarberFiveChooser({ tier: 'multi' });
+                  openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` });
+                }} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">{multiTierName}</div>
                     <div className="mv-f-tier-price">
@@ -1156,6 +1273,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${multiMonthly}/mo` : 'Start →'}</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
+                {isBarberFive && !isBarberTrial && (
+                  <button
+                    type="button"
+                    className="mv-f-paypal-link"
+                    onClick={() => openPaypal({ region: 'barberFive', tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })}
+                    disabled={isLoading}
+                  >
+                    <span>or pay with</span>
+                    <span className="mv-f-paypal-mark">
+                      <span className="mv-f-paypal-pal">Pay</span><span className="mv-f-paypal-pal2">Pal</span>
+                    </span>
+                  </button>
+                )}
               </div>
 
               {isBarberTrial && (
@@ -1229,6 +1359,59 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           ctx={paypalCtx}
           onClose={() => setPaypalOpen(false)}
         />
+
+        {/* Stripe ↔ PayPal chooser for /barber-5 + /barber-5-month */}
+        {barberFiveChooser && (
+          <div className="mv-bc-backdrop" onClick={() => setBarberFiveChooser(null)} role="dialog" aria-modal="true">
+            <div className="mv-bc-card" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-bc-close" onClick={() => setBarberFiveChooser(null)} aria-label="Close">✕</button>
+              <div className="mv-bc-eyebrow">Choose payment</div>
+              <h3 className="mv-bc-title">
+                {barberFiveChooser.tier === 'multi' ? multiTierName : singleTierName}
+                <span className="mv-bc-price">
+                  {' · '}
+                  ${fiveIsYearly
+                    ? (barberFiveChooser.tier === 'multi' ? multiYearly : singleYearly)
+                    : (barberFiveChooser.tier === 'multi' ? multiMonthly : singleMonthly)}
+                  /{fiveIsYearly ? 'yr' : 'mo'}
+                </span>
+              </h3>
+              <p className="mv-bc-sub">Either option subscribes you {fiveIsYearly ? 'yearly' : 'monthly'}. Cancel anytime.</p>
+              <button
+                type="button"
+                className="mv-bc-btn mv-bc-btn-stripe"
+                onClick={() => { const t = barberFiveChooser.tier; setBarberFiveChooser(null); handleCheckout(t, pricingPlan); }}
+                disabled={isLoading}
+              >
+                <span>Pay with card</span>
+                <span className="mv-bc-btn-meta">via Stripe</span>
+              </button>
+              <button
+                type="button"
+                className="mv-bc-btn mv-bc-btn-paypal"
+                onClick={() => {
+                  const t = barberFiveChooser.tier;
+                  setBarberFiveChooser(null);
+                  openPaypal({
+                    region: 'barberFive',
+                    tier: t,
+                    plan: pricingPlan,
+                    label: t === 'multi' ? multiLabel : singleLabel,
+                    priceText: fiveIsYearly
+                      ? `$${t === 'multi' ? multiYearly : singleYearly}/yr`
+                      : `$${t === 'multi' ? multiMonthly : singleMonthly}/mo`,
+                  });
+                }}
+                disabled={isLoading}
+              >
+                <span>Pay with</span>
+                <span className="mv-bc-btn-paypal-mark">
+                  <span className="mv-bc-btn-paypal-pal">Pay</span><span className="mv-bc-btn-paypal-pal2">Pal</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
       </>
     );
   }

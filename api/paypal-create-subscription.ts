@@ -32,8 +32,10 @@ function getPricing(region: Region, tier: Tier | undefined, plan: Plan): Pricing
         label = `Amalvera /5 ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'barberFive') {
         const t = tier === 'multi' ? 'multi' : 'single';
-        value = isYearly ? (t === 'multi' ? 144 : 72) : (t === 'multi' ? 20 : 10);
-        label = `Amalvera /barber-5 ${t === 'multi' ? 'Multi-Page Barbershop + SEO' : 'Single Page Barbershop'} ${isYearly ? 'Yearly' : 'Monthly'}`;
+        // /barber-5, /barber-5-month, /barber-sample, /barber-generator all
+        // share this pricing: \$5/\$10 monthly, \$36/\$72 yearly.
+        value = isYearly ? (t === 'multi' ? 72 : 36) : (t === 'multi' ? 10 : 5);
+        label = `Amalvera Barbershop ${t === 'multi' ? 'Multi-Page + SEO' : 'Single Page'} ${isYearly ? 'Yearly' : 'Monthly'}`;
     } else if (region === 'home') {
         const t = tier === 'single' ? 'single' : 'multi';
         // Match the prices the home page actually advertises: single = $20/mo,
