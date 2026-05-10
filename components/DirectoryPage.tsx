@@ -804,6 +804,58 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-f-tier-compact { padding:12px 14px; }
           .mv-f-tier-compact .mv-f-tier-price { font-size:22px; }
 
+          /* "Tap any video for a full walkthrough" hint above the
+             gallery rows on /barber-5 + /barber-5-month. Soft gold
+             pulse animation draws the eye without being noisy. */
+          .mv-f-tap-hint {
+            display:flex; align-items:center; gap:9px;
+            width:fit-content;
+            margin:8px auto 10px;
+            padding:8px 14px 8px 12px;
+            border-radius:999px;
+            background:linear-gradient(180deg, rgba(201,169,110,0.16) 0%, rgba(201,169,110,0.04) 100%);
+            border:1px solid rgba(201,169,110,0.45);
+            font-family:'Inter', sans-serif;
+            font-size:12.5px;
+            line-height:1.35;
+            color:#f5ecd7;
+            box-shadow:0 6px 16px rgba(0,0,0,0.20);
+            animation: mvTapHintPulse 2.4s ease-in-out infinite;
+          }
+          .mv-f-tap-hint-dot {
+            width:8px; height:8px;
+            border-radius:999px;
+            background:#f0cd84;
+            box-shadow:0 0 0 0 rgba(240,205,132,0.55);
+            animation: mvTapHintDot 1.6s ease-out infinite;
+          }
+          .mv-f-tap-hint-text { letter-spacing:0.005em; }
+          .mv-f-tap-hint-text strong { color:#f0cd84; font-weight:700; }
+          .mv-f-tap-hint-compact {
+            font-size:11.5px;
+            padding:7px 12px 7px 10px;
+            margin:6px auto 8px;
+          }
+          .mv-f-tap-hint-compact .mv-f-tap-hint-dot { width:7px; height:7px; }
+          @keyframes mvTapHintPulse {
+            0%, 100% { transform: translateY(0); box-shadow: 0 6px 16px rgba(0,0,0,0.20); }
+            50%      { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(201,169,110,0.22); }
+          }
+          @keyframes mvTapHintDot {
+            0%   { box-shadow: 0 0 0 0 rgba(240,205,132,0.55); }
+            70%  { box-shadow: 0 0 0 10px rgba(240,205,132,0); }
+            100% { box-shadow: 0 0 0 0 rgba(240,205,132,0); }
+          }
+          /* Light-theme fallback when not on the barber wrapper */
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-tap-hint {
+            background:#fff;
+            border-color:rgba(13,13,13,0.10);
+            color:#0d0d0d;
+            box-shadow:0 6px 16px rgba(0,0,0,0.06);
+          }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-tap-hint-text strong { color:#1f63ff; }
+          .mv-f-page:not(.mv-f-page-barber) .mv-f-tap-hint-dot { background:#1f63ff; box-shadow: 0 0 0 0 rgba(31,99,255,0.55); }
+
           /* "Our Guarantee" — 24-hour-delivery refund promise pinned
              above the pricing cards on /barber-5 + /barber-5-month.
              Bold gold border + slim accent rail so it reads as a
@@ -1172,6 +1224,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <p className="mv-f-sub">We build it. We host it. We deliver it in 24 hours. That's it.</p>
 
               <div className="mv-f-eyebrow" style={{ marginTop: 6 }}>{examplesEyebrow}</div>
+              {isBarberFive && !isBarberTrial && (
+                <div className="mv-f-tap-hint" role="note">
+                  <span className="mv-f-tap-hint-dot" aria-hidden="true" />
+                  <span className="mv-f-tap-hint-text">
+                    <strong>Tap any video</strong> for a full walkthrough of a custom site we built.
+                  </span>
+                </div>
+              )}
               <div className="mv-f-gallery-wrap">
                 <button
                   type="button"
@@ -1268,6 +1328,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
               </div>
 
+              {isBarberFive && !isBarberTrial && (
+                <div className="mv-f-tap-hint mv-f-tap-hint-compact" role="note">
+                  <span className="mv-f-tap-hint-dot" aria-hidden="true" />
+                  <span className="mv-f-tap-hint-text">
+                    <strong>Tap any video</strong> for a full walkthrough.
+                  </span>
+                </div>
+              )}
               <div className="mv-f-gallery-wrap mv-f-gallery-compact" style={{ marginBottom: 10 }}>
                 <button
                   type="button"
