@@ -1228,15 +1228,20 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginTop: 12 }}>
                 <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
-                <button
-                  className="mv-f-pill"
-                  style={{ width: '100%', maxWidth: 240, justifyContent: 'center', padding: '14px 20px', fontSize: 16, fontWeight: 800 }}
-                  onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                  disabled={isLoading}
-                >
-                  {primaryCtaLabel}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: 16, height: 16 }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </button>
+                {/* /barber-5 + /barber-5-month: pricing is right below
+                    the hero, so a "See pricing" CTA is redundant.
+                    Trial keeps its "Get started for free" pill. */}
+                {!(isBarberFive && !isBarberTrial) && (
+                  <button
+                    className="mv-f-pill"
+                    style={{ width: '100%', maxWidth: 240, justifyContent: 'center', padding: '14px 20px', fontSize: 16, fontWeight: 800 }}
+                    onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                    disabled={isLoading}
+                  >
+                    {primaryCtaLabel}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ width: 16, height: 16 }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
+                )}
                 {!isBarberFive && <PaymentBadgeRow />}
               </div>
             </section>
@@ -1454,12 +1459,16 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
 
-          <div className={`mv-f-sticky${showFiveSticky ? ' is-visible' : ''}`}>
-            <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
-            <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              {primaryCtaLabel}
-            </button>
-          </div>
+          {/* Bottom sticky "See pricing" — kept for /5 + /barber-trial,
+              hidden for /barber-5 + /barber-5-month. */}
+          {!(isBarberFive && !isBarberTrial) && (
+            <div className={`mv-f-sticky${showFiveSticky ? ' is-visible' : ''}`}>
+              <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
+              <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                {primaryCtaLabel}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Embedded checkout modal */}
