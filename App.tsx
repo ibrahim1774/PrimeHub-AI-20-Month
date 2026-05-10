@@ -10,7 +10,7 @@ import BarberGeneratorPage from './components/BarberGeneratorPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting';
 
 const dirPaths: Record<string, Region> = {
   '/': 'home',
@@ -23,6 +23,8 @@ const dirPaths: Record<string, Region> = {
   '/barber-5': 'barberFive',
   '/barber-5-month': 'barberFiveMonth',
   '/barber-trial': 'barberTrial',
+  '/barber-19': 'barber19',
+  '/barber-19-hosting': 'barber19Hosting',
   '/local-business': 'localbusiness',
   '/freewebsite': 'freewebsite',
   '/freewebsite49': 'freewebsite49',
@@ -133,6 +135,19 @@ const App: React.FC = () => {
   // Directory pages incl. new luxurious home '/'
   if (pathname in dirPaths) {
     const region = dirPaths[pathname];
+
+    // /barber-19 success = design fee paid → forward to the hosting
+    // selection page, NOT the GHL onboarding form. Hosting step does
+    // the final onboarding redirect itself.
+    if (pathname === '/barber-19' && status === 'success' && typeof window !== 'undefined') {
+      // Carry the session_id forward so the hosting page can read it
+      // for Pixel attribution if it wants.
+      const sid = params.get('session_id') || '';
+      const next = `/barber-19-hosting${sid ? `?design_session_id=${encodeURIComponent(sid)}` : ''}`;
+      window.location.replace(next);
+      return null;
+    }
+
     if (status === 'success') {
       return <DirectorySuccessPage />;
     }

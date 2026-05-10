@@ -63,6 +63,14 @@
         {
             "source": "/barber-generator",
             "destination": "/index.html"
+        },
+        {
+            "source": "/barber-19",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/barber-19-hosting",
+            "destination": "/index.html"
         }
     ],
     "functions": {
