@@ -748,7 +748,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const singleYearly = isBarber19 ? 19 : isBarber19Hosting ? 36 : isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 36 : 36;
     const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 10 : 10;
     const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 72 : 72;
-    const heroEyebrow = isBarber19 ? `Custom barbershop sites · $19 design fee` : isBarber19Hosting ? `Step 2 of 2 · Pick your hosting plan` : isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
+    const heroEyebrow = isBarber19 ? `Custom barbershop sites · One-time $19` : isBarber19Hosting ? `Step 2 of 2 · Pick your hosting plan` : isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
     const primaryCtaLabel = isBarberTrial ? 'Get started for free' : 'See pricing';
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
     const examplesEyebrow = isBarberFive ? 'Real sites · Real barbershops' : 'Real sites · Real local businesses';
@@ -767,7 +767,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         : isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
     const multiTierName = isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
     const singleBullets = isBarber19
-      ? ['Custom design built for your barbershop', 'Your real photos + business info', 'Delivered within 24 hours', 'Hosting sold separately on the next page']
+      ? ['Custom design built for your barbershop', 'Your real photos + business info', 'Delivered within 24 hours', 'Free unlimited edits — just email us']
       : isBarber19Hosting
         ? ['Keeps your custom site live online', 'Free unlimited edits — just email us', 'Delivered + activated within 24 hours', 'Cancel anytime · no contracts']
         : isBarberFive
@@ -1370,17 +1370,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-f-steps">
                 <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link or info</div><div className="mv-f-step-b">A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.</div></div>
                 <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">We build your site</div><div className="mv-f-step-b">Our team uses AI to build a custom site for your business — with nice-looking backgrounds and your real info.</div></div>
-                <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours</div><div className="mv-f-step-b">Up and running within 24 hours. We host it too — you just cover the monthly cost.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours</div><div className="mv-f-step-b">{isBarber19 ? 'Your custom site is designed and delivered within 24 hours.' : 'Up and running within 24 hours. We host it too — you just cover the monthly cost.'}</div></div>
               </div>
             </section>
 
             {/* Pricing */}
             <section id="mv-f-pricing" className="mv-f-card mv-f-pricing mv-h-anim">
-              <div className="mv-f-eyebrow">{isBarber19 ? 'Step 1 of 2 · Design fee' : isBarber19Hosting ? 'Step 2 of 2 · Hosting' : 'Pricing'}</div>
+              <div className="mv-f-eyebrow">{isBarber19 ? 'Custom design fee' : isBarber19Hosting ? 'Step 2 of 2 · Hosting' : 'Pricing'}</div>
               <h2 className="mv-f-title">{isBarber19 ? 'One-time $19 design.' : isBarber19Hosting ? 'Pick your hosting plan.' : 'Pick your plan.'}</h2>
               <p className="mv-f-sub">{
                 isBarber19
-                  ? "Pay once. We design and deliver your custom barbershop site within 24 hours. Hosting is billed separately on the next page."
+                  ? "Pay once. We design and deliver your custom barbershop site within 24 hours."
                   : isBarber19Hosting
                     ? 'Keeps your site live online — pay monthly or save 40% yearly. Cancel anytime.'
                     : isBarberTrial ? 'Start with a 1-day free trial. Cancel anytime — no risk.' : 'Pay monthly, or save 40% by paying yearly.'
@@ -1601,7 +1601,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Can I make edits to the site?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Yes. Any time you want changes — copy, photos, layout — just message us and we'll make the edits for you. It's all included in the monthly cost.</div>
+                  <div className="mv-f-faq-a">{isBarber19 ? 'Yes. Any time you want changes — copy, photos, layout — just message us and we\'ll make the edits for you.' : 'Yes. Any time you want changes — copy, photos, layout — just message us and we\'ll make the edits for you. It\'s all included in the monthly cost.'}</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">How fast is it live?<span className="mv-f-faq-icon">+</span></summary>

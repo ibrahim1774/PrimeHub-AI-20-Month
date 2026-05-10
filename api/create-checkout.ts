@@ -93,7 +93,7 @@ export default async function handler(req: any, res: any) {
 
         // Description differs for one-time fees vs subscription pages
         const description = isBarber19
-            ? `$19${currencyLabel} one-time custom barbershop website design. Hosting billed separately.`
+            ? `$19${currencyLabel} one-time custom barbershop website design.`
             : isNineteen
                 ? `$19${currencyLabel} for a custom website design.`
                 : isYearly
