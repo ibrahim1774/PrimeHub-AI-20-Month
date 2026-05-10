@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -249,6 +249,41 @@ const REGIONS: Record<Region, {
     monthlyAmount: 10,
     yearlyAmount: 72,
     yearlyWas: 120,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  barber19: {
+    // Step 1 of the /barber-19 flow: \$19 ONE-TIME design fee.
+    // Hosting is sold separately on /barber-19-hosting.
+    source: 'barber19',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 19,
+    yearlyAmount: 19,
+    yearlyWas: 19,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  barber19Hosting: {
+    // Step 2 of the /barber-19 flow: \$5/mo or \$36/yr hosting subscription.
+    source: 'barber19Hosting',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 5,
+    yearlyAmount: 36,
+    yearlyWas: 60,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -685,10 +720,19 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial') {
-    // /barber-5, /barber-5-month, and /barber-trial share the dark/gold barber theme
-    // and Stripe-only checkout. /barber-trial adds a 1-day free trial flow.
-    const isBarberFive = region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial';
+  if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barber19Hosting') {
+    // /barber-5, /barber-5-month, /barber-trial, /barber-19, /barber-19-hosting
+    // share the dark/gold barber theme and Stripe-only checkout.
+    //   • /barber-trial adds a 1-day free trial.
+    //   • /barber-19 is a one-time \$19 design fee (no PayPal, single tier
+    //     only); on success it forwards to /barber-19-hosting.
+    //   • /barber-19-hosting is the hosting subscription step (\$5/mo,
+    //     \$36/yr, single tier, Stripe-only); on success it lands on the
+    //     normal GHL onboarding flow.
+    const isBarber19 = region === 'barber19';
+    const isBarber19Hosting = region === 'barber19Hosting';
+    const isBarber19Flow = isBarber19 || isBarber19Hosting;
+    const isBarberFive = region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || isBarber19Flow;
     const isBarberFiveMonth = region === 'barberFiveMonth';
     const isBarberTrial = region === 'barberTrial';
     const barberFiveGallery = [
@@ -700,23 +744,35 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveExamples = isBarberFive ? barberFiveGallery : freewebsite49Gallery;
     const fiveTier: 'single' | 'multi' = activeHomeTier;
     const fiveIsYearly = pricingPlan === 'yearly';
-    const singleMonthly = isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 5 : 5;
-    const singleYearly = isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 36 : 36;
+    const singleMonthly = isBarber19 ? 19 : isBarber19Hosting ? 5 : isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 5 : 5;
+    const singleYearly = isBarber19 ? 19 : isBarber19Hosting ? 36 : isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 36 : 36;
     const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 10 : 10;
     const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 72 : 72;
-    const heroEyebrow = isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
+    const heroEyebrow = isBarber19 ? `Custom barbershop sites · $19 design fee` : isBarber19Hosting ? `Step 2 of 2 · Pick your hosting plan` : isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
     const primaryCtaLabel = isBarberTrial ? 'Get started for free' : 'See pricing';
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
     const examplesEyebrow = isBarberFive ? 'Real sites · Real barbershops' : 'Real sites · Real local businesses';
     const playerColor = isBarberFive ? 'c9a96e' : '0d0d0d';
     const ppRegion: 'five' | 'barberFive' = isBarberFive ? 'barberFive' : 'five';
-    const singleLabel = isBarberFive ? 'Single Page Barbershop Site' : 'Single Page Website';
+    const singleLabel = isBarber19
+      ? 'Custom Barbershop Website Design'
+      : isBarber19Hosting
+        ? 'Barbershop Website Hosting'
+        : isBarberFive ? 'Single Page Barbershop Site' : 'Single Page Website';
     const multiLabel = isBarberFive ? 'Multi-Page Barbershop Site + SEO' : 'Multi-Page + SEO';
-    const singleTierName = isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
+    const singleTierName = isBarber19
+      ? 'One-time custom design'
+      : isBarber19Hosting
+        ? 'Website hosting · single page'
+        : isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
     const multiTierName = isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
-    const singleBullets = isBarberFive
-      ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included', 'Cancel anytime · no contracts']
-      : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included', 'Cancel anytime · no contracts'];
+    const singleBullets = isBarber19
+      ? ['Custom design built for your barbershop', 'Your real photos + business info', 'Delivered within 24 hours', 'Hosting sold separately on the next page']
+      : isBarber19Hosting
+        ? ['Keeps your custom site live online', 'Free unlimited edits — just email us', 'Delivered + activated within 24 hours', 'Cancel anytime · no contracts']
+        : isBarberFive
+          ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included', 'Cancel anytime · no contracts']
+          : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included', 'Cancel anytime · no contracts'];
     const multiBullets = isBarberFive
       ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts']
       : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts'];
@@ -1320,13 +1376,22 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
             {/* Pricing */}
             <section id="mv-f-pricing" className="mv-f-card mv-f-pricing mv-h-anim">
-              <div className="mv-f-eyebrow">Pricing</div>
-              <h2 className="mv-f-title">Pick your plan.</h2>
-              <p className="mv-f-sub">{isBarberTrial ? 'Start with a 1-day free trial. Cancel anytime — no risk.' : 'Pay monthly, or save 40% by paying yearly.'}</p>
-              <div className="mv-f-toggle" role="tablist" aria-label="Billing plan">
-                <button type="button" className={pricingPlan === 'monthly' ? 'active' : ''} onClick={() => setPricingPlan('monthly')}>Monthly</button>
-                <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
-              </div>
+              <div className="mv-f-eyebrow">{isBarber19 ? 'Step 1 of 2 · Design fee' : isBarber19Hosting ? 'Step 2 of 2 · Hosting' : 'Pricing'}</div>
+              <h2 className="mv-f-title">{isBarber19 ? 'One-time $19 design.' : isBarber19Hosting ? 'Pick your hosting plan.' : 'Pick your plan.'}</h2>
+              <p className="mv-f-sub">{
+                isBarber19
+                  ? "Pay once. We design and deliver your custom barbershop site within 24 hours. Hosting is billed separately on the next page."
+                  : isBarber19Hosting
+                    ? 'Keeps your site live online — pay monthly or save 40% yearly. Cancel anytime.'
+                    : isBarberTrial ? 'Start with a 1-day free trial. Cancel anytime — no risk.' : 'Pay monthly, or save 40% by paying yearly.'
+              }</p>
+              {/* /barber-19 is a single one-time fee — no monthly/yearly toggle. */}
+              {!isBarber19 && (
+                <div className="mv-f-toggle" role="tablist" aria-label="Billing plan">
+                  <button type="button" className={pricingPlan === 'monthly' ? 'active' : ''} onClick={() => setPricingPlan('monthly')}>Monthly</button>
+                  <button type="button" className={pricingPlan === 'yearly' ? 'active' : ''} onClick={() => setPricingPlan('yearly')}>Yearly<span className="mv-f-save">40% off</span></button>
+                </div>
+              )}
 
               {isBarberFive && !isBarberTrial && (
                 <div className="mv-f-tap-hint mv-f-tap-hint-compact" role="note">
@@ -1412,11 +1477,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               )}
 
               {/* $0 Design clarifier — what the monthly fee actually pays for */}
-              {isBarberFive && (
+              {isBarberFive && !isBarber19 && (
                 <div className="mv-f-hosting-note" role="note" aria-label="What the monthly fee covers">
-                  <span className="mv-f-hosting-pill">$0 Design Fee</span>
+                  <span className="mv-f-hosting-pill">{isBarber19Hosting ? 'Design Already Paid' : '$0 Design Fee'}</span>
                   <span className="mv-f-hosting-text">
-                    Your monthly payment covers <strong>website hosting</strong> — design, build, and edits are included on us.
+                    {isBarber19Hosting
+                      ? <>Your monthly payment covers <strong>website hosting</strong> — your design fee from step 1 covered the build.</>
+                      : <>Your monthly payment covers <strong>website hosting</strong> — design, build, and edits are included on us.</>}
                   </span>
                 </div>
               )}
@@ -1424,23 +1491,38 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="mv-f-tiers">
                 <button type="button" className="mv-f-tier mv-f-tier-compact" onClick={() => {
                   if (isBarberTrial) return handleCheckout('single', pricingPlan);
+                  // /barber-19 + /barber-19-hosting: Stripe-direct, no
+                  // payment-method chooser (PayPal is intentionally off here).
+                  if (isBarber19Flow) return handleCheckout('single', pricingPlan);
                   if (isBarberFive)  return setBarberFiveChooser({ tier: 'single' });
                   openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` });
                 }} disabled={isLoading}>
                   <div className="mv-f-tier-head">
                     <div className="mv-f-tier-name">{singleTierName}</div>
                     <div className="mv-f-tier-price">
-                      ${fiveIsYearly ? singleYearly : singleMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
-                      {fiveIsYearly && <span className="mv-f-tier-strike">${singleMonthly * 12}</span>}
+                      ${fiveIsYearly ? singleYearly : singleMonthly}
+                      {!isBarber19 && <small>/{fiveIsYearly ? 'yr' : 'mo'}</small>}
+                      {isBarber19 && <small> one-time</small>}
+                      {fiveIsYearly && !isBarber19 && <span className="mv-f-tier-strike">${singleMonthly * 12}</span>}
                     </div>
                   </div>
                   <ul className="mv-f-tier-list">
                     {singleBullets.map((b, i) => <li key={i}>{b}</li>)}
                   </ul>
-                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'single' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${singleMonthly}/mo` : 'Start →'}</span>
+                  <span className="mv-f-tier-cta">{
+                    isBarberFive && isLoading && fiveTier === 'single'
+                      ? 'Loading…'
+                      : isBarber19
+                        ? `Pay $19 → continue to hosting`
+                        : isBarber19Hosting
+                          ? `Subscribe — $${fiveIsYearly ? singleYearly : singleMonthly}/${fiveIsYearly ? 'yr' : 'mo'}`
+                          : isBarberTrial
+                            ? `Start a 1-day trial, then $${singleMonthly}/mo`
+                            : 'Start →'
+                  }</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
-                {isBarberFive && !isBarberTrial && (
+                {isBarberFive && !isBarberTrial && !isBarber19Flow && (
                   <button
                     type="button"
                     className="mv-f-paypal-link"
@@ -1453,36 +1535,41 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     </span>
                   </button>
                 )}
-                <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => {
-                  if (isBarberTrial) return handleCheckout('multi', pricingPlan);
-                  if (isBarberFive)  return setBarberFiveChooser({ tier: 'multi' });
-                  openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` });
-                }} disabled={isLoading}>
-                  <div className="mv-f-tier-head">
-                    <div className="mv-f-tier-name">{multiTierName}</div>
-                    <div className="mv-f-tier-price">
-                      ${fiveIsYearly ? multiYearly : multiMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
-                      {fiveIsYearly && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
-                    </div>
-                  </div>
-                  <ul className="mv-f-tier-list">
-                    {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
-                  </ul>
-                  <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${multiMonthly}/mo` : 'Start →'}</span>
-                  {!isBarberFive && <PaymentBadgeRow />}
-                </button>
-                {isBarberFive && !isBarberTrial && (
-                  <button
-                    type="button"
-                    className="mv-f-paypal-link"
-                    onClick={() => openPaypal({ region: 'barberFive', tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })}
-                    disabled={isLoading}
-                  >
-                    <span>or pay with</span>
-                    <span className="mv-f-paypal-mark">
-                      <span className="mv-f-paypal-pal">Pay</span><span className="mv-f-paypal-pal2">Pal</span>
-                    </span>
-                  </button>
+                {/* /barber-19 + /barber-19-hosting are single-tier only; multi tier hidden. */}
+                {!isBarber19Flow && (
+                  <>
+                    <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => {
+                      if (isBarberTrial) return handleCheckout('multi', pricingPlan);
+                      if (isBarberFive)  return setBarberFiveChooser({ tier: 'multi' });
+                      openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` });
+                    }} disabled={isLoading}>
+                      <div className="mv-f-tier-head">
+                        <div className="mv-f-tier-name">{multiTierName}</div>
+                        <div className="mv-f-tier-price">
+                          ${fiveIsYearly ? multiYearly : multiMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
+                          {fiveIsYearly && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
+                        </div>
+                      </div>
+                      <ul className="mv-f-tier-list">
+                        {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
+                      </ul>
+                      <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${multiMonthly}/mo` : 'Start →'}</span>
+                      {!isBarberFive && <PaymentBadgeRow />}
+                    </button>
+                    {isBarberFive && !isBarberTrial && (
+                      <button
+                        type="button"
+                        className="mv-f-paypal-link"
+                        onClick={() => openPaypal({ region: 'barberFive', tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` })}
+                        disabled={isLoading}
+                      >
+                        <span>or pay with</span>
+                        <span className="mv-f-paypal-mark">
+                          <span className="mv-f-paypal-pal">Pay</span><span className="mv-f-paypal-pal2">Pal</span>
+                        </span>
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
 
