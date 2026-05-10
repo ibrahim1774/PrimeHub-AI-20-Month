@@ -1513,7 +1513,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     isBarberFive && isLoading && fiveTier === 'single'
                       ? 'Loading…'
                       : isBarber19
-                        ? `Pay $19 → continue to hosting`
+                        ? `Pay $19 — get my custom site`
                         : isBarber19Hosting
                           ? `Subscribe — $${fiveIsYearly ? singleYearly : singleMonthly}/${fiveIsYearly ? 'yr' : 'mo'}`
                           : isBarberTrial
