@@ -445,7 +445,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [region, cfg.monthlyAmount, cfg.currency]);
 
   useEffect(() => {
-    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial') return;
+    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial' && region !== 'barber19' && region !== 'barber19Hosting') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
