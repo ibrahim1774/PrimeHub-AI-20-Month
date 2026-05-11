@@ -474,29 +474,55 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
 
-    // Fire Meta Pixel InitiateCheckout event when user starts checkout
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      const value = region === 'home'
-        ? homeMonthly
-        : region === 'five'
-          ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
-          : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
-      const eventID = `ic_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      (window as any).fbq('track', 'InitiateCheckout', {
-        value,
-        currency: cfg.currency,
-        content_name: usesTier
-          ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
-          : (effectivePlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan'),
-        content_category: 'subscription',
-      }, { eventID });
+    // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
+    // is forwarded to /api/create-checkout so the server can fire CAPI
+    // for both pixels with deduplication.
+    const value = region === 'home'
+      ? homeMonthly
+      : region === 'five'
+        ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
+        : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+    const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const contentName = usesTier
+      ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
+      : (effectivePlan === 'yearly' ? 'Yearly Plan' : 'Monthly Plan');
+    if (typeof window !== 'undefined') {
+      const w = window as any;
+      if (w.fbq) {
+        w.fbq('track', 'InitiateCheckout', {
+          value,
+          currency: cfg.currency,
+          content_name: contentName,
+          content_category: 'subscription',
+        }, { eventID });
+      }
+      if (w.ttq) {
+        w.ttq.track('InitiateCheckout', {
+          value,
+          currency: cfg.currency,
+          content_name: contentName,
+          content_type: 'product',
+          contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
+        }, { event_id: eventID });
+      }
     }
 
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: effectivePlan, source: cfg.source, embedded: true, ...(usesTier ? { tier: effectiveTier } : {}) }),
+        body: JSON.stringify({
+          plan: effectivePlan,
+          source: cfg.source,
+          embedded: true,
+          ...(usesTier ? { tier: effectiveTier } : {}),
+          // Forwarded so the server can fire FB + TikTok CAPI
+          // InitiateCheckout with the same event_id (dedup).
+          initiateCheckoutEventId: eventID,
+          initiateCheckoutValue: value,
+          initiateCheckoutCurrency: cfg.currency,
+          initiateCheckoutContentName: contentName,
+        }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -1344,10 +1370,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginTop: 12 }}>
                 <div className="mv-f-promise"><strong>We deliver within 24 hours</strong></div>
-                {/* /barber-5 + /barber-5-month: pricing is right below
-                    the hero, so a "See pricing" CTA is redundant.
-                    Trial keeps its "Get started for free" pill. */}
-                {!(isBarberFive && !isBarberTrial) && (
+                {/* /barber-5 + /barber-5-month + /barber-19-hosting:
+                    pricing sits right below the hero so a "See pricing"
+                    CTA is redundant. /barber-trial keeps "Get started
+                    for free"; /barber-19 keeps "See pricing" so the
+                    \$19 design fee CTA is reachable from the hero. */}
+                {!(isBarberFive && !isBarberTrial && !isBarber19) && (
                   <button
                     className="mv-f-pill"
                     style={{ width: '100%', maxWidth: 240, justifyContent: 'center', padding: '14px 20px', fontSize: 16, fontWeight: 800 }}
@@ -1614,9 +1642,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="mv-f-footer">© {new Date().getFullYear()} Amalvera · Austin, TX</div>
 
-          {/* Bottom sticky "See pricing" — kept for /5 + /barber-trial,
-              hidden for /barber-5 + /barber-5-month. */}
-          {!(isBarberFive && !isBarberTrial) && (
+          {/* Bottom sticky "See pricing" — kept for /5 + /barber-trial
+              + /barber-19, hidden for /barber-5 + /barber-5-month +
+              /barber-19-hosting. */}
+          {!(isBarberFive && !isBarberTrial && !isBarber19) && (
             <div className={`mv-f-sticky${showFiveSticky ? ' is-visible' : ''}`}>
               <span className="mv-f-sticky-text">We build it · host it · deliver in 24 hours</span>
               <button className="mv-f-pill" onClick={() => { const el = document.getElementById('mv-f-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>

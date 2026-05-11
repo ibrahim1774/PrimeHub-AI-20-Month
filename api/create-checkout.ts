@@ -1,8 +1,83 @@
 import Stripe from 'stripe';
+import crypto from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
 });
+
+// Server-side InitiateCheckout firing for Meta + TikTok CAPI. Uses
+// the same event_id as the browser pixel call so each platform
+// dedupes browser ↔ server. Fire-and-forget — never blocks the
+// Stripe session response.
+const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
+const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
+const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D4D45MRC77U2TCIL3ILG';
+const TIKTOK_ACCESS_TOKEN = process.env.TIKTOK_ACCESS_TOKEN;
+const TIKTOK_TEST_EVENT_CODE = process.env.TIKTOK_TEST_EVENT_CODE;
+
+async function fireFbInitiateCheckoutCAPI(opts: { eventId: string; value: number; currency: string; clientIp?: string; userAgent?: string; eventSourceUrl?: string; contentName?: string; }) {
+    if (!FB_ACCESS_TOKEN) return;
+    try {
+        const body = {
+            data: [{
+                event_name: 'InitiateCheckout',
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: opts.eventId,
+                event_source_url: opts.eventSourceUrl,
+                action_source: 'website',
+                user_data: {
+                    client_ip_address: opts.clientIp,
+                    client_user_agent: opts.userAgent,
+                },
+                custom_data: {
+                    currency: (opts.currency || 'USD').toUpperCase(),
+                    value: opts.value,
+                    ...(opts.contentName ? { content_name: opts.contentName, content_category: 'subscription' } : {}),
+                },
+            }],
+        };
+        await fetch(`https://graph.facebook.com/v18.0/${FB_PIXEL_ID}/events?access_token=${FB_ACCESS_TOKEN}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+    } catch (e) {
+        console.error('[FB CAPI InitiateCheckout]', e);
+    }
+}
+
+async function fireTikTokInitiateCheckoutCAPI(opts: { eventId: string; value: number; currency: string; clientIp?: string; userAgent?: string; eventSourceUrl?: string; contentName?: string; }) {
+    if (!TIKTOK_ACCESS_TOKEN) return;
+    try {
+        const body: any = {
+            event_source: 'web',
+            event_source_id: TIKTOK_PIXEL_ID,
+            ...(TIKTOK_TEST_EVENT_CODE ? { test_event_code: TIKTOK_TEST_EVENT_CODE } : {}),
+            data: [{
+                event: 'InitiateCheckout',
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: opts.eventId,
+                user: {
+                    ip: opts.clientIp,
+                    user_agent: opts.userAgent,
+                },
+                properties: {
+                    currency: (opts.currency || 'USD').toUpperCase(),
+                    value: opts.value,
+                    ...(opts.contentName ? { content_name: opts.contentName } : {}),
+                },
+                page: { url: opts.eventSourceUrl },
+            }],
+        };
+        await fetch('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Access-Token': TIKTOK_ACCESS_TOKEN },
+            body: JSON.stringify(body),
+        });
+    } catch (e) {
+        console.error('[TikTok CAPI InitiateCheckout]', e);
+    }
+}
 
 export default async function handler(req: any, res: any) {
     if (req.method !== 'POST') {
@@ -10,7 +85,16 @@ export default async function handler(req: any, res: any) {
     }
 
     try {
-        const { pendingId, companyName, plan = 'monthly', source, embedded, tier } = req.body;
+        const {
+            pendingId, companyName, plan = 'monthly', source, embedded, tier,
+            // Browser pixel passes these through so server CAPI can dedupe.
+            initiateCheckoutEventId,
+            initiateCheckoutValue,
+            initiateCheckoutCurrency,
+            initiateCheckoutContentName,
+        } = req.body;
+        // suppress unused-var lint until we wire it (kept for future use).
+        void crypto;
 
         const isAus = source === 'australia';
         const isTen = source === 'ten';
@@ -142,6 +226,32 @@ export default async function handler(req: any, res: any) {
         }
 
         const session = await stripe.checkout.sessions.create(params);
+
+        // Fire-and-forget CAPI InitiateCheckout (Meta + TikTok) using
+        // the same event_id the browser pixel used. We don't await —
+        // visitor should never wait on third-party tracking.
+        if (initiateCheckoutEventId && typeof initiateCheckoutValue === 'number') {
+            const eventSourceUrl = `${origin}${directoryPath}`;
+            const ipForCapi = Array.isArray(clientIp) ? clientIp[0] : (clientIp || '');
+            fireFbInitiateCheckoutCAPI({
+                eventId: initiateCheckoutEventId,
+                value: initiateCheckoutValue,
+                currency: (initiateCheckoutCurrency || 'USD'),
+                clientIp: ipForCapi,
+                userAgent: userAgent || '',
+                eventSourceUrl,
+                contentName: initiateCheckoutContentName,
+            });
+            fireTikTokInitiateCheckoutCAPI({
+                eventId: initiateCheckoutEventId,
+                value: initiateCheckoutValue,
+                currency: (initiateCheckoutCurrency || 'USD'),
+                clientIp: ipForCapi,
+                userAgent: userAgent || '',
+                eventSourceUrl,
+                contentName: initiateCheckoutContentName,
+            });
+        }
 
         return res.status(200).json(
             embedded

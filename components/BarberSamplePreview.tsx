@@ -109,39 +109,50 @@ const BarberSamplePreview: React.FC<Props> = ({
     };
   };
 
+  // Returns the eventID + value used so the caller can forward them
+  // to the server for CAPI dedup.
   const fireInitiateCheckoutPixels = (tier: Tier) => {
-    if (typeof window === 'undefined') return;
     const { value } = tierPricing(tier);
     const eventID = `ic_${source}_${tier}_${plan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const contentName = tier === 'multi' ? 'Multi-Page + SEO' : 'Single Page';
-    const w = window as any;
-    if (w.fbq) {
-      w.fbq('track', 'InitiateCheckout', {
-        value, currency: 'USD',
-        content_name: contentName, content_category: 'subscription',
-      }, { eventID });
+    if (typeof window !== 'undefined') {
+      const w = window as any;
+      if (w.fbq) {
+        w.fbq('track', 'InitiateCheckout', {
+          value, currency: 'USD',
+          content_name: contentName, content_category: 'subscription',
+        }, { eventID });
+      }
+      if (w.ttq) {
+        w.ttq.track('InitiateCheckout', {
+          value, currency: 'USD',
+          content_name: contentName,
+          content_type: 'product',
+          contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
+        }, { event_id: eventID });
+      }
     }
-    if (w.ttq) {
-      w.ttq.track('InitiateCheckout', {
-        value, currency: 'USD',
-        content_name: contentName,
-        content_type: 'product',
-        contents: [{ content_name: contentName, content_category: 'subscription', quantity: 1, price: value }],
-      }, { event_id: eventID });
-    }
+    return { eventID, value, contentName };
   };
 
   const startCheckout = useCallback(async (tier: Tier) => {
     setLoading(true);
     setError(null);
 
-    fireInitiateCheckoutPixels(tier);
+    const ic = fireInitiateCheckoutPixels(tier);
 
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan, source, tier, embedded: true }),
+        body: JSON.stringify({
+          plan, source, tier, embedded: true,
+          // Forwarded so server-side CAPI fires with the same event_id.
+          initiateCheckoutEventId: ic.eventID,
+          initiateCheckoutValue: ic.value,
+          initiateCheckoutCurrency: 'USD',
+          initiateCheckoutContentName: ic.contentName,
+        }),
       });
       const data = await res.json();
       if (!res.ok || !data.clientSecret) throw new Error(data?.error || 'Checkout failed to start');
