@@ -123,6 +123,7 @@ export default async function handler(req: any, res: any) {
         const barberTrialTier: 'single' | 'multi' = isBarberTrial ? (tier === 'multi' ? 'multi' : 'single') : 'single';
         const barberSampleTier: 'single' | 'multi' = isBarberSample ? (tier === 'multi' ? 'multi' : 'single') : 'single';
         const barberGeneratorTier: 'single' | 'multi' = isBarberGenerator ? (tier === 'multi' ? 'multi' : 'single') : 'single';
+        const barber19Tier: 'single' | 'multi' = isBarber19 ? (tier === 'multi' ? 'multi' : 'single') : 'single';
 
         // /19 + /barber-19 are one-time payments, no subscription, no yearly variant
         const isOneTime = isNineteen || isBarber19;
@@ -136,7 +137,9 @@ export default async function handler(req: any, res: any) {
         const productName = isBarber
             ? 'Amalvera - Barbershop Website Build'
             : isBarber19
-                ? 'Amalvera - Custom Barbershop Website Design (One-Time)'
+                ? (barber19Tier === 'multi'
+                    ? 'Amalvera - Custom Barbershop Website Design — Multi-Page (One-Time)'
+                    : 'Amalvera - Custom Barbershop Website Design — Single Page (One-Time)')
                 : isBarber19Hosting
                 ? 'Amalvera - Barbershop Website Hosting'
                 : isLocalBusiness
@@ -161,7 +164,7 @@ export default async function handler(req: any, res: any) {
 
         const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isBarberGenerator ? '/barber-generator' : isBarberSample ? '/barber-sample' : isBarberTrial ? '/barber-trial' : isBarber19Hosting ? '/barber-19-hosting' : isBarber19 ? '/barber-19' : isBarberFiveMonth ? '/barber-5-month' : isBarberFive ? '/barber-5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : isHome ? '/' : '/1';
         const successUrl = isDirectory
-            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberGenerator ? `&tier=${barberGeneratorTier}` : isBarberSample ? `&tier=${barberSampleTier}` : isBarberTrial ? `&tier=${barberTrialTier}` : isBarberFiveMonth ? `&tier=${barberFiveMonthTier}` : isBarberFive ? `&tier=${barberFiveTier}` : ''}`
+            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberGenerator ? `&tier=${barberGeneratorTier}` : isBarberSample ? `&tier=${barberSampleTier}` : isBarberTrial ? `&tier=${barberTrialTier}` : isBarberFiveMonth ? `&tier=${barberFiveMonthTier}` : isBarberFive ? `&tier=${barberFiveTier}` : isBarber19 ? `&tier=${barber19Tier}` : ''}`
             : `${origin}/generator?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
@@ -177,7 +180,9 @@ export default async function handler(req: any, res: any) {
 
         // Description differs for one-time fees vs subscription pages
         const description = isBarber19
-            ? `$19${currencyLabel} one-time custom barbershop website design.`
+            ? (barber19Tier === 'multi'
+                ? `$39${currencyLabel} one-time multi-page custom barbershop website design.`
+                : `$19${currencyLabel} one-time custom barbershop website design.`)
             : isNineteen
                 ? `$19${currencyLabel} for a custom website design.`
                 : isYearly
@@ -196,7 +201,7 @@ export default async function handler(req: any, res: any) {
                             name: productName,
                             description,
                         },
-                        unit_amount: isBarber19 ? 1900 : isNineteen ? 1900 : isYearly ? yearlyAmountCents : monthlyAmountCents,
+                        unit_amount: isBarber19 ? (barber19Tier === 'multi' ? 3900 : 1900) : isNineteen ? 1900 : isYearly ? yearlyAmountCents : monthlyAmountCents,
                         // recurring only for subscription mode
                         ...(isOneTime ? {} : { recurring: { interval: isYearly ? 'year' : 'month' } }),
                     },

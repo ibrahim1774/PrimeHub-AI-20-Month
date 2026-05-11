@@ -466,13 +466,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
     const homeMonthly = effectiveTier === 'single' ? 20 : 50;
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
+    const barber19Amount = effectiveTier === 'single' ? 19 : 39;
 
     // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
     // is forwarded to /api/create-checkout so the server can fire CAPI
@@ -481,7 +482,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       ? homeMonthly
       : region === 'five'
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
-        : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+        : region === 'barber19'
+          ? barber19Amount
+          : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const contentName = usesTier
       ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
@@ -772,8 +775,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveIsYearly = pricingPlan === 'yearly';
     const singleMonthly = isBarber19 ? 19 : isBarber19Hosting ? 5 : isBarberTrial ? 10 : isBarberFiveMonth ? 5 : isBarberFive ? 5 : 5;
     const singleYearly = isBarber19 ? 19 : isBarber19Hosting ? 36 : isBarberTrial ? 72 : isBarberFiveMonth ? 36 : isBarberFive ? 36 : 36;
-    const multiMonthly = isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 10 : 10;
-    const multiYearly = isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 72 : 72;
+    const multiMonthly = isBarber19 ? 39 : isBarberTrial ? 20 : isBarberFiveMonth ? 10 : isBarberFive ? 10 : 10;
+    const multiYearly = isBarber19 ? 39 : isBarberTrial ? 144 : isBarberFiveMonth ? 72 : isBarberFive ? 72 : 72;
     const heroEyebrow = isBarber19 ? `Custom barbershop sites · One-time $19` : isBarber19Hosting ? `Step 2 of 2 · Pick your hosting plan` : isBarberTrial ? `Custom barbershop sites · 1-day free trial` : isBarberFive ? `Custom barbershop sites · From $${singleMonthly}/mo` : `Custom websites · From $5/mo`;
     const primaryCtaLabel = isBarberTrial ? 'Get started for free' : 'See pricing';
     const heroTitleEm = isBarberFive ? 'barbershops.' : 'local businesses.';
@@ -785,13 +788,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       : isBarber19Hosting
         ? 'Barbershop Website Hosting'
         : isBarberFive ? 'Single Page Barbershop Site' : 'Single Page Website';
-    const multiLabel = isBarberFive ? 'Multi-Page Barbershop Site + SEO' : 'Multi-Page + SEO';
+    const multiLabel = isBarber19 ? 'Multi-Page Custom Barbershop Website Design' : isBarberFive ? 'Multi-Page Barbershop Site + SEO' : 'Multi-Page + SEO';
     const singleTierName = isBarber19
       ? 'One-time custom design'
       : isBarber19Hosting
         ? 'Website hosting · single page'
         : isBarberFive ? '1-page site, custom for your barbershop' : '1-page site, custom to your business';
-    const multiTierName = isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
+    const multiTierName = isBarber19 ? 'Multi-page custom barbershop site' : isBarberFive ? 'Multi-page barbershop site with SEO' : 'Multi-page site with SEO';
     const singleBullets = isBarber19
       ? ['Custom design built for your barbershop', 'Your real photos + business info', 'Delivered within 24 hours', 'Free unlimited edits — just email us']
       : isBarber19Hosting
@@ -799,9 +802,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         : isBarberFive
           ? ['One custom page, built for your barbershop', 'Your real photos + barbershop info', 'Hosting + edits included', 'Cancel anytime · no contracts']
           : ['One custom page, built for your business', 'Your real photos + business info', 'Hosting + edits included', 'Cancel anytime · no contracts'];
-    const multiBullets = isBarberFive
-      ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts']
-      : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts'];
+    const multiBullets = isBarber19
+      ? ['Multi-page custom design — services, about, contact', 'Built-in SEO best-practices baked in', 'Your real photos + business info', 'Delivered within 24 hours', 'Free unlimited edits — just email us']
+      : isBarberFive
+        ? ['Multiple pages — services, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts']
+        : ['Multiple pages — service, about, contact', 'Built-in SEO best-practices baked in', 'Hosting + edits included', 'Cancel anytime · no contracts'];
     return (
       <>
         <style>{`
@@ -1541,7 +1546,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     isBarberFive && isLoading && fiveTier === 'single'
                       ? 'Loading…'
                       : isBarber19
-                        ? `Pay $19 — get my custom site`
+                        ? `Get My Custom Site Design`
                         : isBarber19Hosting
                           ? `Subscribe — $${fiveIsYearly ? singleYearly : singleMonthly}/${fiveIsYearly ? 'yr' : 'mo'}`
                           : isBarberTrial
@@ -1563,28 +1568,39 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     </span>
                   </button>
                 )}
-                {/* /barber-19 + /barber-19-hosting are single-tier only; multi tier hidden. */}
-                {!isBarber19Flow && (
+                {/* /barber-19-hosting is single-tier only; multi tier hidden there. /barber-19 shows multi at $39 one-time. */}
+                {!isBarber19Hosting && (
                   <>
                     <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => {
                       if (isBarberTrial) return handleCheckout('multi', pricingPlan);
+                      if (isBarber19) return handleCheckout('multi', pricingPlan);
                       if (isBarberFive)  return setBarberFiveChooser({ tier: 'multi' });
                       openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` });
                     }} disabled={isLoading}>
                       <div className="mv-f-tier-head">
                         <div className="mv-f-tier-name">{multiTierName}</div>
                         <div className="mv-f-tier-price">
-                          ${fiveIsYearly ? multiYearly : multiMonthly}<small>/{fiveIsYearly ? 'yr' : 'mo'}</small>
-                          {fiveIsYearly && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
+                          ${fiveIsYearly ? multiYearly : multiMonthly}
+                          {!isBarber19 && <small>/{fiveIsYearly ? 'yr' : 'mo'}</small>}
+                          {isBarber19 && <small> one-time</small>}
+                          {fiveIsYearly && !isBarber19 && <span className="mv-f-tier-strike">${multiMonthly * 12}</span>}
                         </div>
                       </div>
                       <ul className="mv-f-tier-list">
                         {multiBullets.map((b, i) => <li key={i}>{b}</li>)}
                       </ul>
-                      <span className="mv-f-tier-cta">{isBarberFive && isLoading && fiveTier === 'multi' ? 'Loading…' : isBarberTrial ? `Start a 1-day trial, then $${multiMonthly}/mo` : 'Start →'}</span>
+                      <span className="mv-f-tier-cta">{
+                        isBarberFive && isLoading && fiveTier === 'multi'
+                          ? 'Loading…'
+                          : isBarber19
+                            ? 'Get My Custom Site Design'
+                            : isBarberTrial
+                              ? `Start a 1-day trial, then $${multiMonthly}/mo`
+                              : 'Start →'
+                      }</span>
                       {!isBarberFive && <PaymentBadgeRow />}
                     </button>
-                    {isBarberFive && !isBarberTrial && (
+                    {isBarberFive && !isBarberTrial && !isBarber19 && (
                       <button
                         type="button"
                         className="mv-f-paypal-link"
