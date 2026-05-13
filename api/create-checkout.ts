@@ -11,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 // Stripe session response.
 const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
 const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
-const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D4D45MRC77U2TCIL3ILG';
+const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D81SNARC77UATASKVG10';
 const TIKTOK_ACCESS_TOKEN = process.env.TIKTOK_ACCESS_TOKEN;
 const TIKTOK_TEST_EVENT_CODE = process.env.TIKTOK_TEST_EVENT_CODE;
 

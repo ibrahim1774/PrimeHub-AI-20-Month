@@ -44,8 +44,16 @@ const DirectorySuccessPage: React.FC = () => {
         w.fbq('track', 'Purchase', { currency, value }, { eventID });
       }
       if (w.ttq) {
-        // TikTok's purchase event is "CompletePayment".
-        w.ttq.track('CompletePayment', { currency, value }, { event_id: eventID });
+        // TikTok purchase event. Same event_id as FB → CAPI dedupes.
+        w.ttq.track('Purchase', {
+          value,
+          currency,
+          contents: [{
+            content_id: pathname,
+            content_type: 'product',
+            content_name: pathname,
+          }],
+        }, { event_id: eventID });
       }
     }
 

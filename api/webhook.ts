@@ -77,12 +77,12 @@ const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
 
 // TikTok Pixel ID is public (already in the browser snippet) so it's
 // safe as a default. The access token MUST live in env vars.
-const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D4D45MRC77U2TCIL3ILG';
+const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D81SNARC77UATASKVG10';
 const TIKTOK_ACCESS_TOKEN = process.env.TIKTOK_ACCESS_TOKEN;
 const TIKTOK_TEST_EVENT_CODE = process.env.TIKTOK_TEST_EVENT_CODE; // optional
 
 // TikTok Events API (v1.3). Mirrors sendFBConversionsEvent above.
-// Browser pixel fires 'CompletePayment' with the same event_id, so
+// Browser pixel fires 'Purchase' with the same event_id, so
 // TikTok dedupes the two automatically.
 async function sendTikTokConversionsEvent(pixelId: string, accessToken: string, data: any) {
     try {
@@ -96,7 +96,7 @@ async function sendTikTokConversionsEvent(pixelId: string, accessToken: string, 
             ...(TIKTOK_TEST_EVENT_CODE ? { test_event_code: TIKTOK_TEST_EVENT_CODE } : {}),
             data: [
                 {
-                    event: 'CompletePayment',
+                    event: 'Purchase',
                     event_time: Math.floor(Date.now() / 1000),
                     event_id: data.eventId,
                     user: {
