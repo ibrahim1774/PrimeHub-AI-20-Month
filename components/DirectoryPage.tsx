@@ -480,7 +480,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     // for both pixels with deduplication.
     const value = region === 'home'
       ? homeMonthly
-      : region === 'five'
+      : (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth')
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
           ? barber19Amount
@@ -1527,6 +1527,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   // /barber-19 + /barber-19-hosting: Stripe-direct, no
                   // payment-method chooser (PayPal is intentionally off here).
                   if (isBarber19Flow) return handleCheckout('single', pricingPlan);
+                  // /barber-5: Stripe-direct, no PayPal chooser.
+                  if (region === 'barberFive') return handleCheckout('single', pricingPlan);
                   if (isBarberFive)  return setBarberFiveChooser({ tier: 'single' });
                   openPaypal({ region: ppRegion, tier: 'single', plan: pricingPlan, label: singleLabel, priceText: fiveIsYearly ? `$${singleYearly}/yr` : `$${singleMonthly}/mo` });
                 }} disabled={isLoading}>
@@ -1555,7 +1557,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   }</span>
                   {!isBarberFive && <PaymentBadgeRow />}
                 </button>
-                {isBarberFive && !isBarberTrial && !isBarber19Flow && (
+                {isBarberFive && !isBarberTrial && !isBarber19Flow && region !== 'barberFive' && (
                   <button
                     type="button"
                     className="mv-f-paypal-link"
@@ -1574,6 +1576,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <button type="button" className="mv-f-tier mv-f-tier-multi" onClick={() => {
                       if (isBarberTrial) return handleCheckout('multi', pricingPlan);
                       if (isBarber19) return handleCheckout('multi', pricingPlan);
+                      // /barber-5: Stripe-direct, no PayPal chooser.
+                      if (region === 'barberFive') return handleCheckout('multi', pricingPlan);
                       if (isBarberFive)  return setBarberFiveChooser({ tier: 'multi' });
                       openPaypal({ region: ppRegion, tier: 'multi', plan: pricingPlan, label: multiLabel, priceText: fiveIsYearly ? `$${multiYearly}/yr` : `$${multiMonthly}/mo` });
                     }} disabled={isLoading}>
@@ -1600,7 +1604,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                       }</span>
                       {!isBarberFive && <PaymentBadgeRow />}
                     </button>
-                    {isBarberFive && !isBarberTrial && !isBarber19 && (
+                    {isBarberFive && !isBarberTrial && !isBarber19 && region !== 'barberFive' && (
                       <button
                         type="button"
                         className="mv-f-paypal-link"
