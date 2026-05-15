@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -284,6 +284,22 @@ const REGIONS: Record<Region, {
     monthlyAmount: 5,
     yearlyAmount: 36,
     yearlyWas: 60,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  barberNine: {
+    source: 'barberNine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 9,
+    yearlyAmount: 65,
+    yearlyWas: 108,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -748,6 +764,232 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </button>
     </div>
   );
+
+  if (region === 'barberNine') {
+    const b9Gallery = [
+      { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
+      { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
+      { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
+      { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
+    ];
+    const b9Monthly = 9;
+    const b9Yearly = 65;
+    const b9YearlyWas = 108;
+    return (
+      <>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          .b9-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 200px; }
+          .b9-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
+          .b9-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
+          .b9-stack { display:flex; flex-direction:column; gap:14px; max-width:980px; margin:0 auto; }
+          .b9-card { position:relative; border-radius:22px; padding:20px 18px; overflow:hidden; background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
+          .b9-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
+          .b9-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
+          .b9-included { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px; }
+          .b9-chip { display:inline-flex; align-items:center; gap:6px; background:rgba(201,169,110,.12); color:#c9a96e; border:1px solid rgba(201,169,110,.45); padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.02em; }
+          .b9-chip svg { width:13px; height:13px; }
+          .b9-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
+          .b9-allin svg { width:16px; height:16px; }
+          .b9-gallery-wrap { position:relative; margin-bottom:18px; }
+          .b9-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:0 -4px; scroll-behavior:smooth; }
+          .b9-gallery::-webkit-scrollbar { height:5px; }
+          .b9-gallery::-webkit-scrollbar-thumb { background:rgba(201,169,110,.35); border-radius:999px; }
+          .b9-gcard { flex:0 0 auto; width:140px; aspect-ratio:9/16; background:#0a0a0a; border-radius:14px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.55), inset 0 0 0 1px rgba(201,169,110,.20); }
+          .b9-gcard wistia-player { width:100%; height:100%; display:block; }
+          .b9-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:999px; background:#c9a96e; color:#0a0a0a; border:0; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.5); z-index:5; }
+          .b9-gallery-arrow:hover { background:#d8b67a; }
+          .b9-gallery-arrow svg { width:16px; height:16px; }
+          .b9-gallery-arrow-prev { left:-2px; }
+          .b9-gallery-arrow-next { right:-2px; }
+          .b9-mini-h { font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#c9a96e; margin:6px 0 10px; }
+          .b9-steps { display:grid; grid-template-columns:1fr; gap:8px; }
+          .b9-step { background:rgba(201,169,110,.07); border-radius:12px; padding:12px 14px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-step-num { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:20px; color:#c9a96e; line-height:1; }
+          .b9-step-h { font-weight:800; font-size:13px; margin:2px 0 2px; color:#f5f0e0; }
+          .b9-step-b { font-size:12px; color:#cfc8b8; line-height:1.45; }
+          .b9-guarantee { background:#fff8e6; color:#0a0a0a; border-radius:18px; padding:18px 18px; box-shadow:0 14px 32px rgba(0,0,0,.45), 0 0 0 2px #c9a96e; margin-top:6px; }
+          .b9-guarantee-badge { display:inline-flex; align-items:center; gap:6px; background:#0a0a0a; color:#c9a96e; padding:6px 12px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px; }
+          .b9-guarantee-badge svg { width:12px; height:12px; }
+          .b9-guarantee-h { font-weight:900; font-size:18px; letter-spacing:-.01em; margin:0 0 8px; line-height:1.2; }
+          .b9-guarantee-b { font-size:13px; line-height:1.55; color:#1c1c1c; margin:0; }
+          .b9-guarantee-b mark { background:#c9a96e; color:#0a0a0a; padding:1px 6px; border-radius:4px; font-weight:800; }
+          .b9-sticky { position:fixed; left:10px; right:10px; bottom:10px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:18px; padding:10px 10px; box-shadow:0 14px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.45); max-width:560px; margin:0 auto; }
+          .b9-sticky-h { font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#c9a96e; text-align:center; padding:4px 4px 8px; }
+          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:14px; padding:14px 12px; cursor:pointer; text-align:left; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; }
+          .b9-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 12px 28px rgba(0,0,0,.45); }
+          .b9-pricebtn-yearly { background:#c9a96e; color:#0a0a0a; box-shadow:inset 0 0 0 1px rgba(10,10,10,.10); }
+          .b9-priceblabel { font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.85; margin-bottom:2px; display:flex; align-items:center; justify-content:space-between; gap:6px; }
+          .b9-priceblabel .b9-save { background:#0a0a0a; color:#c9a96e; padding:2px 6px; border-radius:999px; font-size:9px; letter-spacing:.06em; }
+          .b9-priceval { font-weight:900; font-size:22px; letter-spacing:-.025em; line-height:1.05; }
+          .b9-priceval small { font-size:11px; font-weight:600; opacity:.7; margin-left:2px; }
+          .b9-pricewas { font-size:10px; opacity:.55; text-decoration:line-through; margin-left:5px; font-weight:600; }
+          .b9-pricecta { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:6px; font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+          .b9-pricecta svg { width:12px; height:12px; }
+          @media (min-width: 760px) {
+            .b9-card { padding:34px 30px; }
+            .b9-title { font-size:46px; }
+            .b9-steps { grid-template-columns:repeat(3, 1fr); gap:10px; }
+            .b9-gcard { width:170px; }
+          }
+          @keyframes b9FadeIn { from { opacity:0 } to { opacity:1 } }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(10,10,10,.82); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:b9FadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0d0d0d; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#1f63ff; }
+          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:12px; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#777; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#0d0d0d; }
+        `}</style>
+
+        <div className="b9-page">
+          <nav className="b9-nav"><span className="b9-logo">amalvera</span></nav>
+
+          <div className="b9-stack">
+            <section className="b9-card">
+              <div className="b9-eyebrow">Custom barbershop sites · One simple plan</div>
+              <h1 className="b9-title">Custom <em>Barbershop</em></h1>
+              <p className="b9-sub">A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan. No add-ons. No upsells.</p>
+
+              <div className="b9-allin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Custom Design + Hosting + Edits — All Included
+              </div>
+
+              <div className="b9-included">
+                <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Custom Design</span>
+                <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Hosting</span>
+                <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Unlimited Edits</span>
+              </div>
+
+              <div className="b9-eyebrow">Real sites · Real barbershops</div>
+              <div className="b9-gallery-wrap">
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-prev"
+                  aria-label="Previous example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-next"
+                  aria-label="Next example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="b9-gallery">
+                  {b9Gallery.map((item, i) => (
+                    <div key={i} className="b9-gcard">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'false',
+                          'big-play-button': 'false',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': 'c9a96e',
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="b9-mini-h">How it works</div>
+              <div className="b9-steps">
+                <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">Send us a link</div><div className="b9-step-b">Google Business, Facebook, or Instagram — or a few photos and your info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">Custom design with your real photos and barbershop info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
+              </div>
+            </section>
+
+            <section className="b9-guarantee">
+              <div className="b9-guarantee-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+                Triple Guarantee
+              </div>
+              <h2 className="b9-guarantee-h">Delivered in 24–48 hours — or we make it right.</h2>
+              <p className="b9-guarantee-b">
+                We <mark>deliver your custom site within 24–48 hours</mark>. If you don't love it, we'll keep revising it until you do. And if you still aren't happy, you're covered by our <mark>7-day money-back guarantee</mark>. Zero risk.
+              </p>
+            </section>
+          </div>
+
+          <div className="b9-sticky">
+            <div className="b9-sticky-h">Start your subscription</div>
+            <div className="b9-sticky-cols">
+              <button
+                type="button"
+                className="b9-pricebtn"
+                onClick={() => { setPricingPlan('monthly'); handleCheckout(undefined, 'monthly'); }}
+                disabled={isLoading}
+              >
+                <div className="b9-priceblabel">Monthly</div>
+                <div className="b9-priceval">${b9Monthly}<small>/mo</small></div>
+                <div className="b9-pricecta">
+                  {isLoading && pricingPlan === 'monthly' ? 'Loading…' : 'Subscribe →'}
+                </div>
+              </button>
+              <button
+                type="button"
+                className="b9-pricebtn b9-pricebtn-yearly"
+                onClick={() => { setPricingPlan('yearly'); handleCheckout(undefined, 'yearly'); }}
+                disabled={isLoading}
+              >
+                <div className="b9-priceblabel">Yearly<span className="b9-save">Save 40%</span></div>
+                <div className="b9-priceval">${b9Yearly}<small>/yr</small><span className="b9-pricewas">${b9YearlyWas}</span></div>
+                <div className="b9-pricecta">
+                  {isLoading && pricingPlan === 'yearly' ? 'Loading…' : 'Subscribe →'}
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {modalOpen && clientSecret && (
+          <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+            <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+              <div className="mv-checkout-frame-inner">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+              <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
+                Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   if (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barber19Hosting') {
     // /barber-5, /barber-5-month, /barber-trial, /barber-19, /barber-19-hosting
