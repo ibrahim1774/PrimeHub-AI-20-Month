@@ -71,6 +71,10 @@
         {
             "source": "/barber-19-hosting",
             "destination": "/index.html"
+        },
+        {
+            "source": "/barber-9",
+            "destination": "/index.html"
         }
     ],
     "functions": {
