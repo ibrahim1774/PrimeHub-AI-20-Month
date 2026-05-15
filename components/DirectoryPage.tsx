@@ -384,7 +384,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -482,7 +482,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -490,6 +490,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
+    const barberNineMonthly = effectiveTier === 'single' ? 9 : 19;
+    const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
 
     // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
     // is forwarded to /api/create-checkout so the server can fire CAPI
@@ -500,7 +502,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
           ? barber19Amount
-          : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+          : region === 'barberNine'
+            ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
+            : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const contentName = usesTier
       ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
@@ -772,9 +776,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
     ];
-    const b9Monthly = 9;
-    const b9Yearly = 65;
-    const b9YearlyWas = 108;
+    const b9SingleMonthly = 9;
+    const b9SingleYearly = 65;
+    const b9MultiMonthly = 19;
+    const b9MultiYearly = 137;
+    const b9IsYearly = pricingPlan === 'yearly';
+    const b9SinglePrice = b9IsYearly ? b9SingleYearly : b9SingleMonthly;
+    const b9MultiPrice = b9IsYearly ? b9MultiYearly : b9MultiMonthly;
+    const b9Period = b9IsYearly ? 'yr' : 'mo';
     return (
       <>
         <style>{`
@@ -816,19 +825,21 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-guarantee-h { font-weight:900; font-size:18px; letter-spacing:-.01em; margin:0 0 8px; line-height:1.2; }
           .b9-guarantee-b { font-size:13px; line-height:1.55; color:#1c1c1c; margin:0; }
           .b9-guarantee-b mark { background:#c9a96e; color:#0a0a0a; padding:1px 6px; border-radius:4px; font-weight:800; }
-          .b9-sticky { position:fixed; left:10px; right:10px; bottom:10px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:18px; padding:10px 10px; box-shadow:0 14px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.45); max-width:560px; margin:0 auto; }
-          .b9-sticky-h { font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#c9a96e; text-align:center; padding:4px 4px 8px; }
-          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:14px; padding:14px 12px; cursor:pointer; text-align:left; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; }
-          .b9-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 12px 28px rgba(0,0,0,.45); }
-          .b9-pricebtn-yearly { background:#c9a96e; color:#0a0a0a; box-shadow:inset 0 0 0 1px rgba(10,10,10,.10); }
-          .b9-priceblabel { font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.85; margin-bottom:2px; display:flex; align-items:center; justify-content:space-between; gap:6px; }
-          .b9-priceblabel .b9-save { background:#0a0a0a; color:#c9a96e; padding:2px 6px; border-radius:999px; font-size:9px; letter-spacing:.06em; }
-          .b9-priceval { font-weight:900; font-size:22px; letter-spacing:-.025em; line-height:1.05; }
-          .b9-priceval small { font-size:11px; font-weight:600; opacity:.7; margin-left:2px; }
-          .b9-pricewas { font-size:10px; opacity:.55; text-decoration:line-through; margin-left:5px; font-weight:600; }
-          .b9-pricecta { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:6px; font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
-          .b9-pricecta svg { width:12px; height:12px; }
+          .b9-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:14px; padding:6px 6px; box-shadow:0 10px 28px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:480px; margin:0 auto; }
+          .b9-sticky-toggle { display:flex; gap:2px; background:rgba(201,169,110,.10); padding:2px; border-radius:999px; margin:0 auto 6px; width:fit-content; }
+          .b9-stoggle { background:transparent; border:0; padding:4px 12px; border-radius:999px; font-family:inherit; font-weight:700; font-size:11px; color:#cfc8b8; cursor:pointer; transition:background .15s ease, color .15s ease; display:inline-flex; align-items:center; gap:5px; }
+          .b9-stoggle.active { background:#c9a96e; color:#0a0a0a; }
+          .b9-stoggle .b9-savetag { background:#0a0a0a; color:#c9a96e; padding:1px 5px; border-radius:999px; font-size:8px; letter-spacing:.06em; font-weight:800; }
+          .b9-stoggle.active .b9-savetag { background:#0a0a0a; color:#c9a96e; }
+          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:10px; padding:8px 10px; cursor:pointer; text-align:left; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+          .b9-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
+          .b9-pricebtn-multi { background:#c9a96e; color:#0a0a0a; box-shadow:inset 0 0 0 1px rgba(10,10,10,.10); }
+          .b9-pricebtn-meta { display:flex; flex-direction:column; gap:0; min-width:0; }
+          .b9-tiername { font-size:9px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; opacity:.75; line-height:1.1; }
+          .b9-priceval { font-weight:900; font-size:16px; letter-spacing:-.02em; line-height:1.1; }
+          .b9-priceval small { font-size:9px; font-weight:600; opacity:.7; margin-left:1px; }
+          .b9-pricecta { font-size:14px; font-weight:900; line-height:1; opacity:.9; flex-shrink:0; }
           @media (min-width: 760px) {
             .b9-card { padding:34px 30px; }
             .b9-title { font-size:46px; }
@@ -942,31 +953,50 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           </div>
 
           <div className="b9-sticky">
-            <div className="b9-sticky-h">Start your subscription</div>
+            <div className="b9-sticky-toggle" role="tablist" aria-label="Billing period">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={!b9IsYearly}
+                className={`b9-stoggle${!b9IsYearly ? ' active' : ''}`}
+                onClick={() => setPricingPlan('monthly')}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={b9IsYearly}
+                className={`b9-stoggle${b9IsYearly ? ' active' : ''}`}
+                onClick={() => setPricingPlan('yearly')}
+              >
+                Yearly <span className="b9-savetag">−40%</span>
+              </button>
+            </div>
             <div className="b9-sticky-cols">
               <button
                 type="button"
                 className="b9-pricebtn"
-                onClick={() => { setPricingPlan('monthly'); handleCheckout(undefined, 'monthly'); }}
+                onClick={() => handleCheckout('single', pricingPlan)}
                 disabled={isLoading}
               >
-                <div className="b9-priceblabel">Monthly</div>
-                <div className="b9-priceval">${b9Monthly}<small>/mo</small></div>
-                <div className="b9-pricecta">
-                  {isLoading && pricingPlan === 'monthly' ? 'Loading…' : 'Subscribe →'}
+                <div className="b9-pricebtn-meta">
+                  <span className="b9-tiername">Single Page</span>
+                  <span className="b9-priceval">${b9SinglePrice}<small>/{b9Period}</small></span>
                 </div>
+                <span className="b9-pricecta">{isLoading && activeHomeTier === 'single' ? '…' : '→'}</span>
               </button>
               <button
                 type="button"
-                className="b9-pricebtn b9-pricebtn-yearly"
-                onClick={() => { setPricingPlan('yearly'); handleCheckout(undefined, 'yearly'); }}
+                className="b9-pricebtn b9-pricebtn-multi"
+                onClick={() => handleCheckout('multi', pricingPlan)}
                 disabled={isLoading}
               >
-                <div className="b9-priceblabel">Yearly<span className="b9-save">Save 40%</span></div>
-                <div className="b9-priceval">${b9Yearly}<small>/yr</small><span className="b9-pricewas">${b9YearlyWas}</span></div>
-                <div className="b9-pricecta">
-                  {isLoading && pricingPlan === 'yearly' ? 'Loading…' : 'Subscribe →'}
+                <div className="b9-pricebtn-meta">
+                  <span className="b9-tiername">Multi-Page</span>
+                  <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
                 </div>
+                <span className="b9-pricecta">{isLoading && activeHomeTier === 'multi' ? '…' : '→'}</span>
               </button>
             </div>
           </div>

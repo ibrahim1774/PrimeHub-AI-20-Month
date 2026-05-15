@@ -125,11 +125,12 @@ export default async function handler(req: any, res: any) {
         const barberSampleTier: 'single' | 'multi' = isBarberSample ? (tier === 'multi' ? 'multi' : 'single') : 'single';
         const barberGeneratorTier: 'single' | 'multi' = isBarberGenerator ? (tier === 'multi' ? 'multi' : 'single') : 'single';
         const barber19Tier: 'single' | 'multi' = isBarber19 ? (tier === 'multi' ? 'multi' : 'single') : 'single';
+        const barberNineTier: 'single' | 'multi' = isBarberNine ? (tier === 'multi' ? 'multi' : 'single') : 'single';
 
         // /19 + /barber-19 are one-time payments, no subscription, no yearly variant
         const isOneTime = isNineteen || isBarber19;
         const isYearly = !isOneTime && plan === 'yearly';
-        const yearlyAmountCents = isBarberNine ? 6500 : isBarber19Hosting ? 3600 : isBarberGenerator ? (barberGeneratorTier === 'multi' ? 14400 : 7200) : isBarberSample ? (barberSampleTier === 'multi' ? 7200 : 3600) : isBarberTrial ? (barberTrialTier === 'multi' ? 14400 : 7200) : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 7200 : 3600) : isBarberFive ? (barberFiveTier === 'multi' ? 7200 : 3600) : isFive ? (fiveTier === 'multi' ? 7200 : 3600) : isTen || isBarber ? 4900 : isLocalBusiness ? 13500 : 9900;
+        const yearlyAmountCents = isBarberNine ? (barberNineTier === 'multi' ? 13700 : 6500) : isBarber19Hosting ? 3600 : isBarberGenerator ? (barberGeneratorTier === 'multi' ? 14400 : 7200) : isBarberSample ? (barberSampleTier === 'multi' ? 7200 : 3600) : isBarberTrial ? (barberTrialTier === 'multi' ? 14400 : 7200) : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 7200 : 3600) : isBarberFive ? (barberFiveTier === 'multi' ? 7200 : 3600) : isFive ? (fiveTier === 'multi' ? 7200 : 3600) : isTen || isBarber ? 4900 : isLocalBusiness ? 13500 : 9900;
         const host = req.headers.host;
         const protocol = host?.includes('localhost') ? 'http' : 'https';
         const origin = `${protocol}://${host}`;
@@ -154,7 +155,9 @@ export default async function handler(req: any, res: any) {
                 : isBarberSample
                 ? (barberSampleTier === 'single' ? 'Amalvera - Barbershop Website (Single Page)' : 'Amalvera - Barbershop Website (Multi-Page + SEO)')
                 : isBarberNine
-                ? 'Amalvera - Custom Barbershop Site (Design + Hosting + Edits)'
+                ? (barberNineTier === 'multi'
+                    ? 'Amalvera - Custom Barbershop Site (Multi-Page) — Design + Hosting + Edits'
+                    : 'Amalvera - Custom Barbershop Site (Single Page) — Design + Hosting + Edits')
                 : isBarberFiveMonth
                 ? (barberFiveMonthTier === 'single' ? 'Amalvera - Barbershop Website (Single Page)' : 'Amalvera - Barbershop Website (Multi-Page + SEO)')
                 : isBarberFive
@@ -167,7 +170,7 @@ export default async function handler(req: any, res: any) {
 
         const directoryPath = isAus ? '/aus' : isTen ? '/10' : isFive ? '/5' : isBarberNine ? '/barber-9' : isBarberGenerator ? '/barber-generator' : isBarberSample ? '/barber-sample' : isBarberTrial ? '/barber-trial' : isBarber19Hosting ? '/barber-19-hosting' : isBarber19 ? '/barber-19' : isBarberFiveMonth ? '/barber-5-month' : isBarberFive ? '/barber-5' : isNineteen ? '/19' : isBarber ? '/barber' : isLocalBusiness ? '/local-business' : isHome ? '/' : '/1';
         const successUrl = isDirectory
-            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberGenerator ? `&tier=${barberGeneratorTier}` : isBarberSample ? `&tier=${barberSampleTier}` : isBarberTrial ? `&tier=${barberTrialTier}` : isBarberFiveMonth ? `&tier=${barberFiveMonthTier}` : isBarberFive ? `&tier=${barberFiveTier}` : isBarber19 ? `&tier=${barber19Tier}` : ''}`
+            ? `${origin}${directoryPath}?status=success&session_id={CHECKOUT_SESSION_ID}&plan=${plan}${isHome ? `&tier=${homeTier}` : isFive ? `&tier=${fiveTier}` : isBarberGenerator ? `&tier=${barberGeneratorTier}` : isBarberSample ? `&tier=${barberSampleTier}` : isBarberTrial ? `&tier=${barberTrialTier}` : isBarberFiveMonth ? `&tier=${barberFiveMonthTier}` : isBarberFive ? `&tier=${barberFiveTier}` : isBarber19 ? `&tier=${barber19Tier}` : isBarberNine ? `&tier=${barberNineTier}` : ''}`
             : `${origin}/generator?status=success&pendingId=${pendingId}&companyName=${encodeURIComponent(companyName)}&session_id={CHECKOUT_SESSION_ID}`;
 
         const cancelUrl = isDirectory
@@ -177,9 +180,9 @@ export default async function handler(req: any, res: any) {
         const currency = isAus ? 'aud' : 'usd';
         const currencyLabel = isAus ? ' AUD' : '';
 
-        const monthlyAmountCents = isBarberNine ? 900 : isBarber19Hosting ? 500 : isBarberGenerator ? (barberGeneratorTier === 'multi' ? 2000 : 1000) : isBarberSample ? (barberSampleTier === 'multi' ? 1000 : 500) : isBarberTrial ? (barberTrialTier === 'multi' ? 2000 : 1000) : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 1000 : 500) : isBarberFive ? (barberFiveTier === 'multi' ? 1000 : 500) : isTen || isBarber ? 1000 : isFive ? (fiveTier === 'multi' ? 1000 : 500) : isNineteen ? 1900 : isHome ? (homeTier === 'single' ? 2000 : 5000) : 2000;
-        const monthlyAmountDisplay = isBarberNine ? '$9' : isBarber19Hosting ? '$5' : isBarberGenerator ? (barberGeneratorTier === 'multi' ? '$20' : '$10') : isBarberSample ? (barberSampleTier === 'multi' ? '$10' : '$5') : isBarberTrial ? (barberTrialTier === 'multi' ? '$20' : '$10') : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$10' : '$5') : isBarberFive ? (barberFiveTier === 'multi' ? '$10' : '$5') : isTen || isBarber ? '$10' : isFive ? (fiveTier === 'multi' ? '$10' : '$5') : isNineteen ? '$19' : isHome ? (homeTier === 'single' ? '$20' : '$50') : '$20';
-        const yearlyAmountDisplay = isBarberNine ? '$65' : isBarber19Hosting ? '$36' : isBarberGenerator ? (barberGeneratorTier === 'multi' ? '$144' : '$72') : isBarberSample ? (barberSampleTier === 'multi' ? '$72' : '$36') : isBarberTrial ? (barberTrialTier === 'multi' ? '$144' : '$72') : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$72' : '$36') : isBarberFive ? (barberFiveTier === 'multi' ? '$72' : '$36') : isFive ? (fiveTier === 'multi' ? '$72' : '$36') : isTen || isBarber ? '$49' : isLocalBusiness ? '$135' : '$99';
+        const monthlyAmountCents = isBarberNine ? (barberNineTier === 'multi' ? 1900 : 900) : isBarber19Hosting ? 500 : isBarberGenerator ? (barberGeneratorTier === 'multi' ? 2000 : 1000) : isBarberSample ? (barberSampleTier === 'multi' ? 1000 : 500) : isBarberTrial ? (barberTrialTier === 'multi' ? 2000 : 1000) : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? 1000 : 500) : isBarberFive ? (barberFiveTier === 'multi' ? 1000 : 500) : isTen || isBarber ? 1000 : isFive ? (fiveTier === 'multi' ? 1000 : 500) : isNineteen ? 1900 : isHome ? (homeTier === 'single' ? 2000 : 5000) : 2000;
+        const monthlyAmountDisplay = isBarberNine ? (barberNineTier === 'multi' ? '$19' : '$9') : isBarber19Hosting ? '$5' : isBarberGenerator ? (barberGeneratorTier === 'multi' ? '$20' : '$10') : isBarberSample ? (barberSampleTier === 'multi' ? '$10' : '$5') : isBarberTrial ? (barberTrialTier === 'multi' ? '$20' : '$10') : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$10' : '$5') : isBarberFive ? (barberFiveTier === 'multi' ? '$10' : '$5') : isTen || isBarber ? '$10' : isFive ? (fiveTier === 'multi' ? '$10' : '$5') : isNineteen ? '$19' : isHome ? (homeTier === 'single' ? '$20' : '$50') : '$20';
+        const yearlyAmountDisplay = isBarberNine ? (barberNineTier === 'multi' ? '$137' : '$65') : isBarber19Hosting ? '$36' : isBarberGenerator ? (barberGeneratorTier === 'multi' ? '$144' : '$72') : isBarberSample ? (barberSampleTier === 'multi' ? '$72' : '$36') : isBarberTrial ? (barberTrialTier === 'multi' ? '$144' : '$72') : isBarberFiveMonth ? (barberFiveMonthTier === 'multi' ? '$72' : '$36') : isBarberFive ? (barberFiveTier === 'multi' ? '$72' : '$36') : isFive ? (fiveTier === 'multi' ? '$72' : '$36') : isTen || isBarber ? '$49' : isLocalBusiness ? '$135' : '$99';
 
         // Description differs for one-time fees vs subscription pages
         const description = isBarber19
@@ -218,7 +221,7 @@ export default async function handler(req: any, res: any) {
                 companyName: companyName || '',
                 plan: isOneTime ? 'one-time' : plan,
                 source: source || 'generator',
-                ...(isHome ? { tier: homeTier } : isFive ? { tier: fiveTier } : isBarberGenerator ? { tier: barberGeneratorTier } : isBarberSample ? { tier: barberSampleTier } : isBarberTrial ? { tier: barberTrialTier } : isBarberFiveMonth ? { tier: barberFiveMonthTier } : isBarberFive ? { tier: barberFiveTier } : {}),
+                ...(isHome ? { tier: homeTier } : isFive ? { tier: fiveTier } : isBarberGenerator ? { tier: barberGeneratorTier } : isBarberSample ? { tier: barberSampleTier } : isBarberTrial ? { tier: barberTrialTier } : isBarberFiveMonth ? { tier: barberFiveMonthTier } : isBarberFive ? { tier: barberFiveTier } : isBarberNine ? { tier: barberNineTier } : {}),
                 clientIp: Array.isArray(clientIp) ? clientIp[0] : clientIp || '',
                 userAgent: userAgent || '',
             },
