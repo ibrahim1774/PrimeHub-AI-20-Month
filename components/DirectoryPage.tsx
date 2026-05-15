@@ -802,6 +802,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-chip svg { width:13px; height:13px; }
           .b9-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
           .b9-allin svg { width:16px; height:16px; }
+          .b9-galleryhint { font-size:12px; color:#cfc8b8; opacity:.85; margin:0 0 10px; font-weight:500; }
           .b9-gallery-wrap { position:relative; margin-bottom:18px; }
           .b9-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:0 -4px; scroll-behavior:smooth; }
           .b9-gallery::-webkit-scrollbar { height:5px; }
@@ -862,8 +863,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="b9-stack">
             <section className="b9-card">
               <div className="b9-eyebrow">Custom barbershop sites · One simple plan</div>
-              <h1 className="b9-title">Custom <em>Barbershop</em></h1>
-              <p className="b9-sub">A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan. No add-ons. No upsells.</p>
+              <h1 className="b9-title">Custom <em>Barbershop Site.</em></h1>
+              <p className="b9-sub">A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.</p>
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -876,7 +877,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Unlimited Edits</span>
               </div>
 
-              <div className="b9-eyebrow">Real sites · Real barbershops</div>
+              <div className="b9-eyebrow">Real Sites, Real Barbershops</div>
+              <p className="b9-galleryhint">▶ Click any video to see the full website</p>
               <div className="b9-gallery-wrap">
                 <button
                   type="button"
@@ -917,8 +919,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                           'volume-control': 'false',
                           'settings-control': 'false',
                           'playback-rate-control': 'false',
-                          'controls-visible-on-load': 'false',
-                          'big-play-button': 'false',
+                          'controls-visible-on-load': 'true',
+                          'big-play-button': 'true',
                           'silent-auto-play': 'true',
                           'playsinline': 'true',
                           'preload': 'auto',
