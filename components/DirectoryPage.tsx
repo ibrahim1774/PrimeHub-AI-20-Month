@@ -2115,6 +2115,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   if (region === 'home') {
     const homeVideos = freewebsite49Gallery;
+    const homeSocialVideos = [
+      { mediaId: 'fezlz3rw75', aspect: '0.5625' },
+      { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
+      { mediaId: 'kz4ap427gj', aspect: '0.5625' },
+    ];
     return (
       <>
         <style>{`
@@ -2217,6 +2222,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-pricing { background: #f0e4b8; }
           .mv-h-how { background: #e6dff0; }
           .mv-h-faq { background: #fdf8f0; }
+          .mv-h-asseenon { background: #eadff2; }
+          .mv-h-asseenon .mv-h-card-text { width: 100%; }
+          .mv-h-social-icons { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; }
+          .mv-h-social-icon { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; background: #ffffff; color: #4a3a6a; box-shadow: 0 4px 10px rgba(74,58,106,0.08), inset 0 0 0 1px rgba(74,58,106,0.10); transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease; text-decoration: none; }
+          .mv-h-social-icon:hover { transform: translateY(-2px); background: #4a3a6a; color: #ffffff; box-shadow: 0 8px 18px rgba(74,58,106,0.20); }
+          .mv-h-social-icon svg { width: 20px; height: 20px; }
           .mv-h-final { background: #fbdfd0; min-height: 380px; align-items: center; justify-content: center; text-align: center; }
           .mv-h-final .mv-h-title, .mv-h-final .mv-h-sub { margin-left: auto; margin-right: auto; max-width: 600px; }
           .mv-h-final .mv-h-pill { align-self: center; }
@@ -3041,6 +3052,55 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
+                </div>
+              </div>
+            </section>
+
+            {/* As Seen On — social proof video gallery */}
+            <section className="mv-h-card mv-h-asseenon mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Featured</div>
+                <h2 className="mv-h-title">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
+                <p className="mv-h-sub">Me personally walking into local businesses and building them sites.</p>
+                <div className="mv-h-social-icons">
+                  <a className="mv-h-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
+                  </a>
+                  <a className="mv-h-social-icon" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+                  </a>
+                </div>
+                <div className="mv-h-pricing-gallery">
+                  <div className="mv-h-gallery-row">
+                    {homeSocialVideos.map((item, i) => (
+                      <div key={`asseenon-${i}`} className="mv-h-gallery-card">
+                        <wistia-player
+                          media-id={item.mediaId}
+                          aspect={item.aspect}
+                          autoplay="true"
+                          muted="true"
+                          {...({
+                            loop: 'true',
+                            'playbar': 'false',
+                            'play-button': 'false',
+                            'small-play-button': 'false',
+                            'fullscreen-button': 'false',
+                            'volume-control': 'false',
+                            'settings-control': 'false',
+                            'playback-rate-control': 'false',
+                            'controls-visible-on-load': 'true',
+                            'big-play-button': 'true',
+                            'silent-auto-play': 'true',
+                            'playsinline': 'true',
+                            'preload': 'auto',
+                            'end-video-behavior': 'loop',
+                            'resumable': 'false',
+                            'player-color': '4a3a6a',
+                          } as any)}
+                        ></wistia-player>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
