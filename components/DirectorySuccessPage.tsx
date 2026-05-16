@@ -30,12 +30,14 @@ const DirectorySuccessPage: React.FC = () => {
       const barberSampleYearly = tier === 'multi' ? 72.00 : 36.00;
       const barberGeneratorMonthly = tier === 'multi' ? 20.00 : 10.00;
       const barberGeneratorYearly = tier === 'multi' ? 144.00 : 72.00;
+      const barberNineMonthly = tier === 'multi' ? 19.00 : 9.00;
+      const barberNineYearly = tier === 'multi' ? 137.00 : 65.00;
       // /barber-19 = $19 one-time design fee (no yearly)
       // /barber-19-hosting = $5/mo or $36/yr hosting subscription
       const barber19HostingMonthly = 5.00;
       const barber19HostingYearly = 36.00;
-      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
-      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : pathname === '/barber-19-hosting' ? barber19HostingYearly : pathname === '/barber-19' ? 19.00 : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
+      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-9' ? barberNineMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
+      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : pathname === '/barber-9' ? barberNineYearly : pathname === '/barber-19-hosting' ? barber19HostingYearly : pathname === '/barber-19' ? 19.00 : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $20/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
       const currency = isAus ? 'AUD' : 'USD';
