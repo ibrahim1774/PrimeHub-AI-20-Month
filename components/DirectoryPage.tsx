@@ -776,6 +776,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
     ];
+    const b9SocialGallery = [
+      { mediaId: 'fezlz3rw75', aspect: '0.5625' },
+      { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
+      { mediaId: 'kz4ap427gj', aspect: '0.5625' },
+    ];
     const b9SingleMonthly = 9;
     const b9SingleYearly = 65;
     const b9MultiMonthly = 19;
@@ -826,6 +831,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-guarantee-h { font-weight:900; font-size:18px; letter-spacing:-.01em; margin:0 0 8px; line-height:1.2; }
           .b9-guarantee-b { font-size:13px; line-height:1.55; color:#1c1c1c; margin:0; }
           .b9-guarantee-b mark { background:#c9a96e; color:#0a0a0a; padding:1px 6px; border-radius:4px; font-weight:800; }
+          .b9-social { background:#141414; color:#f5f0e0; border-radius:22px; padding:20px 18px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-social-h { font-family:'Inter', sans-serif; font-weight:800; font-size:24px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
+          .b9-social-h em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-social-sub { font-size:14px; line-height:1.5; color:#cfc8b8; margin:0 0 12px; max-width:560px; }
+          .b9-social-icons { display:flex; align-items:center; gap:10px; margin:0 0 14px; }
+          .b9-social-icon { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:rgba(201,169,110,.10); color:#c9a96e; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, background .15s ease; text-decoration:none; }
+          .b9-social-icon:hover { transform:translateY(-2px); background:rgba(201,169,110,.22); }
+          .b9-social-icon svg { width:18px; height:18px; }
+          @media (min-width: 760px) {
+            .b9-social { padding:28px 26px; }
+            .b9-social-h { font-size:30px; }
+          }
           .b9-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:14px; padding:6px 6px; box-shadow:0 10px 28px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:480px; margin:0 auto; }
           .b9-sticky-toggle { display:flex; gap:2px; background:rgba(201,169,110,.10); padding:2px; border-radius:999px; margin:0 auto 6px; width:fit-content; }
           .b9-stoggle { background:transparent; border:0; padding:4px 12px; border-radius:999px; font-family:inherit; font-weight:700; font-size:11px; color:#cfc8b8; cursor:pointer; transition:background .15s ease, color .15s ease; display:inline-flex; align-items:center; gap:5px; }
@@ -951,6 +968,74 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <p className="b9-guarantee-b">
                 We <mark>deliver your custom site within 24–48 hours</mark>. If you don't love it, we'll keep revising it until you do. And if you still aren't happy, you're covered by our <mark>7-day money-back guarantee</mark>. Zero risk.
               </p>
+            </section>
+
+            <section className="b9-social">
+              <div className="b9-eyebrow">Featured</div>
+              <h2 className="b9-social-h">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
+              <p className="b9-social-sub">Me personally walking into local businesses and building them sites.</p>
+              <div className="b9-social-icons">
+                <a className="b9-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
+                </a>
+                <a className="b9-social-icon" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+                </a>
+              </div>
+              <div className="b9-gallery-wrap">
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-prev"
+                  aria-label="Previous video"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-next"
+                  aria-label="Next video"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="b9-gallery">
+                  {b9SocialGallery.map((item, i) => (
+                    <div key={`s-${i}`} className="b9-gcard">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'true',
+                          'big-play-button': 'true',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': 'c9a96e',
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </section>
           </div>
 
