@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -309,6 +309,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  localbusinessNine: {
+    source: 'localbusinessNine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 9,
+    yearlyAmount: 65,
+    yearlyWas: 108,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'local businesses',
+    businessNoun: 'local business',
+    bookMoreNoun: 'customers',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -384,7 +400,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -482,7 +498,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -502,7 +518,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
           ? barber19Amount
-          : region === 'barberNine'
+          : (region === 'barberNine' || region === 'localbusinessNine')
             ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
             : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -769,13 +785,30 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'barberNine') {
-    const b9Gallery = [
+  if (region === 'barberNine' || region === 'localbusinessNine') {
+    const b9IsLocal = region === 'localbusinessNine';
+    const b9Gallery = b9IsLocal ? [
+      { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
+      { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
+      { mediaId: '8t4kzvzuno', aspect: '0.5429864253393665' },
+      { mediaId: 'qi2zmppcou', aspect: '0.5263157894736842' },
+      { mediaId: 'ogc6ertxsl', aspect: '0.569620253164557' },
+    ] : [
       { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
     ];
+    const b9NicheLabel = b9IsLocal ? 'local business' : 'barbershop';
+    const b9NicheLabelPlural = b9IsLocal ? 'Local Businesses' : 'Barbershops';
+    const b9HeadlineEm = b9IsLocal ? 'Local Business Site.' : 'Barbershop Site.';
+    const b9EyebrowText = b9IsLocal ? 'Custom local business sites · One simple plan' : 'Custom barbershop sites · One simple plan';
+    const b9SubCopy = b9IsLocal
+      ? 'A custom site built for your local business, hosted by us, with edits whenever you need them — all in one plan.'
+      : 'A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.';
+    const b9Step2Body = b9IsLocal
+      ? 'Custom design with your real photos and business info.'
+      : 'Custom design with your real photos and barbershop info.';
     const b9SocialGallery = [
       { mediaId: 'fezlz3rw75', aspect: '0.5625' },
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
@@ -879,9 +912,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="b9-stack">
             <section className="b9-card">
-              <div className="b9-eyebrow">Custom barbershop sites · One simple plan</div>
-              <h1 className="b9-title">Custom <em>Barbershop Site.</em></h1>
-              <p className="b9-sub">A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.</p>
+              <div className="b9-eyebrow">{b9EyebrowText}</div>
+              <h1 className="b9-title">Custom <em>{b9HeadlineEm}</em></h1>
+              <p className="b9-sub">{b9SubCopy}</p>
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -894,7 +927,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Unlimited Edits</span>
               </div>
 
-              <div className="b9-eyebrow">Real Sites, Real Barbershops</div>
+              <div className="b9-eyebrow">Real Sites, Real {b9NicheLabelPlural}</div>
               <p className="b9-galleryhint">▶ Click any video to see the full website</p>
               <div className="b9-gallery-wrap">
                 <button
@@ -954,7 +987,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="b9-mini-h">How it works</div>
               <div className="b9-steps">
                 <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">Send us a link</div><div className="b9-step-b">Google Business, Facebook, or Instagram — or a few photos and your info.</div></div>
-                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">Custom design with your real photos and barbershop info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">{b9Step2Body}</div></div>
                 <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
               </div>
             </section>
@@ -2115,6 +2148,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   if (region === 'home') {
     const homeVideos = freewebsite49Gallery;
+    const homeSocialVideos = [
+      { mediaId: 'fezlz3rw75', aspect: '0.5625' },
+      { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
+      { mediaId: 'kz4ap427gj', aspect: '0.5625' },
+    ];
     return (
       <>
         <style>{`
@@ -2217,6 +2255,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-h-pricing { background: #f0e4b8; }
           .mv-h-how { background: #e6dff0; }
           .mv-h-faq { background: #fdf8f0; }
+          .mv-h-asseenon { background: #eadff2; }
+          .mv-h-asseenon .mv-h-card-text { width: 100%; }
+          .mv-h-social-icons { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; }
+          .mv-h-social-icon { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; background: #ffffff; color: #4a3a6a; box-shadow: 0 4px 10px rgba(74,58,106,0.08), inset 0 0 0 1px rgba(74,58,106,0.10); transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease; text-decoration: none; }
+          .mv-h-social-icon:hover { transform: translateY(-2px); background: #4a3a6a; color: #ffffff; box-shadow: 0 8px 18px rgba(74,58,106,0.20); }
+          .mv-h-social-icon svg { width: 20px; height: 20px; }
           .mv-h-final { background: #fbdfd0; min-height: 380px; align-items: center; justify-content: center; text-align: center; }
           .mv-h-final .mv-h-title, .mv-h-final .mv-h-sub { margin-left: auto; margin-right: auto; max-width: 600px; }
           .mv-h-final .mv-h-pill { align-self: center; }
@@ -3041,6 +3085,55 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
+                </div>
+              </div>
+            </section>
+
+            {/* As Seen On — social proof video gallery */}
+            <section className="mv-h-card mv-h-asseenon mv-h-anim">
+              <div className="mv-h-card-text">
+                <div className="mv-h-eyebrow">Featured</div>
+                <h2 className="mv-h-title">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
+                <p className="mv-h-sub">Me personally walking into local businesses and building them sites.</p>
+                <div className="mv-h-social-icons">
+                  <a className="mv-h-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
+                  </a>
+                  <a className="mv-h-social-icon" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+                  </a>
+                </div>
+                <div className="mv-h-pricing-gallery">
+                  <div className="mv-h-gallery-row">
+                    {homeSocialVideos.map((item, i) => (
+                      <div key={`asseenon-${i}`} className="mv-h-gallery-card">
+                        <wistia-player
+                          media-id={item.mediaId}
+                          aspect={item.aspect}
+                          autoplay="true"
+                          muted="true"
+                          {...({
+                            loop: 'true',
+                            'playbar': 'false',
+                            'play-button': 'false',
+                            'small-play-button': 'false',
+                            'fullscreen-button': 'false',
+                            'volume-control': 'false',
+                            'settings-control': 'false',
+                            'playback-rate-control': 'false',
+                            'controls-visible-on-load': 'true',
+                            'big-play-button': 'true',
+                            'silent-auto-play': 'true',
+                            'playsinline': 'true',
+                            'preload': 'auto',
+                            'end-video-behavior': 'loop',
+                            'resumable': 'false',
+                            'player-color': '4a3a6a',
+                          } as any)}
+                        ></wistia-player>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
