@@ -857,12 +857,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-step-num { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:20px; color:#c9a96e; line-height:1; }
           .b9-step-h { font-weight:800; font-size:13px; margin:2px 0 2px; color:#f5f0e0; }
           .b9-step-b { font-size:12px; color:#cfc8b8; line-height:1.45; }
-          .b9-guarantee { background:#fff8e6; color:#0a0a0a; border-radius:18px; padding:18px 18px; box-shadow:0 14px 32px rgba(0,0,0,.45), 0 0 0 2px #c9a96e; margin-top:6px; }
-          .b9-guarantee-badge { display:inline-flex; align-items:center; gap:6px; background:#0a0a0a; color:#c9a96e; padding:6px 12px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px; }
-          .b9-guarantee-badge svg { width:12px; height:12px; }
-          .b9-guarantee-h { font-weight:900; font-size:18px; letter-spacing:-.01em; margin:0 0 8px; line-height:1.2; }
-          .b9-guarantee-b { font-size:13px; line-height:1.55; color:#1c1c1c; margin:0; }
-          .b9-guarantee-b mark { background:#c9a96e; color:#0a0a0a; padding:1px 6px; border-radius:4px; font-weight:800; }
+          .b9-guarantee-inline { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:10px 14px; margin:0 0 16px; background:rgba(201,169,110,.10); border-radius:12px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.35); font-size:12px; font-weight:700; color:#f5f0e0; line-height:1.3; }
+          .b9-guarantee-inline span { display:inline-flex; align-items:center; gap:6px; }
+          .b9-guarantee-inline svg { width:13px; height:13px; color:#c9a96e; flex-shrink:0; }
           .b9-social { background:#141414; color:#f5f0e0; border-radius:22px; padding:20px 18px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
           .b9-social-h { font-family:'Inter', sans-serif; font-weight:800; font-size:24px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
           .b9-social-h em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
@@ -882,14 +879,16 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-stoggle .b9-savetag { background:#0a0a0a; color:#c9a96e; padding:1px 5px; border-radius:999px; font-size:8px; letter-spacing:.06em; font-weight:800; }
           .b9-stoggle.active .b9-savetag { background:#0a0a0a; color:#c9a96e; }
           .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:10px; padding:8px 10px; cursor:pointer; text-align:left; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:12px; padding:10px 10px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:8px; }
           .b9-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
-          .b9-pricebtn-multi { background:#c9a96e; color:#0a0a0a; box-shadow:inset 0 0 0 1px rgba(10,10,10,.10); }
-          .b9-pricebtn-meta { display:flex; flex-direction:column; gap:0; min-width:0; }
-          .b9-tiername { font-size:9px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; opacity:.75; line-height:1.1; }
-          .b9-priceval { font-weight:900; font-size:16px; letter-spacing:-.02em; line-height:1.1; }
-          .b9-priceval small { font-size:9px; font-weight:600; opacity:.7; margin-left:1px; }
-          .b9-pricecta { font-size:14px; font-weight:900; line-height:1; opacity:.9; flex-shrink:0; }
+          .b9-pricebtn-multi { background:#1c1c1c; }
+          .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
+          .b9-tiername { font-size:9px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:#c9a96e; line-height:1.1; }
+          .b9-priceval { font-weight:900; font-size:18px; letter-spacing:-.02em; line-height:1.05; color:#f5f0e0; }
+          .b9-priceval small { font-size:10px; font-weight:600; opacity:.7; margin-left:1px; }
+          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:5px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:8px 10px; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 6px 14px rgba(201,169,110,.30); }
+          .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 10px 22px rgba(201,169,110,.45); }
+          .b9-startbtn svg { width:11px; height:11px; }
           @media (min-width: 760px) {
             .b9-card { padding:34px 30px; }
             .b9-title { font-size:46px; }
@@ -914,6 +913,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="b9-eyebrow">{b9EyebrowText}</div>
               <h1 className="b9-title">Custom <em>{b9HeadlineEm}</em></h1>
               <p className="b9-sub">{b9SubCopy}</p>
+
+              <div className="b9-guarantee-inline" role="note" aria-label="Delivery and money-back guarantee">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24–48 hr delivery</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Unlimited revisions</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+              </div>
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -989,17 +994,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">{b9Step2Body}</div></div>
                 <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
               </div>
-            </section>
-
-            <section className="b9-guarantee">
-              <div className="b9-guarantee-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-                Triple Guarantee
-              </div>
-              <h2 className="b9-guarantee-h">Delivered in 24–48 hours — or we make it right.</h2>
-              <p className="b9-guarantee-b">
-                We <mark>deliver your custom site within 24–48 hours</mark>. If you don't love it, we'll keep revising it until you do. And if you still aren't happy, you're covered by our <mark>money-back guarantee</mark>. Zero risk.
-              </p>
             </section>
 
             <section className="b9-social">
@@ -1103,7 +1097,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="b9-tiername">Single Page</span>
                   <span className="b9-priceval">${b9SinglePrice}<small>/{b9Period}</small></span>
                 </div>
-                <span className="b9-pricecta">{isLoading && activeHomeTier === 'single' ? '…' : '→'}</span>
+                <span className="b9-startbtn">
+                  {isLoading && activeHomeTier === 'single' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                </span>
               </button>
               <button
                 type="button"
@@ -1115,7 +1111,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   <span className="b9-tiername">Multi-Page</span>
                   <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
                 </div>
-                <span className="b9-pricecta">{isLoading && activeHomeTier === 'multi' ? '…' : '→'}</span>
+                <span className="b9-startbtn">
+                  {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                </span>
               </button>
             </div>
           </div>
