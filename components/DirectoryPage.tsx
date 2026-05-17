@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -309,6 +309,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  localbusinessNine: {
+    source: 'localbusinessNine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 9,
+    yearlyAmount: 65,
+    yearlyWas: 108,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'local businesses',
+    businessNoun: 'local business',
+    bookMoreNoun: 'customers',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -384,7 +400,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -482,7 +498,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -502,7 +518,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
           ? barber19Amount
-          : region === 'barberNine'
+          : (region === 'barberNine' || region === 'localbusinessNine')
             ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
             : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -769,13 +785,30 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'barberNine') {
-    const b9Gallery = [
+  if (region === 'barberNine' || region === 'localbusinessNine') {
+    const b9IsLocal = region === 'localbusinessNine';
+    const b9Gallery = b9IsLocal ? [
+      { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
+      { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
+      { mediaId: '8t4kzvzuno', aspect: '0.5429864253393665' },
+      { mediaId: 'qi2zmppcou', aspect: '0.5263157894736842' },
+      { mediaId: 'ogc6ertxsl', aspect: '0.569620253164557' },
+    ] : [
       { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
     ];
+    const b9NicheLabel = b9IsLocal ? 'local business' : 'barbershop';
+    const b9NicheLabelPlural = b9IsLocal ? 'Local Businesses' : 'Barbershops';
+    const b9HeadlineEm = b9IsLocal ? 'Local Business Site.' : 'Barbershop Site.';
+    const b9EyebrowText = b9IsLocal ? 'Custom local business sites · One simple plan' : 'Custom barbershop sites · One simple plan';
+    const b9SubCopy = b9IsLocal
+      ? 'A custom site built for your local business, hosted by us, with edits whenever you need them — all in one plan.'
+      : 'A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.';
+    const b9Step2Body = b9IsLocal
+      ? 'Custom design with your real photos and business info.'
+      : 'Custom design with your real photos and barbershop info.';
     const b9SocialGallery = [
       { mediaId: 'fezlz3rw75', aspect: '0.5625' },
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
@@ -879,9 +912,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="b9-stack">
             <section className="b9-card">
-              <div className="b9-eyebrow">Custom barbershop sites · One simple plan</div>
-              <h1 className="b9-title">Custom <em>Barbershop Site.</em></h1>
-              <p className="b9-sub">A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.</p>
+              <div className="b9-eyebrow">{b9EyebrowText}</div>
+              <h1 className="b9-title">Custom <em>{b9HeadlineEm}</em></h1>
+              <p className="b9-sub">{b9SubCopy}</p>
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -894,7 +927,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <span className="b9-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Unlimited Edits</span>
               </div>
 
-              <div className="b9-eyebrow">Real Sites, Real Barbershops</div>
+              <div className="b9-eyebrow">Real Sites, Real {b9NicheLabelPlural}</div>
               <p className="b9-galleryhint">▶ Click any video to see the full website</p>
               <div className="b9-gallery-wrap">
                 <button
@@ -954,7 +987,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <div className="b9-mini-h">How it works</div>
               <div className="b9-steps">
                 <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">Send us a link</div><div className="b9-step-b">Google Business, Facebook, or Instagram — or a few photos and your info.</div></div>
-                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">Custom design with your real photos and barbershop info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">{b9Step2Body}</div></div>
                 <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
               </div>
             </section>
