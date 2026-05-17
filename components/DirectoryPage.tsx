@@ -338,7 +338,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const [showFiveSticky, setShowFiveSticky] = useState(false);
   // Home-page payment-method chooser: tap "Start" on a tier, pick
   // Stripe or PayPal in the dialog before either checkout opens.
-  const [homeChooser, setHomeChooser] = useState<null | { tier: 'single' | 'multi' }>(null);
   // Same chooser for /barber-5 + /barber-5-month tier cards (Stripe + PayPal).
   const [barberFiveChooser, setBarberFiveChooser] = useState<null | { tier: 'single' | 'multi' }>(null);
 
@@ -999,7 +998,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
               <h2 className="b9-guarantee-h">Delivered in 24–48 hours — or we make it right.</h2>
               <p className="b9-guarantee-b">
-                We <mark>deliver your custom site within 24–48 hours</mark>. If you don't love it, we'll keep revising it until you do. And if you still aren't happy, you're covered by our <mark>7-day money-back guarantee</mark>. Zero risk.
+                We <mark>deliver your custom site within 24–48 hours</mark>. If you don't love it, we'll keep revising it until you do. And if you still aren't happy, you're covered by our <mark>money-back guarantee</mark>. Zero risk.
               </p>
             </section>
 
@@ -3066,7 +3065,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Live in ~48 hours</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => setHomeChooser({ tier: 'single' })} disabled={isLoading}>
+                  <button className="mv-h-pill" onClick={() => handleCheckout('single', 'monthly')} disabled={isLoading}>
                     Start — $20/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
@@ -3081,7 +3080,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     <li>Deeper SEO setup</li>
                     <li>Hosting + edits included</li>
                   </ul>
-                  <button className="mv-h-pill" onClick={() => setHomeChooser({ tier: 'multi' })} disabled={isLoading}>
+                  <button className="mv-h-pill" onClick={() => handleCheckout('multi', 'monthly')} disabled={isLoading}>
                     Start — $50/mo
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
@@ -3212,57 +3211,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         {/* Payment-method chooser — appears between "Start" and either
             checkout flow. Visitor picks Stripe (cards) or PayPal
             (monthly subscription). */}
-        {homeChooser && (
-          <div className="mv-h-chooser-backdrop" onClick={() => setHomeChooser(null)} role="dialog" aria-modal="true">
-            <div className="mv-h-chooser" onClick={(e) => e.stopPropagation()}>
-              <button className="mv-h-chooser-close" onClick={() => setHomeChooser(null)} aria-label="Close">✕</button>
-              <div className="mv-h-chooser-eyebrow">Choose payment method</div>
-              <h3 className="mv-h-chooser-title">
-                {homeChooser.tier === 'multi' ? 'Multi-service · $50/mo' : 'Single page · $20/mo'}
-              </h3>
-              <p className="mv-h-chooser-sub">Either option subscribes you monthly. Cancel anytime.</p>
-
-              <button
-                type="button"
-                className="mv-h-chooser-btn mv-h-chooser-btn-stripe"
-                onClick={() => {
-                  const tier = homeChooser.tier;
-                  setHomeChooser(null);
-                  handleCheckout(tier, 'monthly');
-                }}
-                disabled={isLoading}
-              >
-                <span className="mv-h-chooser-btn-label">Pay with card</span>
-                <span className="mv-h-chooser-btn-meta">via Stripe</span>
-              </button>
-
-              <button
-                type="button"
-                className="mv-h-chooser-btn mv-h-chooser-btn-paypal"
-                onClick={() => {
-                  const tier = homeChooser.tier;
-                  setHomeChooser(null);
-                  openPaypal(computePaypalCtx('home', tier, 'monthly'));
-                }}
-                disabled={isLoading}
-              >
-                <span className="mv-h-chooser-btn-label">Pay with</span>
-                <span className="mv-h-chooser-btn-paypal-mark">
-                  <span className="mv-h-chooser-btn-paypal-pal">Pay</span><span className="mv-h-chooser-btn-paypal-pal2">Pal</span>
-                </span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* PayPal subscription modal — rendered here so the chooser's
-            "Pay with PayPal" button has somewhere to open. The other
-            region branches mount their own copy. */}
-        <PayPalSubscribeModal
-          open={paypalOpen}
-          ctx={paypalCtx}
-          onClose={() => setPaypalOpen(false)}
-        />
       </>
     );
   }
