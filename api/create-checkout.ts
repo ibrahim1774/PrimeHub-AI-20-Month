@@ -161,9 +161,7 @@ export default async function handler(req: any, res: any) {
                     ? 'Amalvera - Custom Local Business Site (Multi-Page) — Design + Hosting + Edits'
                     : 'Amalvera - Custom Local Business Site (Single Page) — Design + Hosting + Edits')
                 : isBarberNine
-                ? (barberNineTier === 'multi'
-                    ? 'Amalvera - Custom Barbershop Site (Multi-Page) — Design + Hosting + Edits'
-                    : 'Amalvera - Custom Barbershop Site (Single Page) — Design + Hosting + Edits')
+                ? 'Amalvera - Custom Barbershop Site (Multiple Pages + SEO Optimized) — Design + Hosting + Edits'
                 : isBarberFiveMonth
                 ? (barberFiveMonthTier === 'single' ? 'Amalvera - Barbershop Website (Single Page)' : 'Amalvera - Barbershop Website (Multi-Page + SEO)')
                 : isBarberFive

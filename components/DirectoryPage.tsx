@@ -786,6 +786,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   if (region === 'barberNine' || region === 'localbusinessNine') {
     const b9IsLocal = region === 'localbusinessNine';
+    const b9ShowMulti = b9IsLocal;
+    const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Multiple Pages & SEO Optimized';
     const b9Gallery = b9IsLocal ? [
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
       { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
@@ -1081,7 +1083,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 Yearly <span className="b9-savetag">−40%</span>
               </button>
             </div>
-            <div className="b9-sticky-cols">
+            <div className="b9-sticky-cols" style={b9ShowMulti ? undefined : { gridTemplateColumns: '1fr' }}>
               <button
                 type="button"
                 className="b9-pricebtn"
@@ -1089,27 +1091,29 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 disabled={isLoading}
               >
                 <div className="b9-pricebtn-meta">
-                  <span className="b9-tiername">Single Page</span>
+                  <span className="b9-tiername">{b9SingleTierLabel}</span>
                   <span className="b9-priceval">${b9SinglePrice}<small>/{b9Period}</small></span>
                 </div>
                 <span className="b9-startbtn">
                   {isLoading && activeHomeTier === 'single' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
                 </span>
               </button>
-              <button
-                type="button"
-                className="b9-pricebtn b9-pricebtn-multi"
-                onClick={() => handleCheckout('multi', pricingPlan)}
-                disabled={isLoading}
-              >
-                <div className="b9-pricebtn-meta">
-                  <span className="b9-tiername">Multi-Page</span>
-                  <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
-                </div>
-                <span className="b9-startbtn">
-                  {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
-                </span>
-              </button>
+              {b9ShowMulti && (
+                <button
+                  type="button"
+                  className="b9-pricebtn b9-pricebtn-multi"
+                  onClick={() => handleCheckout('multi', pricingPlan)}
+                  disabled={isLoading}
+                >
+                  <div className="b9-pricebtn-meta">
+                    <span className="b9-tiername">Multi-Page</span>
+                    <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
+                  </div>
+                  <span className="b9-startbtn">
+                    {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </div>
