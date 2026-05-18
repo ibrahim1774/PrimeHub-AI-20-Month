@@ -787,7 +787,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   if (region === 'barberNine' || region === 'localbusinessNine') {
     const b9IsLocal = region === 'localbusinessNine';
     const b9ShowMulti = b9IsLocal;
-    const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Multiple Pages & SEO Optimized';
+    const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Multi-Page + SEO';
+    const b9SingleTierDesc = b9IsLocal ? null : '5–15 pages · Booksy / theCut / Fresha booking integration';
     const b9Gallery = b9IsLocal ? [
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
       { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
@@ -886,6 +887,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-pricebtn-multi { background:#1c1c1c; }
           .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
           .b9-tiername { font-size:9px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:#c9a96e; line-height:1.1; }
+          .b9-tierdesc { font-size:10px; font-weight:500; color:#cfc8b8; line-height:1.3; padding:0 4px; max-width:280px; }
           .b9-priceval { font-weight:900; font-size:18px; letter-spacing:-.02em; line-height:1.05; color:#f5f0e0; }
           .b9-priceval small { font-size:10px; font-weight:600; opacity:.7; margin-left:1px; }
           .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:5px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:8px 10px; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 6px 14px rgba(201,169,110,.30); }
@@ -1092,6 +1094,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">{b9SingleTierLabel}</span>
+                  {b9SingleTierDesc && <span className="b9-tierdesc">{b9SingleTierDesc}</span>}
                   <span className="b9-priceval">${b9SinglePrice}<small>/{b9Period}</small></span>
                 </div>
                 <span className="b9-startbtn">
