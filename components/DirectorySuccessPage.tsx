@@ -32,8 +32,8 @@ const DirectorySuccessPage: React.FC = () => {
       const barberGeneratorYearly = tier === 'multi' ? 144.00 : 72.00;
       const barberNineMonthly = tier === 'multi' ? 19.00 : 9.00;
       const barberNineYearly = tier === 'multi' ? 137.00 : 65.00;
-      const barberFiveNineMonthly = 5.00;
-      const barberFiveNineYearly = 36.00;
+      const barberFiveNineMonthly = 7.00;
+      const barberFiveNineYearly = 50.00;
       // /barber-19 = $19 one-time design fee (no yearly)
       // /barber-19-hosting = $5/mo or $36/yr hosting subscription
       const barber19HostingMonthly = 5.00;

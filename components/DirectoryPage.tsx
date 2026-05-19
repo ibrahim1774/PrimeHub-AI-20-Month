@@ -361,9 +361,9 @@ const REGIONS: Record<Region, {
     source: 'barberFiveNine',
     currency: 'USD',
     currencySymbol: '$',
-    monthlyAmount: 5,
-    yearlyAmount: 36,
-    yearlyWas: 60,
+    monthlyAmount: 7,
+    yearlyAmount: 50,
+    yearlyWas: 84,
     ribbonEstYear: 'Since 2026',
     ribbonLocation: 'Austin · TX',
     phoneHref: 'tel:+18302549274',
@@ -571,8 +571,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
     const barberNineMonthly = effectiveTier === 'single' ? 9 : 19;
     const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
-    const barberFiveNineMonthly = 5;
-    const barberFiveNineYearly = 36;
+    const barberFiveNineMonthly = 7;
+    const barberFiveNineYearly = 50;
 
     // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
     // is forwarded to /api/create-checkout so the server can fire CAPI
@@ -913,8 +913,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
       { mediaId: 'kz4ap427gj', aspect: '0.5625' },
     ];
-    const b9SingleMonthly = b9IsFive ? 5 : 9;
-    const b9SingleYearly = b9IsFive ? 36 : 65;
+    const b9SingleMonthly = b9IsFive ? 7 : 9;
+    const b9SingleYearly = b9IsFive ? 50 : 65;
     const b9MultiMonthly = 19;
     const b9MultiYearly = 137;
     const b9IsYearly = pricingPlan === 'yearly';
