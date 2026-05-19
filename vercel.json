@@ -79,6 +79,14 @@
         {
             "source": "/localbusiness-9",
             "destination": "/index.html"
+        },
+        {
+            "source": "/barber-9-leads",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/localbusiness-9-leads",
+            "destination": "/index.html"
         }
     ],
     "functions": {

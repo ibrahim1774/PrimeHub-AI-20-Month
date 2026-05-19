@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -325,6 +325,38 @@ const REGIONS: Record<Region, {
     businessNoun: 'local business',
     bookMoreNoun: 'customers',
   },
+  barberNineLeads: {
+    source: 'barberNineLeads',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 0,
+    yearlyAmount: 0,
+    yearlyWas: 0,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  localbusinessNineLeads: {
+    source: 'localbusinessNineLeads',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 0,
+    yearlyAmount: 0,
+    yearlyWas: 0,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'local businesses',
+    businessNoun: 'local business',
+    bookMoreNoun: 'customers',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -432,7 +464,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [modalOpen, clientSecret]);
 
   useEffect(() => {
-    if ((region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads')) return;
+    if ((region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads' && region !== 'barberNineLeads' && region !== 'localbusinessNineLeads')) return;
     const SRC = 'https://link.msgsndr.com/js/form_embed.js';
     if (document.querySelector(`script[src="${SRC}"]`)) return;
     const s = document.createElement('script');
@@ -443,7 +475,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   // Fire Meta Pixel "Lead" event when the LeadConnector iframe form is submitted
   useEffect(() => {
-    if (region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads') return;
+    if (region !== 'freewebsite' && region !== 'freewebsite49' && region !== 'barberleads' && region !== 'barberNineLeads' && region !== 'localbusinessNineLeads') return;
     let fired = false;
     const onMessage = (event: MessageEvent) => {
       if (fired) return;
@@ -463,7 +495,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       if (typeof window !== 'undefined' && (window as any).fbq) {
         const eventID = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         (window as any).fbq('track', 'Lead', {
-          content_name: region === 'freewebsite49' ? 'FreeWebsite49 Form' : 'FreeWebsite Form',
+          content_name: region === 'freewebsite49' ? 'FreeWebsite49 Form' : region === 'barberleads' ? 'BarberLeads Form' : region === 'barberNineLeads' ? 'Barber9 Leads Form' : region === 'localbusinessNineLeads' ? 'LocalBusiness9 Leads Form' : 'FreeWebsite Form',
           content_category: 'lead_capture',
           value: cfg.monthlyAmount,
           currency: cfg.currency,
@@ -784,9 +816,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'barberNine' || region === 'localbusinessNine') {
-    const b9IsLocal = region === 'localbusinessNine';
-    const b9ShowMulti = b9IsLocal;
+  if (region === 'barberNine' || region === 'localbusinessNine' || region === 'barberNineLeads' || region === 'localbusinessNineLeads') {
+    const b9IsLeads = region === 'barberNineLeads' || region === 'localbusinessNineLeads';
+    const b9IsLocal = region === 'localbusinessNine' || region === 'localbusinessNineLeads';
+    const b9ShowMulti = region === 'localbusinessNine';
+    const b9LeadFormId = region === 'barberNineLeads' ? 'eWkkKWwoxGJK2CvpWUxX' : 'LRbgZwbTGaM6WyesqAjV';
+    const b9LeadFormName = region === 'barberNineLeads' ? 'Barber - $20' : 'Contractors - Free';
+    const b9LeadFormHeight = region === 'barberNineLeads' ? 420 : 360;
     const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Custom Barbershop Site';
     const b9SingleTierFeats = b9IsLocal ? [
       'Single page site',
@@ -839,6 +875,17 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
           .b9-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 200px; }
+          .b9-page-leads { padding-bottom:40px; }
+          .b9-leadform { background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.22); }
+          .b9-leadform-h { font-family:'Inter', sans-serif; font-weight:800; font-size:24px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
+          .b9-leadform-h em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-leadform-sub { font-size:14px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:560px; }
+          .b9-leadform-frame { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,.45); }
+          .b9-leadform-frame iframe { display:block; width:100%; border:0; }
+          @media (min-width: 760px) {
+            .b9-leadform { padding:28px 26px; }
+            .b9-leadform-h { font-size:30px; }
+          }
           .b9-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
           .b9-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
           .b9-stack { display:flex; flex-direction:column; gap:14px; max-width:980px; margin:0 auto; }
@@ -936,7 +983,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-checkout-fallback-link:hover { color:#0d0d0d; }
         `}</style>
 
-        <div className={`b9-page${b9IsLocal ? ' b9-page-local' : ''}`}>
+        <div className={`b9-page${b9IsLocal ? ' b9-page-local' : ''}${b9IsLeads ? ' b9-page-leads' : ''}`}>
           <nav className="b9-nav"><span className="b9-logo">amalvera</span></nav>
 
           <div className="b9-stack">
@@ -1022,6 +1069,33 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               </div>
             </section>
 
+            {b9IsLeads && (
+              <section className="b9-card b9-leadform">
+                <div className="b9-eyebrow">◊ Get Started — Free ◊</div>
+                <h2 className="b9-leadform-h">Tell us about your <em>{b9NicheLabel}.</em></h2>
+                <p className="b9-leadform-sub">We'll design + build your {b9NicheLabel} site for free. Only pay if you love it.</p>
+                <div className="b9-leadform-frame">
+                  <iframe
+                    src={`https://api.leadconnectorhq.com/widget/form/${b9LeadFormId}`}
+                    style={{ width: '100%', height: b9LeadFormHeight, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
+                    id={`inline-${b9LeadFormId}`}
+                    data-layout='{"id":"INLINE"}'
+                    data-trigger-type="alwaysShow"
+                    data-trigger-value=""
+                    data-activation-type="alwaysActivated"
+                    data-activation-value=""
+                    data-deactivation-type="neverDeactivate"
+                    data-deactivation-value=""
+                    data-form-name={b9LeadFormName}
+                    data-height={String(b9LeadFormHeight)}
+                    data-layout-iframe-id={`inline-${b9LeadFormId}`}
+                    data-form-id={b9LeadFormId}
+                    title={b9LeadFormName}
+                  />
+                </div>
+              </section>
+            )}
+
             <section className="b9-social">
               <div className="b9-eyebrow">Featured</div>
               <h2 className="b9-social-h">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
@@ -1094,6 +1168,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </section>
           </div>
 
+          {!b9IsLeads && (
           <div className="b9-sticky">
             <div className="b9-sticky-toggle" role="tablist" aria-label="Billing period">
               <button
@@ -1158,6 +1233,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               )}
             </div>
           </div>
+          )}
         </div>
 
         {modalOpen && clientSecret && (
