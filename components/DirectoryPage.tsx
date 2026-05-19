@@ -902,6 +902,22 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-tierfeats li { counter-increment:b9feat; font-size:11px; font-weight:700; color:#f5f0e0; line-height:1.3; padding-left:22px; position:relative; }
           .b9-tierfeats li::before { content:counter(b9feat); position:absolute; left:0; top:0; width:16px; height:16px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:9px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
           .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:6px 8px; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); margin-top:auto; }
+
+          /* /localbusiness-9: ~20% smaller sticky than /barber-9 */
+          .b9-page-local .b9-sticky { padding:4px 4px; border-radius:10px; max-width:360px; }
+          .b9-page-local .b9-sticky-toggle { padding:1px; margin:0 auto 3px; }
+          .b9-page-local .b9-stoggle { padding:2px 8px; font-size:8px; }
+          .b9-page-local .b9-stoggle .b9-savetag { font-size:7px; padding:1px 3px; }
+          .b9-page-local .b9-sticky-cols { gap:4px; }
+          .b9-page-local .b9-pricebtn { padding:6px 6px; border-radius:8px; gap:4px; }
+          .b9-page-local .b9-pricebtn-meta { gap:1px; }
+          .b9-page-local .b9-tiername { font-size:11px; }
+          .b9-page-local .b9-tierprice { font-size:14px; }
+          .b9-page-local .b9-tierfeats { margin:4px 0 2px; gap:4px; }
+          .b9-page-local .b9-tierfeats li { font-size:9px; padding-left:18px; }
+          .b9-page-local .b9-tierfeats li::before { width:13px; height:13px; font-size:8px; }
+          .b9-page-local .b9-startbtn { padding:5px 6px; font-size:8px; }
+          .b9-page-local .b9-startbtn svg { width:8px; height:8px; }
           .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
           .b9-startbtn svg { width:10px; height:10px; }
           @media (min-width: 760px) {
@@ -920,7 +936,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .mv-checkout-fallback-link:hover { color:#0d0d0d; }
         `}</style>
 
-        <div className="b9-page">
+        <div className={`b9-page${b9IsLocal ? ' b9-page-local' : ''}`}>
           <nav className="b9-nav"><span className="b9-logo">amalvera</span></nav>
 
           <div className="b9-stack">
