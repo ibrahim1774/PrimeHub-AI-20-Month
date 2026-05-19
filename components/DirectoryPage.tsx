@@ -788,7 +788,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const b9IsLocal = region === 'localbusinessNine';
     const b9ShowMulti = b9IsLocal;
     const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Custom Barbershop Site';
-    const b9SingleTierFeats = b9IsLocal ? null : [
+    const b9SingleTierFeats = b9IsLocal ? [
+      'Single page site',
+    ] : [
       'Multiple pages (5–15)',
       'SEO Optimized',
       'Booking link integration (Booksy, theCut, Fresha)',
@@ -895,11 +897,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .b9-pricebtn-multi { background:#1c1c1c; }
           .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:0; }
           .b9-tiername { font-size:14px; font-weight:900; letter-spacing:-.01em; color:#f5f0e0; line-height:1.1; }
-          .b9-tierprice { font-size:10px; font-weight:700; color:#c9a96e; line-height:1.1; letter-spacing:.02em; }
+          .b9-tierprice { font-size:17px; font-weight:900; color:#f5f0e0; line-height:1.05; letter-spacing:-.01em; margin-top:1px; }
           .b9-tierfeats { list-style:none; padding:0; margin:5px 0 2px; display:flex; flex-direction:column; gap:5px; text-align:left; counter-reset:b9feat; align-self:stretch; }
           .b9-tierfeats li { counter-increment:b9feat; font-size:11px; font-weight:700; color:#f5f0e0; line-height:1.3; padding-left:22px; position:relative; }
           .b9-tierfeats li::before { content:counter(b9feat); position:absolute; left:0; top:0; width:16px; height:16px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:9px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
-          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:6px 8px; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); }
+          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:6px 8px; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); margin-top:auto; }
           .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
           .b9-startbtn svg { width:10px; height:10px; }
           @media (min-width: 760px) {
