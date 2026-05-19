@@ -1011,6 +1011,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <h2 className="b9-social-h">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
               <p className="b9-social-sub">Me personally walking into local businesses and building them sites.</p>
               <div className="b9-social-icons">
+                <a className="b9-social-icon" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12z"/></svg>
+                </a>
                 <a className="b9-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
                 </a>
