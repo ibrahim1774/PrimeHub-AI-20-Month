@@ -793,6 +793,10 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       'SEO Optimized',
       'Booking link integration (Booksy, theCut, Fresha)',
     ];
+    const b9MultiTierFeats = b9IsLocal ? [
+      'Multiple pages (5–15)',
+      'SEO Optimized',
+    ] : null;
     const b9Gallery = b9IsLocal ? [
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
       { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
@@ -1120,6 +1124,11 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 >
                   <div className="b9-pricebtn-meta">
                     <span className="b9-tiername">Multi-Page</span>
+                    {b9MultiTierFeats && (
+                      <ol className="b9-tierfeats">
+                        {b9MultiTierFeats.map((f) => <li key={f}>{f}</li>)}
+                      </ol>
+                    )}
                     <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
                   </div>
                   <span className="b9-startbtn">
