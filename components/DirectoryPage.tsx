@@ -876,15 +876,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
           .b9-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 200px; }
           .b9-page-leads { padding-bottom:40px; }
-          .b9-leadform { background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.22); }
-          .b9-leadform-h { font-family:'Inter', sans-serif; font-weight:800; font-size:24px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
+          .b9-leadform-inline { margin:0 0 18px; padding:14px 14px; background:rgba(201,169,110,.06); border-radius:14px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.22); }
+          .b9-leadform-h { font-family:'Inter', sans-serif; font-weight:800; font-size:22px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
           .b9-leadform-h em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
-          .b9-leadform-sub { font-size:14px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:560px; }
-          .b9-leadform-frame { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,.45); }
+          .b9-leadform-sub { font-size:14px; line-height:1.5; color:#cfc8b8; margin:0 0 12px; max-width:560px; }
+          .b9-leadform-frame { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 8px 22px rgba(0,0,0,.45); }
           .b9-leadform-frame iframe { display:block; width:100%; border:0; }
           @media (min-width: 760px) {
-            .b9-leadform { padding:28px 26px; }
-            .b9-leadform-h { font-size:30px; }
+            .b9-leadform-inline { padding:20px 22px; }
+            .b9-leadform-h { font-size:26px; }
           }
           .b9-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
           .b9-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
@@ -1003,6 +1003,32 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 Custom Design + Hosting + Edits — All Included
               </div>
 
+              {b9IsLeads && (
+                <div className="b9-leadform-inline">
+                  <div className="b9-eyebrow" style={{ color: '#c9a96e' }}>◊ Get Started — Free ◊</div>
+                  <h2 className="b9-leadform-h">Tell us about your <em>{b9NicheLabel}.</em></h2>
+                  <p className="b9-leadform-sub">We'll design + build your {b9NicheLabel} site for free. Only pay if you love it.</p>
+                  <div className="b9-leadform-frame">
+                    <iframe
+                      src={`https://api.leadconnectorhq.com/widget/form/${b9LeadFormId}`}
+                      style={{ width: '100%', height: b9LeadFormHeight, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
+                      id={`inline-${b9LeadFormId}`}
+                      data-layout='{"id":"INLINE"}'
+                      data-trigger-type="alwaysShow"
+                      data-trigger-value=""
+                      data-activation-type="alwaysActivated"
+                      data-activation-value=""
+                      data-deactivation-type="neverDeactivate"
+                      data-deactivation-value=""
+                      data-form-name={b9LeadFormName}
+                      data-height={String(b9LeadFormHeight)}
+                      data-layout-iframe-id={`inline-${b9LeadFormId}`}
+                      data-form-id={b9LeadFormId}
+                      title={b9LeadFormName}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="b9-eyebrow">Real Sites, Real {b9NicheLabelPlural}</div>
               <p className="b9-galleryhint">▶ Click any video to see the full website</p>
@@ -1068,33 +1094,6 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
               </div>
             </section>
-
-            {b9IsLeads && (
-              <section className="b9-card b9-leadform">
-                <div className="b9-eyebrow">◊ Get Started — Free ◊</div>
-                <h2 className="b9-leadform-h">Tell us about your <em>{b9NicheLabel}.</em></h2>
-                <p className="b9-leadform-sub">We'll design + build your {b9NicheLabel} site for free. Only pay if you love it.</p>
-                <div className="b9-leadform-frame">
-                  <iframe
-                    src={`https://api.leadconnectorhq.com/widget/form/${b9LeadFormId}`}
-                    style={{ width: '100%', height: b9LeadFormHeight, border: 'none', borderRadius: 3, display: 'block', background: '#fff' }}
-                    id={`inline-${b9LeadFormId}`}
-                    data-layout='{"id":"INLINE"}'
-                    data-trigger-type="alwaysShow"
-                    data-trigger-value=""
-                    data-activation-type="alwaysActivated"
-                    data-activation-value=""
-                    data-deactivation-type="neverDeactivate"
-                    data-deactivation-value=""
-                    data-form-name={b9LeadFormName}
-                    data-height={String(b9LeadFormHeight)}
-                    data-layout-iframe-id={`inline-${b9LeadFormId}`}
-                    data-form-id={b9LeadFormId}
-                    title={b9LeadFormName}
-                  />
-                </div>
-              </section>
-            )}
 
             <section className="b9-social">
               <div className="b9-eyebrow">Featured</div>
