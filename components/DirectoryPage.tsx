@@ -16,7 +16,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -357,6 +357,38 @@ const REGIONS: Record<Region, {
     businessNoun: 'local business',
     bookMoreNoun: 'customers',
   },
+  barberFiveNine: {
+    source: 'barberFiveNine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 5,
+    yearlyAmount: 36,
+    yearlyWas: 60,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
+  localbusinessNineSpanish: {
+    source: 'localbusinessNineSpanish',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 9,
+    yearlyAmount: 65,
+    yearlyWas: 108,
+    ribbonEstYear: 'Desde 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Llámanos · Ayuda 24/7',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'negocios locales',
+    businessNoun: 'negocio local',
+    bookMoreNoun: 'clientes',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -431,7 +463,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -529,7 +561,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -539,6 +571,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
     const barberNineMonthly = effectiveTier === 'single' ? 9 : 19;
     const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
+    const barberFiveNineMonthly = 5;
+    const barberFiveNineYearly = 36;
 
     // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
     // is forwarded to /api/create-checkout so the server can fire CAPI
@@ -551,7 +585,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           ? barber19Amount
           : (region === 'barberNine' || region === 'localbusinessNine')
             ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
-            : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+            : region === 'barberFiveNine'
+              ? (effectivePlan === 'yearly' ? barberFiveNineYearly : barberFiveNineMonthly)
+              : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const contentName = usesTier
       ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
@@ -816,25 +852,33 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     </div>
   );
 
-  if (region === 'barberNine' || region === 'localbusinessNine' || region === 'barberNineLeads' || region === 'localbusinessNineLeads') {
+  if (region === 'barberNine' || region === 'localbusinessNine' || region === 'barberNineLeads' || region === 'localbusinessNineLeads' || region === 'localbusinessNineSpanish' || region === 'barberFiveNine') {
     const b9IsLeads = region === 'barberNineLeads' || region === 'localbusinessNineLeads';
-    const b9IsLocal = region === 'localbusinessNine' || region === 'localbusinessNineLeads';
-    const b9ShowMulti = region === 'localbusinessNine';
+    const b9IsLocal = region === 'localbusinessNine' || region === 'localbusinessNineLeads' || region === 'localbusinessNineSpanish';
+    const b9IsSpanish = region === 'localbusinessNineSpanish';
+    const b9IsFive = region === 'barberFiveNine';
+    const b9ShowMulti = region === 'localbusinessNine' || region === 'localbusinessNineSpanish';
     const b9LeadFormId = region === 'barberNineLeads' ? 'eWkkKWwoxGJK2CvpWUxX' : 'LRbgZwbTGaM6WyesqAjV';
     const b9LeadFormName = region === 'barberNineLeads' ? 'Barber - $20' : 'Contractors - Free';
     const b9LeadFormHeight = region === 'barberNineLeads' ? 420 : 360;
-    const b9SingleTierLabel = b9IsLocal ? 'Single Page' : 'Custom Barbershop Site';
-    const b9SingleTierFeats = b9IsLocal ? [
+    const t = (en: string, es: string) => b9IsSpanish ? es : en;
+    const b9SingleTierLabel = b9IsSpanish ? 'Una Página' : (b9IsLocal ? 'Single Page' : 'Custom Barbershop Site');
+    const b9SingleTierFeats = b9IsSpanish ? [
+      'Sitio de una sola página',
+    ] : (b9IsLocal ? [
       'Single page site',
     ] : [
       'Multiple pages (5–15)',
       'SEO Optimized',
       'Booking link integration (Booksy, theCut, Fresha)',
-    ];
-    const b9MultiTierFeats = b9IsLocal ? [
+    ]);
+    const b9MultiTierFeats = b9IsSpanish ? [
+      'Múltiples páginas (5–15)',
+      'Optimizado para SEO',
+    ] : (b9IsLocal ? [
       'Multiple pages (5–15)',
       'SEO Optimized',
-    ] : null;
+    ] : null);
     const b9Gallery = b9IsLocal ? [
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
       { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
@@ -847,29 +891,36 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
     ];
-    const b9NicheLabel = b9IsLocal ? 'local business' : 'barbershop';
-    const b9NicheLabelPlural = b9IsLocal ? 'Local Businesses' : 'Barbershops';
-    const b9HeadlineEm = b9IsLocal ? 'Local Business Site.' : 'Barbershop Site.';
-    const b9EyebrowText = b9IsLocal ? 'Custom local business sites · One simple plan' : 'Custom barbershop sites · One simple plan';
-    const b9SubCopy = b9IsLocal
-      ? 'A custom site built for your local business, hosted by us, with edits whenever you need them — all in one plan.'
-      : 'A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.';
-    const b9Step2Body = b9IsLocal
-      ? 'Custom design with your real photos and business info.'
-      : 'Custom design with your real photos and barbershop info.';
+    const b9NicheLabel = b9IsSpanish ? 'negocio local' : (b9IsLocal ? 'local business' : 'barbershop');
+    const b9NicheLabelPlural = b9IsSpanish ? 'Negocios Locales' : (b9IsLocal ? 'Local Businesses' : 'Barbershops');
+    const b9HeadlineEm = b9IsSpanish ? 'Negocio Local.' : (b9IsLocal ? 'Local Business Site.' : 'Barbershop Site.');
+    const b9HeadlinePrefix = b9IsSpanish ? 'Sitio Web Personalizado para tu ' : 'Custom ';
+    const b9EyebrowText = b9IsSpanish
+      ? 'Sitios personalizados para negocios · Un plan simple'
+      : (b9IsLocal ? 'Custom local business sites · One simple plan' : 'Custom barbershop sites · One simple plan');
+    const b9SubCopy = b9IsSpanish
+      ? 'Un sitio personalizado construido para tu negocio local, alojado por nosotros, con ediciones cuando las necesites — todo en un solo plan.'
+      : (b9IsLocal
+        ? 'A custom site built for your local business, hosted by us, with edits whenever you need them — all in one plan.'
+        : 'A custom site built for your barbershop, hosted by us, with edits whenever you need them — all in one plan.');
+    const b9Step2Body = b9IsSpanish
+      ? 'Diseño personalizado con tus fotos reales y la información de tu negocio.'
+      : (b9IsLocal
+        ? 'Custom design with your real photos and business info.'
+        : 'Custom design with your real photos and barbershop info.');
     const b9SocialGallery = [
       { mediaId: 'fezlz3rw75', aspect: '0.5625' },
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
       { mediaId: 'kz4ap427gj', aspect: '0.5625' },
     ];
-    const b9SingleMonthly = 9;
-    const b9SingleYearly = 65;
+    const b9SingleMonthly = b9IsFive ? 5 : 9;
+    const b9SingleYearly = b9IsFive ? 36 : 65;
     const b9MultiMonthly = 19;
     const b9MultiYearly = 137;
     const b9IsYearly = pricingPlan === 'yearly';
     const b9SinglePrice = b9IsYearly ? b9SingleYearly : b9SingleMonthly;
     const b9MultiPrice = b9IsYearly ? b9MultiYearly : b9MultiMonthly;
-    const b9Period = b9IsYearly ? 'yr' : 'mo';
+    const b9Period = b9IsSpanish ? (b9IsYearly ? 'año' : 'mes') : (b9IsYearly ? 'yr' : 'mo');
     return (
       <>
         <style>{`
@@ -989,18 +1040,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="b9-stack">
             <section className="b9-card">
               <div className="b9-eyebrow">{b9EyebrowText}</div>
-              <h1 className="b9-title">Custom <em>{b9HeadlineEm}</em></h1>
+              <h1 className="b9-title">{b9HeadlinePrefix}<em>{b9HeadlineEm}</em></h1>
               <p className="b9-sub">{b9SubCopy}</p>
 
-              <div className="b9-guarantee-inline" role="note" aria-label="Delivery and money-back guarantee">
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24–48 hr delivery</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Edits &amp; revisions included</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+              <div className="b9-guarantee-inline" role="note" aria-label={t('Delivery and money-back guarantee', 'Garantía de entrega y reembolso')}>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{t('24–48 hr delivery', 'Entrega en 24–48 hrs')}</span>
+                {!b9IsFive && <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>{t('Edits & revisions included', 'Ediciones y revisiones incluidas')}</span>}
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{t('Money-back guarantee', 'Garantía de reembolso')}</span>
               </div>
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                Custom Design + Hosting + Edits — All Included
+                {t('Custom Design + Hosting + Edits — All Included', 'Diseño Personalizado + Alojamiento + Ediciones — Todo Incluido')}
               </div>
 
               {b9IsLeads && (
@@ -1030,8 +1081,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </div>
               )}
 
-              <div className="b9-eyebrow">Real Sites, Real {b9NicheLabelPlural}</div>
-              <p className="b9-galleryhint">▶ Click any video to see the full website</p>
+              <div className="b9-eyebrow">{t('Real Sites, Real ', 'Sitios Reales, ')}{b9NicheLabelPlural}{b9IsSpanish ? ' Reales' : ''}</div>
+              <p className="b9-galleryhint">{t('▶ Click any video to see the full website', '▶ Haz clic en cualquier video para ver el sitio completo')}</p>
               <div className="b9-gallery-wrap">
                 <button
                   type="button"
@@ -1087,18 +1138,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </div>
               </div>
 
-              <div className="b9-mini-h">How it works</div>
+              <div className="b9-mini-h">{t('How it works', 'Cómo funciona')}</div>
               <div className="b9-steps">
-                <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">Send us a link</div><div className="b9-step-b">Google Business, Facebook, or Instagram — or a few photos and your info.</div></div>
-                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We build your site</div><div className="b9-step-b">{b9Step2Body}</div></div>
-                <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Live in 24–48 hrs</div><div className="b9-step-b">Hosted, edited, and maintained by us — just message any change.</div></div>
+                <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">{t('Send us a link', 'Envíanos un enlace')}</div><div className="b9-step-b">{t('Google Business, Facebook, or Instagram — or a few photos and your info.', 'Google Business, Facebook o Instagram — o algunas fotos y la información de tu negocio.')}</div></div>
+                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">{t('We build your site', 'Construimos tu sitio')}</div><div className="b9-step-b">{b9Step2Body}</div></div>
+                <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">{t('Live in 24–48 hrs', 'En línea en 24–48 hrs')}</div><div className="b9-step-b">{t('Hosted, edited, and maintained by us — just message any change.', 'Alojado, editado y mantenido por nosotros — solo mándanos cualquier cambio.')}</div></div>
               </div>
             </section>
 
             <section className="b9-social">
-              <div className="b9-eyebrow">Featured</div>
-              <h2 className="b9-social-h">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
-              <p className="b9-social-sub">Me personally walking into local businesses and building them sites.</p>
+              <div className="b9-eyebrow">{t('Featured', 'Destacado')}</div>
+              <h2 className="b9-social-h">{t('As Seen On Facebook, TikTok & ', 'Visto En Facebook, TikTok e ')}<em>Instagram.</em></h2>
+              <p className="b9-social-sub">{t('Me personally walking into local businesses and building them sites.', 'Yo personalmente visitando negocios locales y construyéndoles sitios.')}</p>
               <div className="b9-social-icons">
                 <a className="b9-social-icon" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12z"/></svg>
@@ -1169,7 +1220,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           {!b9IsLeads && (
           <div className="b9-sticky">
-            <div className="b9-sticky-toggle" role="tablist" aria-label="Billing period">
+            <div className="b9-sticky-toggle" role="tablist" aria-label={t('Billing period', 'Periodo de facturación')}>
               <button
                 type="button"
                 role="tab"
@@ -1177,7 +1228,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 className={`b9-stoggle${!b9IsYearly ? ' active' : ''}`}
                 onClick={() => setPricingPlan('monthly')}
               >
-                Monthly
+                {t('Monthly', 'Mensual')}
               </button>
               <button
                 type="button"
@@ -1186,7 +1237,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 className={`b9-stoggle${b9IsYearly ? ' active' : ''}`}
                 onClick={() => setPricingPlan('yearly')}
               >
-                Yearly <span className="b9-savetag">−40%</span>
+                {t('Yearly', 'Anual')} <span className="b9-savetag">−40%</span>
               </button>
             </div>
             <div className="b9-sticky-cols" style={b9ShowMulti ? undefined : { gridTemplateColumns: '1fr' }}>
@@ -1206,7 +1257,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   )}
                 </div>
                 <span className="b9-startbtn">
-                  {isLoading && activeHomeTier === 'single' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                  {isLoading && activeHomeTier === 'single' ? t('Loading…', 'Cargando…') : (<>{t('Start Now', 'Empezar Ahora')} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
                 </span>
               </button>
               {b9ShowMulti && (
@@ -1217,7 +1268,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                   disabled={isLoading}
                 >
                   <div className="b9-pricebtn-meta">
-                    <span className="b9-tiername">Multi-Page</span>
+                    <span className="b9-tiername">{t('Multi-Page', 'Múltiples Páginas')}</span>
                     <span className="b9-tierprice">${b9MultiPrice}/{b9Period}</span>
                     {b9MultiTierFeats && (
                       <ol className="b9-tierfeats">
@@ -1226,7 +1277,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     )}
                   </div>
                   <span className="b9-startbtn">
-                    {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                    {isLoading && activeHomeTier === 'multi' ? t('Loading…', 'Cargando…') : (<>{t('Start Now', 'Empezar Ahora')} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
                   </span>
                 </button>
               )}
