@@ -883,26 +883,25 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .b9-social { padding:28px 26px; }
             .b9-social-h { font-size:30px; }
           }
-          .b9-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:14px; padding:6px 6px; box-shadow:0 10px 28px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:480px; margin:0 auto; }
-          .b9-sticky-toggle { display:flex; gap:2px; background:rgba(201,169,110,.10); padding:2px; border-radius:999px; margin:0 auto 6px; width:fit-content; }
-          .b9-stoggle { background:transparent; border:0; padding:4px 12px; border-radius:999px; font-family:inherit; font-weight:700; font-size:11px; color:#cfc8b8; cursor:pointer; transition:background .15s ease, color .15s ease; display:inline-flex; align-items:center; gap:5px; }
+          .b9-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:12px; padding:5px 5px; box-shadow:0 8px 22px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:440px; margin:0 auto; }
+          .b9-sticky-toggle { display:flex; gap:2px; background:rgba(201,169,110,.10); padding:2px; border-radius:999px; margin:0 auto 4px; width:fit-content; }
+          .b9-stoggle { background:transparent; border:0; padding:3px 10px; border-radius:999px; font-family:inherit; font-weight:700; font-size:10px; color:#cfc8b8; cursor:pointer; transition:background .15s ease, color .15s ease; display:inline-flex; align-items:center; gap:4px; }
           .b9-stoggle.active { background:#c9a96e; color:#0a0a0a; }
-          .b9-stoggle .b9-savetag { background:#0a0a0a; color:#c9a96e; padding:1px 5px; border-radius:999px; font-size:8px; letter-spacing:.06em; font-weight:800; }
+          .b9-stoggle .b9-savetag { background:#0a0a0a; color:#c9a96e; padding:1px 4px; border-radius:999px; font-size:8px; letter-spacing:.06em; font-weight:800; }
           .b9-stoggle.active .b9-savetag { background:#0a0a0a; color:#c9a96e; }
-          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:12px; padding:10px 10px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:8px; }
+          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:10px; padding:8px 8px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:5px; }
           .b9-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
           .b9-pricebtn-multi { background:#1c1c1c; }
-          .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
-          .b9-tiername { font-size:9px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:#c9a96e; line-height:1.1; }
-          .b9-tierfeats { list-style:none; padding:0; margin:8px 0 4px; display:flex; flex-direction:column; gap:8px; text-align:left; counter-reset:b9feat; align-self:stretch; }
-          .b9-tierfeats li { counter-increment:b9feat; font-size:13px; font-weight:700; color:#f5f0e0; line-height:1.35; padding-left:28px; position:relative; }
-          .b9-tierfeats li::before { content:counter(b9feat); position:absolute; left:0; top:1px; width:20px; height:20px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:11px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
-          .b9-priceval { font-weight:900; font-size:18px; letter-spacing:-.02em; line-height:1.05; color:#f5f0e0; }
-          .b9-priceval small { font-size:10px; font-weight:600; opacity:.7; margin-left:1px; }
-          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:5px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:8px 10px; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 6px 14px rgba(201,169,110,.30); }
-          .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 10px 22px rgba(201,169,110,.45); }
-          .b9-startbtn svg { width:11px; height:11px; }
+          .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:0; }
+          .b9-tiername { font-size:14px; font-weight:900; letter-spacing:-.01em; color:#f5f0e0; line-height:1.1; }
+          .b9-tierprice { font-size:10px; font-weight:700; color:#c9a96e; line-height:1.1; letter-spacing:.02em; }
+          .b9-tierfeats { list-style:none; padding:0; margin:5px 0 2px; display:flex; flex-direction:column; gap:5px; text-align:left; counter-reset:b9feat; align-self:stretch; }
+          .b9-tierfeats li { counter-increment:b9feat; font-size:11px; font-weight:700; color:#f5f0e0; line-height:1.3; padding-left:22px; position:relative; }
+          .b9-tierfeats li::before { content:counter(b9feat); position:absolute; left:0; top:0; width:16px; height:16px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:9px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:6px 8px; font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); }
+          .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
+          .b9-startbtn svg { width:10px; height:10px; }
           @media (min-width: 760px) {
             .b9-card { padding:34px 30px; }
             .b9-title { font-size:46px; }
@@ -1104,12 +1103,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">{b9SingleTierLabel}</span>
+                  <span className="b9-tierprice">${b9SinglePrice}/{b9Period}</span>
                   {b9SingleTierFeats && (
                     <ol className="b9-tierfeats">
                       {b9SingleTierFeats.map((f) => <li key={f}>{f}</li>)}
                     </ol>
                   )}
-                  <span className="b9-priceval">${b9SinglePrice}<small>/{b9Period}</small></span>
                 </div>
                 <span className="b9-startbtn">
                   {isLoading && activeHomeTier === 'single' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
@@ -1124,12 +1123,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 >
                   <div className="b9-pricebtn-meta">
                     <span className="b9-tiername">Multi-Page</span>
+                    <span className="b9-tierprice">${b9MultiPrice}/{b9Period}</span>
                     {b9MultiTierFeats && (
                       <ol className="b9-tierfeats">
                         {b9MultiTierFeats.map((f) => <li key={f}>{f}</li>)}
                       </ol>
                     )}
-                    <span className="b9-priceval">${b9MultiPrice}<small>/{b9Period}</small></span>
                   </div>
                   <span className="b9-startbtn">
                     {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
