@@ -3,6 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import PayPalSubscribeModal, { type PayPalCtx } from './PayPalSubscribeModal';
 import PaymentBadgeRow, { TierPaymentBadge } from './PaymentBadgeRow';
+import VapiCallButton from './VapiCallButton';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -1145,6 +1146,15 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">{t('Live in 24–48 hrs', 'En línea en 24–48 hrs')}</div><div className="b9-step-b">{t('Hosted, edited, and maintained by us — just message any change.', 'Alojado, editado y mantenido por nosotros — solo mándanos cualquier cambio.')}</div></div>
               </div>
             </section>
+
+            {b9IsFive && (
+              <VapiCallButton
+                assistantId="6a9a8a57-2776-4397-81b3-e9b9d9df9a9b"
+                assistantName="Mia"
+                headline="We're available 24/7 to answer any questions"
+                sub="Tap to call Mia, our AI assistant — she'll explain how the $7/month plan works and help you decide if it's right for your shop. Conversation stays right here in your browser."
+              />
+            )}
 
             <section className="b9-social">
               <div className="b9-eyebrow">{t('Featured', 'Destacado')}</div>
