@@ -889,7 +889,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             color:#f4f4f5;
             font-family:'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
             -webkit-font-smoothing:antialiased;
-            padding:6px 12px 220px;
+            padding:6px 12px 140px;
             position:relative;
             overflow-x:hidden;
           }
@@ -1104,43 +1104,43 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
 
           .lbv-sticky {
-            position:fixed; left:8px; right:8px; bottom:8px; z-index:90;
+            position:fixed; left:8px; right:8px; bottom:6px; z-index:90;
             background:linear-gradient(160deg, #141414 0%, #050505 100%);
-            border-radius:18px;
-            padding:10px 12px 12px;
+            border-radius:14px;
+            padding:7px 8px 8px;
             box-shadow:
-              0 20px 50px rgba(0,0,0,.7),
+              0 14px 36px rgba(0,0,0,.65),
               inset 0 1px 0 rgba(255,255,255,.12),
               inset 0 0 0 1px rgba(255,255,255,.08);
-            max-width:440px; margin:0 auto;
+            max-width:310px; margin:0 auto;
           }
           .lbv-pricebtn {
             position:relative; appearance:none;
             background:linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
-            color:#0a0a0a; border:0; border-radius:14px;
-            padding:12px 14px; cursor:pointer; text-align:center;
+            color:#0a0a0a; border:0; border-radius:10px;
+            padding:7px 9px; cursor:pointer; text-align:center;
             box-shadow:
-              0 14px 30px rgba(0,0,0,.55),
+              0 10px 22px rgba(0,0,0,.5),
               inset 0 1px 0 rgba(255,255,255,.95),
-              inset 0 -2px 0 rgba(0,0,0,.12);
+              inset 0 -1px 0 rgba(0,0,0,.12);
             transition:transform .15s ease, box-shadow .15s ease;
-            font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:6px; width:100%;
+            font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:4px; width:100%;
           }
-          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,1), inset 0 -2px 0 rgba(0,0,0,.14); }
-          .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
-          .lbv-tiername { font-family:'Playfair Display', Georgia, serif; font-size:14px; font-weight:700; letter-spacing:-.005em; color:#0a0a0a; line-height:1.1; font-style:italic; }
-          .lbv-tierprice { font-family:'Playfair Display', Georgia, serif; font-size:24px; font-weight:800; color:#0a0a0a; line-height:1.05; letter-spacing:-.02em; }
-          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#4a4a4a; font-size:14px; }
+          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 14px 28px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,.14); }
+          .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:0; }
+          .lbv-tiername { font-family:'Playfair Display', Georgia, serif; font-size:10px; font-weight:700; letter-spacing:-.005em; color:#0a0a0a; line-height:1.1; font-style:italic; }
+          .lbv-tierprice { font-family:'Playfair Display', Georgia, serif; font-size:17px; font-weight:800; color:#0a0a0a; line-height:1.05; letter-spacing:-.02em; }
+          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#4a4a4a; font-size:10px; }
           .lbv-startbtn {
-            display:inline-flex; align-items:center; justify-content:center; gap:6px;
+            display:inline-flex; align-items:center; justify-content:center; gap:4px;
             background:#0a0a0a; color:#ffffff;
-            border-radius:999px; padding:10px 16px; font-family:'Inter', sans-serif; font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
-            box-shadow:0 4px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
+            border-radius:999px; padding:6px 10px; font-family:'Inter', sans-serif; font-size:9px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+            box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
           }
-          .lbv-startbtn svg { width:11px; height:11px; }
+          .lbv-startbtn svg { width:8px; height:8px; }
           .lbv-disclaim {
             font-family:'Cormorant Garamond', Georgia, serif;
-            margin-top:10px; font-size:13px; line-height:1.4; color:#a8a8a8; text-align:center; font-weight:400;
+            margin-top:5px; font-size:10px; line-height:1.3; color:#a8a8a8; text-align:center; font-weight:400;
           }
           .lbv-disclaim b { color:#ffffff; font-weight:600; font-family:'Playfair Display', Georgia, serif; font-style:italic; }
 
@@ -1169,31 +1169,31 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
           <div className="lbv-stack">
             <section className="lbv-card">
-              <div className="lbv-eyebrow">AI Voice Agent · For Local Businesses</div>
+              <div className="lbv-eyebrow">24/7 Voice Agent</div>
               <h1 className="lbv-title">Book More Jobs. <em>Don't Miss a Call.</em></h1>
-              <p className="lbv-sub">Mia, your custom AI voice agent, answers calls 24/7 — helps book jobs, helps capture leads, and answers questions while you work. Start a 1-day free trial today — then $29/month.</p>
+              <p className="lbv-sub">A custom AI voice agent that answers your calls 24/7, books jobs, and captures leads.</p>
 
               <div className="lbv-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                Start a 1-Day Free Trial — Then $29/month
+                1-Day Free Trial · Then $29/mo
               </div>
 
               <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Custom-trained</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back</span>
               </div>
             </section>
 
             <section className="lbv-tryit" aria-label="Live sample voice agent">
               <span className="lbv-tryit-tag">Hear &amp; talk to Mia</span>
-              <h2 className="lbv-tryit-h">Talk to Mia — a <em>sample 24/7 agent.</em></h2>
-              <p className="lbv-tryit-cap">A live, in-browser demo of the exact voice agent we'd build for your business.</p>
+              <h2 className="lbv-tryit-h">Talk to Mia — a <em>sample agent.</em></h2>
+              <p className="lbv-tryit-cap">Live in-browser demo.</p>
               <VapiCallButton
                 compact
                 assistantName="Mia"
                 headline="Talk to Mia"
-                sub="Tap to chat live. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
+                sub="Sample of the exact agent we'd build for your business."
               assistantConfig={{
                 name: 'Mia · Amalvera (Local Business)',
                 firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
@@ -1292,12 +1292,12 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             </section>
 
             <section className="lbv-card">
-              <div className="lbv-mini-h" style={{ marginTop: 0 }}>What Does the 24/7 Voice Receptionist Do?</div>
+              <div className="lbv-mini-h" style={{ marginTop: 0 }}>What Mia does</div>
               <ol className="lbv-feats">
-                <li><b>Answers Calls 24/7, 7 Days a Week</b> — even after hours, on weekends, or while you're on a job.</li>
-                <li><b>"Helps Book Jobs"</b> — collects what the caller needs and slots them in for you.</li>
-                <li><b>"Helps Capture Lead Info"</b> — name, number, and what they want — sent straight to you.</li>
-                <li><b>"Custom Trained"</b> — built around your services, hours, pricing, and how you want calls handled.</li>
+                <li><b>Answers calls 24/7</b></li>
+                <li><b>Books jobs</b></li>
+                <li><b>Captures lead info</b></li>
+                <li><b>Custom-trained on your business</b></li>
               </ol>
             </section>
           </div>
@@ -1310,15 +1310,15 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               disabled={isLoading}
             >
               <div className="lbv-pricebtn-meta">
-                <span className="lbv-tiername">Get Started — Start a Free Trial</span>
-                <span className="lbv-tierprice">1-day free, then $29/mo <em>+ usage minutes</em></span>
+                <span className="lbv-tiername">Free Trial</span>
+                <span className="lbv-tierprice">1-day free, then $29/mo</span>
               </div>
               <span className="lbv-startbtn">
-                {isLoading ? 'Loading…' : (<>Get Started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                {isLoading ? '…' : (<>Get Started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
               </span>
             </button>
             <p className="lbv-disclaim">
-              <b>1-day free trial · Money-back guarantee.</b> After the trial, $29/month. Additional usage charges based on minutes used apply monthly and are billed separately.
+              <b>Money-back guarantee.</b> + per-minute usage.
             </p>
           </div>
         </div>
