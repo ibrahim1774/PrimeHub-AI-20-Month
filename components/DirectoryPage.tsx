@@ -390,6 +390,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'negocio local',
     bookMoreNoun: 'clientes',
   },
+  localbusinessVoice: {
+    source: 'localbusinessVoice',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 29,
+    yearlyAmount: 29,
+    yearlyWas: 29,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'local businesses',
+    businessNoun: 'local business',
+    bookMoreNoun: 'customers',
+  },
 };
 
 const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
@@ -464,7 +480,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -562,7 +578,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -574,6 +590,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
     const barberFiveNineMonthly = 7;
     const barberFiveNineYearly = 50;
+    const localbusinessVoiceMonthly = 29;
 
     // Fire Meta Pixel + TikTok Pixel InitiateCheckout. The same eventID
     // is forwarded to /api/create-checkout so the server can fire CAPI
@@ -588,7 +605,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
             : region === 'barberFiveNine'
               ? (effectivePlan === 'yearly' ? barberFiveNineYearly : barberFiveNineMonthly)
-              : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
+              : region === 'localbusinessVoice'
+                ? localbusinessVoiceMonthly
+                : (effectivePlan === 'yearly' ? cfg.yearlyAmount : cfg.monthlyAmount);
     const eventID = `ic_${cfg.source}_${usesTier ? effectiveTier + '_' : ''}${effectivePlan}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const contentName = usesTier
       ? (effectiveTier === 'single' ? 'Single Page Website' : 'Multi-Page Website')
@@ -852,6 +871,231 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       </button>
     </div>
   );
+
+  if (region === 'localbusinessVoice') {
+    // /localbusiness-voice — AI voice agent ("Mia") for local businesses.
+    // $29/mo single tier, no yearly. Reuses the b9-* dark/gold styles.
+    return (
+      <>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          .lbv-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 220px; }
+          .lbv-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
+          .lbv-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
+          .lbv-stack { display:flex; flex-direction:column; gap:14px; max-width:980px; margin:0 auto; }
+          .lbv-card { position:relative; border-radius:22px; padding:20px 18px; overflow:hidden; background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .lbv-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
+          .lbv-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
+          .lbv-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .lbv-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
+          .lbv-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
+          .lbv-allin svg { width:16px; height:16px; }
+          .lbv-guarantee { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:10px 14px; margin:0 0 16px; background:rgba(201,169,110,.10); border-radius:12px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.35); font-size:12px; font-weight:700; color:#f5f0e0; line-height:1.3; }
+          .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
+          .lbv-guarantee svg { width:13px; height:13px; color:#c9a96e; flex-shrink:0; }
+          .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:8px; counter-reset:lbvfeat; }
+          .lbv-feats li { counter-increment:lbvfeat; font-size:14px; font-weight:700; color:#f5f0e0; line-height:1.4; padding-left:30px; position:relative; }
+          .lbv-feats li::before { content:counter(lbvfeat); position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:11px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+          .lbv-feats li b { color:#c9a96e; font-weight:800; }
+          .lbv-mini-h { font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#c9a96e; margin:18px 0 10px; }
+          .lbv-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:12px; padding:8px 10px 10px; box-shadow:0 8px 22px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:440px; margin:0 auto; }
+          .lbv-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:10px; padding:10px 12px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:6px; width:100%; }
+          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
+          .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
+          .lbv-tiername { font-size:14px; font-weight:900; letter-spacing:-.01em; color:#f5f0e0; line-height:1.1; }
+          .lbv-tierprice { font-size:20px; font-weight:900; color:#f5f0e0; line-height:1.05; letter-spacing:-.01em; }
+          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; font-size:13px; }
+          .lbv-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:8px 12px; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); }
+          .lbv-pricebtn:hover:not(:disabled) .lbv-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
+          .lbv-startbtn svg { width:11px; height:11px; }
+          .lbv-disclaim { margin-top:6px; font-size:10px; line-height:1.35; color:#9d9788; text-align:center; }
+          .lbv-disclaim b { color:#cfc8b8; font-weight:700; }
+          @media (min-width: 760px) {
+            .lbv-card { padding:34px 30px; }
+            .lbv-title { font-size:46px; }
+            .lbv-feats li { font-size:15px; }
+          }
+          @keyframes lbvFadeIn { from { opacity:0 } to { opacity:1 } }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(10,10,10,.82); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:lbvFadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0d0d0d; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#1f63ff; }
+          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:12px; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#777; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#0d0d0d; }
+        `}</style>
+
+        <div className="lbv-page">
+          <nav className="lbv-nav"><span className="lbv-logo">amalvera</span></nav>
+
+          <div className="lbv-stack">
+            <section className="lbv-card">
+              <div className="lbv-eyebrow">AI Voice Agent · For Local Businesses</div>
+              <h1 className="lbv-title">Book More Jobs. <em>Never Miss a Call.</em></h1>
+              <p className="lbv-sub">Mia, your custom AI voice agent, answers every call 24/7 — books jobs, captures leads, and answers questions while you work. Get the system implemented in your business for $29/month.</p>
+
+              <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+              </div>
+
+              <div className="lbv-allin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                $29/month — AI Voice Agent Implemented into Your Business
+              </div>
+
+              <div className="lbv-mini-h">What Mia does</div>
+              <ol className="lbv-feats">
+                <li><b>Answers every call 24/7</b> — never miss a job again, even after hours or on weekends.</li>
+                <li><b>Books jobs &amp; quotes</b> — collects what the caller needs and slots them in.</li>
+                <li><b>Captures lead info</b> — name, number, and what they want — sent straight to you.</li>
+                <li><b>Custom-trained on your business</b> — services, hours, pricing, your way.</li>
+                <li><b>Texts you a summary</b> after every call so nothing slips through the cracks.</li>
+              </ol>
+            </section>
+
+            <VapiCallButton
+              compact
+              assistantName="Mia"
+              headline="Talk to Mia — your future voice agent"
+              sub="Tap to chat live. She'll show you what your own AI voice agent could sound like — answering calls, booking jobs, capturing leads."
+              assistantConfig={{
+                name: 'Mia · Amalvera (Local Business)',
+                firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
+                model: {
+                  provider: 'openai',
+                  model: 'gpt-4o-mini',
+                  temperature: 0.85,
+                  messages: [
+                    {
+                      role: 'system',
+                      content: `You are Mia, the friendly AI voice agent from Amalvera. You're a live demo of the exact kind of voice agent Amalvera builds for local business owners — plumbers, electricians, HVAC, roofers, contractors, cleaners, landscapers, salons, auto shops, dentists, and similar local-service businesses. The offer is a custom AI voice agent (like you) implemented into their business for $29/month, with additional usage charges based on minutes used billed separately.
+
+Your job: warmly chat with the visitor, ask their name, ask what their business is, then naturally show them how a voice agent like you could help that specific business — and gently nudge them toward signing up for $29/month. Be ethical, factual, never deceive, never pressure. Use soft language like "can help" and "could help" — don't make hard guarantees about business outcomes.
+
+OPENING:
+- Greet them warmly and ask for their name.
+- Then ask what their business is and what kind of work they do.
+- Use their name occasionally — but naturally, not every sentence.
+
+VOICE & DELIVERY (very important — this is a spoken call):
+- Talk like a real person on a call — relaxed, warm, varied. NOT a script reader.
+- Use contractions everywhere ("we're", "you'll", "that's", "it's", "I'd").
+- Vary your sentence length. Short punchy lines mixed with longer ones.
+- Use natural fillers occasionally — "yeah", "honestly", "for sure", "totally", "right" — but don't overdo it.
+- Mirror the visitor's energy. If they're chill, be chill. If they're skeptical, slow down and be reassuring.
+- Never read bullet points out loud. Translate everything into spoken sentences.
+- Avoid corporate phrasing. Don't say "I would be happy to assist you with that" — say "Yeah, totally — happy to help."
+- Pause naturally with commas and dashes so the TTS gives the right rhythm.
+
+THE OFFER (these numbers are exact — never change them):
+- A custom AI voice agent (just like you) implemented into their business
+- Trained on their services, hours, pricing, and how they want calls handled
+- Answers calls 24/7, books jobs, captures leads, and texts them a summary after every call
+- $29 per month base subscription
+- Additional usage charges based on minutes used are billed separately
+- Money-back guarantee if they're not happy
+- Implementation handled by Amalvera — they don't need to set anything up
+
+WHY A VOICE AGENT CAN HELP (factual — soft phrasing, use "can help" / "could help"):
+- It can answer calls when they're on a job, asleep, or with another customer — so they don't miss work
+- Missed calls can mean lost jobs — a voice agent can help capture the lead instead of losing it to voicemail
+- It can book appointments and quotes around the clock — even at 2am
+- It can free them up to focus on actual jobs instead of being stuck answering the phone all day
+- It can sound friendly and professional every single time — no off days
+- It can text them a summary after every call so they always know what's going on
+
+WHY $29/MO IS FAIR (factual):
+- Hiring a part-time receptionist runs $1,500 to $3,000+ a month
+- A typical 24/7 answering service is $100 to $400+ a month with strict per-call fees
+- Amalvera bundles the voice agent setup, training, and ongoing tuning into the $29/mo base
+- Usage minutes are billed separately at provider cost so they only pay for what they actually use
+- For most local businesses, capturing a single missed job pays for several months of service
+
+HOW IT WORKS (explain step by step if asked):
+1. Tap "Start Now" on this page — subscribe through Stripe at $29/mo
+2. Tell Amalvera about their business — services, hours, pricing, how they want calls handled
+3. Amalvera trains and configures the voice agent and forwards their phone number to it
+4. The agent goes live, answers calls 24/7, and texts them after every call
+5. They can request tweaks anytime by messaging Amalvera
+
+ADDRESSING COMMON QUESTIONS:
+- "What about the minutes charge?" Be honest — explain that the $29/mo covers setup, training, and the voice agent itself, and that usage (talk minutes) is billed separately at provider rates. It's transparent and usage-based.
+- "Will callers know it's AI?" Mia answers honestly: "I'm an AI, but most callers don't realize it — and the agent always tells someone they're speaking with AI if they ask."
+- "Can it transfer to me?" Yes — the agent can be configured to text or call them for urgent or specific requests.
+- "What if my business is unique?" Mia listens, asks more questions, and explains how the agent gets custom-trained on their specific services and process.
+
+THINGS TO AVOID:
+- Never promise specific outcomes — like "you'll book 5 more jobs a week." Use soft phrasing.
+- Never pretend to be human. If asked directly, say you're an AI voice agent from Amalvera.
+- Never make claims about pricing other than $29/mo + usage-based minutes.
+
+CLOSING:
+- If they're skeptical, mention the money-back guarantee.
+- If they want to start, say: "Awesome — just scroll up and tap the gold Start Now button right on this page."
+- If they want to wrap, thank them, remind them you're here 24/7 if anything else comes up.
+
+Keep replies short — 1 to 3 sentences usually. This is a phone call, not an essay.`,
+                    },
+                  ],
+                },
+                voice: {
+                  provider: 'cartesia',
+                  voiceId: '6f84f4b8-58a2-430c-8c79-688dad597532',
+                  model: 'sonic-2',
+                  language: 'en',
+                },
+                transcriber: {
+                  provider: 'deepgram',
+                  model: 'nova-2',
+                  language: 'en-US',
+                },
+                silenceTimeoutSeconds: 30,
+                maxDurationSeconds: 600,
+              }}
+            />
+          </div>
+
+          <div className="lbv-sticky">
+            <button
+              type="button"
+              className="lbv-pricebtn"
+              onClick={() => handleCheckout('single', 'monthly')}
+              disabled={isLoading}
+            >
+              <div className="lbv-pricebtn-meta">
+                <span className="lbv-tiername">AI Voice Agent — Customized for Your Business</span>
+                <span className="lbv-tierprice">$29/mo <em>+ usage minutes</em></span>
+              </div>
+              <span className="lbv-startbtn">
+                {isLoading ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+              </span>
+            </button>
+            <p className="lbv-disclaim">
+              <b>Money-back guarantee.</b> Additional usage charges based on minutes used apply monthly and are billed separately.
+            </p>
+          </div>
+        </div>
+
+        {modalOpen && clientSecret && (
+          <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+            <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+              <div className="mv-checkout-frame-inner">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+              <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
+                Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   if (region === 'barberNine' || region === 'localbusinessNine' || region === 'barberNineLeads' || region === 'localbusinessNineLeads' || region === 'localbusinessNineSpanish' || region === 'barberFiveNine') {
     const b9IsLeads = region === 'barberNineLeads' || region === 'localbusinessNineLeads';
@@ -1153,8 +1397,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <VapiCallButton
                 compact
                 assistantName="Mia"
-                headline="We're available 24/7 to answer any questions"
-                sub="Tap to call Mia — she can walk you through how the $7/month plan works. Conversation stays right here in your browser."
+                headline="24/7 Customer Service — Always Here to Help"
+                sub="Tap to call Mia — your 24/7 customer service rep. She can walk you through how the $7/month plan works, anytime, right here in your browser."
                 assistantConfig={{
                   name: 'Mia · Amalvera',
                   firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",

@@ -236,15 +236,17 @@ export default async function handler(req: any, res: any) {
             const isLocalbusinessNine = source === 'localbusinessNine';
             const isLocalbusinessNineSpanish = source === 'localbusinessNineSpanish';
             const isBarberFiveNine = source === 'barberFiveNine';
+            const isLocalbusinessVoice = source === 'localbusinessVoice';
             const isNineteen = source === 'nineteen';
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
                 : isFive ? '/5'
+                : isLocalbusinessVoice ? '/localbusiness-voice'
                 : isBarberFiveNine ? '/barber-5-9'
                 : isLocalbusinessNineSpanish ? '/localbusiness-9-spanish'
                 : isLocalbusinessNine ? '/localbusiness-9'
@@ -296,15 +298,17 @@ export default async function handler(req: any, res: any) {
             const isLocalbusinessNine = source === 'localbusinessNine';
             const isLocalbusinessNineSpanish = source === 'localbusinessNineSpanish';
             const isBarberFiveNine = source === 'barberFiveNine';
+            const isLocalbusinessVoice = source === 'localbusinessVoice';
             const isNineteen = source === 'nineteen';
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
                 : isFive ? '/5'
+                : isLocalbusinessVoice ? '/localbusiness-voice'
                 : isBarberFiveNine ? '/barber-5-9'
                 : isLocalbusinessNineSpanish ? '/localbusiness-9-spanish'
                 : isLocalbusinessNine ? '/localbusiness-9'

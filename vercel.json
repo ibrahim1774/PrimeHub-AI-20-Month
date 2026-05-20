@@ -95,6 +95,10 @@
         {
             "source": "/barber-5-9",
             "destination": "/index.html"
+        },
+        {
+            "source": "/localbusiness-voice",
+            "destination": "/index.html"
         }
     ],
     "functions": {
