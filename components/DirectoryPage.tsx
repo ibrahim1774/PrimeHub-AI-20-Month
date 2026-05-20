@@ -1353,20 +1353,19 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     const b9IsLocal = region === 'localbusinessNine' || region === 'localbusinessNineLeads' || region === 'localbusinessNineSpanish';
     const b9IsSpanish = region === 'localbusinessNineSpanish';
     const b9IsFive = region === 'barberFiveNine';
-    const b9ShowMulti = region === 'localbusinessNine' || region === 'localbusinessNineSpanish';
+    const b9ShowMulti = region === 'localbusinessNine' || region === 'localbusinessNineSpanish' || region === 'barberNine';
     const b9LeadFormId = region === 'barberNineLeads' ? 'eWkkKWwoxGJK2CvpWUxX' : 'LRbgZwbTGaM6WyesqAjV';
     const b9LeadFormName = region === 'barberNineLeads' ? 'Barber - $20' : 'Contractors - Free';
     const b9LeadFormHeight = region === 'barberNineLeads' ? 420 : 360;
     const t = (en: string, es: string) => b9IsSpanish ? es : en;
-    const b9SingleTierLabel = b9IsSpanish ? 'Una Página' : (b9IsLocal ? 'Single Page' : 'Custom Barbershop Site');
+    const b9SingleTierLabel = b9IsSpanish ? 'Una Página' : (b9IsLocal ? 'Single Page' : 'Single Page');
     const b9SingleTierFeats = b9IsSpanish ? [
       'Sitio de una sola página',
     ] : (b9IsLocal ? [
       'Single page site',
     ] : [
-      'Multiple pages (5–15)',
-      'SEO Optimized',
-      'Booking link integration (Booksy, theCut, Fresha)',
+      'Single page barbershop site',
+      'Custom design + hosting + edits',
     ]);
     const b9MultiTierFeats = b9IsSpanish ? [
       'Múltiples páginas (5–15)',
@@ -1374,7 +1373,11 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     ] : (b9IsLocal ? [
       'Multiple pages (5–15)',
       'SEO Optimized',
-    ] : null);
+    ] : [
+      'Multiple pages (5–15)',
+      'SEO Optimized',
+      'Booking link integration (Booksy, theCut, Fresha)',
+    ]);
     const b9Gallery = b9IsLocal ? [
       { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
       { mediaId: '798tf6y60c', aspect: '0.547112462006079' },
