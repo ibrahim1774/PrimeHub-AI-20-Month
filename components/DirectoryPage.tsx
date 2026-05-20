@@ -879,7 +879,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     return (
       <>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
           .lbv-page {
             min-height:100vh;
             background:
@@ -887,7 +887,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               radial-gradient(ellipse 60% 40% at 50% 110%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 60%),
               linear-gradient(180deg, #0a0a0a 0%, #050505 60%, #000000 100%);
             color:#f4f4f5;
-            font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-family:'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
             -webkit-font-smoothing:antialiased;
             padding:8px 14px 240px;
             position:relative;
@@ -900,7 +900,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-page::after { width:440px; height:440px; bottom:160px; left:-120px; background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 70%); }
           .lbv-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; position:relative; z-index:2; }
           .lbv-logo {
-            font-weight:900; font-size:20px; letter-spacing:-0.02em;
+            font-family:'Playfair Display', Georgia, serif;
+            font-weight:800; font-size:24px; letter-spacing:-0.01em; font-style:italic;
             background:linear-gradient(180deg, #ffffff 0%, #b8b8b8 100%);
             -webkit-background-clip:text; background-clip:text; color:transparent;
           }
@@ -924,26 +925,31 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
           .lbv-eyebrow {
             display:inline-block; position:relative;
-            font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
-            padding:6px 12px; border-radius:999px; margin-bottom:14px;
-            background:rgba(255,255,255,.06); color:#e6e6e6;
-            box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.10);
+            font-family:'Inter', sans-serif;
+            font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+            padding:6px 12px; border-radius:999px; margin-bottom:18px;
+            background:rgba(255,255,255,.05); color:#dadada;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.10);
           }
           .lbv-title {
-            font-family:'Inter', sans-serif; font-weight:800; font-size:36px; line-height:1.04; letter-spacing:-.028em;
-            color:#fafafa; margin:0 0 12px; position:relative;
+            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:40px; line-height:1.02; letter-spacing:-.022em;
+            color:#fafafa; margin:0 0 14px; position:relative;
           }
           .lbv-title em {
-            font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; font-size:1.05em;
-            background:linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            font-family:'Playfair Display', Georgia, serif; font-style:italic; font-weight:500; font-size:1em;
+            background:linear-gradient(180deg, #ffffff 0%, #a8a8a8 100%);
             -webkit-background-clip:text; background-clip:text; color:transparent;
           }
-          .lbv-sub { font-size:15px; line-height:1.55; color:#b8b8b8; margin:0 0 18px; max-width:520px; position:relative; }
+          .lbv-sub {
+            font-family:'Cormorant Garamond', Georgia, serif;
+            font-size:19px; line-height:1.45; color:#c8c8c8; margin:0 0 20px; max-width:520px; position:relative;
+            font-weight:400; letter-spacing:.005em;
+          }
           .lbv-allin {
             display:inline-flex; align-items:center; gap:8px;
-            padding:13px 20px; border-radius:14px;
+            padding:14px 22px; border-radius:14px;
             background:linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
-            color:#0a0a0a; font-weight:800; font-size:14px; letter-spacing:.01em;
+            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:15px; letter-spacing:-.005em;
             box-shadow:
               0 16px 32px rgba(0,0,0,.55),
               inset 0 1px 0 rgba(255,255,255,.9),
@@ -953,47 +959,65 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-allin svg { width:16px; height:16px; }
           .lbv-guarantee {
             display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
-            padding:11px 14px; margin:16px 0 0;
+            padding:11px 14px; margin:18px 0 0;
             background:rgba(255,255,255,.04); border-radius:14px;
             box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
-            font-size:12px; font-weight:700; color:#e0e0e0; line-height:1.3;
+            font-family:'Inter', sans-serif;
+            font-size:12px; font-weight:600; color:#e0e0e0; line-height:1.3; letter-spacing:.01em;
             position:relative;
           }
           .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
           .lbv-guarantee svg { width:13px; height:13px; color:#ffffff; flex-shrink:0; }
 
-          /* Highlighted "Try it live" Mia section directly under the price pill */
+          /* Highlighted "Try it live" Mia card — peer section under hero */
           .lbv-tryit {
             position:relative;
-            margin:22px 0 4px;
-            padding:14px 14px 16px;
-            border-radius:22px;
-            background:linear-gradient(160deg, #161616 0%, #080808 100%);
+            padding:28px 22px 22px;
+            border-radius:26px;
+            background:linear-gradient(160deg, #181818 0%, #060606 100%);
             box-shadow:
-              0 0 0 1px rgba(255,255,255,.10),
-              0 0 0 4px rgba(255,255,255,.04),
-              0 30px 60px -20px rgba(0,0,0,.85),
-              inset 0 1px 0 rgba(255,255,255,.12);
+              0 0 0 1px rgba(255,255,255,.12),
+              0 0 0 6px rgba(255,255,255,.04),
+              0 35px 70px -20px rgba(0,0,0,.85),
+              0 12px 30px -10px rgba(255,255,255,.06),
+              inset 0 1px 0 rgba(255,255,255,.14);
+            animation:lbvTryitGlow 4.5s ease-in-out infinite;
+          }
+          @keyframes lbvTryitGlow {
+            0%,100% { box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 0 0 6px rgba(255,255,255,.04), 0 35px 70px -20px rgba(0,0,0,.85), 0 12px 30px -10px rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.14); }
+            50%     { box-shadow:0 0 0 1px rgba(255,255,255,.18), 0 0 0 7px rgba(255,255,255,.07), 0 40px 80px -20px rgba(0,0,0,.9), 0 16px 38px -10px rgba(255,255,255,.10), inset 0 1px 0 rgba(255,255,255,.16); }
           }
           .lbv-tryit::before {
-            content:''; position:absolute; inset:-2px; border-radius:24px; padding:2px;
-            background:linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.05) 35%, rgba(255,255,255,.6) 70%, rgba(255,255,255,.05));
+            content:''; position:absolute; inset:-2px; border-radius:28px; padding:2px;
+            background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.05) 35%, rgba(255,255,255,.75) 70%, rgba(255,255,255,.05));
             -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask-composite:xor; mask-composite:exclude;
-            pointer-events:none; opacity:.55;
+            pointer-events:none; opacity:.6;
           }
           .lbv-tryit-tag {
-            position:absolute; top:-11px; left:50%; transform:translateX(-50%);
+            position:absolute; top:-14px; left:50%; transform:translateX(-50%);
             display:inline-flex; align-items:center; gap:6px;
             background:linear-gradient(180deg, #ffffff 0%, #c8c8c8 100%);
-            color:#0a0a0a; font-size:10px; font-weight:900; letter-spacing:.18em; text-transform:uppercase;
-            padding:5px 11px; border-radius:999px;
-            box-shadow:0 8px 18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.10);
+            color:#0a0a0a; font-family:'Inter', sans-serif; font-size:10px; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
+            padding:7px 14px; border-radius:999px;
+            box-shadow:0 10px 22px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.10);
             white-space:nowrap;
           }
           .lbv-tryit-tag::after { content:'▼'; font-size:8px; color:#0a0a0a; }
-          .lbv-tryit-cap { font-size:12px; line-height:1.4; color:#cfcfcf; text-align:center; margin:6px 0 8px; }
-          .lbv-tryit-cap b { color:#ffffff; font-weight:800; }
+          .lbv-tryit-h {
+            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:22px; line-height:1.15; letter-spacing:-.015em;
+            color:#fafafa; text-align:center; margin:6px 0 6px;
+          }
+          .lbv-tryit-h em {
+            font-style:italic; font-weight:500;
+            background:linear-gradient(180deg, #ffffff 0%, #a8a8a8 100%);
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+          }
+          .lbv-tryit-cap {
+            font-family:'Cormorant Garamond', Georgia, serif;
+            font-size:16px; line-height:1.4; color:#cfcfcf; text-align:center; margin:0 auto 4px; max-width:380px;
+            font-weight:400;
+          }
 
           /* Chrome / obsidian orb — glossy black & white */
           .lbv-orb-stage { display:flex; justify-content:center; align-items:flex-end; padding:14px 0 4px; position:relative; height:170px; }
@@ -1051,8 +1075,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.9) !important;
           }
           .lbv-page .vc-badge-dot { background:#0a0a0a !important; }
-          .lbv-page .vc-h { color:#fafafa !important; }
-          .lbv-page .vc-sub { color:#b8b8b8 !important; }
+          .lbv-page .vc-h { color:#fafafa !important; font-family:'Playfair Display', Georgia, serif !important; font-weight:700 !important; letter-spacing:-.01em !important; }
+          .lbv-page .vc-sub { color:#c8c8c8 !important; font-family:'Cormorant Garamond', Georgia, serif !important; font-size:16px !important; line-height:1.45 !important; }
+          .lbv-page .vc-btn { font-family:'Playfair Display', Georgia, serif !important; font-weight:700 !important; letter-spacing:0 !important; }
           .lbv-page .vc-btn {
             background:linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%) !important;
             color:#0a0a0a !important;
@@ -1092,25 +1117,27 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:10px; counter-reset:lbvfeat; }
           .lbv-feats li {
             counter-increment:lbvfeat;
-            font-size:14px; font-weight:600; color:#cfcfcf; line-height:1.45;
-            padding:10px 12px 10px 44px; position:relative;
+            font-family:'Cormorant Garamond', Georgia, serif;
+            font-size:17px; font-weight:500; color:#cfcfcf; line-height:1.4;
+            padding:12px 14px 12px 48px; position:relative;
             background:rgba(255,255,255,.04); border-radius:12px;
             box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
           }
           .lbv-feats li::before {
-            content:counter(lbvfeat); position:absolute; left:10px; top:50%; transform:translateY(-50%);
-            width:24px; height:24px; border-radius:999px;
+            content:counter(lbvfeat); position:absolute; left:12px; top:50%; transform:translateY(-50%);
+            width:26px; height:26px; border-radius:999px;
             background:linear-gradient(180deg, #ffffff 0%, #cfcfcf 100%);
-            color:#0a0a0a; font-size:11px; font-weight:900;
+            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-size:13px; font-weight:700; font-style:italic;
             display:inline-flex; align-items:center; justify-content:center; line-height:1;
             box-shadow:0 4px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.95);
           }
-          .lbv-feats li b { color:#fafafa; font-weight:800; }
+          .lbv-feats li b { color:#fafafa; font-weight:700; font-family:'Playfair Display', Georgia, serif; font-size:.95em; }
 
           .lbv-mini-h {
-            font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
-            color:#e6e6e6;
-            margin:0 0 14px;
+            font-family:'Playfair Display', Georgia, serif;
+            font-style:italic; font-weight:600; font-size:22px; letter-spacing:-.005em;
+            color:#fafafa;
+            margin:0 0 16px;
           }
 
           .lbv-sticky {
@@ -1138,27 +1165,32 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
           .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,1), inset 0 -2px 0 rgba(0,0,0,.14); }
           .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
-          .lbv-tiername { font-size:13px; font-weight:800; letter-spacing:.01em; color:#0a0a0a; line-height:1.1; }
-          .lbv-tierprice { font-size:22px; font-weight:900; color:#0a0a0a; line-height:1.05; letter-spacing:-.015em; }
-          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#4a4a4a; font-size:13px; }
+          .lbv-tiername { font-family:'Playfair Display', Georgia, serif; font-size:14px; font-weight:700; letter-spacing:-.005em; color:#0a0a0a; line-height:1.1; font-style:italic; }
+          .lbv-tierprice { font-family:'Playfair Display', Georgia, serif; font-size:24px; font-weight:800; color:#0a0a0a; line-height:1.05; letter-spacing:-.02em; }
+          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#4a4a4a; font-size:14px; }
           .lbv-startbtn {
             display:inline-flex; align-items:center; justify-content:center; gap:6px;
             background:#0a0a0a; color:#ffffff;
-            border-radius:999px; padding:9px 14px; font-size:11px; font-weight:900; letter-spacing:.10em; text-transform:uppercase;
+            border-radius:999px; padding:10px 16px; font-family:'Inter', sans-serif; font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
             box-shadow:0 4px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
           }
           .lbv-startbtn svg { width:11px; height:11px; }
-          .lbv-disclaim { margin-top:8px; font-size:10px; line-height:1.45; color:#9a9a9a; text-align:center; }
-          .lbv-disclaim b { color:#ffffff; font-weight:700; }
+          .lbv-disclaim {
+            font-family:'Cormorant Garamond', Georgia, serif;
+            margin-top:10px; font-size:13px; line-height:1.4; color:#a8a8a8; text-align:center; font-weight:400;
+          }
+          .lbv-disclaim b { color:#ffffff; font-weight:600; font-family:'Playfair Display', Georgia, serif; font-style:italic; }
 
           @media (min-width: 760px) {
             .lbv-stack { max-width:680px; }
             .lbv-card { padding:34px 32px; }
-            .lbv-title { font-size:48px; }
-            .lbv-sub { font-size:16px; }
-            .lbv-feats li { font-size:15px; }
+            .lbv-title { font-size:56px; }
+            .lbv-sub { font-size:21px; }
+            .lbv-feats li { font-size:18px; }
             .lbv-orb { width:170px; height:170px; }
             .lbv-orb-stage { height:200px; }
+            .lbv-tryit-h { font-size:28px; }
+            .lbv-tryit-cap { font-size:18px; }
           }
 
           @keyframes lbvFadeIn { from { opacity:0 } to { opacity:1 } }
@@ -1185,18 +1217,26 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 Start a 1-Day Free Trial — Then $29/month
               </div>
 
-              <div className="lbv-tryit">
-                <span className="lbv-tryit-tag">Hear what it sounds like</span>
-                <p className="lbv-tryit-cap"><b>Talk to Mia — a sample 24/7 voice agent.</b> Tap below to hear exactly what your business's agent could sound like.</p>
-                <div className="lbv-orb-stage" aria-hidden="true">
-                  <div className="lbv-orb" />
-                  <div className="lbv-orb-shadow" />
-                </div>
-                <VapiCallButton
-                  compact
-                  assistantName="Mia"
-                  headline="Talk to Mia — Sample 24/7 Voice Agent"
-                  sub="Tap to chat live with Mia. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
+              <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+              </div>
+            </section>
+
+            <section className="lbv-tryit" aria-label="Live sample voice agent">
+              <span className="lbv-tryit-tag">Hear what it sounds like</span>
+              <h2 className="lbv-tryit-h">Talk to Mia — a <em>sample 24/7 agent.</em></h2>
+              <p className="lbv-tryit-cap">A live, in-browser demo of the exact voice agent we'd build for your business. Tap and hear it yourself.</p>
+              <div className="lbv-orb-stage" aria-hidden="true">
+                <div className="lbv-orb" />
+                <div className="lbv-orb-shadow" />
+              </div>
+              <VapiCallButton
+                compact
+                assistantName="Mia"
+                headline="Talk to Mia"
+                sub="Tap to chat live. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
               assistantConfig={{
                 name: 'Mia · Amalvera (Local Business)',
                 firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
@@ -1291,14 +1331,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 silenceTimeoutSeconds: 30,
                 maxDurationSeconds: 600,
               }}
-                />
-              </div>
-
-              <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
-              </div>
+              />
             </section>
 
             <section className="lbv-card">
