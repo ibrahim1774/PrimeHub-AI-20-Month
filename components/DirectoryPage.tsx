@@ -931,8 +931,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="lbv-stack">
             <section className="lbv-card">
               <div className="lbv-eyebrow">AI Voice Agent · For Local Businesses</div>
-              <h1 className="lbv-title">Book More Jobs. <em>Never Miss a Call.</em></h1>
-              <p className="lbv-sub">Mia, your custom AI voice agent, answers every call 24/7 — books jobs, captures leads, and answers questions while you work. Get the system implemented in your business for $29/month.</p>
+              <h1 className="lbv-title">Book More Jobs. <em>Don't Miss a Call.</em></h1>
+              <p className="lbv-sub">Mia, your custom AI voice agent, answers calls 24/7 — helps book jobs, helps capture leads, and answers questions while you work. Get the system implemented in your business for $29/month.</p>
 
               <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
@@ -944,22 +944,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
                 $29/month — AI Voice Agent Implemented into Your Business
               </div>
-
-              <div className="lbv-mini-h">What Mia does</div>
-              <ol className="lbv-feats">
-                <li><b>Answers every call 24/7</b> — never miss a job again, even after hours or on weekends.</li>
-                <li><b>Books jobs &amp; quotes</b> — collects what the caller needs and slots them in.</li>
-                <li><b>Captures lead info</b> — name, number, and what they want — sent straight to you.</li>
-                <li><b>Custom-trained on your business</b> — services, hours, pricing, your way.</li>
-                <li><b>Texts you a summary</b> after every call so nothing slips through the cracks.</li>
-              </ol>
             </section>
 
             <VapiCallButton
               compact
               assistantName="Mia"
-              headline="Talk to Mia — your future voice agent"
-              sub="Tap to chat live. She'll show you what your own AI voice agent could sound like — answering calls, booking jobs, capturing leads."
+              headline="Talk to Mia — A Sample Voice Agent"
+              sub="Tap to chat live with Mia. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
               assistantConfig={{
                 name: 'Mia · Amalvera (Local Business)',
                 firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
@@ -992,7 +983,7 @@ VOICE & DELIVERY (very important — this is a spoken call):
 THE OFFER (these numbers are exact — never change them):
 - A custom AI voice agent (just like you) implemented into their business
 - Trained on their services, hours, pricing, and how they want calls handled
-- Answers calls 24/7, books jobs, captures leads, and texts them a summary after every call
+- Answers calls 24/7, 7 days a week — helps book jobs and helps capture leads
 - $29 per month base subscription
 - Additional usage charges based on minutes used are billed separately
 - Money-back guarantee if they're not happy
@@ -1004,7 +995,6 @@ WHY A VOICE AGENT CAN HELP (factual — soft phrasing, use "can help" / "could h
 - It can book appointments and quotes around the clock — even at 2am
 - It can free them up to focus on actual jobs instead of being stuck answering the phone all day
 - It can sound friendly and professional every single time — no off days
-- It can text them a summary after every call so they always know what's going on
 
 WHY $29/MO IS FAIR (factual):
 - Hiring a part-time receptionist runs $1,500 to $3,000+ a month
@@ -1017,7 +1007,7 @@ HOW IT WORKS (explain step by step if asked):
 1. Tap "Start Now" on this page — subscribe through Stripe at $29/mo
 2. Tell Amalvera about their business — services, hours, pricing, how they want calls handled
 3. Amalvera trains and configures the voice agent and forwards their phone number to it
-4. The agent goes live, answers calls 24/7, and texts them after every call
+4. The agent goes live and answers calls 24/7, 7 days a week
 5. They can request tweaks anytime by messaging Amalvera
 
 ADDRESSING COMMON QUESTIONS:
@@ -1055,6 +1045,16 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 maxDurationSeconds: 600,
               }}
             />
+
+            <section className="lbv-card">
+              <div className="lbv-mini-h" style={{ marginTop: 0 }}>What Does the 24/7 Voice Receptionist Do?</div>
+              <ol className="lbv-feats">
+                <li><b>Answers Calls 24/7, 7 Days a Week</b> — even after hours, on weekends, or while you're on a job.</li>
+                <li><b>"Helps Book Jobs"</b> — collects what the caller needs and slots them in for you.</li>
+                <li><b>"Helps Capture Lead Info"</b> — name, number, and what they want — sent straight to you.</li>
+                <li><b>"Custom Trained"</b> — built around your services, hours, pricing, and how you want calls handled.</li>
+              </ol>
+            </section>
           </div>
 
           <div className="lbv-sticky">
