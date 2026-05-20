@@ -889,7 +889,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             color:#f4f4f5;
             font-family:'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
             -webkit-font-smoothing:antialiased;
-            padding:8px 14px 240px;
+            padding:6px 12px 220px;
             position:relative;
             overflow-x:hidden;
           }
@@ -905,35 +905,35 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             background:linear-gradient(180deg, #ffffff 0%, #b8b8b8 100%);
             -webkit-background-clip:text; background-clip:text; color:transparent;
           }
-          .lbv-stack { display:flex; flex-direction:column; gap:14px; max-width:560px; margin:0 auto; position:relative; z-index:2; }
+          .lbv-stack { display:flex; flex-direction:column; gap:10px; max-width:540px; margin:0 auto; position:relative; z-index:2; }
           .lbv-card {
             position:relative;
-            border-radius:26px;
-            padding:24px 22px;
+            border-radius:20px;
+            padding:16px 16px;
             overflow:hidden;
             background:linear-gradient(160deg, #181818 0%, #0c0c0c 100%);
             box-shadow:
-              0 30px 70px -20px rgba(0,0,0,.75),
-              0 10px 25px -8px rgba(0,0,0,.6),
+              0 24px 50px -20px rgba(0,0,0,.7),
+              0 8px 20px -8px rgba(0,0,0,.55),
               inset 0 1px 0 rgba(255,255,255,.10),
               inset 0 0 0 1px rgba(255,255,255,.06);
           }
           .lbv-card::after {
-            content:''; position:absolute; left:0; right:0; top:0; height:48%;
-            background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 100%);
-            border-radius:26px 26px 0 0; pointer-events:none;
+            content:''; position:absolute; left:0; right:0; top:0; height:40%;
+            background:linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,0) 100%);
+            border-radius:20px 20px 0 0; pointer-events:none;
           }
           .lbv-eyebrow {
             display:inline-block; position:relative;
             font-family:'Inter', sans-serif;
-            font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
-            padding:6px 12px; border-radius:999px; margin-bottom:18px;
+            font-size:9px; font-weight:700; letter-spacing:.20em; text-transform:uppercase;
+            padding:4px 10px; border-radius:999px; margin-bottom:10px;
             background:rgba(255,255,255,.05); color:#dadada;
             box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.10);
           }
           .lbv-title {
-            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:40px; line-height:1.02; letter-spacing:-.022em;
-            color:#fafafa; margin:0 0 14px; position:relative;
+            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:24px; line-height:1.08; letter-spacing:-.018em;
+            color:#fafafa; margin:0 0 8px; position:relative;
           }
           .lbv-title em {
             font-family:'Playfair Display', Georgia, serif; font-style:italic; font-weight:500; font-size:1em;
@@ -942,71 +942,71 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
           .lbv-sub {
             font-family:'Cormorant Garamond', Georgia, serif;
-            font-size:19px; line-height:1.45; color:#c8c8c8; margin:0 0 20px; max-width:520px; position:relative;
+            font-size:14px; line-height:1.4; color:#c8c8c8; margin:0 0 12px; max-width:500px; position:relative;
             font-weight:400; letter-spacing:.005em;
           }
           .lbv-allin {
-            display:inline-flex; align-items:center; gap:8px;
-            padding:14px 22px; border-radius:14px;
+            display:inline-flex; align-items:center; gap:7px;
+            padding:10px 16px; border-radius:12px;
             background:linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
-            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:15px; letter-spacing:-.005em;
+            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:13px; letter-spacing:-.005em;
             box-shadow:
-              0 16px 32px rgba(0,0,0,.55),
+              0 12px 24px rgba(0,0,0,.5),
               inset 0 1px 0 rgba(255,255,255,.9),
               inset 0 -2px 0 rgba(0,0,0,.10);
             position:relative;
           }
-          .lbv-allin svg { width:16px; height:16px; }
+          .lbv-allin svg { width:14px; height:14px; }
           .lbv-guarantee {
-            display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
-            padding:11px 14px; margin:18px 0 0;
-            background:rgba(255,255,255,.04); border-radius:14px;
+            display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px;
+            padding:8px 12px; margin:12px 0 0;
+            background:rgba(255,255,255,.04); border-radius:12px;
             box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
             font-family:'Inter', sans-serif;
-            font-size:12px; font-weight:600; color:#e0e0e0; line-height:1.3; letter-spacing:.01em;
+            font-size:11px; font-weight:600; color:#e0e0e0; line-height:1.3; letter-spacing:.01em;
             position:relative;
           }
-          .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
-          .lbv-guarantee svg { width:13px; height:13px; color:#ffffff; flex-shrink:0; }
+          .lbv-guarantee span { display:inline-flex; align-items:center; gap:5px; }
+          .lbv-guarantee svg { width:12px; height:12px; color:#ffffff; flex-shrink:0; }
 
           /* Highlighted "Try it live" Mia card — peer section under hero */
           .lbv-tryit {
             position:relative;
-            padding:28px 22px 22px;
-            border-radius:26px;
+            padding:18px 14px 14px;
+            border-radius:20px;
             background:linear-gradient(160deg, #181818 0%, #060606 100%);
             box-shadow:
-              0 0 0 1px rgba(255,255,255,.12),
-              0 0 0 6px rgba(255,255,255,.04),
-              0 35px 70px -20px rgba(0,0,0,.85),
-              0 12px 30px -10px rgba(255,255,255,.06),
+              0 0 0 1px rgba(255,255,255,.14),
+              0 0 0 5px rgba(255,255,255,.05),
+              0 28px 56px -18px rgba(0,0,0,.85),
+              0 10px 24px -10px rgba(255,255,255,.07),
               inset 0 1px 0 rgba(255,255,255,.14);
             animation:lbvTryitGlow 4.5s ease-in-out infinite;
           }
           @keyframes lbvTryitGlow {
-            0%,100% { box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 0 0 6px rgba(255,255,255,.04), 0 35px 70px -20px rgba(0,0,0,.85), 0 12px 30px -10px rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.14); }
-            50%     { box-shadow:0 0 0 1px rgba(255,255,255,.18), 0 0 0 7px rgba(255,255,255,.07), 0 40px 80px -20px rgba(0,0,0,.9), 0 16px 38px -10px rgba(255,255,255,.10), inset 0 1px 0 rgba(255,255,255,.16); }
+            0%,100% { box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 0 0 5px rgba(255,255,255,.05), 0 28px 56px -18px rgba(0,0,0,.85), 0 10px 24px -10px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.14); }
+            50%     { box-shadow:0 0 0 1px rgba(255,255,255,.20), 0 0 0 6px rgba(255,255,255,.08), 0 32px 64px -18px rgba(0,0,0,.9), 0 14px 30px -10px rgba(255,255,255,.11), inset 0 1px 0 rgba(255,255,255,.16); }
           }
           .lbv-tryit::before {
-            content:''; position:absolute; inset:-2px; border-radius:28px; padding:2px;
+            content:''; position:absolute; inset:-1px; border-radius:21px; padding:1px;
             background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.05) 35%, rgba(255,255,255,.75) 70%, rgba(255,255,255,.05));
             -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask-composite:xor; mask-composite:exclude;
-            pointer-events:none; opacity:.6;
+            pointer-events:none; opacity:.55;
           }
           .lbv-tryit-tag {
-            position:absolute; top:-14px; left:50%; transform:translateX(-50%);
-            display:inline-flex; align-items:center; gap:6px;
+            position:absolute; top:-11px; left:50%; transform:translateX(-50%);
+            display:inline-flex; align-items:center; gap:5px;
             background:linear-gradient(180deg, #ffffff 0%, #c8c8c8 100%);
-            color:#0a0a0a; font-family:'Inter', sans-serif; font-size:10px; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
-            padding:7px 14px; border-radius:999px;
-            box-shadow:0 10px 22px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.10);
+            color:#0a0a0a; font-family:'Inter', sans-serif; font-size:9px; font-weight:900; letter-spacing:.20em; text-transform:uppercase;
+            padding:5px 11px; border-radius:999px;
+            box-shadow:0 8px 18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.10);
             white-space:nowrap;
           }
-          .lbv-tryit-tag::after { content:'▼'; font-size:8px; color:#0a0a0a; }
+          .lbv-tryit-tag::after { content:'▼'; font-size:7px; color:#0a0a0a; }
           .lbv-tryit-h {
-            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:22px; line-height:1.15; letter-spacing:-.015em;
-            color:#fafafa; text-align:center; margin:6px 0 6px;
+            font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:18px; line-height:1.15; letter-spacing:-.012em;
+            color:#fafafa; text-align:center; margin:4px 0 4px;
           }
           .lbv-tryit-h em {
             font-style:italic; font-weight:500;
@@ -1015,45 +1015,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           }
           .lbv-tryit-cap {
             font-family:'Cormorant Garamond', Georgia, serif;
-            font-size:16px; line-height:1.4; color:#cfcfcf; text-align:center; margin:0 auto 4px; max-width:380px;
+            font-size:13px; line-height:1.35; color:#cfcfcf; text-align:center; margin:0 auto 10px; max-width:340px;
             font-weight:400;
-          }
-
-          /* Chrome / obsidian orb — glossy black & white */
-          .lbv-orb-stage { display:flex; justify-content:center; align-items:flex-end; padding:14px 0 4px; position:relative; height:170px; }
-          .lbv-orb {
-            position:relative; width:140px; height:140px; border-radius:50%;
-            background:
-              radial-gradient(circle at 32% 26%, rgba(255,255,255,.98) 0%, rgba(255,255,255,0) 18%),
-              radial-gradient(circle at 65% 80%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 38%),
-              radial-gradient(circle at 60% 35%, #6a6a6a 0%, #2a2a2a 45%, #0a0a0a 100%);
-            box-shadow:
-              inset -18px -22px 40px rgba(0,0,0,.85),
-              inset 14px 18px 30px rgba(255,255,255,.18),
-              0 30px 60px rgba(0,0,0,.65),
-              0 10px 22px rgba(0,0,0,.45),
-              0 0 0 1px rgba(255,255,255,.10);
-            animation:lbvOrbFloat 6.5s ease-in-out infinite;
-          }
-          .lbv-orb::before {
-            content:''; position:absolute; left:18%; top:14%; width:34%; height:26%; border-radius:50%;
-            background:radial-gradient(ellipse, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 70%);
-            filter:blur(1px);
-          }
-          .lbv-orb::after {
-            content:''; position:absolute; right:14%; bottom:18%; width:18%; height:10%; border-radius:50%;
-            background:radial-gradient(ellipse, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 70%);
-            filter:blur(1px);
-          }
-          .lbv-orb-shadow {
-            position:absolute; bottom:-2px; left:50%; transform:translateX(-50%);
-            width:120px; height:14px; border-radius:50%;
-            background:radial-gradient(ellipse, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 70%);
-            filter:blur(6px);
-          }
-          @keyframes lbvOrbFloat {
-            0%,100% { transform:translateY(0) scale(1); }
-            50% { transform:translateY(-7px) scale(1.02); }
           }
 
           /* VAPI card override — black glossy inside this page */
@@ -1114,30 +1077,30 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-page .vc-hint { color:#888 !important; }
           .lbv-page .vc-err { background:rgba(255,140,140,.12) !important; color:#ffb0b0 !important; box-shadow:inset 0 0 0 1px rgba(255,140,140,.35) !important; }
 
-          .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:10px; counter-reset:lbvfeat; }
+          .lbv-feats { list-style:none; padding:0; margin:4px 0 0; display:flex; flex-direction:column; gap:7px; counter-reset:lbvfeat; }
           .lbv-feats li {
             counter-increment:lbvfeat;
             font-family:'Cormorant Garamond', Georgia, serif;
-            font-size:17px; font-weight:500; color:#cfcfcf; line-height:1.4;
-            padding:12px 14px 12px 48px; position:relative;
-            background:rgba(255,255,255,.04); border-radius:12px;
+            font-size:14px; font-weight:500; color:#cfcfcf; line-height:1.35;
+            padding:9px 12px 9px 40px; position:relative;
+            background:rgba(255,255,255,.04); border-radius:10px;
             box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
           }
           .lbv-feats li::before {
-            content:counter(lbvfeat); position:absolute; left:12px; top:50%; transform:translateY(-50%);
-            width:26px; height:26px; border-radius:999px;
+            content:counter(lbvfeat); position:absolute; left:10px; top:50%; transform:translateY(-50%);
+            width:22px; height:22px; border-radius:999px;
             background:linear-gradient(180deg, #ffffff 0%, #cfcfcf 100%);
-            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-size:13px; font-weight:700; font-style:italic;
+            color:#0a0a0a; font-family:'Playfair Display', Georgia, serif; font-size:11px; font-weight:700; font-style:italic;
             display:inline-flex; align-items:center; justify-content:center; line-height:1;
-            box-shadow:0 4px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.95);
+            box-shadow:0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.95);
           }
           .lbv-feats li b { color:#fafafa; font-weight:700; font-family:'Playfair Display', Georgia, serif; font-size:.95em; }
 
           .lbv-mini-h {
             font-family:'Playfair Display', Georgia, serif;
-            font-style:italic; font-weight:600; font-size:22px; letter-spacing:-.005em;
+            font-style:italic; font-weight:600; font-size:17px; letter-spacing:-.005em;
             color:#fafafa;
-            margin:0 0 16px;
+            margin:0 0 10px;
           }
 
           .lbv-sticky {
@@ -1182,15 +1145,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-disclaim b { color:#ffffff; font-weight:600; font-family:'Playfair Display', Georgia, serif; font-style:italic; }
 
           @media (min-width: 760px) {
-            .lbv-stack { max-width:680px; }
-            .lbv-card { padding:34px 32px; }
-            .lbv-title { font-size:56px; }
-            .lbv-sub { font-size:21px; }
-            .lbv-feats li { font-size:18px; }
-            .lbv-orb { width:170px; height:170px; }
-            .lbv-orb-stage { height:200px; }
-            .lbv-tryit-h { font-size:28px; }
-            .lbv-tryit-cap { font-size:18px; }
+            .lbv-stack { max-width:600px; }
+            .lbv-card { padding:22px 22px; }
+            .lbv-title { font-size:34px; }
+            .lbv-sub { font-size:16px; }
+            .lbv-feats li { font-size:15px; }
+            .lbv-tryit-h { font-size:22px; }
+            .lbv-tryit-cap { font-size:14px; }
           }
 
           @keyframes lbvFadeIn { from { opacity:0 } to { opacity:1 } }
@@ -1225,13 +1186,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             </section>
 
             <section className="lbv-tryit" aria-label="Live sample voice agent">
-              <span className="lbv-tryit-tag">Hear what it sounds like</span>
+              <span className="lbv-tryit-tag">Hear &amp; talk to Mia</span>
               <h2 className="lbv-tryit-h">Talk to Mia — a <em>sample 24/7 agent.</em></h2>
-              <p className="lbv-tryit-cap">A live, in-browser demo of the exact voice agent we'd build for your business. Tap and hear it yourself.</p>
-              <div className="lbv-orb-stage" aria-hidden="true">
-                <div className="lbv-orb" />
-                <div className="lbv-orb-shadow" />
-              </div>
+              <p className="lbv-tryit-cap">A live, in-browser demo of the exact voice agent we'd build for your business.</p>
               <VapiCallButton
                 compact
                 assistantName="Mia"
