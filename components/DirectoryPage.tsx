@@ -1176,12 +1176,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="lbv-stack">
             <section className="lbv-card">
               <div className="lbv-eyebrow">24/7 Voice Agent</div>
-              <h1 className="lbv-title">For Local Businesses — Book More Jobs. <em>Don't Miss a Call.</em></h1>
+              <h1 className="lbv-title">For Local Businesses — <em>Don't Miss a Call.</em></h1>
               <p className="lbv-sub">A custom AI voice agent that answers your calls 24/7, books jobs, and captures leads.</p>
 
               <div className="lbv-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                1-Day Free Trial · Then $29/mo
+                Get Started with a Free Trial
               </div>
 
               <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
@@ -1316,8 +1316,8 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               disabled={isLoading}
             >
               <div className="lbv-pricebtn-meta">
-                <span className="lbv-tiername">Free Trial</span>
-                <span className="lbv-tierprice">1-day free, then $29/mo</span>
+                <span className="lbv-tiername">Get Started</span>
+                <span className="lbv-tierprice">Free trial · $29/mo</span>
               </div>
               <span className="lbv-startbtn">
                 {isLoading ? '…' : (<>Get Started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
