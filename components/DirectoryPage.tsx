@@ -1176,7 +1176,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           <div className="lbv-stack">
             <section className="lbv-card">
               <div className="lbv-eyebrow">24/7 Voice Agent</div>
-              <h1 className="lbv-title">Book More Jobs. <em>Don't Miss a Call.</em></h1>
+              <h1 className="lbv-title">For Local Businesses — Book More Jobs. <em>Don't Miss a Call.</em></h1>
               <p className="lbv-sub">A custom AI voice agent that answers your calls 24/7, books jobs, and captures leads.</p>
 
               <div className="lbv-allin">
