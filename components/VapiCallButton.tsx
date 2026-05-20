@@ -11,6 +11,7 @@ interface Props {
   assistantName?: string;
   headline?: string;
   sub?: string;
+  compact?: boolean;
 }
 
 /**
@@ -27,6 +28,7 @@ const VapiCallButton: React.FC<Props> = ({
   assistantName = 'Mia',
   headline = 'We’re available 24/7 to answer any questions',
   sub = 'Tap to call — a real-time voice conversation, right here in your browser.',
+  compact = false,
 }) => {
   const [state, setState] = useState<CallState>('idle');
   const [muted, setMuted] = useState(false);
@@ -151,9 +153,17 @@ const VapiCallButton: React.FC<Props> = ({
         @keyframes vcWave { 0%,100% { transform:scaleY(.5) } 50% { transform:scaleY(1.2) } }
         .vc-err { margin-top:10px; padding:10px 12px; border-radius:10px; background:rgba(180,60,60,.15); color:#ff9b9b; font-size:12px; font-weight:600; box-shadow:inset 0 0 0 1px rgba(180,60,60,.35); }
         .vc-hint { font-size:11px; color:#8a8270; margin-top:10px; line-height:1.5; }
+
+        .vc-card.vc-compact { padding:14px 16px; border-radius:16px; }
+        .vc-card.vc-compact .vc-badge { font-size:9px; padding:4px 8px; margin-bottom:6px; }
+        .vc-card.vc-compact .vc-h { font-size:16px; margin:0 0 4px; }
+        .vc-card.vc-compact .vc-sub { font-size:12px; margin:0 0 10px; }
+        .vc-card.vc-compact .vc-btn { padding:11px 18px; font-size:14px; }
+        .vc-card.vc-compact .vc-btn svg { width:16px; height:16px; }
+        .vc-card.vc-compact .vc-meta { font-size:11px; }
       `}</style>
 
-      <section className="vc-card" aria-live="polite">
+      <section className={`vc-card${compact ? ' vc-compact' : ''}`} aria-live="polite">
         <div className="vc-badge"><span className="vc-badge-dot" />24/7 voice assistant</div>
         <h3 className="vc-h">{headline}</h3>
         <p className="vc-sub">{sub}</p>
@@ -223,7 +233,6 @@ const VapiCallButton: React.FC<Props> = ({
           </>
         )}
 
-        <p className="vc-hint">Powered by an AI voice agent. Conversations are processed by Vapi to answer your questions about Amalvera. By starting a call you consent to your microphone being used.</p>
       </section>
     </>
   );

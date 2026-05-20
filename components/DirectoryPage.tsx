@@ -1082,9 +1082,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                 </div>
               )}
 
-              <div className="b9-eyebrow">{t('Real Sites, Real ', 'Sitios Reales, ')}{b9NicheLabelPlural}{b9IsSpanish ? ' Reales' : ''}</div>
-              <p className="b9-galleryhint">{t('▶ Click any video to see the full website', '▶ Haz clic en cualquier video para ver el sitio completo')}</p>
-              <div className="b9-gallery-wrap">
+              {!b9IsFive && <div className="b9-eyebrow">{t('Real Sites, Real ', 'Sitios Reales, ')}{b9NicheLabelPlural}{b9IsSpanish ? ' Reales' : ''}</div>}
+              {!b9IsFive && <p className="b9-galleryhint">{t('▶ Click any video to see the full website', '▶ Haz clic en cualquier video para ver el sitio completo')}</p>}
+              {!b9IsFive && <div className="b9-gallery-wrap">
                 <button
                   type="button"
                   className="b9-gallery-arrow b9-gallery-arrow-prev"
@@ -1137,24 +1137,27 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div>}
 
-              <div className="b9-mini-h">{t('How it works', 'Cómo funciona')}</div>
-              <div className="b9-steps">
-                <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">{t('Send us a link', 'Envíanos un enlace')}</div><div className="b9-step-b">{t('Google Business, Facebook, or Instagram — or a few photos and your info.', 'Google Business, Facebook o Instagram — o algunas fotos y la información de tu negocio.')}</div></div>
-                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">{t('We build your site', 'Construimos tu sitio')}</div><div className="b9-step-b">{b9Step2Body}</div></div>
-                <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">{t('Live in 24–48 hrs', 'En línea en 24–48 hrs')}</div><div className="b9-step-b">{t('Hosted, edited, and maintained by us — just message any change.', 'Alojado, editado y mantenido por nosotros — solo mándanos cualquier cambio.')}</div></div>
-              </div>
+              {!b9IsFive && <div className="b9-mini-h">{t('How it works', 'Cómo funciona')}</div>}
+              {!b9IsFive && (
+                <div className="b9-steps">
+                  <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">{t('Send us a link', 'Envíanos un enlace')}</div><div className="b9-step-b">{t('Google Business, Facebook, or Instagram — or a few photos and your info.', 'Google Business, Facebook o Instagram — o algunas fotos y la información de tu negocio.')}</div></div>
+                  <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">{t('We build your site', 'Construimos tu sitio')}</div><div className="b9-step-b">{b9Step2Body}</div></div>
+                  <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">{t('Live in 24–48 hrs', 'En línea en 24–48 hrs')}</div><div className="b9-step-b">{t('Hosted, edited, and maintained by us — just message any change.', 'Alojado, editado y mantenido por nosotros — solo mándanos cualquier cambio.')}</div></div>
+                </div>
+              )}
             </section>
 
             {b9IsFive && (
               <VapiCallButton
+                compact
                 assistantName="Mia"
                 headline="We're available 24/7 to answer any questions"
-                sub="Tap to call Mia, our AI assistant — she'll explain how the $7/month plan works and help you decide if it's right for your shop. Conversation stays right here in your browser."
+                sub="Tap to call Mia — she can walk you through how the $7/month plan works. Conversation stays right here in your browser."
                 assistantConfig={{
                   name: 'Mia · Amalvera',
-                  firstMessage: "Hey — Mia here from Amalvera. So, what's on your mind about getting a website for your shop?",
+                  firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
                   model: {
                     provider: 'openai',
                     model: 'gpt-4o-mini',
@@ -1162,18 +1165,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
                     messages: [
                       {
                         role: 'system',
-                        content: `You are Mia, the friendly AI assistant for Amalvera — a service that builds custom barbershop websites for $7/month.
+                        content: `You are Mia, the friendly AI assistant for Amalvera — a service that builds custom barbershop websites for $7/month. You're available 24/7 to answer any questions the visitor might have.
 
-Your job: answer questions clearly and gently persuade the visitor to start the $7/month plan. Be ethical, be factual, never deceive, never pressure, never make claims you cannot back up.
+Your job: warmly answer their questions and gently nudge them toward starting the $7/month plan. Be ethical, factual, never deceive, never pressure, never make claims you cannot back up. Use soft language like "can help" and "could help" — don't make hard guarantees about business outcomes.
 
-VOICE & DELIVERY (very important — this is a spoken phone-style call):
+OPENING:
+- Start by greeting them and asking for their name.
+- Once they share it, use it occasionally — but naturally, not every sentence.
+- Then ask what they're curious about, or what's holding them back from getting a site.
+
+VOICE & DELIVERY (very important — this is a spoken call):
 - Talk like a real person on a call — relaxed, warm, varied. NOT a script reader.
 - Use contractions everywhere ("we're", "you'll", "that's", "it's", "I'd").
 - Vary your sentence length. Short punchy lines mixed with longer ones.
 - Use natural fillers occasionally — "yeah", "honestly", "for sure", "totally", "right" — but don't overdo it.
 - Mirror the visitor's energy. If they're chill, be chill. If they're skeptical, slow down and be reassuring.
 - Never read bullet points out loud. Translate everything into spoken sentences.
-- Avoid corporate/robotic phrasing like "I would be happy to assist you with that." Just say "Yeah totally — happy to help."
+- Avoid corporate phrasing. Don't say "I would be happy to assist you with that" — say "Yeah, totally — happy to help."
 - Pause naturally with commas and dashes so the TTS gives the right rhythm.
 
 THE OFFER (these numbers are exact — never change them):
@@ -1185,36 +1193,37 @@ THE OFFER (these numbers are exact — never change them):
 - Money-back guarantee if they're not happy
 - We use the visitor's own photos and business info — no stock junk
 
-WHY A BARBERSHOP NEEDS A WEBSITE (factual benefits — say these confidently):
-- It shows up in Google when people search the shop name
-- A clean site builds trust; first-time clients judge credibility by the site
-- It works 24/7 — collects contact info even when the shop is closed
-- A social account can vanish overnight; a website is owned
-- Helps Google Business Profile, Apple Maps, and Yelp listings look legitimate
+WHY A WEBSITE CAN HELP (factual — soft phrasing, use "can help" / "could help"):
+- It can help your shop show up in Google when people search your name
+- A clean site can help build trust with first-time clients — they often judge how legit a shop is by the website
+- It gives people a place to find your hours, prices, and location any time of day or night
+- A social media account can disappear overnight — a website is something you actually own
+- It can help your Google Business Profile, Apple Maps, and Yelp listing look more legitimate
 
 WHY $7/MO IS FAIR (factual):
-- Typical custom barbershop sites cost $1,500 to $5,000 upfront plus $30 to $100 a month for hosting and edits
-- Most agencies bill setup, monthly, and per-edit separately
-- Amalvera bundles design plus hosting plus edits for $7 a month, no setup fee
-- The reason it's affordable: AI-assisted design with human review — not a 40-hour custom build
+- Typical custom barbershop sites cost $1,500 to $5,000 upfront, plus $30 to $100 a month for hosting and edits
+- Most agencies bill setup, monthly, and per-edit fees separately
+- Amalvera bundles design plus hosting plus edits for $7 a month, with no setup fee
+- The reason it's affordable: we use AI-assisted design with human review — not a 40-hour custom build
 
 HOW IT WORKS (explain step by step if asked):
-1. Tap "Start Now" on this page → subscribe through Stripe at $7/mo
-2. Send us your Google Business link, Facebook, or Instagram (or photos + info)
+1. Tap "Start Now" on this page — subscribe through Stripe at $7/mo
+2. Send us your Google Business link, Facebook, or Instagram — or just photos and info
 3. We build the custom site in 24 to 48 hours
-4. It goes live, and they can request edits anytime by messaging us
+4. It goes live, and they can ask for edits anytime by messaging us
+
+THINGS TO AVOID:
+- Never mention lead forms, contact forms, opt-ins, or capturing visitor info on the site. The site is brochure-style — info, photos, hours, location. Not a lead-capture page.
+- Never promise more bookings, more revenue, or higher Google rankings — those depend on too many other things.
+- Never pretend to be human. If asked, say you're an AI assistant from Amalvera, but you're available 24/7 to answer real questions about the offer.
 
 UPSELL ONLY IF ASKED:
-If they want multiple pages, SEO, or booking integration (Booksy, theCut, Fresha), mention the $9/mo plan on /barber-9. Don't pressure.
+If they ask about multiple pages, SEO, or booking integration (Booksy, theCut, Fresha), mention the $9/mo plan at /barber-9. Don't push.
 
-STYLE:
-- Warm, brief, conversational — like a friend who runs a small business
-- One question at a time. Listen before recommending.
-- Never pretend to be human. If asked, say you're an AI assistant for Amalvera.
-- Never promise SEO rankings, sales increases, or revenue lift
-- If they're skeptical, point to the money-back guarantee
-- If they want to start, say: "Awesome — just scroll up and tap the gold Start Now button on this page."
-- If they want to stop, end politely and let them know they can come back anytime.
+CLOSING:
+- If they're skeptical, mention the money-back guarantee.
+- If they want to start, say: "Awesome — just scroll up and tap the gold Start Now button right on this page."
+- If they want to wrap, thank them, remind them you're here 24/7 if anything else comes up.
 
 Keep replies short — 1 to 3 sentences usually. This is a phone call, not an essay.`,
                       },
@@ -1307,6 +1316,67 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 </div>
               </div>
             </section>
+
+            {b9IsFive && (
+              <section className="b9-card">
+                <div className="b9-eyebrow">Real Sites, Real Barbershops</div>
+                <p className="b9-galleryhint">▶ Click any video to see the full website</p>
+                <div className="b9-gallery-wrap">
+                  <button
+                    type="button"
+                    className="b9-gallery-arrow b9-gallery-arrow-prev"
+                    aria-label="Previous example"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                      row?.scrollBy({ left: -200, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="b9-gallery-arrow b9-gallery-arrow-next"
+                    aria-label="Next example"
+                    onClick={(e) => {
+                      const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                      row?.scrollBy({ left: 200, behavior: 'smooth' });
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                  </button>
+                  <div className="b9-gallery">
+                    {b9Gallery.map((item, i) => (
+                      <div key={`sample-${i}`} className="b9-gcard">
+                        <wistia-player
+                          media-id={item.mediaId}
+                          aspect={item.aspect}
+                          autoplay="true"
+                          muted="true"
+                          {...({
+                            loop: 'true',
+                            'playbar': 'false',
+                            'play-button': 'false',
+                            'small-play-button': 'false',
+                            'fullscreen-button': 'false',
+                            'volume-control': 'false',
+                            'settings-control': 'false',
+                            'playback-rate-control': 'false',
+                            'controls-visible-on-load': 'true',
+                            'big-play-button': 'true',
+                            'silent-auto-play': 'true',
+                            'playsinline': 'true',
+                            'preload': 'auto',
+                            'end-video-behavior': 'loop',
+                            'resumable': 'false',
+                            'player-color': 'c9a96e',
+                          } as any)}
+                        ></wistia-player>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
           </div>
 
           {!b9IsLeads && (
