@@ -1044,20 +1044,26 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-page .vc-btn {
             background:linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%) !important;
             color:#0a0a0a !important;
+            padding:14px 26px !important;
+            font-size:16px !important;
             box-shadow:
-              0 14px 30px rgba(0,0,0,.55),
+              0 16px 34px rgba(0,0,0,.6),
+              0 0 0 1px rgba(255,255,255,.35),
+              0 0 0 6px rgba(255,255,255,.08),
               inset 0 1px 0 rgba(255,255,255,.95),
               inset 0 -2px 0 rgba(0,0,0,.12) !important;
+            animation:lbvBtnGlow 2.6s ease-in-out infinite !important;
+          }
+          @keyframes lbvBtnGlow {
+            0%,100% { box-shadow:0 16px 34px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.35), 0 0 0 6px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -2px 0 rgba(0,0,0,.12); }
+            50%     { box-shadow:0 22px 46px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.55), 0 0 0 10px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,1), inset 0 -2px 0 rgba(0,0,0,.12); }
           }
           .lbv-page .vc-btn:hover:not(:disabled) {
-            background:linear-gradient(180deg, #ffffff 0%, #e6e6e6 100%) !important;
-            box-shadow:
-              0 18px 38px rgba(0,0,0,.65),
-              inset 0 1px 0 rgba(255,255,255,1),
-              inset 0 -2px 0 rgba(0,0,0,.14) !important;
+            background:linear-gradient(180deg, #ffffff 0%, #ececec 100%) !important;
+            transform:translateY(-2px);
           }
-          .lbv-page .vc-btn-pulse::after { box-shadow:0 0 0 0 rgba(255,255,255,.55) !important; animation:lbvPulse 1.8s cubic-bezier(.22,1,.36,1) infinite; }
-          @keyframes lbvPulse { 0% { box-shadow:0 0 0 0 rgba(255,255,255,.55); } 70% { box-shadow:0 0 0 18px rgba(255,255,255,0); } 100% { box-shadow:0 0 0 0 rgba(255,255,255,0); } }
+          .lbv-page .vc-btn-pulse::after { box-shadow:0 0 0 0 rgba(255,255,255,.65) !important; animation:lbvPulse 1.6s cubic-bezier(.22,1,.36,1) infinite; }
+          @keyframes lbvPulse { 0% { box-shadow:0 0 0 0 rgba(255,255,255,.65); } 70% { box-shadow:0 0 0 24px rgba(255,255,255,0); } 100% { box-shadow:0 0 0 0 rgba(255,255,255,0); } }
           .lbv-page .vc-meta { color:#b8b8b8 !important; }
           .lbv-page .vc-meta strong { color:#fafafa !important; }
           .lbv-page .vc-status {
@@ -1187,13 +1193,13 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
             <section className="lbv-tryit" aria-label="Live sample voice agent">
               <span className="lbv-tryit-tag">Hear &amp; talk to Mia</span>
-              <h2 className="lbv-tryit-h">Talk to Mia — a <em>sample agent.</em></h2>
+              <h2 className="lbv-tryit-h">Talk to Mia — a <em>similar 24/7 agent.</em></h2>
               <p className="lbv-tryit-cap">Live in-browser demo.</p>
               <VapiCallButton
                 compact
                 assistantName="Mia"
                 headline="Talk to Mia"
-                sub="Sample of the exact agent we'd build for your business."
+                sub="A similar voice agent to the one we'd build for your business."
               assistantConfig={{
                 name: 'Mia · Amalvera (Local Business)',
                 firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
