@@ -4,7 +4,10 @@ import Vapi from '@vapi-ai/web';
 type CallState = 'idle' | 'connecting' | 'live' | 'ending' | 'error';
 
 interface Props {
-  assistantId: string;
+  /** Either an assistant ID configured in the VAPI dashboard… */
+  assistantId?: string;
+  /** …or an inline assistant config (preferred — keeps voice + prompt in code). */
+  assistantConfig?: any;
   assistantName?: string;
   headline?: string;
   sub?: string;
@@ -20,6 +23,7 @@ interface Props {
  */
 const VapiCallButton: React.FC<Props> = ({
   assistantId,
+  assistantConfig,
   assistantName = 'Mia',
   headline = 'We’re available 24/7 to answer any questions',
   sub = 'Tap to call — a real-time voice conversation, right here in your browser.',
@@ -33,7 +37,9 @@ const VapiCallButton: React.FC<Props> = ({
   const startTsRef = useRef<number | null>(null);
   const timerRef = useRef<number | null>(null);
 
-  const publicKey = (import.meta as any).env?.VITE_VAPI_PUBLIC_KEY as string | undefined;
+  const publicKey =
+    ((import.meta as any).env?.VITE_VAPI_PUBLIC_KEY as string | undefined) ||
+    '6a9a8a57-2776-4397-81b3-e9b9d9df9a9b';
 
   useEffect(() => {
     if (!publicKey) return;
@@ -47,7 +53,7 @@ const VapiCallButton: React.FC<Props> = ({
         if (startTsRef.current) setElapsed(Math.floor((Date.now() - startTsRef.current) / 1000));
       }, 1000);
       if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('trackCustom', 'VapiCallStarted', { assistantId });
+        (window as any).fbq('trackCustom', 'VapiCallStarted', { assistantName });
       }
     });
     vapi.on('call-end', () => {
@@ -70,7 +76,7 @@ const VapiCallButton: React.FC<Props> = ({
       try { vapi.stop(); } catch {}
       if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     };
-  }, [publicKey, assistantId]);
+  }, [publicKey]);
 
   const startCall = async () => {
     setErrorMsg(null);
@@ -82,7 +88,9 @@ const VapiCallButton: React.FC<Props> = ({
     if (!vapiRef.current) return;
     try {
       setState('connecting');
-      await vapiRef.current.start(assistantId);
+      const target = assistantConfig ?? assistantId;
+      if (!target) throw new Error('No assistant config or id provided.');
+      await vapiRef.current.start(target);
     } catch (e: any) {
       console.error('[Vapi start]', e);
       setState('error');
