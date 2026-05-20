@@ -874,8 +874,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   if (region === 'localbusinessVoice') {
     // /localbusiness-voice — AI voice agent ("Mia") for local businesses.
-    // $29/mo single tier, no yearly. Soft premium AI aesthetic with
-    // iridescent orb, glassmorphism cards, pastel ambient gradient.
+    // $29/mo single tier with 1-day free trial. Black-and-white glossy
+    // premium look with a chrome orb and highlighted Talk-to-Mia card.
     return (
       <>
         <style>{`
@@ -883,224 +883,273 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
           .lbv-page {
             min-height:100vh;
             background:
-              radial-gradient(ellipse 60% 50% at 12% 8%, rgba(255,196,218,.85) 0%, rgba(255,196,218,0) 60%),
-              radial-gradient(ellipse 55% 45% at 88% 15%, rgba(217,194,255,.75) 0%, rgba(217,194,255,0) 60%),
-              radial-gradient(ellipse 70% 55% at 50% 95%, rgba(190,220,255,.85) 0%, rgba(190,220,255,0) 65%),
-              radial-gradient(ellipse 50% 40% at 5% 65%, rgba(255,215,195,.55) 0%, rgba(255,215,195,0) 65%),
-              linear-gradient(180deg, #fdf6f8 0%, #faf3f9 45%, #f1f4fb 100%);
-            color:#1c1330;
+              radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
+              radial-gradient(ellipse 60% 40% at 50% 110%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 60%),
+              linear-gradient(180deg, #0a0a0a 0%, #050505 60%, #000000 100%);
+            color:#f4f4f5;
             font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             -webkit-font-smoothing:antialiased;
-            padding:8px 14px 220px;
+            padding:8px 14px 240px;
             position:relative;
             overflow-x:hidden;
           }
           .lbv-page::before, .lbv-page::after {
-            content:''; position:absolute; border-radius:999px; filter:blur(80px); opacity:.45; pointer-events:none; z-index:0;
+            content:''; position:absolute; border-radius:999px; filter:blur(90px); pointer-events:none; z-index:0;
           }
-          .lbv-page::before { width:380px; height:380px; top:-80px; right:-60px; background:radial-gradient(circle, #ffb6d0 0%, #d9b3ff 60%, transparent 75%); animation:lbvBlobA 14s ease-in-out infinite alternate; }
-          .lbv-page::after { width:420px; height:420px; bottom:120px; left:-100px; background:radial-gradient(circle, #b8d4ff 0%, #cfb8ff 60%, transparent 75%); animation:lbvBlobB 18s ease-in-out infinite alternate; }
-          @keyframes lbvBlobA { from { transform:translate(0,0) scale(1); } to { transform:translate(-30px,40px) scale(1.06); } }
-          @keyframes lbvBlobB { from { transform:translate(0,0) scale(1); } to { transform:translate(40px,-30px) scale(1.08); } }
+          .lbv-page::before { width:380px; height:380px; top:-100px; right:-80px; background:radial-gradient(circle, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 70%); }
+          .lbv-page::after { width:440px; height:440px; bottom:160px; left:-120px; background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 70%); }
           .lbv-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; position:relative; z-index:2; }
-          .lbv-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 50%, #4a8de6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+          .lbv-logo {
+            font-weight:900; font-size:20px; letter-spacing:-0.02em;
+            background:linear-gradient(180deg, #ffffff 0%, #b8b8b8 100%);
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+          }
           .lbv-stack { display:flex; flex-direction:column; gap:14px; max-width:560px; margin:0 auto; position:relative; z-index:2; }
           .lbv-card {
             position:relative;
             border-radius:26px;
             padding:24px 22px;
             overflow:hidden;
-            background:linear-gradient(160deg, rgba(255,255,255,.78) 0%, rgba(255,255,255,.55) 100%);
-            backdrop-filter:blur(22px) saturate(140%);
-            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            background:linear-gradient(160deg, #181818 0%, #0c0c0c 100%);
             box-shadow:
-              0 30px 60px -20px rgba(180,120,200,.20),
-              0 10px 25px -8px rgba(160,120,200,.15),
-              inset 0 1px 0 rgba(255,255,255,.85),
-              inset 0 0 0 1px rgba(255,255,255,.4);
+              0 30px 70px -20px rgba(0,0,0,.75),
+              0 10px 25px -8px rgba(0,0,0,.6),
+              inset 0 1px 0 rgba(255,255,255,.10),
+              inset 0 0 0 1px rgba(255,255,255,.06);
+          }
+          .lbv-card::after {
+            content:''; position:absolute; left:0; right:0; top:0; height:48%;
+            background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 100%);
+            border-radius:26px 26px 0 0; pointer-events:none;
           }
           .lbv-eyebrow {
-            display:inline-block;
-            font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+            display:inline-block; position:relative;
+            font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
             padding:6px 12px; border-radius:999px; margin-bottom:14px;
-            background:linear-gradient(135deg, rgba(211,77,143,.10), rgba(74,141,230,.10));
-            color:#7a3da0;
-            box-shadow:inset 0 0 0 1px rgba(160,100,200,.20);
+            background:rgba(255,255,255,.06); color:#e6e6e6;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.10);
           }
           .lbv-title {
             font-family:'Inter', sans-serif; font-weight:800; font-size:36px; line-height:1.04; letter-spacing:-.028em;
-            color:#1c1330; margin:0 0 12px;
+            color:#fafafa; margin:0 0 12px; position:relative;
           }
           .lbv-title em {
             font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; font-size:1.05em;
-            background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 55%, #4a8de6 100%);
+            background:linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
             -webkit-background-clip:text; background-clip:text; color:transparent;
           }
-          .lbv-sub { font-size:15px; line-height:1.55; color:#5b4a73; margin:0 0 16px; max-width:520px; }
+          .lbv-sub { font-size:15px; line-height:1.55; color:#b8b8b8; margin:0 0 18px; max-width:520px; position:relative; }
           .lbv-allin {
             display:inline-flex; align-items:center; gap:8px;
-            padding:12px 18px; border-radius:14px;
-            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
-            color:#fff; font-weight:800; font-size:14px; letter-spacing:.01em;
-            box-shadow:0 14px 30px rgba(196,137,255,.40), inset 0 1px 0 rgba(255,255,255,.5);
+            padding:13px 20px; border-radius:14px;
+            background:linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
+            color:#0a0a0a; font-weight:800; font-size:14px; letter-spacing:.01em;
+            box-shadow:
+              0 16px 32px rgba(0,0,0,.55),
+              inset 0 1px 0 rgba(255,255,255,.9),
+              inset 0 -2px 0 rgba(0,0,0,.10);
+            position:relative;
           }
           .lbv-allin svg { width:16px; height:16px; }
           .lbv-guarantee {
             display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
-            padding:11px 14px; margin:0 0 16px;
-            background:rgba(255,255,255,.55); border-radius:14px;
-            box-shadow:inset 0 0 0 1px rgba(180,150,220,.25);
-            font-size:12px; font-weight:700; color:#3a2a55; line-height:1.3;
+            padding:11px 14px; margin:16px 0 0;
+            background:rgba(255,255,255,.04); border-radius:14px;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+            font-size:12px; font-weight:700; color:#e0e0e0; line-height:1.3;
+            position:relative;
           }
           .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
-          .lbv-guarantee svg { width:13px; height:13px; color:#8a5dd6; flex-shrink:0; }
+          .lbv-guarantee svg { width:13px; height:13px; color:#ffffff; flex-shrink:0; }
 
-          /* Iridescent orb — premium AI focal element */
-          .lbv-orb-stage { display:flex; justify-content:center; padding:6px 0 0; position:relative; }
-          .lbv-orb {
-            position:relative; width:180px; height:180px; border-radius:50%;
-            background:
-              radial-gradient(circle at 32% 28%, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 22%),
-              radial-gradient(circle at 70% 78%, rgba(180,220,255,.55) 0%, rgba(180,220,255,0) 45%),
-              radial-gradient(circle at 60% 35%, #ffb3d4 0%, #d6b3ff 38%, #b3d4ff 70%, #b8e2ff 100%);
+          /* Highlighted "Try it live" Mia section directly under the price pill */
+          .lbv-tryit {
+            position:relative;
+            margin:22px 0 4px;
+            padding:14px 14px 16px;
+            border-radius:22px;
+            background:linear-gradient(160deg, #161616 0%, #080808 100%);
             box-shadow:
-              inset -22px -28px 55px rgba(120,70,160,.28),
-              inset 18px 22px 36px rgba(255,255,255,.45),
-              0 30px 70px rgba(200,130,220,.40),
-              0 10px 25px rgba(180,120,210,.22);
+              0 0 0 1px rgba(255,255,255,.10),
+              0 0 0 4px rgba(255,255,255,.04),
+              0 30px 60px -20px rgba(0,0,0,.85),
+              inset 0 1px 0 rgba(255,255,255,.12);
+          }
+          .lbv-tryit::before {
+            content:''; position:absolute; inset:-2px; border-radius:24px; padding:2px;
+            background:linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.05) 35%, rgba(255,255,255,.6) 70%, rgba(255,255,255,.05));
+            -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite:xor; mask-composite:exclude;
+            pointer-events:none; opacity:.55;
+          }
+          .lbv-tryit-tag {
+            position:absolute; top:-11px; left:50%; transform:translateX(-50%);
+            display:inline-flex; align-items:center; gap:6px;
+            background:linear-gradient(180deg, #ffffff 0%, #c8c8c8 100%);
+            color:#0a0a0a; font-size:10px; font-weight:900; letter-spacing:.18em; text-transform:uppercase;
+            padding:5px 11px; border-radius:999px;
+            box-shadow:0 8px 18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.10);
+            white-space:nowrap;
+          }
+          .lbv-tryit-tag::after { content:'▼'; font-size:8px; color:#0a0a0a; }
+          .lbv-tryit-cap { font-size:12px; line-height:1.4; color:#cfcfcf; text-align:center; margin:6px 0 8px; }
+          .lbv-tryit-cap b { color:#ffffff; font-weight:800; }
+
+          /* Chrome / obsidian orb — glossy black & white */
+          .lbv-orb-stage { display:flex; justify-content:center; align-items:flex-end; padding:14px 0 4px; position:relative; height:170px; }
+          .lbv-orb {
+            position:relative; width:140px; height:140px; border-radius:50%;
+            background:
+              radial-gradient(circle at 32% 26%, rgba(255,255,255,.98) 0%, rgba(255,255,255,0) 18%),
+              radial-gradient(circle at 65% 80%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 38%),
+              radial-gradient(circle at 60% 35%, #6a6a6a 0%, #2a2a2a 45%, #0a0a0a 100%);
+            box-shadow:
+              inset -18px -22px 40px rgba(0,0,0,.85),
+              inset 14px 18px 30px rgba(255,255,255,.18),
+              0 30px 60px rgba(0,0,0,.65),
+              0 10px 22px rgba(0,0,0,.45),
+              0 0 0 1px rgba(255,255,255,.10);
             animation:lbvOrbFloat 6.5s ease-in-out infinite;
           }
+          .lbv-orb::before {
+            content:''; position:absolute; left:18%; top:14%; width:34%; height:26%; border-radius:50%;
+            background:radial-gradient(ellipse, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 70%);
+            filter:blur(1px);
+          }
           .lbv-orb::after {
-            content:''; position:absolute; left:20%; top:18%; width:30%; height:22%; border-radius:50%;
-            background:radial-gradient(ellipse, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 75%);
+            content:''; position:absolute; right:14%; bottom:18%; width:18%; height:10%; border-radius:50%;
+            background:radial-gradient(ellipse, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 70%);
             filter:blur(1px);
           }
           .lbv-orb-shadow {
-            position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
-            width:130px; height:18px; border-radius:50%;
-            background:radial-gradient(ellipse, rgba(180,120,200,.35) 0%, rgba(180,120,200,0) 70%);
+            position:absolute; bottom:-2px; left:50%; transform:translateX(-50%);
+            width:120px; height:14px; border-radius:50%;
+            background:radial-gradient(ellipse, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 70%);
             filter:blur(6px);
           }
           @keyframes lbvOrbFloat {
             0%,100% { transform:translateY(0) scale(1); }
-            50% { transform:translateY(-8px) scale(1.025); }
+            50% { transform:translateY(-7px) scale(1.02); }
           }
 
-          /* VAPI card override — light premium look inside this page */
+          /* VAPI card override — black glossy inside this page */
           .lbv-page .vc-card {
-            background:linear-gradient(160deg, rgba(255,255,255,.85) 0%, rgba(252,245,253,.75) 100%) !important;
-            color:#1c1330 !important;
-            backdrop-filter:blur(22px) saturate(140%);
-            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            background:linear-gradient(160deg, #141414 0%, #060606 100%) !important;
+            color:#f4f4f5 !important;
             box-shadow:
-              0 30px 60px -20px rgba(180,120,200,.22),
-              inset 0 1px 0 rgba(255,255,255,.85),
-              inset 0 0 0 1px rgba(255,255,255,.4) !important;
+              0 30px 60px -20px rgba(0,0,0,.85),
+              inset 0 1px 0 rgba(255,255,255,.12),
+              inset 0 0 0 1px rgba(255,255,255,.08) !important;
           }
           .lbv-page .vc-card::before {
-            background:linear-gradient(135deg, rgba(255,140,190,.55), rgba(180,150,255,.35), rgba(140,180,255,.55)) !important;
-            opacity:.55 !important;
+            background:linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.05) 40%, rgba(255,255,255,.55)) !important;
+            opacity:.4 !important;
           }
           .lbv-page .vc-badge {
-            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%) !important;
-            color:#fff !important;
-            box-shadow:0 6px 14px rgba(196,137,255,.35);
+            background:linear-gradient(180deg, #ffffff 0%, #cfcfcf 100%) !important;
+            color:#0a0a0a !important;
+            box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.9) !important;
           }
-          .lbv-page .vc-badge-dot { background:#fff !important; }
-          .lbv-page .vc-h { color:#1c1330 !important; }
-          .lbv-page .vc-sub { color:#5b4a73 !important; }
+          .lbv-page .vc-badge-dot { background:#0a0a0a !important; }
+          .lbv-page .vc-h { color:#fafafa !important; }
+          .lbv-page .vc-sub { color:#b8b8b8 !important; }
           .lbv-page .vc-btn {
-            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%) !important;
-            color:#fff !important;
-            box-shadow:0 14px 30px rgba(196,137,255,.42), inset 0 1px 0 rgba(255,255,255,.45) !important;
+            background:linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%) !important;
+            color:#0a0a0a !important;
+            box-shadow:
+              0 14px 30px rgba(0,0,0,.55),
+              inset 0 1px 0 rgba(255,255,255,.95),
+              inset 0 -2px 0 rgba(0,0,0,.12) !important;
           }
           .lbv-page .vc-btn:hover:not(:disabled) {
-            background:linear-gradient(135deg, #ff90bb 0%, #d09bff 50%, #91c5ff 100%) !important;
-            box-shadow:0 18px 38px rgba(196,137,255,.52), inset 0 1px 0 rgba(255,255,255,.5) !important;
+            background:linear-gradient(180deg, #ffffff 0%, #e6e6e6 100%) !important;
+            box-shadow:
+              0 18px 38px rgba(0,0,0,.65),
+              inset 0 1px 0 rgba(255,255,255,1),
+              inset 0 -2px 0 rgba(0,0,0,.14) !important;
           }
-          .lbv-page .vc-btn-pulse::after { box-shadow:0 0 0 0 rgba(196,137,255,.55) !important; animation:lbvPulse 1.8s cubic-bezier(.22,1,.36,1) infinite; }
-          @keyframes lbvPulse { 0% { box-shadow:0 0 0 0 rgba(196,137,255,.55); } 70% { box-shadow:0 0 0 18px rgba(196,137,255,0); } 100% { box-shadow:0 0 0 0 rgba(196,137,255,0); } }
-          .lbv-page .vc-meta { color:#5b4a73 !important; }
-          .lbv-page .vc-meta strong { color:#1c1330 !important; }
+          .lbv-page .vc-btn-pulse::after { box-shadow:0 0 0 0 rgba(255,255,255,.55) !important; animation:lbvPulse 1.8s cubic-bezier(.22,1,.36,1) infinite; }
+          @keyframes lbvPulse { 0% { box-shadow:0 0 0 0 rgba(255,255,255,.55); } 70% { box-shadow:0 0 0 18px rgba(255,255,255,0); } 100% { box-shadow:0 0 0 0 rgba(255,255,255,0); } }
+          .lbv-page .vc-meta { color:#b8b8b8 !important; }
+          .lbv-page .vc-meta strong { color:#fafafa !important; }
           .lbv-page .vc-status {
-            background:rgba(196,137,255,.12) !important;
-            color:#6e3da0 !important;
-            box-shadow:inset 0 0 0 1px rgba(196,137,255,.35) !important;
+            background:rgba(255,255,255,.06) !important;
+            color:#e6e6e6 !important;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.14) !important;
           }
-          .lbv-page .vc-status-live { background:rgba(120,200,160,.18) !important; color:#2a7a4a !important; box-shadow:inset 0 0 0 1px rgba(120,200,160,.4) !important; }
-          .lbv-page .vc-wave span { background:linear-gradient(180deg, #c489ff, #7eb8ff) !important; }
+          .lbv-page .vc-status-live { background:rgba(120,200,160,.16) !important; color:#9be0b4 !important; box-shadow:inset 0 0 0 1px rgba(120,200,160,.4) !important; }
+          .lbv-page .vc-wave span { background:linear-gradient(180deg, #ffffff, #a0a0a0) !important; }
           .lbv-page .vc-ctrl {
-            background:rgba(255,255,255,.85) !important;
-            color:#1c1330 !important;
-            box-shadow:inset 0 0 0 1px rgba(180,150,220,.35) !important;
+            background:rgba(255,255,255,.06) !important;
+            color:#f4f4f5 !important;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.14) !important;
           }
-          .lbv-page .vc-ctrl:hover { background:#fff !important; }
-          .lbv-page .vc-ctrl-end { background:linear-gradient(135deg, #ff5a7f, #ff7a9d) !important; color:#fff !important; box-shadow:0 6px 16px rgba(255,90,127,.35) !important; }
-          .lbv-page .vc-hint { color:#8773a0 !important; }
-          .lbv-page .vc-err { background:rgba(255,140,140,.15) !important; color:#a83333 !important; box-shadow:inset 0 0 0 1px rgba(255,140,140,.4) !important; }
+          .lbv-page .vc-ctrl:hover { background:rgba(255,255,255,.10) !important; }
+          .lbv-page .vc-ctrl-end { background:linear-gradient(180deg, #ff5a7f, #d83a5f) !important; color:#fff !important; box-shadow:0 6px 16px rgba(216,58,95,.45), inset 0 1px 0 rgba(255,255,255,.30) !important; }
+          .lbv-page .vc-hint { color:#888 !important; }
+          .lbv-page .vc-err { background:rgba(255,140,140,.12) !important; color:#ffb0b0 !important; box-shadow:inset 0 0 0 1px rgba(255,140,140,.35) !important; }
 
           .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:10px; counter-reset:lbvfeat; }
           .lbv-feats li {
             counter-increment:lbvfeat;
-            font-size:14px; font-weight:600; color:#3a2a55; line-height:1.45;
-            padding:10px 12px 10px 42px; position:relative;
-            background:rgba(255,255,255,.5); border-radius:12px;
-            box-shadow:inset 0 0 0 1px rgba(180,150,220,.18);
+            font-size:14px; font-weight:600; color:#cfcfcf; line-height:1.45;
+            padding:10px 12px 10px 44px; position:relative;
+            background:rgba(255,255,255,.04); border-radius:12px;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
           }
           .lbv-feats li::before {
             content:counter(lbvfeat); position:absolute; left:10px; top:50%; transform:translateY(-50%);
             width:24px; height:24px; border-radius:999px;
-            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
-            color:#fff; font-size:11px; font-weight:900;
+            background:linear-gradient(180deg, #ffffff 0%, #cfcfcf 100%);
+            color:#0a0a0a; font-size:11px; font-weight:900;
             display:inline-flex; align-items:center; justify-content:center; line-height:1;
-            box-shadow:0 4px 10px rgba(196,137,255,.35);
+            box-shadow:0 4px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.95);
           }
-          .lbv-feats li b { color:#1c1330; font-weight:800; }
+          .lbv-feats li b { color:#fafafa; font-weight:800; }
 
           .lbv-mini-h {
-            font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
-            background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 60%, #4a8de6 100%);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
+            font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
+            color:#e6e6e6;
             margin:0 0 14px;
           }
 
           .lbv-sticky {
             position:fixed; left:8px; right:8px; bottom:8px; z-index:90;
-            background:linear-gradient(160deg, rgba(255,255,255,.85) 0%, rgba(250,243,250,.82) 100%);
-            backdrop-filter:blur(22px) saturate(140%);
-            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            background:linear-gradient(160deg, #141414 0%, #050505 100%);
             border-radius:18px;
             padding:10px 12px 12px;
             box-shadow:
-              0 20px 50px -10px rgba(180,120,200,.30),
-              0 8px 22px rgba(180,120,200,.18),
-              inset 0 1px 0 rgba(255,255,255,.85),
-              inset 0 0 0 1px rgba(255,255,255,.4);
+              0 20px 50px rgba(0,0,0,.7),
+              inset 0 1px 0 rgba(255,255,255,.12),
+              inset 0 0 0 1px rgba(255,255,255,.08);
             max-width:440px; margin:0 auto;
           }
           .lbv-pricebtn {
             position:relative; appearance:none;
-            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
-            color:#fff; border:0; border-radius:14px;
+            background:linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
+            color:#0a0a0a; border:0; border-radius:14px;
             padding:12px 14px; cursor:pointer; text-align:center;
-            box-shadow:0 14px 30px rgba(196,137,255,.42), inset 0 1px 0 rgba(255,255,255,.45);
+            box-shadow:
+              0 14px 30px rgba(0,0,0,.55),
+              inset 0 1px 0 rgba(255,255,255,.95),
+              inset 0 -2px 0 rgba(0,0,0,.12);
             transition:transform .15s ease, box-shadow .15s ease;
             font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:6px; width:100%;
           }
-          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 18px 38px rgba(196,137,255,.55), inset 0 1px 0 rgba(255,255,255,.5); }
+          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 18px 38px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,1), inset 0 -2px 0 rgba(0,0,0,.14); }
           .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
-          .lbv-tiername { font-size:13px; font-weight:800; letter-spacing:.01em; color:#fff; line-height:1.1; }
-          .lbv-tierprice { font-size:22px; font-weight:900; color:#fff; line-height:1.05; letter-spacing:-.015em; text-shadow:0 1px 0 rgba(0,0,0,.06); }
-          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:rgba(255,255,255,.85); font-size:13px; }
+          .lbv-tiername { font-size:13px; font-weight:800; letter-spacing:.01em; color:#0a0a0a; line-height:1.1; }
+          .lbv-tierprice { font-size:22px; font-weight:900; color:#0a0a0a; line-height:1.05; letter-spacing:-.015em; }
+          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#4a4a4a; font-size:13px; }
           .lbv-startbtn {
             display:inline-flex; align-items:center; justify-content:center; gap:6px;
-            background:rgba(255,255,255,.95); color:#7a3da0;
-            border-radius:999px; padding:9px 14px; font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
-            box-shadow:0 4px 12px rgba(0,0,0,.08), inset 0 0 0 1px rgba(196,137,255,.2);
+            background:#0a0a0a; color:#ffffff;
+            border-radius:999px; padding:9px 14px; font-size:11px; font-weight:900; letter-spacing:.10em; text-transform:uppercase;
+            box-shadow:0 4px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
           }
           .lbv-startbtn svg { width:11px; height:11px; }
-          .lbv-disclaim { margin-top:8px; font-size:10px; line-height:1.45; color:#7a6890; text-align:center; }
-          .lbv-disclaim b { color:#3a2a55; font-weight:700; }
+          .lbv-disclaim { margin-top:8px; font-size:10px; line-height:1.45; color:#9a9a9a; text-align:center; }
+          .lbv-disclaim b { color:#ffffff; font-weight:700; }
 
           @media (min-width: 760px) {
             .lbv-stack { max-width:680px; }
@@ -1108,17 +1157,18 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             .lbv-title { font-size:48px; }
             .lbv-sub { font-size:16px; }
             .lbv-feats li { font-size:15px; }
-            .lbv-orb { width:210px; height:210px; }
+            .lbv-orb { width:170px; height:170px; }
+            .lbv-orb-stage { height:200px; }
           }
 
           @keyframes lbvFadeIn { from { opacity:0 } to { opacity:1 } }
-          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(50,30,70,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:lbvFadeIn .2s ease; }
-          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:22px; box-shadow:0 30px 70px rgba(80,40,120,.30); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
-          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#1c1330; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
-          .mv-checkout-close:hover { background:#8a5dd6; }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.78); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:lbvFadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:22px; box-shadow:0 30px 70px rgba(0,0,0,.6); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0a0a0a; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#2a2a2a; }
           .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:14px; }
-          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#7a6890; font-weight:600; text-align:center; }
-          .mv-checkout-fallback-link:hover { color:#1c1330; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#888; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#0a0a0a; }
         `}</style>
 
         <div className="lbv-page">
@@ -1130,28 +1180,23 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
               <h1 className="lbv-title">Book More Jobs. <em>Don't Miss a Call.</em></h1>
               <p className="lbv-sub">Mia, your custom AI voice agent, answers calls 24/7 — helps book jobs, helps capture leads, and answers questions while you work. Start a 1-day free trial today — then $29/month.</p>
 
-              <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
-                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
-              </div>
-
               <div className="lbv-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
                 Start a 1-Day Free Trial — Then $29/month
               </div>
-            </section>
 
-            <div className="lbv-orb-stage" aria-hidden="true">
-              <div className="lbv-orb" />
-              <div className="lbv-orb-shadow" />
-            </div>
-
-            <VapiCallButton
-              compact
-              assistantName="Mia"
-              headline="Talk to Mia — A Sample Voice Agent"
-              sub="Tap to chat live with Mia. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
+              <div className="lbv-tryit">
+                <span className="lbv-tryit-tag">Hear what it sounds like</span>
+                <p className="lbv-tryit-cap"><b>Talk to Mia — a sample 24/7 voice agent.</b> Tap below to hear exactly what your business's agent could sound like.</p>
+                <div className="lbv-orb-stage" aria-hidden="true">
+                  <div className="lbv-orb" />
+                  <div className="lbv-orb-shadow" />
+                </div>
+                <VapiCallButton
+                  compact
+                  assistantName="Mia"
+                  headline="Talk to Mia — Sample 24/7 Voice Agent"
+                  sub="Tap to chat live with Mia. She's a sample of the exact kind of voice agent we build for your business — answering calls, helping book jobs, and capturing leads."
               assistantConfig={{
                 name: 'Mia · Amalvera (Local Business)',
                 firstMessage: "Hey, how's it going? This is Mia from Amalvera — what's your name?",
@@ -1246,7 +1291,15 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 silenceTimeoutSeconds: 30,
                 maxDurationSeconds: 600,
               }}
-            />
+                />
+              </div>
+
+              <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Customized to your business</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Money-back guarantee</span>
+              </div>
+            </section>
 
             <section className="lbv-card">
               <div className="lbv-mini-h" style={{ marginTop: 0 }}>What Does the 24/7 Voice Receptionist Do?</div>
