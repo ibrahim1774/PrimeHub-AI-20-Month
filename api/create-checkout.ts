@@ -169,7 +169,7 @@ export default async function handler(req: any, res: any) {
                 : isBarberFiveNine
                 ? 'Amalvera - Custom Barbershop Site (Mini) — Design + Hosting'
                 : isLocalbusinessVoice
-                ? 'Amalvera - AI Voice Agent for Local Business — Custom Implementation ($29/mo base + usage minutes)'
+                ? 'Amalvera - AI Voice Agent for Local Business — 1-Day Free Trial, then $29/mo base + usage minutes'
                 : isLocalbusinessNineSpanish
                 ? (localbusinessNineSpanishTier === 'multi'
                     ? 'Amalvera - Sitio Personalizado (Múltiples Páginas) — Diseño + Alojamiento + Ediciones'
@@ -210,7 +210,7 @@ export default async function handler(req: any, res: any) {
             : isNineteen
                 ? `$19${currencyLabel} for a custom website design.`
                 : isLocalbusinessVoice
-                    ? `$29${currencyLabel}/MONTH base for your custom AI voice agent. Additional usage charges based on minutes used apply monthly and are billed separately.`
+                    ? `1-DAY FREE TRIAL — then $29${currencyLabel}/MONTH base for your custom AI voice agent. Additional usage charges based on minutes used apply monthly and are billed separately.`
                     : isYearly
                         ? `PAY ONLY ${yearlyAmountDisplay}${currencyLabel}/YEAR FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`
                         : `PAY ONLY ${monthlyAmountDisplay}${currencyLabel}/MONTH FOR WEBSITE HOSTING TO HAVE YOUR CUSTOM SITE LIVE & ACTIVE`;
@@ -235,7 +235,7 @@ export default async function handler(req: any, res: any) {
                 },
             ],
             mode: isOneTime ? 'payment' : 'subscription',
-            ...(isBarberTrial ? { subscription_data: { trial_period_days: 1 } } : {}),
+            ...(isBarberTrial || isLocalbusinessVoice ? { subscription_data: { trial_period_days: 1 } } : {}),
             metadata: {
                 pendingId: pendingId || '',
                 companyName: companyName || '',

@@ -874,55 +874,251 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
   if (region === 'localbusinessVoice') {
     // /localbusiness-voice — AI voice agent ("Mia") for local businesses.
-    // $29/mo single tier, no yearly. Reuses the b9-* dark/gold styles.
+    // $29/mo single tier, no yearly. Soft premium AI aesthetic with
+    // iridescent orb, glassmorphism cards, pastel ambient gradient.
     return (
       <>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
-          .lbv-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 220px; }
-          .lbv-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
-          .lbv-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
-          .lbv-stack { display:flex; flex-direction:column; gap:14px; max-width:980px; margin:0 auto; }
-          .lbv-card { position:relative; border-radius:22px; padding:20px 18px; overflow:hidden; background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
-          .lbv-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
-          .lbv-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
-          .lbv-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
-          .lbv-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
-          .lbv-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
-          .lbv-allin svg { width:16px; height:16px; }
-          .lbv-guarantee { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:10px 14px; margin:0 0 16px; background:rgba(201,169,110,.10); border-radius:12px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.35); font-size:12px; font-weight:700; color:#f5f0e0; line-height:1.3; }
-          .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
-          .lbv-guarantee svg { width:13px; height:13px; color:#c9a96e; flex-shrink:0; }
-          .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:8px; counter-reset:lbvfeat; }
-          .lbv-feats li { counter-increment:lbvfeat; font-size:14px; font-weight:700; color:#f5f0e0; line-height:1.4; padding-left:30px; position:relative; }
-          .lbv-feats li::before { content:counter(lbvfeat); position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:11px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
-          .lbv-feats li b { color:#c9a96e; font-weight:800; }
-          .lbv-mini-h { font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#c9a96e; margin:18px 0 10px; }
-          .lbv-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:12px; padding:8px 10px 10px; box-shadow:0 8px 22px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:440px; margin:0 auto; }
-          .lbv-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:10px; padding:10px 12px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:6px; width:100%; }
-          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
-          .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
-          .lbv-tiername { font-size:14px; font-weight:900; letter-spacing:-.01em; color:#f5f0e0; line-height:1.1; }
-          .lbv-tierprice { font-size:20px; font-weight:900; color:#f5f0e0; line-height:1.05; letter-spacing:-.01em; }
-          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; font-size:13px; }
-          .lbv-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:8px 12px; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); }
-          .lbv-pricebtn:hover:not(:disabled) .lbv-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
-          .lbv-startbtn svg { width:11px; height:11px; }
-          .lbv-disclaim { margin-top:6px; font-size:10px; line-height:1.35; color:#9d9788; text-align:center; }
-          .lbv-disclaim b { color:#cfc8b8; font-weight:700; }
-          @media (min-width: 760px) {
-            .lbv-card { padding:34px 30px; }
-            .lbv-title { font-size:46px; }
-            .lbv-feats li { font-size:15px; }
+          .lbv-page {
+            min-height:100vh;
+            background:
+              radial-gradient(ellipse 60% 50% at 12% 8%, rgba(255,196,218,.85) 0%, rgba(255,196,218,0) 60%),
+              radial-gradient(ellipse 55% 45% at 88% 15%, rgba(217,194,255,.75) 0%, rgba(217,194,255,0) 60%),
+              radial-gradient(ellipse 70% 55% at 50% 95%, rgba(190,220,255,.85) 0%, rgba(190,220,255,0) 65%),
+              radial-gradient(ellipse 50% 40% at 5% 65%, rgba(255,215,195,.55) 0%, rgba(255,215,195,0) 65%),
+              linear-gradient(180deg, #fdf6f8 0%, #faf3f9 45%, #f1f4fb 100%);
+            color:#1c1330;
+            font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            -webkit-font-smoothing:antialiased;
+            padding:8px 14px 220px;
+            position:relative;
+            overflow-x:hidden;
           }
+          .lbv-page::before, .lbv-page::after {
+            content:''; position:absolute; border-radius:999px; filter:blur(80px); opacity:.45; pointer-events:none; z-index:0;
+          }
+          .lbv-page::before { width:380px; height:380px; top:-80px; right:-60px; background:radial-gradient(circle, #ffb6d0 0%, #d9b3ff 60%, transparent 75%); animation:lbvBlobA 14s ease-in-out infinite alternate; }
+          .lbv-page::after { width:420px; height:420px; bottom:120px; left:-100px; background:radial-gradient(circle, #b8d4ff 0%, #cfb8ff 60%, transparent 75%); animation:lbvBlobB 18s ease-in-out infinite alternate; }
+          @keyframes lbvBlobA { from { transform:translate(0,0) scale(1); } to { transform:translate(-30px,40px) scale(1.06); } }
+          @keyframes lbvBlobB { from { transform:translate(0,0) scale(1); } to { transform:translate(40px,-30px) scale(1.08); } }
+          .lbv-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; position:relative; z-index:2; }
+          .lbv-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 50%, #4a8de6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+          .lbv-stack { display:flex; flex-direction:column; gap:14px; max-width:560px; margin:0 auto; position:relative; z-index:2; }
+          .lbv-card {
+            position:relative;
+            border-radius:26px;
+            padding:24px 22px;
+            overflow:hidden;
+            background:linear-gradient(160deg, rgba(255,255,255,.78) 0%, rgba(255,255,255,.55) 100%);
+            backdrop-filter:blur(22px) saturate(140%);
+            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            box-shadow:
+              0 30px 60px -20px rgba(180,120,200,.20),
+              0 10px 25px -8px rgba(160,120,200,.15),
+              inset 0 1px 0 rgba(255,255,255,.85),
+              inset 0 0 0 1px rgba(255,255,255,.4);
+          }
+          .lbv-eyebrow {
+            display:inline-block;
+            font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+            padding:6px 12px; border-radius:999px; margin-bottom:14px;
+            background:linear-gradient(135deg, rgba(211,77,143,.10), rgba(74,141,230,.10));
+            color:#7a3da0;
+            box-shadow:inset 0 0 0 1px rgba(160,100,200,.20);
+          }
+          .lbv-title {
+            font-family:'Inter', sans-serif; font-weight:800; font-size:36px; line-height:1.04; letter-spacing:-.028em;
+            color:#1c1330; margin:0 0 12px;
+          }
+          .lbv-title em {
+            font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; font-size:1.05em;
+            background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 55%, #4a8de6 100%);
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+          }
+          .lbv-sub { font-size:15px; line-height:1.55; color:#5b4a73; margin:0 0 16px; max-width:520px; }
+          .lbv-allin {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:12px 18px; border-radius:14px;
+            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
+            color:#fff; font-weight:800; font-size:14px; letter-spacing:.01em;
+            box-shadow:0 14px 30px rgba(196,137,255,.40), inset 0 1px 0 rgba(255,255,255,.5);
+          }
+          .lbv-allin svg { width:16px; height:16px; }
+          .lbv-guarantee {
+            display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
+            padding:11px 14px; margin:0 0 16px;
+            background:rgba(255,255,255,.55); border-radius:14px;
+            box-shadow:inset 0 0 0 1px rgba(180,150,220,.25);
+            font-size:12px; font-weight:700; color:#3a2a55; line-height:1.3;
+          }
+          .lbv-guarantee span { display:inline-flex; align-items:center; gap:6px; }
+          .lbv-guarantee svg { width:13px; height:13px; color:#8a5dd6; flex-shrink:0; }
+
+          /* Iridescent orb — premium AI focal element */
+          .lbv-orb-stage { display:flex; justify-content:center; padding:6px 0 0; position:relative; }
+          .lbv-orb {
+            position:relative; width:180px; height:180px; border-radius:50%;
+            background:
+              radial-gradient(circle at 32% 28%, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 22%),
+              radial-gradient(circle at 70% 78%, rgba(180,220,255,.55) 0%, rgba(180,220,255,0) 45%),
+              radial-gradient(circle at 60% 35%, #ffb3d4 0%, #d6b3ff 38%, #b3d4ff 70%, #b8e2ff 100%);
+            box-shadow:
+              inset -22px -28px 55px rgba(120,70,160,.28),
+              inset 18px 22px 36px rgba(255,255,255,.45),
+              0 30px 70px rgba(200,130,220,.40),
+              0 10px 25px rgba(180,120,210,.22);
+            animation:lbvOrbFloat 6.5s ease-in-out infinite;
+          }
+          .lbv-orb::after {
+            content:''; position:absolute; left:20%; top:18%; width:30%; height:22%; border-radius:50%;
+            background:radial-gradient(ellipse, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 75%);
+            filter:blur(1px);
+          }
+          .lbv-orb-shadow {
+            position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+            width:130px; height:18px; border-radius:50%;
+            background:radial-gradient(ellipse, rgba(180,120,200,.35) 0%, rgba(180,120,200,0) 70%);
+            filter:blur(6px);
+          }
+          @keyframes lbvOrbFloat {
+            0%,100% { transform:translateY(0) scale(1); }
+            50% { transform:translateY(-8px) scale(1.025); }
+          }
+
+          /* VAPI card override — light premium look inside this page */
+          .lbv-page .vc-card {
+            background:linear-gradient(160deg, rgba(255,255,255,.85) 0%, rgba(252,245,253,.75) 100%) !important;
+            color:#1c1330 !important;
+            backdrop-filter:blur(22px) saturate(140%);
+            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            box-shadow:
+              0 30px 60px -20px rgba(180,120,200,.22),
+              inset 0 1px 0 rgba(255,255,255,.85),
+              inset 0 0 0 1px rgba(255,255,255,.4) !important;
+          }
+          .lbv-page .vc-card::before {
+            background:linear-gradient(135deg, rgba(255,140,190,.55), rgba(180,150,255,.35), rgba(140,180,255,.55)) !important;
+            opacity:.55 !important;
+          }
+          .lbv-page .vc-badge {
+            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%) !important;
+            color:#fff !important;
+            box-shadow:0 6px 14px rgba(196,137,255,.35);
+          }
+          .lbv-page .vc-badge-dot { background:#fff !important; }
+          .lbv-page .vc-h { color:#1c1330 !important; }
+          .lbv-page .vc-sub { color:#5b4a73 !important; }
+          .lbv-page .vc-btn {
+            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%) !important;
+            color:#fff !important;
+            box-shadow:0 14px 30px rgba(196,137,255,.42), inset 0 1px 0 rgba(255,255,255,.45) !important;
+          }
+          .lbv-page .vc-btn:hover:not(:disabled) {
+            background:linear-gradient(135deg, #ff90bb 0%, #d09bff 50%, #91c5ff 100%) !important;
+            box-shadow:0 18px 38px rgba(196,137,255,.52), inset 0 1px 0 rgba(255,255,255,.5) !important;
+          }
+          .lbv-page .vc-btn-pulse::after { box-shadow:0 0 0 0 rgba(196,137,255,.55) !important; animation:lbvPulse 1.8s cubic-bezier(.22,1,.36,1) infinite; }
+          @keyframes lbvPulse { 0% { box-shadow:0 0 0 0 rgba(196,137,255,.55); } 70% { box-shadow:0 0 0 18px rgba(196,137,255,0); } 100% { box-shadow:0 0 0 0 rgba(196,137,255,0); } }
+          .lbv-page .vc-meta { color:#5b4a73 !important; }
+          .lbv-page .vc-meta strong { color:#1c1330 !important; }
+          .lbv-page .vc-status {
+            background:rgba(196,137,255,.12) !important;
+            color:#6e3da0 !important;
+            box-shadow:inset 0 0 0 1px rgba(196,137,255,.35) !important;
+          }
+          .lbv-page .vc-status-live { background:rgba(120,200,160,.18) !important; color:#2a7a4a !important; box-shadow:inset 0 0 0 1px rgba(120,200,160,.4) !important; }
+          .lbv-page .vc-wave span { background:linear-gradient(180deg, #c489ff, #7eb8ff) !important; }
+          .lbv-page .vc-ctrl {
+            background:rgba(255,255,255,.85) !important;
+            color:#1c1330 !important;
+            box-shadow:inset 0 0 0 1px rgba(180,150,220,.35) !important;
+          }
+          .lbv-page .vc-ctrl:hover { background:#fff !important; }
+          .lbv-page .vc-ctrl-end { background:linear-gradient(135deg, #ff5a7f, #ff7a9d) !important; color:#fff !important; box-shadow:0 6px 16px rgba(255,90,127,.35) !important; }
+          .lbv-page .vc-hint { color:#8773a0 !important; }
+          .lbv-page .vc-err { background:rgba(255,140,140,.15) !important; color:#a83333 !important; box-shadow:inset 0 0 0 1px rgba(255,140,140,.4) !important; }
+
+          .lbv-feats { list-style:none; padding:0; margin:6px 0 4px; display:flex; flex-direction:column; gap:10px; counter-reset:lbvfeat; }
+          .lbv-feats li {
+            counter-increment:lbvfeat;
+            font-size:14px; font-weight:600; color:#3a2a55; line-height:1.45;
+            padding:10px 12px 10px 42px; position:relative;
+            background:rgba(255,255,255,.5); border-radius:12px;
+            box-shadow:inset 0 0 0 1px rgba(180,150,220,.18);
+          }
+          .lbv-feats li::before {
+            content:counter(lbvfeat); position:absolute; left:10px; top:50%; transform:translateY(-50%);
+            width:24px; height:24px; border-radius:999px;
+            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
+            color:#fff; font-size:11px; font-weight:900;
+            display:inline-flex; align-items:center; justify-content:center; line-height:1;
+            box-shadow:0 4px 10px rgba(196,137,255,.35);
+          }
+          .lbv-feats li b { color:#1c1330; font-weight:800; }
+
+          .lbv-mini-h {
+            font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+            background:linear-gradient(135deg, #d34d8f 0%, #8a5dd6 60%, #4a8de6 100%);
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+            margin:0 0 14px;
+          }
+
+          .lbv-sticky {
+            position:fixed; left:8px; right:8px; bottom:8px; z-index:90;
+            background:linear-gradient(160deg, rgba(255,255,255,.85) 0%, rgba(250,243,250,.82) 100%);
+            backdrop-filter:blur(22px) saturate(140%);
+            -webkit-backdrop-filter:blur(22px) saturate(140%);
+            border-radius:18px;
+            padding:10px 12px 12px;
+            box-shadow:
+              0 20px 50px -10px rgba(180,120,200,.30),
+              0 8px 22px rgba(180,120,200,.18),
+              inset 0 1px 0 rgba(255,255,255,.85),
+              inset 0 0 0 1px rgba(255,255,255,.4);
+            max-width:440px; margin:0 auto;
+          }
+          .lbv-pricebtn {
+            position:relative; appearance:none;
+            background:linear-gradient(135deg, #ff7eb0 0%, #c489ff 50%, #7eb8ff 100%);
+            color:#fff; border:0; border-radius:14px;
+            padding:12px 14px; cursor:pointer; text-align:center;
+            box-shadow:0 14px 30px rgba(196,137,255,.42), inset 0 1px 0 rgba(255,255,255,.45);
+            transition:transform .15s ease, box-shadow .15s ease;
+            font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:6px; width:100%;
+          }
+          .lbv-pricebtn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 18px 38px rgba(196,137,255,.55), inset 0 1px 0 rgba(255,255,255,.5); }
+          .lbv-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; }
+          .lbv-tiername { font-size:13px; font-weight:800; letter-spacing:.01em; color:#fff; line-height:1.1; }
+          .lbv-tierprice { font-size:22px; font-weight:900; color:#fff; line-height:1.05; letter-spacing:-.015em; text-shadow:0 1px 0 rgba(0,0,0,.06); }
+          .lbv-tierprice em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:rgba(255,255,255,.85); font-size:13px; }
+          .lbv-startbtn {
+            display:inline-flex; align-items:center; justify-content:center; gap:6px;
+            background:rgba(255,255,255,.95); color:#7a3da0;
+            border-radius:999px; padding:9px 14px; font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+            box-shadow:0 4px 12px rgba(0,0,0,.08), inset 0 0 0 1px rgba(196,137,255,.2);
+          }
+          .lbv-startbtn svg { width:11px; height:11px; }
+          .lbv-disclaim { margin-top:8px; font-size:10px; line-height:1.45; color:#7a6890; text-align:center; }
+          .lbv-disclaim b { color:#3a2a55; font-weight:700; }
+
+          @media (min-width: 760px) {
+            .lbv-stack { max-width:680px; }
+            .lbv-card { padding:34px 32px; }
+            .lbv-title { font-size:48px; }
+            .lbv-sub { font-size:16px; }
+            .lbv-feats li { font-size:15px; }
+            .lbv-orb { width:210px; height:210px; }
+          }
+
           @keyframes lbvFadeIn { from { opacity:0 } to { opacity:1 } }
-          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(10,10,10,.82); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:lbvFadeIn .2s ease; }
-          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
-          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0d0d0d; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
-          .mv-checkout-close:hover { background:#1f63ff; }
-          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:12px; }
-          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#777; font-weight:600; text-align:center; }
-          .mv-checkout-fallback-link:hover { color:#0d0d0d; }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(50,30,70,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:lbvFadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:22px; box-shadow:0 30px 70px rgba(80,40,120,.30); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#1c1330; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#8a5dd6; }
+          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:14px; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#7a6890; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#1c1330; }
         `}</style>
 
         <div className="lbv-page">
@@ -932,7 +1128,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
             <section className="lbv-card">
               <div className="lbv-eyebrow">AI Voice Agent · For Local Businesses</div>
               <h1 className="lbv-title">Book More Jobs. <em>Don't Miss a Call.</em></h1>
-              <p className="lbv-sub">Mia, your custom AI voice agent, answers calls 24/7 — helps book jobs, helps capture leads, and answers questions while you work. Get the system implemented in your business for $29/month.</p>
+              <p className="lbv-sub">Mia, your custom AI voice agent, answers calls 24/7 — helps book jobs, helps capture leads, and answers questions while you work. Start a 1-day free trial today — then $29/month.</p>
 
               <div className="lbv-guarantee" role="note" aria-label="Coverage and guarantee">
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 coverage</span>
@@ -942,9 +1138,14 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
 
               <div className="lbv-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                $29/month — AI Voice Agent Implemented into Your Business
+                Start a 1-Day Free Trial — Then $29/month
               </div>
             </section>
+
+            <div className="lbv-orb-stage" aria-hidden="true">
+              <div className="lbv-orb" />
+              <div className="lbv-orb-shadow" />
+            </div>
 
             <VapiCallButton
               compact
@@ -984,7 +1185,8 @@ THE OFFER (these numbers are exact — never change them):
 - A custom AI voice agent (just like you) implemented into their business
 - Trained on their services, hours, pricing, and how they want calls handled
 - Answers calls 24/7, 7 days a week — helps book jobs and helps capture leads
-- $29 per month base subscription
+- 1-day free trial to try it risk-free
+- $29 per month base subscription (after the trial)
 - Additional usage charges based on minutes used are billed separately
 - Money-back guarantee if they're not happy
 - Implementation handled by Amalvera — they don't need to set anything up
@@ -1004,7 +1206,7 @@ WHY $29/MO IS FAIR (factual):
 - For most local businesses, capturing a single missed job pays for several months of service
 
 HOW IT WORKS (explain step by step if asked):
-1. Tap "Start Now" on this page — subscribe through Stripe at $29/mo
+1. Tap "Get Started" on this page — start a 1-day free trial through Stripe (then $29/mo)
 2. Tell Amalvera about their business — services, hours, pricing, how they want calls handled
 3. Amalvera trains and configures the voice agent and forwards their phone number to it
 4. The agent goes live and answers calls 24/7, 7 days a week
@@ -1022,8 +1224,8 @@ THINGS TO AVOID:
 - Never make claims about pricing other than $29/mo + usage-based minutes.
 
 CLOSING:
-- If they're skeptical, mention the money-back guarantee.
-- If they want to start, say: "Awesome — just scroll up and tap the gold Start Now button right on this page."
+- If they're skeptical, mention the 1-day free trial AND the money-back guarantee.
+- If they want to start, say: "Awesome — just scroll up and tap the Get Started button to kick off your free trial."
 - If they want to wrap, thank them, remind them you're here 24/7 if anything else comes up.
 
 Keep replies short — 1 to 3 sentences usually. This is a phone call, not an essay.`,
@@ -1065,15 +1267,15 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               disabled={isLoading}
             >
               <div className="lbv-pricebtn-meta">
-                <span className="lbv-tiername">AI Voice Agent — Customized for Your Business</span>
-                <span className="lbv-tierprice">$29/mo <em>+ usage minutes</em></span>
+                <span className="lbv-tiername">Get Started — Start a Free Trial</span>
+                <span className="lbv-tierprice">1-day free, then $29/mo <em>+ usage minutes</em></span>
               </div>
               <span className="lbv-startbtn">
-                {isLoading ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                {isLoading ? 'Loading…' : (<>Get Started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
               </span>
             </button>
             <p className="lbv-disclaim">
-              <b>Money-back guarantee.</b> Additional usage charges based on minutes used apply monthly and are billed separately.
+              <b>1-day free trial · Money-back guarantee.</b> After the trial, $29/month. Additional usage charges based on minutes used apply monthly and are billed separately.
             </p>
           </div>
         </div>
