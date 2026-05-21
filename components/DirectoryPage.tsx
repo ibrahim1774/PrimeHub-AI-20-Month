@@ -1632,7 +1632,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">Single Page</span>
-                  <span className="b9-tierprice">$29 <small>one-time</small></span>
+                  <span className="b9-tierprice">$29</span>
                   <ol className="b9-tierfeats">
                     {b29SingleFeats.map((f) => <li key={f}>{f}</li>)}
                   </ol>
@@ -1649,7 +1649,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">Multi-Page</span>
-                  <span className="b9-tierprice">$49 <small>one-time</small></span>
+                  <span className="b9-tierprice">$49</span>
                   <ol className="b9-tierfeats">
                     {b29MultiFeats.map((f) => <li key={f}>{f}</li>)}
                   </ol>
