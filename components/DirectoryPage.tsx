@@ -1392,8 +1392,16 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     ];
     const b9NicheLabel = b9IsSpanish ? 'negocio local' : (b9IsLocal ? 'local business' : 'barbershop');
     const b9NicheLabelPlural = b9IsSpanish ? 'Negocios Locales' : (b9IsLocal ? 'Local Businesses' : 'Barbershops');
-    const b9HeadlineEm = b9IsSpanish ? 'Negocio Local.' : (b9IsLocal ? 'Local Business Site.' : 'Barbershop Site.');
-    const b9HeadlinePrefix = b9IsSpanish ? 'Sitio Web Personalizado para tu ' : 'Custom ';
+    const b9HeadlineEm = b9IsSpanish
+      ? 'Negocio Local.'
+      : (b9IsLocal
+        ? 'Local Business Site.'
+        : (region === 'barberNine'
+          ? 'That Can Help Local Clients Find You, Trust You, & Book.'
+          : 'Barbershop Site.'));
+    const b9HeadlinePrefix = b9IsSpanish
+      ? 'Sitio Web Personalizado para tu '
+      : (region === 'barberNine' ? 'Custom Modern Barbershop Website ' : 'Custom ');
     const b9EyebrowText = b9IsSpanish
       ? 'Sitios personalizados para negocios · Un plan simple'
       : (b9IsLocal ? 'Custom local business sites · One simple plan' : 'Custom barbershop sites · One simple plan');
