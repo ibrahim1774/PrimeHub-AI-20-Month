@@ -10,7 +10,7 @@ import BarberGeneratorPage from './components/BarberGeneratorPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine' | 'localbusinessVoice';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine' | 'localbusinessVoice';
 
 const dirPaths: Record<string, Region> = {
   '/': 'home',
@@ -26,6 +26,7 @@ const dirPaths: Record<string, Region> = {
   '/barber-19': 'barber19',
   '/barber-19-hosting': 'barber19Hosting',
   '/barber-9': 'barberNine',
+  '/barber-29': 'barberTwentyNine',
   '/localbusiness-9': 'localbusinessNine',
   '/barber-9-leads': 'barberNineLeads',
   '/localbusiness-9-leads': 'localbusinessNineLeads',

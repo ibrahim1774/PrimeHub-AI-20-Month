@@ -233,6 +233,7 @@ export default async function handler(req: any, res: any) {
             const isBarber19 = source === 'barber19';
             const isBarber19Hosting = source === 'barber19Hosting';
             const isBarberNine = source === 'barberNine';
+            const isBarberTwentyNine = source === 'barberTwentyNine';
             const isLocalbusinessNine = source === 'localbusinessNine';
             const isLocalbusinessNineSpanish = source === 'localbusinessNineSpanish';
             const isBarberFiveNine = source === 'barberFiveNine';
@@ -241,7 +242,7 @@ export default async function handler(req: any, res: any) {
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
@@ -250,6 +251,7 @@ export default async function handler(req: any, res: any) {
                 : isBarberFiveNine ? '/barber-5-9'
                 : isLocalbusinessNineSpanish ? '/localbusiness-9-spanish'
                 : isLocalbusinessNine ? '/localbusiness-9'
+                : isBarberTwentyNine ? '/barber-29'
                 : isBarberNine ? '/barber-9'
                 : isBarberGenerator ? '/barber-generator'
                 : isBarberSample ? '/barber-sample'
@@ -295,6 +297,7 @@ export default async function handler(req: any, res: any) {
             const isBarber19 = source === 'barber19';
             const isBarber19Hosting = source === 'barber19Hosting';
             const isBarberNine = source === 'barberNine';
+            const isBarberTwentyNine = source === 'barberTwentyNine';
             const isLocalbusinessNine = source === 'localbusinessNine';
             const isLocalbusinessNineSpanish = source === 'localbusinessNineSpanish';
             const isBarberFiveNine = source === 'barberFiveNine';
@@ -303,7 +306,7 @@ export default async function handler(req: any, res: any) {
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
@@ -312,6 +315,7 @@ export default async function handler(req: any, res: any) {
                 : isBarberFiveNine ? '/barber-5-9'
                 : isLocalbusinessNineSpanish ? '/localbusiness-9-spanish'
                 : isLocalbusinessNine ? '/localbusiness-9'
+                : isBarberTwentyNine ? '/barber-29'
                 : isBarberNine ? '/barber-9'
                 : isBarberGenerator ? '/barber-generator'
                 : isBarberSample ? '/barber-sample'

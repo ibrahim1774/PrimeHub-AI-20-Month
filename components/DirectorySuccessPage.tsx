@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 
 const GHL_FORM_URL = 'https://app.gohighlevel.com/v2/preview/4Cfl2ya9UdYFoYuW868F';
+// /barber-29 has its own dedicated onboarding form.
+const BARBER29_FORM_URL = 'https://api.leadconnectorhq.com/widget/form/sNiyT3yMdXdEgBG9nxjJ';
 
 const DirectorySuccessPage: React.FC = () => {
   const [phase, setPhase] = useState<'success' | 'onboarding'>('success');
@@ -32,6 +34,8 @@ const DirectorySuccessPage: React.FC = () => {
       const barberGeneratorYearly = tier === 'multi' ? 144.00 : 72.00;
       const barberNineMonthly = tier === 'multi' ? 19.00 : 9.00;
       const barberNineYearly = tier === 'multi' ? 137.00 : 65.00;
+      // /barber-29 = one-time $29 single / $49 multi (no recurring)
+      const barberTwentyNineAmount = tier === 'multi' ? 49.00 : 29.00;
       const barberFiveNineMonthly = 7.00;
       const barberFiveNineYearly = 50.00;
       const localbusinessVoiceMonthly = 29.00;
@@ -39,8 +43,8 @@ const DirectorySuccessPage: React.FC = () => {
       // /barber-19-hosting = $5/mo or $36/yr hosting subscription
       const barber19HostingMonthly = 5.00;
       const barber19HostingYearly = 36.00;
-      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-5-9' ? barberFiveNineMonthly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
-      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : pathname === '/barber-5-9' ? barberFiveNineYearly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineYearly : pathname === '/barber-19-hosting' ? barber19HostingYearly : pathname === '/barber-19' ? 19.00 : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
+      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-5-9' ? barberFiveNineMonthly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : pathname === '/barber-29' ? barberTwentyNineAmount : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
+      const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : pathname === '/barber-5-9' ? barberFiveNineYearly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : pathname === '/barber-29' ? barberTwentyNineAmount : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineYearly : pathname === '/barber-19-hosting' ? barber19HostingYearly : pathname === '/barber-19' ? 19.00 : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $20/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
       const currency = isAus ? 'AUD' : 'USD';
@@ -62,13 +66,17 @@ const DirectorySuccessPage: React.FC = () => {
       }
     }
 
-    // After 2.5s, show onboarding message
-    const onboardingTimer = setTimeout(() => setPhase('onboarding'), 2500);
+    const isBarber29 = typeof window !== 'undefined' && window.location.pathname === '/barber-29';
+    const formUrl = isBarber29 ? BARBER29_FORM_URL : GHL_FORM_URL;
 
-    // After 4s, redirect to GHL form
+    // Show the "you must fill out the onboarding form" message ~2s in,
+    // then redirect to the onboarding form shortly after.
+    const onboardingTimer = setTimeout(() => setPhase('onboarding'), 2000);
+
+    // Redirect to the onboarding form.
     const redirectTimer = setTimeout(() => {
-      window.location.href = GHL_FORM_URL;
-    }, 4000);
+      window.location.href = formUrl;
+    }, 3800);
 
     return () => {
       clearTimeout(onboardingTimer);

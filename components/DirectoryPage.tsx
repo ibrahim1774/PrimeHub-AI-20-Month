@@ -17,7 +17,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -310,6 +310,22 @@ const REGIONS: Record<Region, {
     businessNoun: 'barbershop',
     bookMoreNoun: 'clients',
   },
+  barberTwentyNine: {
+    source: 'barberTwentyNine',
+    currency: 'USD',
+    currencySymbol: '$',
+    monthlyAmount: 29,
+    yearlyAmount: 29,
+    yearlyWas: 29,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Tap to Call · 24/7 Help',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'barbers',
+    businessNoun: 'barbershop',
+    bookMoreNoun: 'clients',
+  },
   localbusinessNine: {
     source: 'localbusinessNine',
     currency: 'USD',
@@ -480,7 +496,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -578,7 +594,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice';
+    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
@@ -588,6 +604,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
     const barberNineMonthly = effectiveTier === 'single' ? 9 : 19;
     const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
+    const barberTwentyNineAmount = effectiveTier === 'single' ? 29 : 49;
     const barberFiveNineMonthly = 7;
     const barberFiveNineYearly = 50;
     const localbusinessVoiceMonthly = 29;
@@ -601,6 +618,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
           ? barber19Amount
+          : region === 'barberTwentyNine'
+          ? barberTwentyNineAmount
           : (region === 'barberNine' || region === 'localbusinessNine')
             ? (effectivePlan === 'yearly' ? barberNineYearly : barberNineMonthly)
             : region === 'barberFiveNine'
@@ -1326,6 +1345,320 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             <p className="lbv-disclaim">
               <b>Money-back guarantee.</b> + per-minute usage.
             </p>
+          </div>
+        </div>
+
+        {modalOpen && clientSecret && (
+          <div className="mv-checkout-backdrop" onClick={closeCheckout} role="dialog" aria-modal="true">
+            <div className="mv-checkout-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="mv-checkout-close" onClick={closeCheckout} aria-label="Close checkout">✕</button>
+              <div className="mv-checkout-frame-inner">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+              <button type="button" className="mv-checkout-fallback-link" onClick={fallbackToHosted}>
+                Having trouble? Open checkout directly →
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  if (region === 'barberTwentyNine') {
+    // /barber-29 — duplicate of /barber-9's design, but a ONE-TIME custom
+    // website-design offer (no hosting, no edits, no subscription). Two tiers:
+    //   • Single Page — $29 one-time
+    //   • Multi-Page (5–15 pages) — $49 one-time
+    const b29Gallery = [
+      { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
+      { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
+      { mediaId: 'va1232reyg', aspect: '0.5373134328358209' },
+      { mediaId: 'ra875to7uc', aspect: '0.5397301349325337' },
+    ];
+    const b29SocialGallery = [
+      { mediaId: 'fezlz3rw75', aspect: '0.5625' },
+      { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
+      { mediaId: 'kz4ap427gj', aspect: '0.5625' },
+    ];
+    const b29SingleFeats = ['Single page barbershop site', 'Custom website design'];
+    const b29MultiFeats = ['Multiple pages (5–15)', 'SEO Optimized', 'Booking link integration (Booksy, theCut, Fresha)'];
+    return (
+      <>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+          .b9-page { min-height:100vh; background:#0a0a0a; color:#f5f0e0; font-family:'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing:antialiased; padding:8px 14px 200px; }
+          .b9-nav { display:flex; align-items:center; justify-content:flex-start; max-width:980px; margin:0 auto 6px; padding:6px 6px; }
+          .b9-logo { font-weight:900; font-size:20px; letter-spacing:-0.02em; color:#c9a96e; }
+          .b9-stack { display:flex; flex-direction:column; gap:14px; max-width:980px; margin:0 auto; }
+          .b9-card { position:relative; border-radius:22px; padding:20px 18px; overflow:hidden; background:#141414; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
+          .b9-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
+          .b9-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
+          .b9-chip { display:inline-flex; align-items:center; gap:6px; background:rgba(201,169,110,.12); color:#c9a96e; border:1px solid rgba(201,169,110,.45); padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.02em; }
+          .b9-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
+          .b9-allin svg { width:16px; height:16px; }
+          .b9-galleryhint { font-size:12px; color:#cfc8b8; opacity:.85; margin:0 0 10px; font-weight:500; }
+          .b9-gallery-wrap { position:relative; margin-bottom:18px; }
+          .b9-gallery { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px; margin:0 -4px; scroll-behavior:smooth; }
+          .b9-gallery::-webkit-scrollbar { height:5px; }
+          .b9-gallery::-webkit-scrollbar-thumb { background:rgba(201,169,110,.35); border-radius:999px; }
+          .b9-gcard { flex:0 0 auto; width:140px; aspect-ratio:9/16; background:#0a0a0a; border-radius:14px; overflow:hidden; scroll-snap-align:center; box-shadow:0 8px 18px rgba(0,0,0,.55), inset 0 0 0 1px rgba(201,169,110,.20); }
+          .b9-gcard wistia-player { width:100%; height:100%; display:block; }
+          .b9-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:999px; background:#c9a96e; color:#0a0a0a; border:0; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,110,.5); z-index:5; }
+          .b9-gallery-arrow:hover { background:#d8b67a; }
+          .b9-gallery-arrow svg { width:16px; height:16px; }
+          .b9-gallery-arrow-prev { left:-2px; }
+          .b9-gallery-arrow-next { right:-2px; }
+          .b9-mini-h { font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#c9a96e; margin:6px 0 10px; }
+          .b9-steps { display:grid; grid-template-columns:1fr; gap:8px; }
+          .b9-step { background:rgba(201,169,110,.07); border-radius:12px; padding:12px 14px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-step-num { font-family:'Cormorant Garamond', serif; font-style:italic; font-size:20px; color:#c9a96e; line-height:1; }
+          .b9-step-h { font-weight:800; font-size:13px; margin:2px 0 2px; color:#f5f0e0; }
+          .b9-step-b { font-size:12px; color:#cfc8b8; line-height:1.45; }
+          .b9-guarantee-inline { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:10px 14px; margin:0 0 16px; background:rgba(201,169,110,.10); border-radius:12px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.35); font-size:12px; font-weight:700; color:#f5f0e0; line-height:1.3; }
+          .b9-guarantee-inline span { display:inline-flex; align-items:center; gap:6px; }
+          .b9-guarantee-inline svg { width:13px; height:13px; color:#c9a96e; flex-shrink:0; }
+          .b9-social { background:#141414; color:#f5f0e0; border-radius:22px; padding:20px 18px; box-shadow:inset 0 0 0 1px rgba(201,169,110,.18); }
+          .b9-social-h { font-family:'Inter', sans-serif; font-weight:800; font-size:24px; line-height:1.15; letter-spacing:-.02em; color:#f5f0e0; margin:0 0 6px; }
+          .b9-social-h em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-social-sub { font-size:14px; line-height:1.5; color:#cfc8b8; margin:0 0 12px; max-width:560px; }
+          .b9-social-icons { display:flex; align-items:center; gap:10px; margin:0 0 14px; }
+          .b9-social-icon { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:rgba(201,169,110,.10); color:#c9a96e; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, background .15s ease; text-decoration:none; }
+          .b9-social-icon:hover { transform:translateY(-2px); background:rgba(201,169,110,.22); }
+          .b9-social-icon svg { width:18px; height:18px; }
+          @media (min-width: 760px) {
+            .b9-social { padding:28px 26px; }
+            .b9-social-h { font-size:30px; }
+          }
+          .b9-sticky { position:fixed; left:8px; right:8px; bottom:8px; z-index:90; background:rgba(13,13,13,.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:10px; padding:4px 4px; box-shadow:0 8px 22px rgba(0,0,0,.5), 0 0 0 1px rgba(201,169,110,.40); max-width:360px; margin:0 auto; }
+          .b9-sticky-cols { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+          .b9-pricebtn { position:relative; appearance:none; background:#1c1c1c; color:#f5f0e0; border:0; border-radius:8px; padding:6px 6px; cursor:pointer; text-align:center; box-shadow:inset 0 0 0 1px rgba(201,169,110,.30); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; font-family:inherit; display:flex; flex-direction:column; align-items:stretch; gap:4px; }
+          .b9-pricebtn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(201,169,110,.55), 0 6px 14px rgba(0,0,0,.4); }
+          .b9-pricebtn-multi { background:#1c1c1c; }
+          .b9-pricebtn-meta { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:0; }
+          .b9-tiername { font-size:11px; font-weight:900; letter-spacing:-.01em; color:#f5f0e0; line-height:1.1; }
+          .b9-tierprice { font-size:14px; font-weight:900; color:#f5f0e0; line-height:1.05; letter-spacing:-.01em; margin-top:1px; }
+          .b9-tierprice small { font-size:9px; font-weight:700; opacity:.8; margin-left:2px; }
+          .b9-tierfeats { list-style:none; padding:0; margin:4px 0 2px; display:flex; flex-direction:column; gap:4px; text-align:left; counter-reset:b9feat; align-self:stretch; }
+          .b9-tierfeats li { counter-increment:b9feat; font-size:9px; font-weight:700; color:#f5f0e0; line-height:1.3; padding-left:18px; position:relative; }
+          .b9-tierfeats li::before { content:counter(b9feat); position:absolute; left:0; top:0; width:13px; height:13px; border-radius:999px; background:#c9a96e; color:#0a0a0a; font-size:8px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+          .b9-startbtn { display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#c9a96e; color:#0a0a0a; border-radius:999px; padding:5px 6px; font-size:8px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; box-shadow:0 4px 10px rgba(201,169,110,.30); margin-top:auto; }
+          .b9-startbtn svg { width:8px; height:8px; }
+          .b9-pricebtn:hover:not(:disabled) .b9-startbtn { background:#d8b67a; box-shadow:0 6px 16px rgba(201,169,110,.45); }
+          @media (min-width: 760px) {
+            .b9-card { padding:34px 30px; }
+            .b9-title { font-size:46px; }
+            .b9-steps { grid-template-columns:repeat(3, 1fr); gap:10px; }
+            .b9-gcard { width:170px; }
+          }
+          @keyframes b9FadeIn { from { opacity:0 } to { opacity:1 } }
+          .mv-checkout-backdrop { position:fixed; inset:0; background:rgba(10,10,10,.82); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation:b9FadeIn .2s ease; }
+          .mv-checkout-modal { position:relative; width:100%; max-width:440px; max-height:calc(100vh - 40px); background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45); padding:8px; overflow:hidden; display:flex; flex-direction:column; }
+          .mv-checkout-close { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:999px; background:#0d0d0d; border:0; color:#fff; font-size:13px; cursor:pointer; z-index:3; }
+          .mv-checkout-close:hover { background:#1f63ff; }
+          .mv-checkout-frame-inner { flex:1; overflow-y:auto; border-radius:12px; }
+          .mv-checkout-fallback-link { display:block; margin:8px auto 4px; padding:6px 10px; background:transparent; border:0; cursor:pointer; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#777; font-weight:600; text-align:center; }
+          .mv-checkout-fallback-link:hover { color:#0d0d0d; }
+        `}</style>
+
+        <div className="b9-page">
+          <nav className="b9-nav"><span className="b9-logo">amalvera</span></nav>
+
+          <div className="b9-stack">
+            <section className="b9-card">
+              <div className="b9-eyebrow">Custom barbershop website design · Built around your brand</div>
+              <h1 className="b9-title">Custom Modern Barbershop Website <em>That Can Help Local Clients Find You, Trust You, & Book.</em></h1>
+              <p className="b9-sub">A one-of-a-kind website designed for your barbershop — built around your real photos, your services, and your brand.</p>
+
+              <div className="b9-guarantee-inline" role="note" aria-label="Delivery and money-back guarantee">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24–48 hr delivery</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>100% custom design</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Money-back guarantee</span>
+              </div>
+
+              <div className="b9-allin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                100% Custom Website Design — Built Just for You
+              </div>
+
+              <div className="b9-eyebrow">Real Sites, Real Barbershops</div>
+              <p className="b9-galleryhint">▶ Click any video to see the full website</p>
+              <div className="b9-gallery-wrap">
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-prev"
+                  aria-label="Previous example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-next"
+                  aria-label="Next example"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="b9-gallery">
+                  {b29Gallery.map((item, i) => (
+                    <div key={i} className="b9-gcard">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'true',
+                          'big-play-button': 'true',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': 'c9a96e',
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="b9-mini-h">How it works</div>
+              <div className="b9-steps">
+                <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">Send us a link</div><div className="b9-step-b">Google Business, Facebook, or Instagram — or a few photos and your info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">We design your site</div><div className="b9-step-b">Custom design with your real photos and barbershop info.</div></div>
+                <div className="b9-step"><span className="b9-step-num">iii.</span><div className="b9-step-h">Delivered in 24–48 hrs</div><div className="b9-step-b">Your finished custom website design, ready in 24–48 hours.</div></div>
+              </div>
+            </section>
+
+            <section className="b9-social">
+              <div className="b9-eyebrow">Featured</div>
+              <h2 className="b9-social-h">As Seen On Facebook, TikTok & <em>Instagram.</em></h2>
+              <p className="b9-social-sub">Me personally walking into local businesses and building them sites.</p>
+              <div className="b9-social-icons">
+                <a className="b9-social-icon" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12z"/></svg>
+                </a>
+                <a className="b9-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
+                </a>
+                <a className="b9-social-icon" href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+                </a>
+              </div>
+              <div className="b9-gallery-wrap">
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-prev"
+                  aria-label="Previous video"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: -200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+                </button>
+                <button
+                  type="button"
+                  className="b9-gallery-arrow b9-gallery-arrow-next"
+                  aria-label="Next video"
+                  onClick={(e) => {
+                    const row = e.currentTarget.parentElement?.querySelector('.b9-gallery') as HTMLElement | null;
+                    row?.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div className="b9-gallery">
+                  {b29SocialGallery.map((item, i) => (
+                    <div key={`s-${i}`} className="b9-gcard">
+                      <wistia-player
+                        media-id={item.mediaId}
+                        aspect={item.aspect}
+                        autoplay="true"
+                        muted="true"
+                        {...({
+                          loop: 'true',
+                          'playbar': 'false',
+                          'play-button': 'false',
+                          'small-play-button': 'false',
+                          'fullscreen-button': 'false',
+                          'volume-control': 'false',
+                          'settings-control': 'false',
+                          'playback-rate-control': 'false',
+                          'controls-visible-on-load': 'true',
+                          'big-play-button': 'true',
+                          'silent-auto-play': 'true',
+                          'playsinline': 'true',
+                          'preload': 'auto',
+                          'end-video-behavior': 'loop',
+                          'resumable': 'false',
+                          'player-color': 'c9a96e',
+                        } as any)}
+                      ></wistia-player>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className="b9-sticky">
+            <div className="b9-sticky-cols">
+              <button
+                type="button"
+                className="b9-pricebtn"
+                onClick={() => handleCheckout('single')}
+                disabled={isLoading}
+              >
+                <div className="b9-pricebtn-meta">
+                  <span className="b9-tiername">Single Page</span>
+                  <span className="b9-tierprice">$29 <small>one-time</small></span>
+                  <ol className="b9-tierfeats">
+                    {b29SingleFeats.map((f) => <li key={f}>{f}</li>)}
+                  </ol>
+                </div>
+                <span className="b9-startbtn">
+                  {isLoading && activeHomeTier === 'single' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                </span>
+              </button>
+              <button
+                type="button"
+                className="b9-pricebtn b9-pricebtn-multi"
+                onClick={() => handleCheckout('multi')}
+                disabled={isLoading}
+              >
+                <div className="b9-pricebtn-meta">
+                  <span className="b9-tiername">Multi-Page</span>
+                  <span className="b9-tierprice">$49 <small>one-time</small></span>
+                  <ol className="b9-tierfeats">
+                    {b29MultiFeats.map((f) => <li key={f}>{f}</li>)}
+                  </ol>
+                </div>
+                <span className="b9-startbtn">
+                  {isLoading && activeHomeTier === 'multi' ? 'Loading…' : (<>Start Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></>)}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 

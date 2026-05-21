@@ -77,6 +77,10 @@
             "destination": "/index.html"
         },
         {
+            "source": "/barber-29",
+            "destination": "/index.html"
+        },
+        {
             "source": "/localbusiness-9",
             "destination": "/index.html"
         },
