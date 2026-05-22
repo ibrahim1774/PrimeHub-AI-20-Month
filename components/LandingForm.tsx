@@ -28,7 +28,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
           <div className="bg-white text-black p-0.5 rounded font-bold">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h3L12 22l2-10h-3l2-10z" /></svg>
           </div>
-          <span className="font-black tracking-tighter text-base uppercase">PRIMEHUB.AI</span>
+          <span className="font-black tracking-tighter text-base uppercase">PRIMEHUB</span>
         </div>
       </header>
 
@@ -120,7 +120,7 @@ const LandingForm: React.FC<LandingFormProps> = ({ onGenerate }) => {
       <footer className="px-6 md:px-8 py-5 border-t border-white/5 w-full mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 opacity-50">
-            <span className="font-black tracking-tighter text-[11px] uppercase">PRIMEHUB.AI</span>
+            <span className="font-black tracking-tighter text-[11px] uppercase">PRIMEHUB</span>
           </div>
           <div className="text-[8px] text-gray-600 uppercase tracking-widest text-center">
             © 2024 HIGH IMPACT CREATIVE. ALL RIGHTS RESERVED.
