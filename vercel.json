@@ -85,6 +85,10 @@
             "destination": "/index.html"
         },
         {
+            "source": "/localbusiness-29",
+            "destination": "/index.html"
+        },
+        {
             "source": "/localbusiness-9",
             "destination": "/index.html"
         },
