@@ -3001,7 +3001,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               <p className="mv-f-sub">All we need is one link. We handle the rest.</p>
               <div className="mv-f-steps">
                 <div className="mv-f-step"><span className="mv-f-step-num">i.</span><div className="mv-f-step-h">Send us your link or info</div><div className="mv-f-step-b">A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.</div></div>
-                <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">We build your site</div><div className="mv-f-step-b">Our team uses AI to build a custom site for your business — with nice-looking backgrounds and your real info.</div></div>
+                <div className="mv-f-step"><span className="mv-f-step-num">ii.</span><div className="mv-f-step-h">We build your site</div><div className="mv-f-step-b">Our team builds a custom site for your business — with nice-looking backgrounds and your real info.</div></div>
                 <div className="mv-f-step"><span className="mv-f-step-num">iii.</span><div className="mv-f-step-h">Live in 24 hours</div><div className="mv-f-step-b">{isBarber19 ? 'Your custom site is designed and delivered within 24 hours.' : 'Up and running within 24 hours. We host it too — you just cover the monthly cost.'}</div></div>
               </div>
             </section>
@@ -3244,7 +3244,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Is it really custom?<span className="mv-f-faq-icon">+</span></summary>
-                  <div className="mv-f-faq-a">Yes. Our team uses AI to build a custom site for your business with nice-looking backgrounds, your real photos, and your business info. Every site is one of a kind.</div>
+                  <div className="mv-f-faq-a">Yes. Our team builds a custom site for your business with nice-looking backgrounds, your real photos, and your business info. Every site is one of a kind.</div>
                 </details>
                 <details className="mv-f-faq-item">
                   <summary className="mv-f-faq-summary">Can I make edits to the site?<span className="mv-f-faq-icon">+</span></summary>
@@ -3377,10 +3377,10 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     const trustBadges = (
       <div className="mv-h-trust">
         <div className="mv-h-trust-cards">
-          <span className="mv-h-card-icon mv-h-card-visa">VISA</span>
-          <span className="mv-h-card-icon mv-h-card-mc">MC</span>
-          <span className="mv-h-card-icon mv-h-card-amex">AMEX</span>
-          <span className="mv-h-card-icon mv-h-card-disc">DISC</span>
+          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Visa"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><text x="18" y="16" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontStyle="italic" fontWeight="700" fontSize="11" letterSpacing="-0.5" fill="#1434CB">VISA</text></svg>
+          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Mastercard"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="15" cy="12" r="6.5" fill="#EB001B"/><circle cx="21" cy="12" r="6.5" fill="#F79E1B"/><path d="M18 6.9a6.5 6.5 0 0 0 0 10.2 6.5 6.5 0 0 0 0-10.2z" fill="#FF5F00"/></svg>
+          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="American Express"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#1F72CF"/><text x="18" y="15" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" fontSize="7" letterSpacing="0.3" fill="#fff">AMEX</text></svg>
+          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Discover"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="29" cy="14" r="4.2" fill="#F47216"/><text x="3" y="15" fontFamily="Arial, Helvetica, sans-serif" fontWeight="800" fontSize="5" fill="#1A1A1A">DISCOVER</text></svg>
         </div>
         <div className="mv-h-trust-line">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -3711,16 +3711,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             display: flex; flex-direction: column; align-items: center; gap: 8px;
           }
           .mv-h-trust-cards { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
-          .mv-h-card-icon {
-            display: inline-flex; align-items: center; justify-content: center;
-            height: 18px; padding: 0 5px; border-radius: 3px;
-            font-size: 9px; font-weight: 800; letter-spacing: 0.02em;
-            color: #fff; font-family: 'Inter', sans-serif;
-          }
-          .mv-h-card-visa { background: #1a1f71; }
-          .mv-h-card-mc { background: #eb001b; }
-          .mv-h-card-amex { background: #2e77bc; }
-          .mv-h-card-disc { background: #f47216; }
+          .mv-h-card { height: 22px; width: auto; display: block; border-radius: 3.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
           .mv-h-trust-line {
             display: inline-flex; align-items: center; gap: 6px;
             font-size: 12px; font-weight: 500; color: #4a4a4a;
@@ -4201,7 +4192,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               <div className="mv-h-visual">
                 <div className="mv-h-steps">
                   <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">{t('Send us your link or info', 'Send os dit link eller dine oplysninger')}</div><div className="mv-h-step-b">{t("A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.", 'Et link til din Google Business-profil, Facebook eller Instagram — eller blot dine virksomhedsoplysninger og et par billeder. Det er alt, vi har brug for.')}</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">{t('We build your site', 'Vi bygger din hjemmeside')}</div><div className="mv-h-step-b">{t('Our team uses AI to design a custom site for your local business — your real photos, your services, your info.', 'Vores team bruger AI til at designe en skræddersyet hjemmeside til din lokale virksomhed — dine egne billeder, dine ydelser, dine oplysninger.')}</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">{t('We build your site', 'Vi bygger din hjemmeside')}</div><div className="mv-h-step-b">{t('Our team designs a custom site for your local business — your real photos, your services, your info.', 'Vores team designer en skræddersyet hjemmeside til din lokale virksomhed — dine egne billeder, dine ydelser, dine oplysninger.')}</div></div>
                   <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">{t('Live in 48 hours', 'Live på 48 timer')}</div><div className="mv-h-step-b">{isLbDesign ? 'Up and running within about 48 hours — your custom design, with edits included whenever you need a change.' : t('Up and running within about 48 hours. We host it too — you just cover the monthly cost.', 'Klar og online inden for cirka 48 timer. Vi står også for hostingen — du betaler blot den månedlige pris.')}</div></div>
                 </div>
               </div>
