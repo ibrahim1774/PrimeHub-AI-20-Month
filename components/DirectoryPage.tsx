@@ -3377,10 +3377,10 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     const trustBadges = (
       <div className="mv-h-trust">
         <div className="mv-h-trust-cards">
-          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Visa"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><text x="18" y="16" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontStyle="italic" fontWeight="700" fontSize="11" letterSpacing="-0.5" fill="#1434CB">VISA</text></svg>
-          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Mastercard"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="15" cy="12" r="6.5" fill="#EB001B"/><circle cx="21" cy="12" r="6.5" fill="#F79E1B"/><path d="M18 6.9a6.5 6.5 0 0 0 0 10.2 6.5 6.5 0 0 0 0-10.2z" fill="#FF5F00"/></svg>
-          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="American Express"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#1F72CF"/><text x="18" y="15" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" fontSize="7" letterSpacing="0.3" fill="#fff">AMEX</text></svg>
-          <svg className="mv-h-card" viewBox="0 0 36 24" role="img" aria-label="Discover"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="29" cy="14" r="4.2" fill="#F47216"/><text x="3" y="15" fontFamily="Arial, Helvetica, sans-serif" fontWeight="800" fontSize="5" fill="#1A1A1A">DISCOVER</text></svg>
+          <svg className="mv-h-cardlogo" viewBox="0 0 36 24" role="img" aria-label="Visa"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><text x="18" y="16" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontStyle="italic" fontWeight="700" fontSize="11" letterSpacing="-0.5" fill="#1434CB">VISA</text></svg>
+          <svg className="mv-h-cardlogo" viewBox="0 0 36 24" role="img" aria-label="Mastercard"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="15" cy="12" r="6.5" fill="#EB001B"/><circle cx="21" cy="12" r="6.5" fill="#F79E1B"/><path d="M18 6.9a6.5 6.5 0 0 0 0 10.2 6.5 6.5 0 0 0 0-10.2z" fill="#FF5F00"/></svg>
+          <svg className="mv-h-cardlogo" viewBox="0 0 36 24" role="img" aria-label="American Express"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#1F72CF"/><text x="18" y="15" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" fontSize="7" letterSpacing="0.3" fill="#fff">AMEX</text></svg>
+          <svg className="mv-h-cardlogo" viewBox="0 0 36 24" role="img" aria-label="Discover"><rect x="0.5" y="0.5" width="35" height="23" rx="3.5" fill="#fff" stroke="#E6E8EB"/><circle cx="29" cy="14" r="4.2" fill="#F47216"/><text x="3" y="15" fontFamily="Arial, Helvetica, sans-serif" fontWeight="800" fontSize="5" fill="#1A1A1A">DISCOVER</text></svg>
         </div>
         <div className="mv-h-trust-line">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -3711,7 +3711,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             display: flex; flex-direction: column; align-items: center; gap: 8px;
           }
           .mv-h-trust-cards { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
-          .mv-h-card { height: 22px; width: auto; display: block; border-radius: 3.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+          .mv-h-cardlogo { height: 22px; width: auto; display: block; border-radius: 3.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
           .mv-h-trust-line {
             display: inline-flex; align-items: center; gap: 6px;
             font-size: 12px; font-weight: 500; color: #4a4a4a;
