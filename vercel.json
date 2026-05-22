@@ -89,6 +89,10 @@
             "destination": "/index.html"
         },
         {
+            "source": "/localbusiness-9-monthly",
+            "destination": "/index.html"
+        },
+        {
             "source": "/localbusiness-9",
             "destination": "/index.html"
         },
