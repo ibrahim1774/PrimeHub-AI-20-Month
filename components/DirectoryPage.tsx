@@ -653,9 +653,9 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
-    const barberNineMonthly = effectiveTier === 'single' ? 9 : 19;
-    const barberNineYearly = effectiveTier === 'single' ? 65 : 137;
-    const barberTwentyNineAmount = effectiveTier === 'single' ? 29 : 49;
+    const barberNineMonthly = region === 'barberNine' ? (effectiveTier === 'single' ? 5 : 9) : (effectiveTier === 'single' ? 9 : 19);
+    const barberNineYearly = region === 'barberNine' ? (effectiveTier === 'single' ? 36 : 65) : (effectiveTier === 'single' ? 65 : 137);
+    const barberTwentyNineAmount = effectiveTier === 'single' ? 19 : 29;
     const barberFiveNineMonthly = 7;
     const barberFiveNineYearly = 50;
     const localbusinessVoiceMonthly = 29;
@@ -1427,8 +1427,8 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
   if (region === 'barberTwentyNine') {
     // /barber-29 — duplicate of /barber-9's design, but a ONE-TIME custom
     // website-design offer (no hosting, no edits, no subscription). Two tiers:
-    //   • Single Page — $29 one-time
-    //   • Multi-Page (5–15 pages) — $49 one-time
+    //   • Single Page — $19 one-time
+    //   • Multi-Page (5–15 pages) — $29 one-time
     const b29Gallery = [
       { mediaId: 'zeucv84sfn', aspect: '0.5056179775280899' },
       { mediaId: 'dp2jzg06lf', aspect: '0.509915014164306' },
@@ -1689,7 +1689,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">Single Page</span>
-                  <span className="b9-tierprice">$29</span>
+                  <span className="b9-tierprice">$19</span>
                   <ol className="b9-tierfeats">
                     {b29SingleFeats.map((f) => <li key={f}>{f}</li>)}
                   </ol>
@@ -1706,7 +1706,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               >
                 <div className="b9-pricebtn-meta">
                   <span className="b9-tiername">Multi-Page</span>
-                  <span className="b9-tierprice">$49</span>
+                  <span className="b9-tierprice">$29</span>
                   <ol className="b9-tierfeats">
                     {b29MultiFeats.map((f) => <li key={f}>{f}</li>)}
                   </ol>
@@ -1810,10 +1810,10 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
       { mediaId: 'kz4ap427gj', aspect: '0.5625' },
     ];
-    const b9SingleMonthly = b9IsFive ? 7 : 9;
-    const b9SingleYearly = b9IsFive ? 50 : 65;
-    const b9MultiMonthly = 19;
-    const b9MultiYearly = 137;
+    const b9SingleMonthly = b9IsFive ? 7 : region === 'barberNine' ? 5 : 9;
+    const b9SingleYearly = b9IsFive ? 50 : region === 'barberNine' ? 36 : 65;
+    const b9MultiMonthly = region === 'barberNine' ? 9 : 19;
+    const b9MultiYearly = region === 'barberNine' ? 65 : 137;
     const b9IsYearly = pricingPlan === 'yearly';
     const b9SinglePrice = b9IsYearly ? b9SingleYearly : b9SingleMonthly;
     const b9MultiPrice = b9IsYearly ? b9MultiYearly : b9MultiMonthly;
