@@ -242,7 +242,8 @@ export default async function handler(req: any, res: any) {
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDenmark = source === 'denmark';
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome || isDenmark;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
@@ -264,6 +265,7 @@ export default async function handler(req: any, res: any) {
                 : isBarber ? '/barber'
                 : isLocalBusiness ? '/local-business'
                 : isHome ? '/'
+                : isDenmark ? '/denmark'
                 : '/1';
             const eventSourceUrl = isDirectory
                 ? `${origin}${directoryPath}?status=success&session_id=${session.id}`
@@ -306,7 +308,8 @@ export default async function handler(req: any, res: any) {
             const isBarber = source === 'barber';
             const isLocalBusiness = source === 'localbusiness';
             const isHome = source === 'home';
-            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome;
+            const isDenmark = source === 'denmark';
+            const isDirectory = source === 'directory' || isAus || isTen || isFive || isBarberFive || isBarberFiveMonth || isBarberTrial || isBarberSample || isBarberGenerator || isBarber19 || isBarber19Hosting || isBarberNine || isBarberTwentyNine || isLocalbusinessNine || isLocalbusinessNineSpanish || isBarberFiveNine || isLocalbusinessVoice || isNineteen || isBarber || isLocalBusiness || isHome || isDenmark;
             const origin = req.headers?.origin || 'https://www.amalvera.com';
             const directoryPath = isAus ? '/aus'
                 : isTen ? '/10'
@@ -328,6 +331,7 @@ export default async function handler(req: any, res: any) {
                 : isBarber ? '/barber'
                 : isLocalBusiness ? '/local-business'
                 : isHome ? '/'
+                : isDenmark ? '/denmark'
                 : '/1';
             const eventSourceUrl = isDirectory
                 ? `${origin}${directoryPath}?status=success&session_id=${session.id}`

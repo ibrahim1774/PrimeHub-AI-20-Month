@@ -20,6 +20,7 @@ const DirectorySuccessPage: React.FC = () => {
       const isAus = pathname === '/aus';
       const isYearly = plan === 'yearly';
       const homeMonthly = tier === 'multi' ? 50.00 : 20.00;
+      const denmarkMonthly = tier === 'multi' ? 349.00 : 149.00;
       const fiveMonthly = tier === 'multi' ? 10.00 : 5.00;
       const fiveYearly = tier === 'multi' ? 72.00 : 36.00;
       const barberFiveMonthly = tier === 'multi' ? 10.00 : 5.00;
@@ -43,11 +44,11 @@ const DirectorySuccessPage: React.FC = () => {
       // /barber-19-hosting = $5/mo or $36/yr hosting subscription
       const barber19HostingMonthly = 5.00;
       const barber19HostingYearly = 36.00;
-      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-5-9' ? barberFiveNineMonthly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : pathname === '/barber-29' ? barberTwentyNineAmount : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/' ? homeMonthly : 20.00;
+      const monthly = pathname === '/10' || pathname === '/barber' ? 10.00 : pathname === '/5' ? fiveMonthly : pathname === '/barber-5' ? barberFiveMonthly : pathname === '/barber-5-month' ? barberFiveMonthMonthly : pathname === '/barber-trial' ? barberTrialMonthly : pathname === '/barber-sample' ? barberSampleMonthly : pathname === '/barber-generator' ? barberGeneratorMonthly : pathname === '/barber-5-9' ? barberFiveNineMonthly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : pathname === '/barber-29' ? barberTwentyNineAmount : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineMonthly : pathname === '/barber-19' ? 19.00 : pathname === '/barber-19-hosting' ? barber19HostingMonthly : pathname === '/19' ? 19.00 : pathname === '/denmark' ? denmarkMonthly : pathname === '/' ? homeMonthly : 20.00;
       const yearly = pathname === '/5' ? fiveYearly : pathname === '/barber-5' ? barberFiveYearly : pathname === '/barber-5-month' ? barberFiveMonthYearly : pathname === '/barber-trial' ? barberTrialYearly : pathname === '/barber-sample' ? barberSampleYearly : pathname === '/barber-generator' ? barberGeneratorYearly : pathname === '/barber-5-9' ? barberFiveNineYearly : pathname === '/localbusiness-voice' ? localbusinessVoiceMonthly : pathname === '/barber-29' ? barberTwentyNineAmount : (pathname === '/barber-9' || pathname === '/localbusiness-9' || pathname === '/localbusiness-9-spanish') ? barberNineYearly : pathname === '/barber-19-hosting' ? barber19HostingYearly : pathname === '/barber-19' ? 19.00 : (pathname === '/10' || pathname === '/barber') ? 49.00 : pathname === '/local-business' ? 135.00 : 99.00;
       // pathname '/' (home) → $20/mo single or $50/mo multi based on ?tier=
       const value = isYearly ? yearly : monthly;
-      const currency = isAus ? 'AUD' : 'USD';
+      const currency = isAus ? 'AUD' : pathname === '/denmark' ? 'DKK' : 'USD';
       const w = window as any;
       if (w.fbq) {
         w.fbq('track', 'Purchase', { currency, value }, { eventID });

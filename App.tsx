@@ -10,10 +10,11 @@ import BarberGeneratorPage from './components/BarberGeneratorPage';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine' | 'localbusinessVoice';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'denmark' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine' | 'localbusinessVoice';
 
 const dirPaths: Record<string, Region> = {
   '/': 'home',
+  '/denmark': 'denmark',
   '/1': 'us',
   '/aus': 'aus',
   '/10': 'ten',

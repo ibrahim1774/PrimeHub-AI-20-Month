@@ -17,7 +17,7 @@ const galleryItems = [
 
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
-type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine';
+type Region = 'us' | 'aus' | 'ten' | 'five' | 'nineteen' | 'barber' | 'localbusiness' | 'freewebsite' | 'freewebsite49' | 'home' | 'denmark' | 'barberleads' | 'barberFive' | 'barberFiveMonth' | 'barberTrial' | 'barber19' | 'barber19Hosting' | 'barberNine' | 'barberTwentyNine' | 'localbusinessNine' | 'barberNineLeads' | 'localbusinessNineLeads' | 'localbusinessNineSpanish' | 'barberFiveNine';
 
 const REGIONS: Record<Region, {
   source: string;
@@ -194,6 +194,22 @@ const REGIONS: Record<Region, {
     heroTaglineRegion: 'your business',
     businessNoun: 'business',
     bookMoreNoun: 'clients',
+  },
+  denmark: {
+    source: 'denmark',
+    currency: 'DKK',
+    currencySymbol: 'kr.',
+    monthlyAmount: 149,
+    yearlyAmount: 149,
+    yearlyWas: 149,
+    ribbonEstYear: 'Since 2026',
+    ribbonLocation: 'Austin · TX',
+    phoneHref: 'tel:+18302549274',
+    phoneLabel: 'Ring til os · Hjælp 24/7',
+    phoneNumber: '(830) 254-9274',
+    heroTaglineRegion: 'din virksomhed',
+    businessNoun: 'virksomhed',
+    bookMoreNoun: 'kunder',
   },
   barberleads: {
     source: 'barberleads',
@@ -496,7 +512,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice') ? { tier: activeHomeTier } : {}) }),
+        body: JSON.stringify({ plan: pricingPlan, source: cfg.source, embedded: false, ...((region === 'home' || region === 'denmark' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice') ? { tier: activeHomeTier } : {}) }),
       });
       const data = await res.json();
       if (data.url) {
@@ -573,7 +589,7 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   }, [region, cfg.monthlyAmount, cfg.currency]);
 
   useEffect(() => {
-    if (region !== 'home' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial' && region !== 'barber19' && region !== 'barber19Hosting') return;
+    if (region !== 'home' && region !== 'denmark' && region !== 'five' && region !== 'barberFive' && region !== 'barberFiveMonth' && region !== 'barberTrial' && region !== 'barber19' && region !== 'barber19Hosting') return;
     const elements = document.querySelectorAll('.mv-anim-fade, .mv-h-anim');
     if (!elements.length) return;
     const observer = new IntersectionObserver((entries) => {
@@ -594,11 +610,12 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
   const handleCheckout = async (tierOverride?: 'single' | 'multi', planOverride?: 'monthly' | 'yearly') => {
     setIsLoading(true);
 
-    const usesTier = region === 'home' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice';
+    const usesTier = region === 'home' || region === 'denmark' || region === 'five' || region === 'barberFive' || region === 'barberFiveMonth' || region === 'barberTrial' || region === 'barber19' || region === 'barberNine' || region === 'barberTwentyNine' || region === 'localbusinessNine' || region === 'barberFiveNine' || region === 'localbusinessVoice';
     const effectiveTier: 'single' | 'multi' = tierOverride ?? activeHomeTier;
     if (usesTier) setActiveHomeTier(effectiveTier);
     const effectivePlan = planOverride ?? pricingPlan;
     const homeMonthly = effectiveTier === 'single' ? 20 : 50;
+    const denmarkMonthly = effectiveTier === 'single' ? 149 : 349;
     const fiveMonthly = effectiveTier === 'single' ? 5 : 10;
     const fiveYearly = effectiveTier === 'single' ? 36 : 72;
     const barber19Amount = effectiveTier === 'single' ? 19 : 39;
@@ -614,6 +631,8 @@ const DirectoryPage: React.FC<{ region?: Region }> = ({ region = 'us' }) => {
     // for both pixels with deduplication.
     const value = region === 'home'
       ? homeMonthly
+      : region === 'denmark'
+      ? denmarkMonthly
       : (region === 'five' || region === 'barberFive' || region === 'barberFiveMonth')
         ? (effectivePlan === 'yearly' ? fiveYearly : fiveMonthly)
         : region === 'barber19'
@@ -3296,13 +3315,20 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     );
   }
 
-  if (region === 'home') {
+  if (region === 'home' || region === 'denmark') {
     const homeVideos = freewebsite49Gallery;
     const homeSocialVideos = [
       { mediaId: 'fezlz3rw75', aspect: '0.5625' },
       { mediaId: 'djx9rmn7e6', aspect: '0.5625' },
       { mediaId: 'kz4ap427gj', aspect: '0.5625' },
     ];
+    // /denmark = Danish-language clone of the home page, priced in DKK.
+    const isDk = region === 'denmark';
+    const t = (en: string, da: string) => isDk ? da : en;
+    const singlePrice = isDk ? '149 kr.' : '$20';
+    const multiPrice = isDk ? '349 kr.' : '$50';
+    const perMo = isDk ? '/md.' : '/mo';
+    const fromPrice = isDk ? 'Fra 149 kr./måned' : 'From $20/month';
     return (
       <>
         <style>{`
@@ -4000,7 +4026,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           <nav className="mv-h-nav">
             <span className="mv-h-logo">amalvera</span>
             <button className="mv-h-nav-cta" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              Get Started
+              {t('Get Started', 'Kom i gang')}
             </button>
           </nav>
 
@@ -4008,11 +4034,11 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* Hero */}
             <section className="mv-h-card mv-h-hero mv-h-anim">
               <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Local business websites · 48 hours</div>
-                <h1 className="mv-h-title">Custom websites for <em>local businesses.</em></h1>
-                <p className="mv-h-sub">Designed and built in about 48 hours. <strong>From $20/month</strong> — covers hosting and ongoing edits.</p>
+                <div className="mv-h-eyebrow">{t('Local business websites · 48 hours', 'Hjemmesider til lokale virksomheder · 48 timer')}</div>
+                <h1 className="mv-h-title">{isDk ? <>Skræddersyede hjemmesider til <em>lokale virksomheder.</em></> : <>Custom websites for <em>local businesses.</em></>}</h1>
+                <p className="mv-h-sub">{isDk ? <>Designet og bygget på cirka 48 timer. <strong>Fra 149 kr./måned</strong> — inkluderer hosting og løbende rettelser.</> : <>Designed and built in about 48 hours. <strong>From $20/month</strong> — covers hosting and ongoing edits.</>}</p>
                 <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                  See pricing
+                  {t('See pricing', 'Se priser')}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
               </div>
@@ -4082,15 +4108,15 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* How it works — barber-style, local-business copy */}
             <section className="mv-h-card mv-h-how mv-h-anim">
               <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">How it works</div>
-                <h2 className="mv-h-title">Three simple steps.</h2>
-                <p className="mv-h-sub">All we need is a link. We handle the rest.</p>
+                <div className="mv-h-eyebrow">{t('How it works', 'Sådan fungerer det')}</div>
+                <h2 className="mv-h-title">{t('Three simple steps.', 'Tre enkle trin.')}</h2>
+                <p className="mv-h-sub">{t('All we need is a link. We handle the rest.', 'Vi skal bare bruge et link. Vi klarer resten.')}</p>
               </div>
               <div className="mv-h-visual">
                 <div className="mv-h-steps">
-                  <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">Send us your link or info</div><div className="mv-h-step-b">A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">We build your site</div><div className="mv-h-step-b">Our team uses AI to design a custom site for your local business — your real photos, your services, your info.</div></div>
-                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">Live in 48 hours</div><div className="mv-h-step-b">Up and running within about 48 hours. We host it too — you just cover the monthly cost.</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">i.</span><div className="mv-h-step-h">{t('Send us your link or info', 'Send os dit link eller dine oplysninger')}</div><div className="mv-h-step-b">{t("A Google Business Profile, Facebook, or Instagram link — or just your business info and a few photos. That's all we need.", 'Et link til din Google Business-profil, Facebook eller Instagram — eller blot dine virksomhedsoplysninger og et par billeder. Det er alt, vi har brug for.')}</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">ii.</span><div className="mv-h-step-h">{t('We build your site', 'Vi bygger din hjemmeside')}</div><div className="mv-h-step-b">{t('Our team uses AI to design a custom site for your local business — your real photos, your services, your info.', 'Vores team bruger AI til at designe en skræddersyet hjemmeside til din lokale virksomhed — dine egne billeder, dine ydelser, dine oplysninger.')}</div></div>
+                  <div className="mv-h-step"><span className="mv-h-step-num">iii.</span><div className="mv-h-step-h">{t('Live in 48 hours', 'Live på 48 timer')}</div><div className="mv-h-step-b">{t('Up and running within about 48 hours. We host it too — you just cover the monthly cost.', 'Klar og online inden for cirka 48 timer. Vi står også for hostingen — du betaler blot den månedlige pris.')}</div></div>
                 </div>
               </div>
             </section>
@@ -4098,24 +4124,24 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* Trust + Speed + SEO combined */}
             <section className="mv-h-card mv-h-pillars mv-h-anim">
               <div className="mv-h-card-text" style={{ width: '100%' }}>
-                <div className="mv-h-eyebrow">What you get</div>
-                <h2 className="mv-h-title">Built to <em>help local businesses</em> grow.</h2>
+                <div className="mv-h-eyebrow">{t('What you get', 'Hvad du får')}</div>
+                <h2 className="mv-h-title">{isDk ? <>Bygget til at <em>hjælpe lokale virksomheder</em> med at vokse.</> : <>Built to <em>help local businesses</em> grow.</>}</h2>
                 <div className="mv-h-pillar-grid">
                   <div className="mv-h-pillar">
                     <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <circle cx="24" cy="24" r="20" stroke="#0d0d0d" strokeWidth="2"/>
                       <path d="M14 24l7 7 14-15" stroke="#d4914a" strokeWidth="3.5"/>
                     </svg>
-                    <div className="mv-h-pillar-h">Trustworthy design</div>
-                    <div className="mv-h-pillar-b">A polished site can help customers take your local business seriously before the first call.</div>
+                    <div className="mv-h-pillar-h">{t('Trustworthy design', 'Troværdigt design')}</div>
+                    <div className="mv-h-pillar-b">{t('A polished site can help customers take your local business seriously before the first call.', 'En gennemført hjemmeside kan hjælpe kunderne med at tage din lokale virksomhed seriøst allerede før første opkald.')}</div>
                   </div>
                   <div className="mv-h-pillar">
                     <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <circle cx="24" cy="24" r="20" stroke="#0d0d0d" strokeWidth="2"/>
                       <path d="M24 13v11l8 5" stroke="#0d8060" strokeWidth="3"/>
                     </svg>
-                    <div className="mv-h-pillar-h">Live in ~48 hours</div>
-                    <div className="mv-h-pillar-b">Share a bit about your business and we can have it online in about two days.</div>
+                    <div className="mv-h-pillar-h">{t('Live in ~48 hours', 'Live på ~48 timer')}</div>
+                    <div className="mv-h-pillar-b">{t('Share a bit about your business and we can have it online in about two days.', 'Fortæl os lidt om din virksomhed, så kan vi have den online på cirka to dage.')}</div>
                   </div>
                   <div className="mv-h-pillar">
                     <svg className="mv-h-pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -4129,8 +4155,8 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                       <line x1="24" y1="24" x2="8" y2="38" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
                       <line x1="24" y1="24" x2="40" y2="38" stroke="#0d0d0d" strokeWidth="1.5" opacity="0.5"/>
                     </svg>
-                    <div className="mv-h-pillar-h">SEO optimized</div>
-                    <div className="mv-h-pillar-b">Clean code, schema markup, and fast loading — modern SEO best-practices baked in.</div>
+                    <div className="mv-h-pillar-h">{t('SEO optimized', 'SEO-optimeret')}</div>
+                    <div className="mv-h-pillar-b">{t('Clean code, schema markup, and fast loading — modern SEO best-practices baked in.', 'Ren kode, schema-markup og hurtig indlæsning — moderne SEO-bedste praksis er bygget ind.')}</div>
                   </div>
                 </div>
               </div>
@@ -4139,9 +4165,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* Pricing — gallery videos sit right below the headline */}
             <section id="mv-h-pricing" className="mv-h-card mv-h-pricing mv-h-anim mv-h-pricing-section">
               <div className="mv-h-pricing-head">
-                <div className="mv-h-eyebrow">Pricing</div>
-                <h2 className="mv-h-title">Pick the site that fits <em>your business.</em></h2>
-                <p className="mv-h-sub">$0 design fee either way. Pay monthly — covers hosting and ongoing edits.</p>
+                <div className="mv-h-eyebrow">{t('Pricing', 'Priser')}</div>
+                <h2 className="mv-h-title">{isDk ? <>Vælg den hjemmeside, der passer til <em>din virksomhed.</em></> : <>Pick the site that fits <em>your business.</em></>}</h2>
+                <p className="mv-h-sub">{t('$0 design fee either way. Pay monthly — covers hosting and ongoing edits.', '0 kr. i designgebyr uanset hvad. Betal månedligt — inkluderer hosting og løbende rettelser.')}</p>
               </div>
 
               <div className="mv-h-pricing-gallery">
@@ -4208,31 +4234,31 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
 
               <div className="mv-h-tier-row">
                 <div className="mv-h-tier">
-                  <div className="mv-h-tier-eyebrow">Single page</div>
-                  <div className="mv-h-tier-price">$20<span>/mo</span></div>
+                  <div className="mv-h-tier-eyebrow">{t('Single page', 'Én side')}</div>
+                  <div className="mv-h-tier-price">{singlePrice}<span>{perMo}</span></div>
                   <ul className="mv-h-tier-list">
-                    <li>One-page custom site</li>
-                    <li>Mobile-responsive · SEO basics</li>
-                    <li>Live in ~48 hours</li>
-                    <li>Hosting + edits included</li>
+                    <li>{t('One-page custom site', 'Skræddersyet hjemmeside på én side')}</li>
+                    <li>{t('Mobile-responsive · SEO basics', 'Mobilvenlig · grundlæggende SEO')}</li>
+                    <li>{t('Live in ~48 hours', 'Live på ~48 timer')}</li>
+                    <li>{t('Hosting + edits included', 'Hosting + rettelser inkluderet')}</li>
                   </ul>
                   <button className="mv-h-pill" onClick={() => handleCheckout('single', 'monthly')} disabled={isLoading}>
-                    Start — $20/mo
+                    {t(`Start — $20/mo`, `Start — 149 kr./md.`)}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
-                <div className="mv-h-or">or</div>
+                <div className="mv-h-or">{t('or', 'eller')}</div>
                 <div className="mv-h-tier mv-h-tier-feat">
-                  <div className="mv-h-tier-eyebrow">Multi-service</div>
-                  <div className="mv-h-tier-price">$50<span>/mo</span></div>
+                  <div className="mv-h-tier-eyebrow">{t('Multi-service', 'Flere ydelser')}</div>
+                  <div className="mv-h-tier-price">{multiPrice}<span>{perMo}</span></div>
                   <ul className="mv-h-tier-list">
-                    <li>Multiple service pages</li>
-                    <li>Service-area + city pages</li>
-                    <li>Deeper SEO setup</li>
-                    <li>Hosting + edits included</li>
+                    <li>{t('Multiple service pages', 'Flere ydelsessider')}</li>
+                    <li>{t('Service-area + city pages', 'Sider for serviceområde + byer')}</li>
+                    <li>{t('Deeper SEO setup', 'Dybere SEO-opsætning')}</li>
+                    <li>{t('Hosting + edits included', 'Hosting + rettelser inkluderet')}</li>
                   </ul>
                   <button className="mv-h-pill" onClick={() => handleCheckout('multi', 'monthly')} disabled={isLoading}>
-                    Start — $50/mo
+                    {t(`Start — $50/mo`, `Start — 349 kr./md.`)}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
                 </div>
@@ -4242,9 +4268,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* As Seen On — social proof video gallery */}
             <section className="mv-h-card mv-h-asseenon mv-h-anim">
               <div className="mv-h-card-text">
-                <div className="mv-h-eyebrow">Featured</div>
-                <h2 className="mv-h-title">As Seen On Facebook, TikTok &amp; <em>Instagram.</em></h2>
-                <p className="mv-h-sub">Me personally walking into local businesses and building them sites.</p>
+                <div className="mv-h-eyebrow">{t('Featured', 'Omtalt')}</div>
+                <h2 className="mv-h-title">{isDk ? <>Set på Facebook, TikTok &amp; <em>Instagram.</em></> : <>As Seen On Facebook, TikTok &amp; <em>Instagram.</em></>}</h2>
+                <p className="mv-h-sub">{t('Me personally walking into local businesses and building them sites.', 'Mig personligt, der besøger lokale virksomheder og bygger hjemmesider til dem.')}</p>
                 <div className="mv-h-social-icons">
                   <a className="mv-h-social-icon" href="#" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.6 6.32a5.4 5.4 0 0 1-3.42-1.22 5.42 5.42 0 0 1-1.84-3.1h-3.27v13.42a2.6 2.6 0 1 1-2.59-2.6c.27 0 .53.04.78.12V9.62a5.86 5.86 0 1 0 5.08 5.81V8.93a8.6 8.6 0 0 0 5.26 1.78V7.42a5.4 5.4 0 0 1 0-1.1z"/></svg>
@@ -4291,28 +4317,28 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             {/* FAQ */}
             <section className="mv-h-card mv-h-faq mv-h-anim">
               <div className="mv-h-card-text" style={{ width: '100%' }}>
-                <div className="mv-h-eyebrow">Questions</div>
-                <h2 className="mv-h-title">Common <em>questions.</em></h2>
+                <div className="mv-h-eyebrow">{t('Questions', 'Spørgsmål')}</div>
+                <h2 className="mv-h-title">{isDk ? <>Ofte stillede <em>spørgsmål.</em></> : <>Common <em>questions.</em></>}</h2>
                 <div className="mv-h-faq-list">
                   <details className="mv-h-faq-item" open>
-                    <summary className="mv-h-faq-summary">What do I get with the website?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">A custom, professional website for your business — pages, contact forms, mobile-responsive design, and modern SEO best-practices baked in.</div>
+                    <summary className="mv-h-faq-summary">{t('What do I get with the website?', 'Hvad får jeg med hjemmesiden?')}<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">{t('A custom, professional website for your business — pages, contact forms, mobile-responsive design, and modern SEO best-practices baked in.', 'En skræddersyet, professionel hjemmeside til din virksomhed — sider, kontaktformularer, mobilvenligt design og moderne SEO-bedste praksis bygget ind.')}</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">What's the difference between $20 and $50?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">$20/mo gets you a single-page custom site — perfect for a focused business with one main offer. $50/mo gets you a multi-service site with separate pages for each service and service area, plus deeper SEO setup.</div>
+                    <summary className="mv-h-faq-summary">{t("What's the difference between $20 and $50?", 'Hvad er forskellen på 149 kr. og 349 kr.?')}<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">{t('$20/mo gets you a single-page custom site — perfect for a focused business with one main offer. $50/mo gets you a multi-service site with separate pages for each service and service area, plus deeper SEO setup.', '149 kr./md. giver dig en skræddersyet hjemmeside på én side — perfekt til en fokuseret virksomhed med ét hovedtilbud. 349 kr./md. giver dig en hjemmeside med flere ydelser, separate sider for hver ydelse og serviceområde samt dybere SEO-opsætning.')}</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">What is the monthly fee for?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">Hosting — keeping your site live online — plus any edits you need along the way. The design itself is on us.</div>
+                    <summary className="mv-h-faq-summary">{t('What is the monthly fee for?', 'Hvad dækker det månedlige gebyr?')}<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">{t('Hosting — keeping your site live online — plus any edits you need along the way. The design itself is on us.', 'Hosting — at holde din hjemmeside online — samt de rettelser, du måtte få brug for undervejs. Selve designet er gratis.')}</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">What support do I get?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">Email or SMS, anytime. Real humans on the other end.</div>
+                    <summary className="mv-h-faq-summary">{t('What support do I get?', 'Hvilken support får jeg?')}<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">{t('Email or SMS, anytime. Real humans on the other end.', 'E-mail eller SMS, når som helst. Rigtige mennesker i den anden ende.')}</div>
                   </details>
                   <details className="mv-h-faq-item">
-                    <summary className="mv-h-faq-summary">How fast is the website delivered?<span className="mv-h-faq-icon">+</span></summary>
-                    <div className="mv-h-faq-a">Usually about 48 hours from sign-up to live URL.</div>
+                    <summary className="mv-h-faq-summary">{t('How fast is the website delivered?', 'Hvor hurtigt leveres hjemmesiden?')}<span className="mv-h-faq-icon">+</span></summary>
+                    <div className="mv-h-faq-a">{t('Usually about 48 hours from sign-up to live URL.', 'Som regel cirka 48 timer fra tilmelding til live-URL.')}</div>
                   </details>
                 </div>
               </div>
@@ -4320,11 +4346,11 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
 
             {/* Final CTA */}
             <section className="mv-h-card mv-h-final mv-h-anim">
-              <div className="mv-h-eyebrow">Ready when you are</div>
-              <h2 className="mv-h-title">Your local business site, live in <em>about 48 hours.</em></h2>
-              <p className="mv-h-sub">$0 design fee. From $20/month — covers hosting and edits.</p>
+              <div className="mv-h-eyebrow">{t('Ready when you are', 'Klar, når du er')}</div>
+              <h2 className="mv-h-title">{isDk ? <>Din lokale virksomheds hjemmeside, live på <em>cirka 48 timer.</em></> : <>Your local business site, live in <em>about 48 hours.</em></>}</h2>
+              <p className="mv-h-sub">{t('$0 design fee. From $20/month — covers hosting and edits.', '0 kr. i designgebyr. Fra 149 kr./måned — inkluderer hosting og rettelser.')}</p>
               <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                See pricing
+                {t('See pricing', 'Se priser')}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
             </section>
@@ -4335,9 +4361,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           </div>
 
           <div className="mv-h-sticky">
-            <span className="mv-h-sticky-text">$0 design fee · from $20/mo</span>
+            <span className="mv-h-sticky-text">{t('$0 design fee · from $20/mo', '0 kr. i designgebyr · fra 149 kr./md.')}</span>
             <button className="mv-h-pill" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-              See pricing
+              {t('See pricing', 'Se priser')}
             </button>
           </div>
         </div>

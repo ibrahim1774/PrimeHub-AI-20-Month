@@ -81,6 +81,10 @@
             "destination": "/index.html"
         },
         {
+            "source": "/denmark",
+            "destination": "/index.html"
+        },
+        {
             "source": "/localbusiness-9",
             "destination": "/index.html"
         },
