@@ -3373,6 +3373,25 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     const singlePrice = isLb9 ? '$9' : isLb29 ? '$29' : isDk ? '149 kr.' : '$20';
     const multiPrice = isLb9 ? '$19' : isLb29 ? '$49' : isDk ? '349 kr.' : '$50';
     const perMo = isLb29 ? '' : isLb9 ? '/mo' : isDk ? '/md.' : '/mo';
+    // Small reassurance row shown under each pricing card.
+    const trustBadges = (
+      <div className="mv-h-trust">
+        <div className="mv-h-trust-cards">
+          <span className="mv-h-card-icon mv-h-card-visa">VISA</span>
+          <span className="mv-h-card-icon mv-h-card-mc">MC</span>
+          <span className="mv-h-card-icon mv-h-card-amex">AMEX</span>
+          <span className="mv-h-card-icon mv-h-card-disc">DISC</span>
+        </div>
+        <div className="mv-h-trust-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          {t('Secure checkout', 'Sikker betaling')}
+        </div>
+        <div className="mv-h-trust-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          {t('Money-back guarantee', 'Pengene-tilbage-garanti')}
+        </div>
+      </div>
+    );
     return (
       <>
         <style>{`
@@ -3685,6 +3704,29 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           .mv-h-tier-list li { padding: 4px 0; }
           .mv-h-tier-list li::before { content: '— '; color: #d4914a; font-weight: 700; }
           .mv-h-tier .mv-h-pill { align-self: stretch; justify-content: center; }
+
+          /* Reassurance row under each pricing card */
+          .mv-h-trust {
+            margin-top: 14px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+          }
+          .mv-h-trust-cards { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+          .mv-h-card-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            height: 18px; padding: 0 5px; border-radius: 3px;
+            font-size: 9px; font-weight: 800; letter-spacing: 0.02em;
+            color: #fff; font-family: 'Inter', sans-serif;
+          }
+          .mv-h-card-visa { background: #1a1f71; }
+          .mv-h-card-mc { background: #eb001b; }
+          .mv-h-card-amex { background: #2e77bc; }
+          .mv-h-card-disc { background: #f47216; }
+          .mv-h-trust-line {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 500; color: #4a4a4a;
+          }
+          .mv-h-trust-line svg { width: 14px; height: 14px; opacity: 0.75; }
+          .mv-h-tier-feat .mv-h-trust-line { color: rgba(255,255,255,0.8); }
 
           /* Payment-method chooser — bottom sheet on phones, centered
              card on desktop. Lists Stripe + PayPal as side-by-side
@@ -4290,6 +4332,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                     {isLbDesign ? `Start — ${singlePrice}${perMo}` : t(`Start — $20/mo`, `Start — 149 kr./md.`)}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
+                  {trustBadges}
                 </div>
                 <div className="mv-h-or">{t('or', 'eller')}</div>
                 <div className="mv-h-tier mv-h-tier-feat">
@@ -4305,6 +4348,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                     {isLbDesign ? `Start — ${multiPrice}${perMo}` : t(`Start — $50/mo`, `Start — 349 kr./md.`)}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </button>
+                  {trustBadges}
                 </div>
               </div>
             </section>
