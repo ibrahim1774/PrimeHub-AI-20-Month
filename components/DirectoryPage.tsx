@@ -4126,9 +4126,11 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                   <span className="mv-h-msg-label">Text me personally · </span>347-613-1906
                 </a>
               )}
-              <button className="mv-h-nav-cta" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
-                {t('Get Started', 'Kom i gang')}
-              </button>
+              {!isLb9 && (
+                <button className="mv-h-nav-cta" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
+                  {t('Get Started', 'Kom i gang')}
+                </button>
+              )}
             </div>
           </nav>
 
