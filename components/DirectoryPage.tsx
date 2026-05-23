@@ -3429,14 +3429,15 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           .mv-h-nav-right { display: flex; align-items: center; gap: 8px; }
           .mv-h-msg {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 10px 16px; border-radius: 999px;
-            border: 1.5px solid rgba(13,13,13,0.18); background: #fff; color: #0d0d0d;
-            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px;
+            padding: 10px 15px; border-radius: 12px;
+            border: 1.5px solid #1f63ff; background: #eef2ff; color: #0d0d0d;
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px;
             text-decoration: none; white-space: nowrap;
-            transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(31,99,255,0.15);
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
           }
-          .mv-h-msg:hover { border-color: #1f63ff; color: #1f63ff; transform: translateY(-1px); }
-          .mv-h-msg svg { width: 15px; height: 15px; }
+          .mv-h-msg:hover { background: #e0e8ff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31,99,255,0.22); }
+          .mv-h-msg svg { width: 15px; height: 15px; color: #1f63ff; }
           @media (max-width: 520px) {
             .mv-h-msg-label { display: none; }
             .mv-h-msg { padding: 9px 13px; font-size: 12px; }
@@ -4120,9 +4121,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             <span className="mv-h-logo">amalvera</span>
             <div className="mv-h-nav-right">
               {isLb9 && (
-                <a className="mv-h-msg" href="sms:+13476131906" aria-label="Message me at 347-613-1906">
+                <a className="mv-h-msg" href="sms:+13476131906" aria-label="Text me personally at 347-613-1906">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                  <span className="mv-h-msg-label">Message Me · </span>347-613-1906
+                  <span className="mv-h-msg-label">Text me personally · </span>347-613-1906
                 </a>
               )}
               <button className="mv-h-nav-cta" onClick={() => { const el = document.getElementById('mv-h-pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} disabled={isLoading}>
