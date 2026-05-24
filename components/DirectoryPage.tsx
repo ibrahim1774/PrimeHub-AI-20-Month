@@ -1744,9 +1744,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
     const b9IsSpanish = region === 'localbusinessNineSpanish';
     const b9IsFive = region === 'barberFiveNine';
     const b9ShowMulti = region === 'localbusinessNine' || region === 'localbusinessNineSpanish' || region === 'barberNine';
-    const b9LeadFormId = region === 'barberNineLeads' ? 'eWkkKWwoxGJK2CvpWUxX' : 'LRbgZwbTGaM6WyesqAjV';
-    const b9LeadFormName = region === 'barberNineLeads' ? 'Barber - $20' : 'Contractors - Free';
-    const b9LeadFormHeight = region === 'barberNineLeads' ? 420 : 360;
+    const b9LeadFormId = 'LRbgZwbTGaM6WyesqAjV';
+    const b9LeadFormName = region === 'barberNineLeads' ? 'Contractors - $20' : 'Contractors - Free';
+    const b9LeadFormHeight = region === 'barberNineLeads' ? 482 : 360;
     const t = (en: string, es: string) => b9IsSpanish ? es : en;
     const b9SingleTierLabel = b9IsSpanish ? 'Una Página' : (b9IsLocal ? 'Single Page' : 'Single Page');
     const b9SingleTierFeats = b9IsSpanish ? [
