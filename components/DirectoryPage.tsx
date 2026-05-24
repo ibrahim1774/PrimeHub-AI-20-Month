@@ -2130,6 +2130,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               />
             )}
 
+            {region !== 'barberNineLeads' && (
             <section className="b9-social">
               <div className="b9-eyebrow">{t('Featured', 'Destacado')}</div>
               <h2 className="b9-social-h">{t('As Seen On Facebook, TikTok & ', 'Visto En Facebook, TikTok e ')}<em>Instagram.</em></h2>
@@ -2200,6 +2201,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 </div>
               </div>
             </section>
+            )}
 
             {b9IsFive && (
               <section className="b9-card">
