@@ -1454,6 +1454,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           .b9-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
           .b9-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
           .b9-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-page-blead .b9-title { font-size:27px; }
           .b9-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
           .b9-chip { display:inline-flex; align-items:center; gap:6px; background:rgba(201,169,110,.12); color:#c9a96e; border:1px solid rgba(201,169,110,.45); padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.02em; }
           .b9-allin { display:inline-flex; align-items:center; gap:8px; padding:12px 18px; background:linear-gradient(135deg, #c9a96e 0%, #d8b67a 100%); color:#0a0a0a; border-radius:14px; font-weight:800; font-size:14px; letter-spacing:.01em; box-shadow:0 12px 28px rgba(201,169,110,.30); margin-bottom:18px; }
@@ -1509,6 +1510,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           @media (min-width: 760px) {
             .b9-card { padding:34px 30px; }
             .b9-title { font-size:46px; }
+            .b9-page-blead .b9-title { font-size:37px; }
             .b9-steps { grid-template-columns:repeat(3, 1fr); gap:10px; }
             .b9-gcard { width:170px; }
           }
@@ -1845,6 +1847,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           .b9-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#c9a96e; margin-bottom:10px; }
           .b9-title { font-family:'Inter', sans-serif; font-weight:800; font-size:34px; line-height:1.05; letter-spacing:-.025em; color:#f5f0e0; margin:0 0 10px; }
           .b9-title em { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; color:#c9a96e; }
+          .b9-page-blead .b9-title { font-size:27px; }
           .b9-sub { font-size:15px; line-height:1.5; color:#cfc8b8; margin:0 0 14px; max-width:580px; }
           .b9-included { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px; }
           .b9-chip { display:inline-flex; align-items:center; gap:6px; background:rgba(201,169,110,.12); color:#c9a96e; border:1px solid rgba(201,169,110,.45); padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:.02em; }
@@ -1908,6 +1911,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           @media (min-width: 760px) {
             .b9-card { padding:34px 30px; }
             .b9-title { font-size:46px; }
+            .b9-page-blead .b9-title { font-size:37px; }
             .b9-steps { grid-template-columns:repeat(3, 1fr); gap:10px; }
             .b9-gcard { width:170px; }
           }
@@ -1921,7 +1925,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
           .mv-checkout-fallback-link:hover { color:#0d0d0d; }
         `}</style>
 
-        <div className={`b9-page${b9IsLocal ? ' b9-page-local' : ''}${b9IsLeads ? ' b9-page-leads' : ''}`}>
+        <div className={`b9-page${b9IsLocal ? ' b9-page-local' : ''}${b9IsLeads ? ' b9-page-leads' : ''}${region === 'barberNineLeads' ? ' b9-page-blead' : ''}`}>
           <nav className="b9-nav"><span className="b9-logo">amalvera</span></nav>
 
           <div className="b9-stack">
