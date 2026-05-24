@@ -1941,9 +1941,9 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
 
               {b9IsLeads && (
                 <div className="b9-leadform-inline">
-                  <div className="b9-eyebrow" style={{ color: '#c9a96e' }}>◊ Get Started — Free ◊</div>
+                  {region !== 'barberNineLeads' && <div className="b9-eyebrow" style={{ color: '#c9a96e' }}>◊ Get Started — Free ◊</div>}
                   <h2 className="b9-leadform-h">Tell us about your <em>{b9NicheLabel}.</em></h2>
-                  <p className="b9-leadform-sub">We'll design + build your {b9NicheLabel} site for free. Only pay if you love it.</p>
+                  {region !== 'barberNineLeads' && <p className="b9-leadform-sub">We'll design + build your {b9NicheLabel} site for free. Only pay if you love it.</p>}
                   <div className="b9-leadform-frame">
                     <iframe
                       src={`https://api.leadconnectorhq.com/widget/form/${b9LeadFormId}`}
