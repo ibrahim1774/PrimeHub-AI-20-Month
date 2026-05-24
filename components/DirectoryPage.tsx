@@ -1928,7 +1928,7 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
             <section className="b9-card">
               <div className="b9-eyebrow">{b9EyebrowText}</div>
               <h1 className="b9-title">{b9HeadlinePrefix}<em>{b9HeadlineEm}</em></h1>
-              <p className="b9-sub">{b9SubCopy}</p>
+              {region !== 'barberNineLeads' && <p className="b9-sub">{b9SubCopy}</p>}
 
               {region !== 'barberNineLeads' && (
               <div className="b9-guarantee-inline" role="note" aria-label={t('Delivery and money-back guarantee', 'Garantía de entrega y reembolso')}>
