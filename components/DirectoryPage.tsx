@@ -1926,11 +1926,13 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
               <h1 className="b9-title">{b9HeadlinePrefix}<em>{b9HeadlineEm}</em></h1>
               <p className="b9-sub">{b9SubCopy}</p>
 
+              {region !== 'barberNineLeads' && (
               <div className="b9-guarantee-inline" role="note" aria-label={t('Delivery and money-back guarantee', 'Garantía de entrega y reembolso')}>
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{t('24–48 hr delivery', 'Entrega en 24–48 hrs')}</span>
                 {!b9IsFive && <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>{t('Edits & revisions included', 'Ediciones y revisiones incluidas')}</span>}
                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{t('Money-back guarantee', 'Garantía de reembolso')}</span>
               </div>
+              )}
 
               <div className="b9-allin">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -2021,8 +2023,8 @@ Keep replies short — 1 to 3 sentences usually. This is a phone call, not an es
                 </div>
               </div>}
 
-              {!b9IsFive && <div className="b9-mini-h">{t('How it works', 'Cómo funciona')}</div>}
-              {!b9IsFive && (
+              {!b9IsFive && region !== 'barberNineLeads' && <div className="b9-mini-h">{t('How it works', 'Cómo funciona')}</div>}
+              {!b9IsFive && region !== 'barberNineLeads' && (
                 <div className="b9-steps">
                   <div className="b9-step"><span className="b9-step-num">i.</span><div className="b9-step-h">{t('Send us a link', 'Envíanos un enlace')}</div><div className="b9-step-b">{t('Google Business, Facebook, or Instagram — or a few photos and your info.', 'Google Business, Facebook o Instagram — o algunas fotos y la información de tu negocio.')}</div></div>
                   <div className="b9-step"><span className="b9-step-num">ii.</span><div className="b9-step-h">{t('We build your site', 'Construimos tu sitio')}</div><div className="b9-step-b">{b9Step2Body}</div></div>
