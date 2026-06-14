@@ -37,6 +37,10 @@
             "destination": "/index.html"
         },
         {
+            "source": "/primebarber49",
+            "destination": "/index.html"
+        },
+        {
             "source": "/local-business",
             "destination": "/index.html"
         },

@@ -7,6 +7,7 @@ import DirectoryPage from './components/DirectoryPage';
 import DirectorySuccessPage from './components/DirectorySuccessPage';
 import BarberSamplePage from './components/BarberSamplePage';
 import BarberGeneratorPage from './components/BarberGeneratorPage';
+import PrimeBarber49 from './components/PrimeBarber49';
 import { useWebsiteGenerator } from './hooks/useWebsiteGenerator';
 import { FormData } from './types';
 
@@ -114,6 +115,11 @@ const App: React.FC = () => {
   // Legacy generator success on '/' (kept for any in-flight Stripe sessions created before the move)
   if (status === 'success' && pendingId && companyName) {
     return <SuccessPage pendingId={pendingId} companyName={companyName} />;
+  }
+
+  // /primebarber49 — concise video-hook + 3-question quiz funnel → GHL form
+  if (pathname === '/primebarber49') {
+    return <PrimeBarber49 />;
   }
 
   // /generator — landing form / website generator flow
