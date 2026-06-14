@@ -37,9 +37,9 @@ const FEATURES = [
   'Custom Website (Branded Website)',
 ];
 
-// TEMP: skip the 3-question quiz — hero "Watch Video" goes straight to the
-// GoHighLevel form. Flip to false to bring the quiz (Q1→Q3) back.
-const SKIP_QUIZ = true;
+// When true, hero "Watch Video" goes straight to the GoHighLevel form.
+// false = run the 3-question quiz (Q1→Q3) first, then a button to the form.
+const SKIP_QUIZ = false;
 
 type Phase = 'hero' | 'q1' | 'q2' | 'q3' | 'form';
 
@@ -141,12 +141,16 @@ const PrimeBarber49: React.FC = () => {
     (q: QuizQuestion, option: string) => {
       setSelected(option);
       setAnswers(prev => ({ ...prev, [q.key]: option }));
+      // Last question: keep the choice highlighted and let the visitor tap the
+      // explicit "Continue" button (below) to move on to the lead form.
+      if (q.key === 'q3') {
+        track('QuizComplete', true);
+        return;
+      }
       // brief beat so the selection animation reads, then advance
       window.setTimeout(() => {
         setSelected(null);
-        if (q.key === 'q1') setPhase('q2');
-        else if (q.key === 'q2') setPhase('q3');
-        else { track('QuizComplete', true); setPhase('form'); }
+        setPhase(q.key === 'q1' ? 'q2' : 'q3');
       }, 280);
     },
     [],
@@ -333,6 +337,17 @@ const PrimeBarber49: React.FC = () => {
                 );
               })}
             </div>
+
+            {/* After Q3, an explicit button to the lead form */}
+            {activeQuestion.key === 'q3' && answers.q3 && (
+              <button
+                onClick={() => setPhase('form')}
+                className="mx-auto mt-7 block w-full max-w-sm rounded-full px-8 py-4 text-base font-extrabold uppercase tracking-widest text-black shadow-[0_14px_40px_rgba(212,166,74,0.4)] transition-all duration-200 hover:brightness-110 active:scale-[0.98] sm:max-w-md sm:py-5 sm:text-lg"
+                style={{ background: `linear-gradient(180deg, #f2d690, ${GOLD})`, animation: 'pb49-in .4s ease both' }}
+              >
+                Continue →
+              </button>
+            )}
           </div>
         )}
 
