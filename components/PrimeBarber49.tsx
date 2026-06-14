@@ -28,15 +28,6 @@ const VSL_VIDEO_URL = '';
 const VIDEO_POSTER =
   'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1280&q=70';
 
-// Headline value-stack — each rendered with a leading "+".
-const FEATURES = [
-  'Payment System',
-  'Booking Calendar',
-  'Payment Integration',
-  'Sell Your Own Products',
-  'Custom Website (Branded Website)',
-];
-
 // When true, hero "Watch Video" goes straight to the GoHighLevel form.
 // false = run the 3-question quiz (Q1→Q3) first, then a button to the form.
 const SKIP_QUIZ = false;
@@ -112,6 +103,7 @@ const PrimeBarber49: React.FC = () => {
   const [phase, setPhase] = useState<Phase>('hero');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
+  const [preload, setPreload] = useState(false);
   const formHostRef = useRef<HTMLDivElement>(null);
 
   // Distinctive barbershop typography — signage display + elegant serif.
@@ -156,10 +148,23 @@ const PrimeBarber49: React.FC = () => {
     [],
   );
 
-  // Load the GoHighLevel resize script once the embed is on the page.
+  // Warm up the GoHighLevel connection on mount and flag the form for
+  // background preloading, so the iframe is fetched + sized while the visitor
+  // is still on the hero/quiz — zero lag when they hit Continue after Q3.
   useEffect(() => {
-    if (phase !== 'form') return;
-    track('Lead');
+    ['https://api.leadconnectorhq.com', 'https://link.msgsndr.com'].forEach(href => {
+      const l = document.createElement('link');
+      l.rel = 'preconnect';
+      l.href = href;
+      l.crossOrigin = 'anonymous';
+      document.head.appendChild(l);
+    });
+    setPreload(true);
+  }, []);
+
+  // Load the GHL resize script as soon as the (hidden) iframe is mounted.
+  useEffect(() => {
+    if (!preload) return;
     const SRC = 'https://link.msgsndr.com/js/form_embed.js';
     if (!document.querySelector(`script[src="${SRC}"]`)) {
       const s = document.createElement('script');
@@ -167,6 +172,11 @@ const PrimeBarber49: React.FC = () => {
       s.async = true;
       document.body.appendChild(s);
     }
+  }, [preload]);
+
+  // Fire the Lead pixel event when the form is actually revealed.
+  useEffect(() => {
+    if (phase === 'form') track('Lead');
   }, [phase]);
 
   const inQuiz = phase === 'q1' || phase === 'q2' || phase === 'q3';
@@ -217,9 +227,9 @@ const PrimeBarber49: React.FC = () => {
         </div>
       )}
 
-      <main className="relative mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-5 py-14 sm:px-6 sm:py-20 lg:max-w-2xl lg:py-24">
+      <main className="relative mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-5 py-9 sm:px-6 sm:py-14 lg:max-w-2xl lg:py-20">
         {/* Wordmark */}
-        <div className="pb49-in mb-8 flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.42em] text-white/70 sm:mb-10">
+        <div className="pb49-in mb-5 flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.42em] text-white/70 sm:mb-7">
           <span className="h-px w-7" style={{ background: GOLD }} />
           PrimeBarber
           <span className="h-px w-7" style={{ background: GOLD }} />
@@ -228,16 +238,12 @@ const PrimeBarber49: React.FC = () => {
         {/* ─────────────── HERO ─────────────── */}
         {phase === 'hero' && (
           <div className="flex w-full flex-col items-center text-center">
-            <p className="pb49-in mb-5 text-xs font-semibold uppercase tracking-[0.3em] sm:mb-6" style={{ animationDelay: '.05s', color: GOLD }}>
-              The complete barbershop system
-            </p>
-
             {/* Video placeholder — click play to watch how it works */}
             <button
               onClick={goToQuiz}
               aria-label="Watch the video"
-              className="pb49-in group relative mb-8 w-full overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.55)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99] sm:mb-9"
-              style={{ animationDelay: '.1s', aspectRatio: '16 / 9' }}
+              className="pb49-in group relative mb-6 w-full overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.55)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99] sm:mb-7"
+              style={{ animationDelay: '.05s', aspectRatio: '16 / 9' }}
             >
               <img src={VIDEO_POSTER} alt="" className="absolute inset-0 h-full w-full object-cover" />
               <span className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(7,7,7,0.35), rgba(7,7,7,0.78))' }} />
@@ -258,34 +264,28 @@ const PrimeBarber49: React.FC = () => {
               </span>
             </button>
 
-            {/* Headline value-stack */}
-            <h1 className="pb49-in pb49-display text-[clamp(3.25rem,13vw,6rem)] leading-[0.92]" style={{ animationDelay: '.16s' }}>
-              Barbers
+            {/* Headline — concise value prop (kept compact so the CTA stays
+                visible above the fold on mobile) */}
+            <h1 className="pb49-in text-balance text-[1.7rem] font-extrabold leading-[1.18] sm:text-[2.1rem] lg:text-4xl" style={{ animationDelay: '.12s' }}>
+              Your whole barbershop in one{' '}
+              <span style={{ color: GOLD }}>branded website</span> — online booking,
+              payments &amp; product sales.
             </h1>
 
-            <ul className="pb49-in mx-auto mt-4 flex w-fit flex-col items-start gap-1.5 text-left sm:mt-5 sm:gap-2" style={{ animationDelay: '.22s' }}>
-              {FEATURES.map(feature => (
-                <li key={feature} className="flex items-baseline gap-2.5 text-xl font-extrabold leading-tight tracking-tight sm:text-2xl">
-                  <span className="shrink-0" style={{ color: GOLD }}>+</span>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <p className="pb49-in mt-5 text-lg font-bold sm:mt-6 sm:text-xl" style={{ animationDelay: '.28s' }}>
-              For <span style={{ color: GOLD }}>$49/month</span>
+            <p className="pb49-in mt-3 text-base font-bold text-white/80 sm:text-lg" style={{ animationDelay: '.18s' }}>
+              Just <span style={{ color: GOLD }}>$49/month</span>.
             </p>
 
             {/* CTA */}
             <button
               onClick={goToQuiz}
-              className="pb49-in mt-8 w-full max-w-sm rounded-full px-8 py-4 text-base font-extrabold uppercase tracking-widest text-black shadow-[0_14px_40px_rgba(212,166,74,0.4)] transition-all duration-200 hover:brightness-110 active:scale-[0.98] sm:max-w-md sm:py-5 sm:text-lg"
-              style={{ animationDelay: '.34s', background: `linear-gradient(180deg, #f2d690, ${GOLD})` }}
+              className="pb49-in mt-6 w-full max-w-sm rounded-full px-8 py-4 text-base font-extrabold uppercase tracking-widest text-black shadow-[0_14px_40px_rgba(212,166,74,0.4)] transition-all duration-200 hover:brightness-110 active:scale-[0.98] sm:max-w-md sm:py-5 sm:text-lg"
+              style={{ animationDelay: '.26s', background: `linear-gradient(180deg, #f2d690, ${GOLD})` }}
             >
               ▶ Watch Video
             </button>
 
-            <div className="pb49-in mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-wider text-white/45" style={{ animationDelay: '.4s' }}>
+            <div className="pb49-in mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-wider text-white/45 sm:mt-6" style={{ animationDelay: '.32s' }}>
               <span>No contracts</span>
               <span className="h-1 w-1 rounded-full bg-white/30" />
               <span>Cancel anytime</span>
@@ -352,43 +352,59 @@ const PrimeBarber49: React.FC = () => {
         )}
 
         {/* ─────────────── FORM (GoHighLevel embed) ─────────────── */}
+        {/* Heading, revealed only on the final step. */}
         {phase === 'form' && (
-          <div className="pb49-in flex w-full flex-col items-center">
-            <p className="mb-1.5 text-center text-xs font-bold uppercase tracking-[0.3em]" style={{ color: GOLD }}>
+          <div className="pb49-in mb-5 flex w-full flex-col items-center text-center">
+            <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: GOLD }}>
               Last step
             </p>
-            <h2 className="mb-1 text-center text-2xl font-extrabold sm:text-3xl">
+            <h2 className="mb-1 text-2xl font-extrabold sm:text-3xl">
               Your $49/month system is ready
             </h2>
-            <p className="mb-6 max-w-sm text-center text-sm text-white/60 sm:mb-7 sm:text-base">
+            <p className="max-w-sm text-sm text-white/60 sm:text-base">
               Drop your details below and we&apos;ll get your barbershop set up.
             </p>
+          </div>
+        )}
 
-            <div
-              ref={formHostRef}
-              className="w-full max-w-xl overflow-hidden rounded-2xl border border-white/10"
-            >
-              {/* Exact embed provided by GoHighLevel — form_embed.js auto-resizes
-                  the iframe to the form's real height, so no fixed/min height is
-                  set here (a fixed wrapper height would leave a gap or clip). */}
-              <iframe
-                src={FORM_SRC}
-                style={{ display: 'block', width: '100%', height: 600, border: 'none', borderRadius: 3 }}
-                id={`inline-${FORM_ID}`}
-                data-layout="{'id':'INLINE'}"
-                data-trigger-type="alwaysShow"
-                data-trigger-value=""
-                data-activation-type="alwaysActivated"
-                data-activation-value=""
-                data-deactivation-type="neverDeactivate"
-                data-deactivation-value=""
-                data-form-name="Barbershop"
-                data-height="undefined"
-                data-layout-iframe-id={`inline-${FORM_ID}`}
-                data-form-id={FORM_ID}
-                title="Barbershop"
-              />
-            </div>
+        {/* Persistent embed — mounted + fetched/sized in the background from first
+            paint (parked off-screen), then revealed in place on the form step so
+            there's zero load wait after Continue. The SAME iframe stays mounted,
+            so revealing it never re-fetches the form. */}
+        {preload && (
+          <div
+            ref={formHostRef}
+            aria-hidden={phase !== 'form'}
+            className={
+              phase === 'form'
+                ? 'pb49-in w-full max-w-xl overflow-hidden rounded-2xl border border-white/10'
+                : 'w-full max-w-xl overflow-hidden'
+            }
+            style={
+              phase === 'form'
+                ? undefined
+                : { position: 'fixed', left: 0, top: 0, transform: 'translateX(-200vw)', opacity: 0, pointerEvents: 'none' }
+            }
+          >
+            {/* Exact embed provided by GoHighLevel — form_embed.js auto-resizes
+                the iframe to the form's real height. */}
+            <iframe
+              src={FORM_SRC}
+              style={{ display: 'block', width: '100%', height: 600, border: 'none', borderRadius: 3 }}
+              id={`inline-${FORM_ID}`}
+              data-layout="{'id':'INLINE'}"
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name="Barbershop"
+              data-height="undefined"
+              data-layout-iframe-id={`inline-${FORM_ID}`}
+              data-form-id={FORM_ID}
+              title="Barbershop"
+            />
           </div>
         )}
       </main>
