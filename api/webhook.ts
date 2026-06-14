@@ -72,7 +72,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2025-01-27.acacia' as any,
 });
 
-const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
+const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '1287427660086229';
 const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
 
 // TikTok Pixel ID is public (already in the browser snippet) so it's

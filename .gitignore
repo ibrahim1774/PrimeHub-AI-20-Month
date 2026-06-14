@@ -28,3 +28,6 @@ public/gallery/_orig/
 .plans/
 .playwright-mcp/
 .vercel
+.env
+.env.*
+!.env.example

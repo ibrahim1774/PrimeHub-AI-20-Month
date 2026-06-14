@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 // the same event_id as the browser pixel call so each platform
 // dedupes browser ↔ server. Fire-and-forget — never blocks the
 // Stripe session response.
-const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '26490568997297314';
+const FB_PIXEL_ID = process.env.FB_PIXEL_ID || '1287427660086229';
 const FB_ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
 const TIKTOK_PIXEL_ID = process.env.TIKTOK_PIXEL_ID || 'D81SNARC77UATASKVG10';
 const TIKTOK_ACCESS_TOKEN = process.env.TIKTOK_ACCESS_TOKEN;
