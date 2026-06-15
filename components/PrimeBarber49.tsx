@@ -357,8 +357,8 @@ const PrimeBarber49: React.FC = () => {
             <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: GOLD }}>
               Last step
             </p>
-            <h2 className="mb-1 text-2xl font-extrabold sm:text-3xl">
-              Your $49/month system is ready
+            <h2 className="mb-1 text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+              Get your $49/month system
             </h2>
             <p className="max-w-sm text-sm text-white/60 sm:text-base">
               Drop your details below and we&apos;ll get your barbershop set up.
