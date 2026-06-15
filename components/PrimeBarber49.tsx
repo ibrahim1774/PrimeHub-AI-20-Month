@@ -267,9 +267,8 @@ const PrimeBarber49: React.FC = () => {
             {/* Headline — concise value prop (kept compact so the CTA stays
                 visible above the fold on mobile) */}
             <h1 className="pb49-in text-balance text-[1.7rem] font-extrabold leading-[1.18] sm:text-[2.1rem] lg:text-4xl" style={{ animationDelay: '.12s' }}>
-              Your whole barbershop in one{' '}
-              <span style={{ color: GOLD }}>branded website</span> — online booking,
-              payments &amp; product sales.
+              A <span style={{ color: GOLD }}>branded barber site</span> to sell your
+              own products, get paid &amp; run a customer booking system.
             </h1>
 
             <p className="pb49-in mt-3 text-base font-bold text-white/80 sm:text-lg" style={{ animationDelay: '.18s' }}>
