@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
  * /primebarber49 — concise single-screen lead funnel for barbershops.
  *
  * Flow:
- *   HERO  → big "$49/month" title + centred play button. The "WATCH VIDEO"
+ *   HERO  → big "$97/month" title + centred play button. The "WATCH VIDEO"
  *           CTA opens the quiz (no real VSL yet — drop a Wistia id into
  *           VSL_WISTIA_ID below to play a video before the quiz instead).
  *   QUIZ  → 3 single-select, auto-advancing questions. The progress bar
@@ -62,7 +62,7 @@ const QUESTIONS: QuizQuestion[] = [
   },
   {
     key: 'q3',
-    prompt: 'Are you okay with $49/month for the website system and everything?',
+    prompt: 'Are you okay with $97/month for the website system and everything?',
     options: ['Yes', "No"],
   },
 ];
@@ -117,7 +117,7 @@ const PrimeBarber49: React.FC = () => {
         'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,600;1,500;1,600&display=swap';
       document.head.appendChild(link);
     }
-    document.title = 'PrimeBarber — Your Complete Barbershop System for $49/month';
+    document.title = 'PrimeBarber — Your Complete Barbershop System for $97/month';
   }, []);
 
   const goToQuiz = useCallback(() => {
@@ -272,7 +272,7 @@ const PrimeBarber49: React.FC = () => {
             </h1>
 
             <p className="pb49-in mt-3 text-base font-bold text-white/80 sm:text-lg" style={{ animationDelay: '.18s' }}>
-              Just <span style={{ color: GOLD }}>$49/month</span>.
+              Just <span style={{ color: GOLD }}>$97/month</span>.
             </p>
 
             {/* CTA */}
@@ -358,7 +358,7 @@ const PrimeBarber49: React.FC = () => {
               Last step
             </p>
             <h2 className="mb-1 text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-              Get your $49/month system
+              Get your $97/month system
             </h2>
             <p className="max-w-sm text-sm text-white/60 sm:text-base">
               Drop your details below and we&apos;ll get your barbershop set up.
