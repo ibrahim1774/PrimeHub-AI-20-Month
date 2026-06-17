@@ -32,7 +32,7 @@ const VIDEO_POSTER =
 // false = run the 3-question quiz (Q1→Q3) first, then a button to the form.
 const SKIP_QUIZ = false;
 
-type Phase = 'hero' | 'q1' | 'q2' | 'q3' | 'form';
+type Phase = 'hero' | 'q1' | 'q2' | 'form';
 
 interface QuizQuestion {
   key: Phase;
@@ -60,19 +60,13 @@ const QUESTIONS: QuizQuestion[] = [
     prompt: 'Are you looking to move away from Booksy, The Cut, or any other booking link?',
     options: ['Yes', 'No'],
   },
-  {
-    key: 'q3',
-    prompt: 'Are you okay with $97/month for the website system and everything?',
-    options: ['Yes', "No"],
-  },
 ];
 
 // Progress bar literally starts at 50% on Q1, then fills to 100% by the form.
 const PROGRESS: Record<Phase, number> = {
   hero: 0,
   q1: 50,
-  q2: 70,
-  q3: 88,
+  q2: 78,
   form: 100,
 };
 
@@ -133,16 +127,17 @@ const PrimeBarber49: React.FC = () => {
     (q: QuizQuestion, option: string) => {
       setSelected(option);
       setAnswers(prev => ({ ...prev, [q.key]: option }));
+      const idx = QUESTIONS.findIndex(x => x.key === q.key);
       // Last question: keep the choice highlighted and let the visitor tap the
       // explicit "Continue" button (below) to move on to the lead form.
-      if (q.key === 'q3') {
+      if (idx === QUESTIONS.length - 1) {
         track('QuizComplete', true);
         return;
       }
       // brief beat so the selection animation reads, then advance
       window.setTimeout(() => {
         setSelected(null);
-        setPhase(q.key === 'q1' ? 'q2' : 'q3');
+        setPhase(QUESTIONS[idx + 1].key);
       }, 280);
     },
     [],
@@ -179,7 +174,7 @@ const PrimeBarber49: React.FC = () => {
     if (phase === 'form') track('Lead');
   }, [phase]);
 
-  const inQuiz = phase === 'q1' || phase === 'q2' || phase === 'q3';
+  const inQuiz = phase === 'q1' || phase === 'q2';
   const activeQuestion = QUESTIONS.find(q => q.key === phase);
 
   return (
@@ -338,7 +333,7 @@ const PrimeBarber49: React.FC = () => {
             </div>
 
             {/* After Q3, an explicit button to the lead form */}
-            {activeQuestion.key === 'q3' && answers.q3 && (
+            {activeQuestion.key === QUESTIONS[QUESTIONS.length - 1].key && answers[activeQuestion.key] && (
               <button
                 onClick={() => setPhase('form')}
                 className="mx-auto mt-7 block w-full max-w-sm rounded-full px-8 py-4 text-base font-extrabold uppercase tracking-widest text-black shadow-[0_14px_40px_rgba(212,166,74,0.4)] transition-all duration-200 hover:brightness-110 active:scale-[0.98] sm:max-w-md sm:py-5 sm:text-lg"
@@ -357,9 +352,6 @@ const PrimeBarber49: React.FC = () => {
             <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: GOLD }}>
               Last step
             </p>
-            <h2 className="mb-1 text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-              Get your $97/month system
-            </h2>
             <p className="max-w-sm text-sm text-white/60 sm:text-base">
               Drop your details below and we&apos;ll get your barbershop set up.
             </p>
