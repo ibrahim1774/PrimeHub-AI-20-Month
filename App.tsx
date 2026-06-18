@@ -117,8 +117,9 @@ const App: React.FC = () => {
     return <SuccessPage pendingId={pendingId} companyName={companyName} />;
   }
 
-  // /primebarber49 — concise video-hook + 3-question quiz funnel → GHL form
-  if (pathname === '/primebarber49') {
+  // /primebarber97 — concise video-hook + 2-question quiz funnel → GHL form.
+  // /primebarber49 kept as an alias so existing ad links don't 404.
+  if (pathname === '/primebarber97' || pathname === '/primebarber49') {
     return <PrimeBarber49 />;
   }
 
