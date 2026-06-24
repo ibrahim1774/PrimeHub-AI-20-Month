@@ -169,10 +169,10 @@ const PrimeBarber49: React.FC = () => {
     }
   }, [preload]);
 
-  // Fire the Lead pixel event when the form is actually revealed.
-  useEffect(() => {
-    if (phase === 'form') track('Lead');
-  }, [phase]);
+  // NOTE: the Lead pixel event is fired by the GoHighLevel form itself on
+  // actual submit (its built-in pixel), so the page intentionally does NOT
+  // fire 'Lead' on form view — that would double-count and fire for
+  // non-submitters. The quiz is UX only.
 
   const inQuiz = phase === 'q1' || phase === 'q2';
   const activeQuestion = QUESTIONS.find(q => q.key === phase);
