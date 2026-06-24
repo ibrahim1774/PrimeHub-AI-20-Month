@@ -70,16 +70,9 @@ const PROGRESS: Record<Phase, number> = {
   form: 100,
 };
 
-// Fire-and-forget pixel helpers (index.html loads Meta + TikTok pixels).
-const track = (event: string, custom = false) => {
-  try {
-    const w = window as any;
-    if (w.fbq) w.fbq(custom ? 'trackCustom' : 'track', event);
-    if (w.ttq) w.ttq.track(event);
-  } catch {
-    /* never block the funnel on analytics */
-  }
-};
+// The page fires NO pixel events. The only conversion — Lead — is fired by
+// the GoHighLevel form itself on actual submit (its built-in pixel). The
+// quiz/hero are UX only.
 
 const PlayIcon: React.FC = () => (
   <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" className="ml-1.5">
@@ -119,7 +112,6 @@ const PrimeBarber49: React.FC = () => {
       setPhase('form');
       return;
     }
-    track('QuizStart', true);
     setPhase('q1');
   }, []);
 
@@ -131,7 +123,6 @@ const PrimeBarber49: React.FC = () => {
       // Last question: keep the choice highlighted and let the visitor tap the
       // explicit "Continue" button (below) to move on to the lead form.
       if (idx === QUESTIONS.length - 1) {
-        track('QuizComplete', true);
         return;
       }
       // brief beat so the selection animation reads, then advance
